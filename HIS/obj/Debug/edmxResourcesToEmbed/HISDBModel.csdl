@@ -533,5 +533,25 @@
       <End Role="UserType" EntitySet="UserTypes" />
       <End Role="Users" EntitySet="Users" />
     </AssociationSet>
+    <EntitySet Name="VUsers" EntityType="HISModel.VUser" />
   </EntityContainer>
+  <EntityType Name="VUser">
+    <Key>
+      <PropertyRef Name="UserID" />
+      <PropertyRef Name="Gender" />
+      <PropertyRef Name="MaritalStatus" />
+      <PropertyRef Name="Status" />
+    </Key>
+    <Property Name="UserID" Type="Int32" Nullable="false" />
+    <Property Name="Name" Type="String" MaxLength="132" FixedLength="false" Unicode="false" />
+    <Property Name="DOB" Type="DateTime" Precision="0" />
+    <Property Name="Gender" Type="String" Nullable="false" MaxLength="6" FixedLength="false" Unicode="false" />
+    <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Phone" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="MaritalStatus" Type="String" Nullable="false" MaxLength="7" FixedLength="false" Unicode="false" />
+    <Property Name="Qualification" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="DoctorType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="UserTypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Status" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+  </EntityType>
 </Schema>

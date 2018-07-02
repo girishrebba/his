@@ -1009,6 +1009,7 @@
     <Compile Include="Controllers\IntakesController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\SpecializationController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\UserTypeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -1044,6 +1045,7 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\IntakeFrequency.cs" />
     <Compile Include="Models\Specialization.cs" />
+    <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserType.cs" />
     <Compile Include="Patient.cs">
       <DependentUpon>HISDBModel.tt</DependentUpon>
@@ -1072,6 +1074,9 @@
       <DependentUpon>HISDBModel.tt</DependentUpon>
     </Compile>
     <Compile Include="UserType.cs">
+      <DependentUpon>HISDBModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="VUser.cs">
       <DependentUpon>HISDBModel.tt</DependentUpon>
     </Compile>
   </ItemGroup>
@@ -1220,6 +1225,8 @@
     <Content Include="Views\BrandCategory\AddModify.cshtml" />
     <Content Include="Views\Intakes\Index.cshtml" />
     <Content Include="Views\Intakes\AddModify.cshtml" />
+    <Content Include="Views\User\Index.cshtml" />
+    <Content Include="Views\User\AddModify.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

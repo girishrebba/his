@@ -191,6 +191,27 @@
     <Property Name="UserTypeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="UserTypeName" Type="varchar" MaxLength="50" Nullable="false" />
   </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'HIS.dbo.VUsers' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="VUsers">
+    <Key>
+      <PropertyRef Name="UserID" />
+      <PropertyRef Name="Gender" />
+      <PropertyRef Name="MaritalStatus" />
+      <PropertyRef Name="Status" />
+    </Key>
+    <Property Name="UserID" Type="int" Nullable="false" />
+    <Property Name="Name" Type="varchar" MaxLength="132" />
+    <Property Name="DOB" Type="date" />
+    <Property Name="Gender" Type="varchar" MaxLength="6" Nullable="false" />
+    <Property Name="Email" Type="varchar" MaxLength="50" />
+    <Property Name="Phone" Type="varchar" MaxLength="10" />
+    <Property Name="MaritalStatus" Type="varchar" MaxLength="7" Nullable="false" />
+    <Property Name="Qualification" Type="varchar" MaxLength="20" />
+    <Property Name="DoctorType" Type="varchar" MaxLength="50" />
+    <Property Name="UserTypeName" Type="varchar" MaxLength="50" />
+    <Property Name="Status" Type="varchar" MaxLength="8" Nullable="false" />
+  </EntityType>
   <Association Name="FK_BrandCategories_BrandID">
     <End Role="Brands" Type="Self.Brands" Multiplicity="1" />
     <End Role="BrandCategories" Type="Self.BrandCategories" Multiplicity="*" />
@@ -425,6 +446,21 @@
     <EntitySet Name="Specialization" EntityType="Self.Specialization" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="UserType" EntityType="Self.UserType" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="VUsers" EntityType="Self.VUsers" store:Type="Views" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [VUsers].[UserID] AS [UserID], 
+    [VUsers].[Name] AS [Name], 
+    [VUsers].[DOB] AS [DOB], 
+    [VUsers].[Gender] AS [Gender], 
+    [VUsers].[Email] AS [Email], 
+    [VUsers].[Phone] AS [Phone], 
+    [VUsers].[MaritalStatus] AS [MaritalStatus], 
+    [VUsers].[Qualification] AS [Qualification], 
+    [VUsers].[DoctorType] AS [DoctorType], 
+    [VUsers].[UserTypeName] AS [UserTypeName], 
+    [VUsers].[Status] AS [Status]
+    FROM [dbo].[VUsers] AS [VUsers]</DefiningQuery>
+    </EntitySet>
     <AssociationSet Name="FK_BrandCategories_BrandID" Association="Self.FK_BrandCategories_BrandID">
       <End Role="Brands" EntitySet="Brands" />
       <End Role="BrandCategories" EntitySet="BrandCategories" />

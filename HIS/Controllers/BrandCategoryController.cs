@@ -74,7 +74,7 @@ namespace HIS.Controllers
             }
         }
 
-        //Fetch Country from database
+        //Fetch Brands from database
         public List<Brand> GetBrands()
         {
             using (HISDBEntities dc = new HISDBEntities())

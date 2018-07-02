@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="c0b2944e7f47489b9881cffc62a2755b" Name="Diagram1">
+      <Diagram DiagramId="c0b2944e7f47489b9881cffc62a2755b" Name="Diagram1" ZoomLevel="100">
         <EntityTypeShape EntityType="HISModel.BloodGroup" Width="1.5" PointX="6" PointY="7.125" IsExpanded="true" />
         <EntityTypeShape EntityType="HISModel.BrandCategory" Width="1.5" PointX="9" PointY="17.125" IsExpanded="true" />
         <EntityTypeShape EntityType="HISModel.Brand" Width="1.5" PointX="6.75" PointY="17.125" IsExpanded="true" />
@@ -40,6 +40,7 @@
         <AssociationConnector Association="HISModel.FK_PVH_Patient_ENMRNO" ManuallyRouted="false" />
         <AssociationConnector Association="HISModel.FK_User_Specialization" ManuallyRouted="false" />
         <AssociationConnector Association="HISModel.FK_User_Type" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="HISModel.VUser" Width="1.5" PointX="3.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

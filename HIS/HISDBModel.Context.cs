@@ -42,5 +42,6 @@ namespace HIS
         public virtual DbSet<Specialization> Specializations { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserType> UserTypes { get; set; }
+        public virtual DbSet<VUser> VUsers { get; set; }
     }
 }
