@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="c0b2944e7f47489b9881cffc62a2755b" Name="Diagram1">
+        <EntityTypeShape EntityType="HISModel.BloodGroup" Width="1.5" PointX="6" PointY="7.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="HISModel.BrandCategory" Width="1.5" PointX="9" PointY="17.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="HISModel.Brand" Width="1.5" PointX="6.75" PointY="17.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="HISModel.ConsultationFee" Width="1.5" PointX="5.25" PointY="9.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="HISModel.ConsultationType" Width="1.5" PointX="3" PointY="6" IsExpanded="true" />
+        <EntityTypeShape EntityType="HISModel.InPatientHistory" Width="1.5" PointX="10.5" PointY="8.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="HISModel.IntakeFrequency" Width="1.5" PointX="11.25" PointY="2" IsExpanded="true" />
+        <EntityTypeShape EntityType="HISModel.MedicineInventory" Width="1.5" PointX="11.25" PointY="16.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="HISModel.PatientMetric" Width="1.5" PointX="10.5" PointY="10.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="HISModel.PatientPrescription" Width="1.5" PointX="13.5" PointY="9.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="HISModel.PatientRoomAllocation" Width="1.5" PointX="13.5" PointY="5.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="HISModel.Patient" Width="1.5" PointX="8.25" PointY="7.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="HISModel.PatientVisitHistory" Width="1.5" PointX="13.5" PointY="13.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="HISModel.Room" Width="1.5" PointX="11.25" PointY="4.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="HISModel.Specialization" Width="1.5" PointX="0.75" PointY="10.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="HISModel.User" Width="1.5" PointX="3" PointY="8.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="HISModel.UserType" Width="1.5" PointX="0.75" PointY="7.125" IsExpanded="true" />
+        <AssociationConnector Association="HISModel.FK_Patients_BloodGroup" ManuallyRouted="false" />
+        <AssociationConnector Association="HISModel.FK_BrandCategories_BrandID" ManuallyRouted="false" />
+        <AssociationConnector Association="HISModel.FK_MI_CategoryID" ManuallyRouted="false" />
+        <AssociationConnector Association="HISModel.FK_MI_BrandID" ManuallyRouted="false" />
+        <AssociationConnector Association="HISModel.FK_Consultation_Doctor" ManuallyRouted="false" />
+        <AssociationConnector Association="HISModel.FK_Consultation_Type" ManuallyRouted="false" />
+        <AssociationConnector Association="HISModel.FK_PVH_Consultation_Type" ManuallyRouted="false" />
+        <AssociationConnector Association="HISModel.FK_IPH_ENMRNO" ManuallyRouted="false" />
+        <AssociationConnector Association="HISModel.FK_PP_FrequencyID" ManuallyRouted="false" />
+        <AssociationConnector Association="HISModel.FK_PP_MedicineName" ManuallyRouted="false" />
+        <AssociationConnector Association="HISModel.FK_PatientMetrics_ENMRNO" ManuallyRouted="false" />
+        <AssociationConnector Association="HISModel.FK_PP_ENMRNO" ManuallyRouted="false" />
+        <AssociationConnector Association="HISModel.FK_PRA_ENMRNO" ManuallyRouted="false" />
+        <AssociationConnector Association="HISModel.FK_PRA_RoomNo" ManuallyRouted="false" />
+        <AssociationConnector Association="HISModel.FK_Patients_Doctor" ManuallyRouted="false" />
+        <AssociationConnector Association="HISModel.FK_PVH_Patient_ENMRNO" ManuallyRouted="false" />
+        <AssociationConnector Association="HISModel.FK_User_Specialization" ManuallyRouted="false" />
+        <AssociationConnector Association="HISModel.FK_User_Type" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
