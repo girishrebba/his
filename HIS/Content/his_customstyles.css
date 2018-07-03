@@ -1,0 +1,38 @@
+﻿.page-sidebar {
+    background-color: #2B5787
+}
+
+
+.page-container.horizontal-menu header.navbar {
+    background-color: #2B5787;
+}
+
+ul.main-menu li ul {
+    background-color: #2B5787
+}
+
+ul.main-menu > li.active > a, ul.main-menu > li > a:hover, ul.main-menu > li > a:focus {
+    background-color: #029b17;
+}
+
+
+ul.main-menu .nav > li > a:hover, ul.main-menu .nav > li > a:focus, ul.main-menu .nav > li.has-sub.active > a {
+    background-color: #029b17;
+}
+
+.sidebar-collapsed .page-sidebar .main-menu > li > a > span.title {
+    background-color: #029b17;
+}
+
+/*00b8ce to 029b17*/
+.sidebar-collapsed .page-sidebar .main-menu > li.has-sub:hover > a, .sidebar-collapsed .page-sidebar .main-menu > li:hover > a {
+    background-color: #029b17;
+}
+
+.page-container.horizontal-menu header.navbar .navbar-nav > li.active > a, .page-container.horizontal-menu header.navbar .navbar-nav > li:hover > a, .page-container.horizontal-menu header.navbar .navbar-nav li > ul li.active a {
+    background-color: #029b17;
+}
+
+.navbar-inverse {
+    background-color: #2B5787;
+}

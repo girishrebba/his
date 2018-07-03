@@ -148,6 +148,7 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Gridmvc.css" />
+    <Content Include="Content\his_customstyles.css" />
     <Content Include="Content\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\images\ui-bg_glass_55_fbf9ee_1x400.png" />
@@ -1005,6 +1006,7 @@
     <Compile Include="Controllers\BloodGroupController.cs" />
     <Compile Include="Controllers\BrandCategoryController.cs" />
     <Compile Include="Controllers\BrandController.cs" />
+    <Compile Include="Controllers\ConsultTypeController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IntakesController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
@@ -1042,6 +1044,7 @@
     <Compile Include="Models\BloodGroup.cs" />
     <Compile Include="Models\Brand.cs" />
     <Compile Include="Models\BrandCategory.cs" />
+    <Compile Include="Models\ConsultationType.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\IntakeFrequency.cs" />
     <Compile Include="Models\Specialization.cs" />
@@ -1227,6 +1230,8 @@
     <Content Include="Views\Intakes\AddModify.cshtml" />
     <Content Include="Views\User\Index.cshtml" />
     <Content Include="Views\User\AddModify.cshtml" />
+    <Content Include="Views\ConsultType\Index.cshtml" />
+    <Content Include="Views\ConsultType\AddModify.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

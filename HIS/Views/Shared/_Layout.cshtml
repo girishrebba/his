@@ -5,21 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - HIS</title>
     <link href="~/Content/Site.css" rel="stylesheet" />
-    @*<link href="~/Content/bootstrap.min.css" rel="stylesheet" />*@
-    @*<link href="~/Content/jquery-ui.min.css" rel="stylesheet" />*@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    <link href="~/Content/his_customstyles.css" rel="stylesheet" />
 </head>
 <body>
     <!-- Page container -->
     <div class="page-container sidebar-collapsed">
-
         <!-- Page Sidebar -->
         <div class="page-sidebar collapsed">
 
             <!-- Site header  -->
             <header class="site-header">
-                <div class="site-logo"><a href="index.html"><img src="~/light/images/logo.png" alt="Mouldifi" title="Mouldifi"></a></div>
+                <div class="site-logo"><a href="index.html"><img src="~/light/images/hms_logo_menu.png" alt="Mouldifi" title="Mouldifi"></a></div>
                 <div class="sidebar-collapse hidden-xs"><a class="sidebar-collapse-icon" href="#"><i class="icon-menu"></i></a></div>
                 <div class="sidebar-mobile-menu visible-xs"><a data-target="#side-nav" data-toggle="collapse" class="mobile-menu-icon" href="#"><i class="icon-menu"></i></a></div>
             </header>
@@ -27,38 +25,38 @@
             <!-- Main navigation -->
             <ul id="side-nav" class="main-menu navbar-collapse collapsed">
                 <li class="has-sub active ">
-                    <a href="/home/index"><i class="icon-gauge"></i><span class="title">Home</span></a>
+                    <a href="/home/index"><i class="icon-home"></i><span class="title">Home</span></a>
                     <ul class="nav"></ul>
                 </li>
                 <li class="has-sub">
-                    <a href="/home/index"><i class="icon-gauge"></i><span class="title">Users</span></a>
+                    <a href="/home/index"><i class="fa fa-user-md" style="padding-left:5px"></i><span class="title">Users</span></a>
                     <ul class="nav">
                         <li><a href="@Url.Action("Index", "User")"><span class="title">User Management</span></a></li>
                     </ul>
                 </li>
                 <li class="has-sub">
-                    <a href="/home/index"><i class="icon-gauge"></i><span class="title">Patients</span></a>
+                    <a href="/home/index"><i class="fa fa-wheelchair" style="padding-left:5px"></i><span class="title">Patients</span></a>
                     <ul class="nav">
                         <li><a href="#/"><span class="title">Patient Management</span></a></li>
                         <li><a href="#/"><span class="title">Metrics</span></a></li>
                     </ul>
                 </li>
                 <li class="has-sub">
-                    <a href="/home/index"><i class="icon-gauge"></i><span class="title">Rooms</span></a>
+                    <a href="/home/index"><i class="fa fa-bed" style="padding-left:5px"></i><span class="title">Rooms</span></a>
                     <ul class="nav">
                         <li><a href="#/"><span class="title">Room Allocation</span></a></li>
                         <li><a href="#/"><span class="title">Bed Management</span></a></li>
                     </ul>
                 </li>
                 <li class="has-sub">
-                    <a href="/home/index"><i class="icon-gauge"></i><span class="title">Pharmacy</span></a>
+                    <a href="/home/index"><i class="fa fa-medkit" style="padding-left:5px"></i><span class="title">Pharmacy</span></a>
                     <ul class="nav">
                         <li><a href="#/"><span class="title">Medicine Inventory</span></a></li>
                         <li><a href="#/"><span class="title">Patient Prescription</span></a></li>
                     </ul>
                 </li>
                 <li class="has-sub">
-                    <a href="index.html"><i class="icon-record"></i><span class="title">Reports</span></a>
+                    <a href="index.html"><i class="icon-chart-bar"></i><span class="title">Reports</span></a>
                     <ul class="nav">
                         <li class="active"><a href="index.html"><span class="title">Report 1</span></a></li>
                         <li><a href="ecommerce-dashboard.html"><span class="title">Report 2</span></a></li>
@@ -66,7 +64,7 @@
                     </ul>
                 </li>
                 <li class="has-sub">
-                    <a href="index.html"><i class="icon-user"></i><span class="title">Admin</span></a>
+                    <a href="index.html"><i class="icon-lock"></i><span class="title">Admin</span></a>
                     <ul class="nav">
                         <li class="active"><a href="@Url.Action("Index", "BloodGroup")"><span class="title">Blood Groups</span></a></li>
                         <li><a href="@Url.Action("Index", "UserType")"><span class="title">User Types</span></a></li>
@@ -74,6 +72,7 @@
                         <li><a href="@Url.Action("Index", "Intakes")"><span class="title">Intake Frequency</span></a></li>
                         <li><a href="@Url.Action("Index", "Brand")"><span class="title">Brands</span></a></li>
                         <li><a href="@Url.Action("Index", "BrandCategory")"><span class="title">Brand Categories</span></a></li>
+                        <li><a href="@Url.Action("Index", "ConsultType")"><span class="title">Consultations</span></a></li>
                     </ul>
                 </li>
             </ul>
@@ -82,37 +81,29 @@
         <!-- /page sidebar -->
         <!-- Main container -->
         <div class="main-container">
-
             <!-- Main header -->
             <div class="main-header row">
                 <div class="col-sm-6 col-xs-7">
-
                     <!-- User info -->
                     <ul class="user-info pull-left">
                         <li class="profile-info dropdown">
                             <a data-toggle="dropdown" class="dropdown-toggle" href="#" aria-expanded="false">Girish Rebba<span class="caret"></span></a>
-
                             <!-- User action menu -->
                             <ul class="dropdown-menu">
                                 <li><a href="#/"><i class="icon-user"></i>My profile</a></li>
                                 <li><a href="#/"><i class="icon-logout"></i>Logout</a></li>
                             </ul>
                             <!-- /user action menu -->
-
                         </li>
                     </ul>
                     <!-- /user info -->
-
                 </div>
-
                 <div class="col-sm-6 col-xs-5">
                     <div class="pull-right">
                         <!-- User alerts -->
                         <ul class="user-info pull-left">
-
                             <!-- Notifications -->
                             <li class="notifications dropdown">
-
                             </li>
                             <!-- /notifications -->
                             <!-- Messages -->
@@ -127,26 +118,19 @@
                                 </ul>
                             </li>
                             <!-- /messages -->
-
                         </ul>
                         <!-- /user alerts -->
-
                     </div>
                 </div>
             </div>
             <!-- /main header -->
             <!-- Main content -->
-
-
             <div class="main-content">
                 @RenderBody()
-
             </div>
             <!-- /main content -->
-
         </div>
         <!-- /main container -->
-
     </div>
     <!-- /page container -->
     <!--Load JQuery-->
