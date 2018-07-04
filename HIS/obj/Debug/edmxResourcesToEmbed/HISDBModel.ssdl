@@ -67,7 +67,7 @@
     <Property Name="PricePerSheet" Type="decimal" Precision="9" Scale="2" />
     <Property Name="BatchNo" Type="varchar" MaxLength="30" Nullable="false" />
     <Property Name="LotNo" Type="varchar" MaxLength="30" Nullable="false" />
-    <Property Name="ExpirDate" Type="date" />
+    <Property Name="ExpiryDate" Type="date" />
   </EntityType>
   <EntityType Name="PatientMetrics">
     <Key>

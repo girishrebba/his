@@ -78,10 +78,10 @@
     <Property Name="PricePerSheet" Type="Decimal" Precision="9" Scale="2" />
     <Property Name="BatchNo" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
     <Property Name="LotNo" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
-    <Property Name="ExpirDate" Type="DateTime" Precision="0" />
     <NavigationProperty Name="BrandCategory" Relationship="Self.FK_MI_CategoryID" FromRole="MedicineInventory" ToRole="BrandCategories" />
     <NavigationProperty Name="Brand" Relationship="Self.FK_MI_BrandID" FromRole="MedicineInventory" ToRole="Brands" />
     <NavigationProperty Name="PatientPrescriptions" Relationship="Self.FK_PP_MedicineName" FromRole="MedicineInventory" ToRole="PatientPrescription" />
+    <Property Name="ExpiryDate" Type="DateTime" Precision="0" />
   </EntityType>
   <EntityType Name="PatientMetric">
     <Key>

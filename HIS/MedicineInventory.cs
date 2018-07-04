@@ -29,7 +29,7 @@ namespace HIS
         public Nullable<decimal> PricePerSheet { get; set; }
         public string BatchNo { get; set; }
         public string LotNo { get; set; }
-        public Nullable<System.DateTime> ExpirDate { get; set; }
+        public Nullable<System.DateTime> ExpiryDate { get; set; }
     
         public virtual BrandCategory BrandCategory { get; set; }
         public virtual Brand Brand { get; set; }

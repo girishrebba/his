@@ -65,6 +65,7 @@
     <EntitySetMapping Name="MedicineInventories">
       <EntityTypeMapping TypeName="HISModel.MedicineInventory">
         <MappingFragment StoreEntitySet="MedicineInventory">
+          <ScalarProperty Name="ExpiryDate" ColumnName="ExpiryDate" />
           <ScalarProperty Name="MedInventoryID" ColumnName="MedInventoryID" />
           <ScalarProperty Name="BrandID" ColumnName="BrandID" />
           <ScalarProperty Name="BrandCategoryID" ColumnName="BrandCategoryID" />
@@ -74,7 +75,6 @@
           <ScalarProperty Name="PricePerSheet" ColumnName="PricePerSheet" />
           <ScalarProperty Name="BatchNo" ColumnName="BatchNo" />
           <ScalarProperty Name="LotNo" ColumnName="LotNo" />
-          <ScalarProperty Name="ExpirDate" ColumnName="ExpirDate" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

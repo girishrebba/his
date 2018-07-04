@@ -72,7 +72,7 @@
           <Property Name="PricePerSheet" Type="decimal" Precision="9" Scale="2" />
           <Property Name="BatchNo" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="LotNo" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="ExpirDate" Type="date" />
+          <Property Name="ExpiryDate" Type="date" />
         </EntityType>
         <EntityType Name="PatientMetrics">
           <Key>
@@ -621,10 +621,10 @@ warning 6002: The table/view 'HIS.dbo.VUsers' does not have a primary key define
           <Property Name="PricePerSheet" Type="Decimal" Precision="9" Scale="2" />
           <Property Name="BatchNo" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="LotNo" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="ExpirDate" Type="DateTime" Precision="0" />
           <NavigationProperty Name="BrandCategory" Relationship="Self.FK_MI_CategoryID" FromRole="MedicineInventory" ToRole="BrandCategories" />
           <NavigationProperty Name="Brand" Relationship="Self.FK_MI_BrandID" FromRole="MedicineInventory" ToRole="Brands" />
           <NavigationProperty Name="PatientPrescriptions" Relationship="Self.FK_PP_MedicineName" FromRole="MedicineInventory" ToRole="PatientPrescription" />
+          <Property Name="ExpiryDate" Type="DateTime" Precision="0" />
         </EntityType>
         <EntityType Name="PatientMetric">
           <Key>
@@ -1167,6 +1167,7 @@ warning 6002: The table/view 'HIS.dbo.VUsers' does not have a primary key define
           <EntitySetMapping Name="MedicineInventories">
             <EntityTypeMapping TypeName="HISModel.MedicineInventory">
               <MappingFragment StoreEntitySet="MedicineInventory">
+                <ScalarProperty Name="ExpiryDate" ColumnName="ExpiryDate" />
                 <ScalarProperty Name="MedInventoryID" ColumnName="MedInventoryID" />
                 <ScalarProperty Name="BrandID" ColumnName="BrandID" />
                 <ScalarProperty Name="BrandCategoryID" ColumnName="BrandCategoryID" />
@@ -1176,7 +1177,6 @@ warning 6002: The table/view 'HIS.dbo.VUsers' does not have a primary key define
                 <ScalarProperty Name="PricePerSheet" ColumnName="PricePerSheet" />
                 <ScalarProperty Name="BatchNo" ColumnName="BatchNo" />
                 <ScalarProperty Name="LotNo" ColumnName="LotNo" />
-                <ScalarProperty Name="ExpirDate" ColumnName="ExpirDate" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

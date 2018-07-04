@@ -956,6 +956,7 @@
     </Content>
     <Content Include="light\js\jquery-1.12.4.min.map" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\his_datepicker.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <Content Include="Scripts\jquery-1.12.4.min.map" />
@@ -970,6 +971,10 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\moment-with-locales.js" />
+    <Content Include="Scripts\moment-with-locales.min.js" />
+    <Content Include="Scripts\moment.js" />
+    <Content Include="Scripts\moment.min.js" />
     <Content Include="Scripts\notify.min.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
@@ -1010,6 +1015,8 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IntakesController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\MedInventoryController.cs" />
+    <Compile Include="Controllers\SampleController.cs" />
     <Compile Include="Controllers\SpecializationController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\UserTypeController.cs" />
@@ -1047,6 +1054,7 @@
     <Compile Include="Models\ConsultationType.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\IntakeFrequency.cs" />
+    <Compile Include="Models\MedicineInventory.cs" />
     <Compile Include="Models\Specialization.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserType.cs" />
@@ -1232,6 +1240,9 @@
     <Content Include="Views\User\AddModify.cshtml" />
     <Content Include="Views\ConsultType\Index.cshtml" />
     <Content Include="Views\ConsultType\AddModify.cshtml" />
+    <Content Include="Views\MedInventory\Index.cshtml" />
+    <Content Include="Views\MedInventory\AddModify.cshtml" />
+    <Content Include="Views\Sample\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

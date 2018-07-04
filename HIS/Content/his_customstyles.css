@@ -36,3 +36,7 @@ ul.main-menu .nav > li > a:hover, ul.main-menu .nav > li > a:focus, ul.main-menu
 .navbar-inverse {
     background-color: #2B5787;
 }
+
+.datepicker {
+    z-index: 99999 !important;
+}
