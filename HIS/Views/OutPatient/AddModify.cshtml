@@ -1,0 +1,317 @@
+﻿@model HIS.OutPatient
+@{
+    Layout = null;
+}
+@using HIS.HtmlHelpers
+<style type="text/css">
+
+    .nav-tabs {
+        border-bottom: 1px solid #029b17;
+    }
+
+        .nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover {
+            color: #029b17;
+            cursor: default;
+            background-color: #f9f9f9;
+            border: 1px solid #029b17;
+        }
+
+    ul.nav.nav-tabs {
+        margin: 10px 0px;
+    }
+
+        ul.nav.nav-tabs li:not(.active) a {
+            background-color: #eeeeee;
+            color: grey;
+        }
+
+        ul.nav.nav-tabs li.active a {
+            border-top: 3px solid #029b17;
+            border-bottom-color: #f9f9f9;
+        }
+</style>
+@using (Html.BeginForm("AddModify", "OutPatient", FormMethod.Post, new { id = "outPatientForm", onsubmit = "return SubmitForm(this)" }))
+{
+    @Html.HiddenFor(model => model.SNO)
+    @Html.HiddenFor(model => model.ENMRNO)
+    <div id="tabs">
+        <ul class="nav nav-tabs">
+            <li class="active"><a data-toggle="tab" href="#profileTab">Basic Info</a></li>
+            <li><a data-toggle="tab" href="#addressTab">Additional Info</a></li>
+            <li><a data-toggle="tab" href="#historyTab">Patient History</a></li>
+            <li><a data-toggle="tab" href="#metricsTab">Metrics</a></li>
+            <li><a data-toggle="tab" href="#referralTab">Referral Info</a></li>
+        </ul>
+        <div class="tab-content" id="tabContent">
+            <div id="profileTab" class="tab-pane fade in active" role="tabpanel">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ENMRNO, "ENMRNO:", new { @class = "control-label col-sm-2" })
+                        <div class="col-sm-10 lableDisplay">
+                            @Html.DisplayFor(model => model.ENMRNO, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.FirstName, "First Name:", new { @class = "control-label col-sm-2" })
+                        <div class="col-sm-4">
+                            @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.FirstName)
+                        </div>
+                        @Html.LabelFor(model => model.MiddleName, "Middle Name:", new { @class = "control-label col-sm-2" })
+                        <div class="col-sm-4">
+                            @Html.EditorFor(model => model.MiddleName, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.LastName, "Last Name:", new { @class = "control-label col-sm-2" })
+                        <div class="col-sm-4">
+                            @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.LastName)
+                        </div>
+                        @Html.LabelFor(model => model.DOB, "Date of Birth:", htmlAttributes: new { @class = "control-label col-sm-2" })
+                        <div class="col-sm-4">
+                            <div id="date-popup" class="input-group date">
+                                @Html.EditorFor(model => model.DOB, new { htmlAttributes = new { Value = Html.DateFormat(Model.DOB), @class = "datepicker form-control", @placeholder = "" } })
+                                <span class="icondobpicker input-group-addon"><i class="fa fa-calendar"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Gender, "Gender:", new { @class = "control-label col-sm-2" })
+                        <div class="col-sm-4">
+                            @Html.DropDownList("Gender", new List<SelectListItem>(){
+                               new SelectListItem { Text = "--Select--", Value = "" },
+                               new SelectListItem { Text = "Male", Value = "0"  },
+                               new SelectListItem { Text = "Female", Value =  "1"},
+                               new SelectListItem { Text = "Others", Value =  "2"}
+                               },
+                            htmlAttributes: new { @class = "form-control" })
+                        </div>
+                        @Html.LabelFor(model => model.MaritalStatus, "Marital Status:", htmlAttributes: new { @class = "control-label col-sm-2" })
+                        <div class="col-sm-4">
+                            @Html.DropDownList("MaritalStatus", new List<SelectListItem>(){
+                               new SelectListItem { Text = "--Select--", Value = "" },
+                               new SelectListItem { Text = "Single", Value = "0"  },
+                               new SelectListItem { Text = "Married", Value =  "1"},
+                               new SelectListItem { Text = "Others", Value =  "2"}
+                               },
+                            htmlAttributes: new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Email, "Email:", new { @class = "control-label col-sm-2" })
+                        <div class="col-sm-4">
+                            @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                        @Html.LabelFor(model => model.Phone, "Phone:", new { @class = "control-label col-sm-2" })
+                        <div class="col-sm-4">
+                            @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Phone)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DoctorID, "Doctor:", htmlAttributes: new { @class = "control-label col-sm-2" })
+                        <div class="col-sm-4">
+                            @Html.DropDownListFor(model => model.DoctorID, ViewBag.Users as SelectList, "--Select--", new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.DoctorID)
+                        </div>
+                        @Html.LabelFor(model => model.Enrolled, "Enroll Date:", htmlAttributes: new { @class = "control-label col-sm-2" })
+                        <div class="col-sm-4">
+                            <div id="date-popup" class="input-group date">
+                                @Html.EditorFor(model => model.Enrolled, new { htmlAttributes = new { Value = Html.DateFormat(Model.Enrolled), @class = "datepicker form-control", @placeholder = "" } })
+                                <span class="iconenrolledpicker input-group-addon"><i class="fa fa-calendar"></i></span>
+                            </div>
+                            @Html.ValidationMessageFor(model => model.Enrolled, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Purpose, "Purpose:", new { @class = "control-label col-sm-2" })
+                        <div class="col-sm-4">
+                            @Html.EditorFor(model => model.Purpose, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-8 col-sm-offset-5">
+                            <input type="button" value="Next" class="btn btn-primary nexttab" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="addressTab" class="tab-pane fade in" role="tabpanel">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Address1, "Address:", new { @class = "control-label col-sm-2" })
+                        <div class="col-sm-10">
+                            @Html.EditorFor(model => model.Address1, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Address1)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Address2, "Address 2:", new { @class = "control-label col-sm-2" })
+                        <div class="col-sm-4">
+                            @Html.EditorFor(model => model.Address2, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                        @Html.LabelFor(model => model.City, "City:", new { @class = "control-label col-sm-2" })
+                        <div class="col-sm-4">
+                            @Html.EditorFor(model => model.City, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.State, "State:", new { @class = "control-label col-sm-2" })
+                        <div class="col-sm-4">
+                            @Html.EditorFor(model => model.State, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                        @Html.LabelFor(model => model.PinCode, "Zip:", new { @class = "control-label col-sm-2" })
+                        <div class="col-sm-4">
+                            @Html.EditorFor(model => model.PinCode, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.BirthPlace, "Birth Place:", new { @class = "control-label col-sm-2" })
+                        <div class="col-sm-4">
+                            @Html.EditorFor(model => model.BirthPlace, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                        @Html.LabelFor(model => model.Profession, "Occupation:", new { @class = "control-label col-sm-2" })
+                        <div class="col-sm-4">
+                            @Html.EditorFor(model => model.Profession, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.BloodGroupID, "Blood Group", htmlAttributes: new { @class = "control-label col-sm-2" })
+                        <div class="col-sm-4">
+                            @Html.DropDownListFor(model => model.BloodGroupID, ViewBag.BloodGroups as SelectList, "--Select--", new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.BloodGroupID)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-8 col-sm-offset-4">
+                            @*<a class="btn btn-primary back previoustab">Previous</a>
+                                <a class="btn btn-primary continue nexttab">Next</a>*@
+                            <input type="button" value="Previous" class="btn btn-primary previoustab" />
+                            <input type="button" value="Next" class="btn btn-primary nexttab" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="historyTab" class="tab-pane fade in" role="tabpanel">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.PatientHistory, "Patient History:")
+                    @Html.TextAreaFor(model => model.PatientHistory, new { @class = "form-control rounded-0", @rows = 3 })
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-8 col-sm-offset-4">
+                        @*<a class="btn btn-primary back previoustab">Previous</a>
+                            <a class="btn btn-primary continue nexttab">Next</a>*@
+                        <input type="button" value="Previous" class="btn btn-primary previoustab" />
+                        <input type="button" value="Next" class="btn btn-primary nexttab" />
+                    </div>
+                </div>
+            </div>
+            <div id="metricsTab" class="tab-pane fade in" role="tabpanel">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Height, "Height:", new { @class = "control-label col-sm-2" })
+                        <div class="col-sm-4">
+                            @Html.EditorFor(model => model.Height, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                        @Html.LabelFor(model => model.Weight, "Weight:", new { @class = "control-label col-sm-2" })
+                        <div class="col-sm-4">
+                            @Html.EditorFor(model => model.Weight, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.HeartBeat, "Heart Beat:", new { @class = "control-label col-sm-2" })
+                        <div class="col-sm-4">
+                            @Html.EditorFor(model => model.HeartBeat, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                        @Html.LabelFor(model => model.BP, "BP:", new { @class = "control-label col-sm-2" })
+                        <div class="col-sm-4">
+                            @Html.EditorFor(model => model.BP, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Temperature, "Temperature:", new { @class = "control-label col-sm-2" })
+                        <div class="col-sm-4">
+                            @Html.EditorFor(model => model.Temperature, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                        @Html.LabelFor(model => model.BMI, "BMI:", new { @class = "control-label col-sm-2" })
+                        <div class="col-sm-4">
+                            @Html.EditorFor(model => model.BMI, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-8 col-sm-offset-4">
+                            @*<a class="btn btn-primary back previoustab">Previous</a>*@
+                            <input type="button" value="Previous" class="btn btn-primary previoustab" />
+                            <input type="button" value="Next" class="btn btn-primary nexttab" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="referralTab" class="tab-pane fade in" role="tabpanel">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ReferredBy, "Referred By:", new { @class = "control-label col-sm-2" })
+                        <div class="col-sm-4">
+                            @Html.EditorFor(model => model.ReferredBy, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                        @Html.LabelFor(model => model.RefPhone, "Referred Phone:", new { @class = "control-label col-sm-2" })
+                        <div class="col-sm-4">
+                            @Html.EditorFor(model => model.RefPhone, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-8 col-sm-offset-4">
+                            @*<a class="btn btn-primary back previoustab">Previous</a>*@
+                            <input type="button" value="Previous" class="btn btn-primary previoustab" />
+                            <input type="submit" value="Submit" class="btn btn-primary" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-horizontal" id="errorDiv">
+                    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<script type="text/javascript">
+    $(function () {
+        $('.nexttab').click(function () {
+            $('.nav-tabs > .active').next('li').find('a').trigger('click');
+        });
+
+        $('.previoustab').click(function () {
+            $('.nav-tabs > .active').prev('li').find('a').trigger('click');
+        });
+
+        $('#DOB').datepicker({
+            keyboardNavigation: false,
+            forceParse: false,
+            todayHighlight: true,
+            todayBtn: false,
+            format: "mm/dd/yyyy"
+        });
+
+        $('.icondobpicker').click(function (event) {
+            event.preventDefault();
+            $('#DOB').datepicker('show');
+        });
+
+        $('#Enrolled').datepicker({
+            keyboardNavigation: false,
+            forceParse: false,
+            todayHighlight: true,
+            todayBtn: false,
+            format: "mm/dd/yyyy"
+        });
+
+        $('.iconenrolledpicker').click(function (event) {
+            event.preventDefault();
+            $('#Enrolled').datepicker('show');
+        });
+    });
+
+</script>
+

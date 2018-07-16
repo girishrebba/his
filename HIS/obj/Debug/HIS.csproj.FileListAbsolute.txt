@@ -199,8 +199,8 @@ F:\HospitalInformationSystem\HIS\his.git\trunk\HIS\bin\System.Web.Webpages.Razor
 F:\HospitalInformationSystem\HIS\his.git\trunk\HIS\bin\System.Web.Helpers.xml
 F:\HospitalInformationSystem\HIS\his.git\trunk\HIS\bin\System.Web.Mvc.xml
 F:\HospitalInformationSystem\HIS\his.git\trunk\HIS\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+F:\HospitalInformationSystem\HIS\his.git\trunk\HIS\obj\Debug\HIS.csprojAssemblyReference.cache
 F:\HospitalInformationSystem\HIS\his.git\trunk\HIS\obj\Debug\HIS.csproj.CoreCompileInputs.cache
 F:\HospitalInformationSystem\HIS\his.git\trunk\HIS\obj\Debug\HIS.csproj.CopyComplete
 F:\HospitalInformationSystem\HIS\his.git\trunk\HIS\obj\Debug\HIS.dll
 F:\HospitalInformationSystem\HIS\his.git\trunk\HIS\obj\Debug\HIS.pdb
-F:\HospitalInformationSystem\HIS\his.git\trunk\HIS\obj\Debug\HIS.csprojAssemblyReference.cache

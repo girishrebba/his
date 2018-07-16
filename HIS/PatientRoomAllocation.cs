@@ -17,9 +17,11 @@ namespace HIS
         public int AllocationID { get; set; }
         public string ENMRNO { get; set; }
         public int RoomNo { get; set; }
-        public int BrandID { get; set; }
+        public System.DateTime FromDate { get; set; }
+        public Nullable<System.DateTime> EndDate { get; set; }
+        public string DischargeSummary { get; set; }
     
-        public virtual Patient Patient { get; set; }
         public virtual Room Room { get; set; }
+        public virtual InPatient InPatient { get; set; }
     }
 }

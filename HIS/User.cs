@@ -18,7 +18,11 @@ namespace HIS
         public User()
         {
             this.ConsultationFees = new HashSet<ConsultationFee>();
-            this.Patients = new HashSet<Patient>();
+            this.InPatients = new HashSet<InPatient>();
+            this.OutPatients = new HashSet<OutPatient>();
+            this.InPatientHistories = new HashSet<InPatientHistory>();
+            this.PatientPrescriptions = new HashSet<PatientPrescription>();
+            this.PatientVisitHistories = new HashSet<PatientVisitHistory>();
         }
     
         public int UserID { get; set; }
@@ -39,9 +43,17 @@ namespace HIS
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ConsultationFee> ConsultationFees { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Patient> Patients { get; set; }
         public virtual Specialization Specialization { get; set; }
         public virtual UserType UserType { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<InPatient> InPatients { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<OutPatient> OutPatients { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<InPatientHistory> InPatientHistories { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PatientPrescription> PatientPrescriptions { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PatientVisitHistory> PatientVisitHistories { get; set; }
     }
 }

@@ -33,15 +33,15 @@ namespace HIS
         public virtual DbSet<InPatientHistory> InPatientHistories { get; set; }
         public virtual DbSet<IntakeFrequency> IntakeFrequencies { get; set; }
         public virtual DbSet<MedicineInventory> MedicineInventories { get; set; }
-        public virtual DbSet<PatientMetric> PatientMetrics { get; set; }
         public virtual DbSet<PatientPrescription> PatientPrescriptions { get; set; }
         public virtual DbSet<PatientRoomAllocation> PatientRoomAllocations { get; set; }
-        public virtual DbSet<Patient> Patients { get; set; }
         public virtual DbSet<PatientVisitHistory> PatientVisitHistories { get; set; }
         public virtual DbSet<Room> Rooms { get; set; }
         public virtual DbSet<Specialization> Specializations { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserType> UserTypes { get; set; }
-        public virtual DbSet<VUser> VUsers { get; set; }
+        public virtual DbSet<InPatient> InPatients { get; set; }
+        public virtual DbSet<OutPatient> OutPatients { get; set; }
+        public virtual DbSet<FeeCollection> FeeCollections { get; set; }
     }
 }

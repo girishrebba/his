@@ -8,6 +8,12 @@ namespace HIS
     {
         public string BrandName { get; set; }
         public string Category { get; set; }
+        public string ExpiryDateDisplay { get; set; }
+
+        public string GetExpiryDate()
+        {
+            return this.ExpiryDate != null ? this.ExpiryDate.Value.ToString("MM/dd/yyyy") : string.Empty;
+        }
     }
 
     public class MedicineInventoryMetaData
@@ -24,11 +30,13 @@ namespace HIS
         [Display(Name = "Quantity")]
         [Required(ErrorMessage = "Quantity is required", AllowEmptyStrings = false)]
         public int AvailableQty { get; set; }
-        [Display(Name = "Item Cost(Rs)")]
+        [Display(Name = "Item Cost (Rs)")]
         [Required(ErrorMessage = "Item cost is required", AllowEmptyStrings = false)]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:#.#}")]
         public Nullable<decimal> PricePerItem { get; set; }
-        [Display(Name = "Sheet Cost(Rs)")]
+        [Display(Name = "Sheet Cost (Rs)")]
         [Required(ErrorMessage = "Sheet cost is required", AllowEmptyStrings = false)]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:#.#}")]
         public Nullable<decimal> PricePerSheet { get; set; }
         [Display(Name = "Batch Number")]
         [Required(ErrorMessage = "Batch is required", AllowEmptyStrings = false)]

@@ -23,16 +23,22 @@ namespace HIS.Controllers
                                        join b in hs.Brands on med.BrandID equals b.BrandID
                                        join bc in hs.BrandCategories on med.BrandCategoryID equals bc.CategoryID
                                        select new {
-                                           med.MedInventoryID,
+                                           med,
                                            b.BrandName,
-                                           bc.Category,
-                                           med.MedicineName,
-                                           med.ExpiryDate,
-                                           med.BatchNo,
-                                           med.LotNo,
-                                           med.AvailableQty,
-                                           med.PricePerItem,
-                                           med.PricePerSheet
+                                           bc.Category
+                                           }).AsEnumerable().
+                                           Select( x => new MedicineInventory
+                                           {
+                                               MedInventoryID = x.med.MedInventoryID,
+                                               BrandName = x.BrandName,
+                                               Category = x.Category,
+                                               MedicineName = x.med.MedicineName,
+                                               ExpiryDateDisplay = x.med.GetExpiryDate(),
+                                               BatchNo = x.med.BatchNo,
+                                               LotNo = x.med.LotNo,
+                                               AvailableQty = x.med.AvailableQty,
+                                               PricePerItem = x.med.PricePerItem,
+                                               PricePerSheet = x.med.PricePerSheet
                                            }).ToList();
 
                 return Json(new { data = medicines }, JsonRequestBehavior.AllowGet);
@@ -82,6 +88,10 @@ namespace HIS.Controllers
         {
             using (HISDBEntities db = new HISDBEntities())
             {
+                if (!string.IsNullOrEmpty(mi.ExpiryDateDisplay))
+                {
+                    mi.ExpiryDate = DateTime.Parse(mi.ExpiryDateDisplay);
+                }
                 if (mi.MedInventoryID == 0)
                 {
                     db.MedicineInventories.Add(mi);
@@ -118,6 +128,7 @@ namespace HIS.Controllers
                     medicineInventory = v.med;
                     medicineInventory.BrandName = v.BrandName;
                     medicineInventory.Category = v.Category;
+                    medicineInventory.ExpiryDateDisplay = v.med.GetExpiryDate();
                 }
                 return medicineInventory;
             }

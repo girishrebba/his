@@ -1,0 +1,168 @@
+﻿@model HIS.PatientVisitHistory
+
+@{
+    Layout = null;
+}
+<style>
+    .ui-widget-content a {
+        color: #fff !important
+    }
+</style>
+@using HIS.HtmlHelpers
+@using (Html.BeginForm("NewVisit", "OutPatient", FormMethod.Post, new { onsubmit = "return SubmitConsultationForm(this)" }))
+{
+    @Html.HiddenFor(model => model.ENMRNO)
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading clearfix">
+                    ENMRNO: <span class="lableDisplay">@Model.ENMRNO </span>
+                </div>
+                <div class="panel-body">
+                    <div class="table-responsive">
+                        <table id="outPatientHistoryTable" class="table table-striped table-bordered" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Consultation</th>
+                                    <th>Doctor</th>
+                                    <th>Fee</th>
+                                    <th>Discount</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div class="panel-heading clearfix">
+                        <a id="addNew" class="btn btn-success" style="margin-bottom:10px"><i class="fa fa-plus"></i> Add New</a>
+                    </div>
+                    <div id="consultForm" class="form-horizontal hidden">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.DoctorID, "Doctor:", htmlAttributes: new { @class = "control-label col-sm-2" })
+                            <div class="col-sm-4">
+                                @Html.DropDownListFor(model => model.DoctorID, ViewBag.Users as SelectList, "--Select--", new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.DoctorID)
+                            </div>
+
+                            @Html.LabelFor(model => model.ConsultTypeID, "Consultation:", htmlAttributes: new { @class = "control-label col-sm-2" })
+                            <div class="col-sm-4">
+                                @Html.DropDownListFor(model => model.ConsultTypeID, ViewBag.Consultations as SelectList, "--Select--", new { @class = "form-control", @disabled = "disabled" })
+                                @Html.ValidationMessageFor(model => model.ConsultTypeID)
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.DateOfVisit, "Date:", htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-sm-4">
+                                <div id="date-popup" class="input-group date">
+                                    @Html.EditorFor(model => model.DateOfVisit, new { htmlAttributes = new { Value = Html.DateFormat(Model.DateOfVisit), @class = "datepicker form-control", @placeholder = "" } })
+                                    <span class="btnpicker input-group-addon"><i class="fa fa-calendar"></i></span>
+                                </div>
+                                @Html.ValidationMessageFor(model => model.DateOfVisit, "", new { @class = "text-danger" })
+                            </div>
+
+                            @Html.LabelFor(model => model.Fee, new { @class = "control-label col-md-2" })
+                            <div class="col-sm-4">
+                                @Html.EditorFor(model => model.Fee, new { htmlAttributes = new { Value = Model.Fee > 0 ? Model.Fee.ToString() : string.Empty, @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Fee)
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Discount, "Discount:", new { @class = "control-label col-md-2" })
+                            <div class="col-sm-4">
+                                @Html.EditorFor(model => model.Discount, new { htmlAttributes = new { Value = Model.Discount > 0 ? Model.Discount.ToString() : string.Empty, @class = "form-control" } })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3 col-md-offset-5">
+                                <input type="submit" value="Submit" class="btn btn-primary" />
+                                <input type="reset" value="Reset" class="btn" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+}
+
+<script type="text/javascript">
+    var myJsVariable = @Html.Raw(Json.Encode(Model.ENMRNO));
+    $("#outPatientHistoryTable").DataTable({
+        "ajax": {
+            "url": '/OutPatient/GetPatientVisits',
+            "data": { 'enmrNo': myJsVariable },
+            "type": "GET",
+            "datatype": "json"
+        },
+        "columns": [
+            { "data": "DOVDisplay" },
+            { "data": "ConsultType" },
+            { "data": "DoctorName" },
+            { "data": "Fee" },
+            { "data": "Discount" }
+        ],
+        "language": {
+            "emptyTable": "No Visits found"
+        },
+        "scrollY": "100px",
+        "scrollCollapse": true,
+        "paging": false,
+        "info": false,
+        "searching": false,
+        "order": [[0, "desc"]],
+    });
+
+    $("#Discount").blur(function () {
+        var calculatedFee = $('#Fee').val();
+        if ($("#Discount").val() > 0) {
+            calculatedFee = $('#Fee').val() - $("#Discount").val();
+        }
+        $('#Fee').val(calculatedFee);
+    });
+
+    $('#DoctorID').change(function () {
+        if ($('#DoctorID').val() > 0) {
+            $("#ConsultTypeID").removeAttr("disabled");
+        }
+        else {
+            $("#ConsultTypeID").attr("disabled");
+        }
+        $('#ConsultTypeID option:contains("--Select--")').prop('selected', true);
+        $('#Fee').val('');
+        $('#Discount').val('');
+    });
+
+    $("#ConsultTypeID").change(function () {
+        //alert($("#BrandID").val());
+        $.ajax({
+            url: '/OutPatient/GetConsultationFee',
+            type: 'POST',
+            datatype: 'application/json',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                doctorId: +$("#DoctorID").val(),
+                consultTypeId: +$("#ConsultTypeID").val()
+            }),
+            success: function (res) {
+                $("#Fee").val(res);
+            }
+        });
+    });
+        $('#addNew').click(function (e) {
+            e.preventDefault();
+            $('#consultForm').removeClass('hidden');
+    });
+
+    $('#DateOfVisit').datepicker({
+        keyboardNavigation: false,
+        forceParse: false,
+        todayHighlight: true,
+        todayBtn: false,
+        format: "mm/dd/yyyy"
+    });
+
+    $('.btnpicker').click(function (event) {
+        event.preventDefault();
+        $('#DateOfVisit').datepicker('show');
+    });
+</script>

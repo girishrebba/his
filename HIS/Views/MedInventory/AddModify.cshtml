@@ -10,13 +10,13 @@
     <div class="form-group">
         @Html.LabelFor(model => model.BrandID, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-sm-4">
-            @Html.DropDownListFor(model => model.BrandID, ViewBag.Brands as SelectList, "--Selet--", new { @class = "form-control" })
+            @Html.DropDownListFor(model => model.BrandID, ViewBag.Brands as SelectList, "--Select--", new { @class = "form-control" })
             @Html.ValidationMessageFor(model => model.BrandID)
         </div>
 
         @Html.LabelFor(model => model.BrandCategoryID, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-sm-4">
-            @Html.DropDownListFor(model => model.BrandCategoryID, ViewBag.BrandCategories as SelectList, "--Selet--", new { @class = "form-control" })
+            @Html.DropDownListFor(model => model.BrandCategoryID, ViewBag.BrandCategories as SelectList, "--Select--", new { @class = "form-control" })
             @Html.ValidationMessageFor(model => model.BrandCategoryID)
         </div>
     </div>
@@ -29,7 +29,7 @@
 
         @Html.LabelFor(model => model.AvailableQty, new { @class = "control-label col-md-2" })
         <div class="col-sm-4">
-            @Html.EditorFor(model => model.AvailableQty, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.EditorFor(model => model.AvailableQty, new { htmlAttributes = new {Value = Model.AvailableQty > 0 ? Model.AvailableQty.ToString() : string.Empty, @class = "form-control" } })
             @Html.ValidationMessageFor(model => model.AvailableQty)
         </div>
     </div>
@@ -62,15 +62,17 @@
         @Html.LabelFor(model => model.ExpiryDate, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-sm-4">
             <div id="date-popup" class="input-group date">
-                @Html.EditorFor(model => model.ExpiryDate, new { htmlAttributes = new { @class = "datepicker form-control", @placeholder = "" } })
-                <span class="btnPicker input-group-addon"><i class="fa fa-calendar"></i></span>
+                @Html.EditorFor(model => model.ExpiryDateDisplay, new { htmlAttributes = new { @class = "datepicker form-control", @placeholder = "" } })
+                <span class="btnpicker input-group-addon"><i class="fa fa-calendar"></i></span>
             </div>
             @Html.ValidationMessageFor(model => model.ExpiryDate, "", new { @class = "text-danger" })
         </div>
     </div>
     <div class="form-group">
-        <input type="submit" value="Submit" class="btn btn-primary" />
-        <input type="reset" value="Reset" class="btn" />
+        <div class="col-md-3 col-md-offset-5">
+            <input type="submit" value="Submit" class="btn btn-primary" />
+            <input type="reset" value="Reset" class="btn" />
+        </div>
     </div>
 </div>
 }
@@ -82,16 +84,16 @@
             forceParse: false,
             todayHighlight: true,
             todayBtn: false,
-            format:"dd-mm-yyyy"
+            format:"mm/dd/yyyy"
         });
 
-        $('.btnPicker').click(function () {
+        $('.btnpicker').click(function () {
             //alert('clicked');
             $('.datepicker').datepicker('show');
         });
 
         $("#BrandID").change(function () {
-            alert($("#BrandID").val());
+            //alert($("#BrandID").val());
             $.ajax({
                 url: '/MedInventory/GetCategories',
                 type: 'POST',
@@ -102,14 +104,11 @@
                 }),
                 success: function (res) {
                     $("#BrandCategoryID").find("option:not(:first)").remove();
-                    $.each(res.d, function (data, value) {
+                    $.each(res, function (data, value) {
                         $("#BrandCategoryID").append($("<option></option>").val(value.CategoryID).html(value.Category));
                     })
                 }
             });
         });
-        
-
-
     });
 </script>

@@ -28,8 +28,8 @@
                                 <th>Phone</th>
                                 <th>Marital Status</th>
                                 <th>Qualification</th>
-                                <th>Specialization</th>
                                 <th>User Type</th>
+                                <th>Specialization</th>
                                 <th>Status</th>
                                 <th></th>
                             </tr>
@@ -52,28 +52,16 @@
                     "datatype": "json"
                 },
                 "columns": [
-                    { "data": "Name" },
-                    {
-                        "data": "DOB",
-                        "type": "date ",
-                        "render": function (value) {
-                            if (value === null) return "";
-                            var pattern = /Date\(([^)]+)\)/;
-                            var results = pattern.exec(value);
-                            var date = new Date(parseFloat(results[1]));
-                            var month = date.getMonth() + 1;
-                            var dt = date.getDate();
-                            return (month.length > 1 ? month : "0" + month) + "/" + (dt.length > 1 ? dt : "0" + dt) + "/" + date.getFullYear();
-                        }
-                    },
-                    { "data": "Gender" },
+                    { "data": "NameDisplay" },
+                    { "data": "DOBDisplay" },
+                    { "data": "GenderDisplay" },
                     { "data": "Email" },
                     { "data": "Phone" },
-                    { "data": "MaritalStatus" },
+                    { "data": "MaritalStatusDisplay" },
                     { "data": "Qualification" },
-                    { "data": "DoctorType" },
                     { "data": "UserTypeName" },
-                    { "data": "Status" },
+                    { "data": "DoctorTypeDisplay" },      
+                    { "data": "StatusDisplay" },
                     {
                         "data":"UserID", "render" : function (data) {
                         return "<a class='btn btn-default btn-sm' onclick=PopupForm('@Url.Action("AddModify","User")/" + data + "')><i class='fa fa-pencil'></i> Edit</a>";
@@ -105,6 +93,9 @@
                     top:161,
                     close: function () {
                         Popup.dialog('destroy').remove();
+                    },
+                    open: function (event, ui) {
+                        $('.ui-dialog-content').css('overflow', 'hidden');
                     }
 
                 });

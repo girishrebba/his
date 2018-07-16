@@ -13,7 +13,7 @@
     </div>
     <div class="form-group">
         @Html.LabelFor(model => model.BrandID)
-        @Html.DropDownListFor(model => model.BrandID, ViewBag.Brands as SelectList, "--Selet--", new { @class = "form-control" })
+        @Html.DropDownListFor(model => model.BrandID, ViewBag.Brands as SelectList, "--Select--", new { @class = "form-control" })
         @Html.ValidationMessageFor(model => model.BrandID)
     </div>
 

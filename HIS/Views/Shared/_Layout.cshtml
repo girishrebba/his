@@ -8,6 +8,21 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     <link href="~/Content/his_customstyles.css" rel="stylesheet" />
+    <style type="text/css">
+        .his-site-header {
+            padding: 12.5px !important;
+            background-color: #fff !important;
+            border-bottom: solid 1px #e3e1e1 !important;
+        }
+
+        .page-container.sidebar-collapsed .site-header {
+            padding: 18px !important;
+        }
+
+        .his-icon-side-menu {
+            color: #212529 !important
+        }
+    </style>
 </head>
 <body>
     <!-- Page container -->
@@ -16,40 +31,40 @@
         <div class="page-sidebar collapsed">
 
             <!-- Site header  -->
-            <header class="site-header">
+            <header class="site-header his-site-header">
                 <div class="site-logo"><a href="index.html"><img src="~/light/images/hms_logo_menu.png" alt="Mouldifi" title="Mouldifi"></a></div>
-                <div class="sidebar-collapse hidden-xs"><a class="sidebar-collapse-icon" href="#"><i class="icon-menu"></i></a></div>
-                <div class="sidebar-mobile-menu visible-xs"><a data-target="#side-nav" data-toggle="collapse" class="mobile-menu-icon" href="#"><i class="icon-menu"></i></a></div>
+                <div class="sidebar-collapse hidden-xs"><a data-target="#side-nav" class="sidebar-collapse-icon" href="#"><i class="fa fa-bars his-icon-side-menu"></i></a></div>
+                <div class="sidebar-mobile-menu visible-xs"><a data-target="#side-nav" data-toggle="collapse" class="mobile-menu-icon" href="#"><i class="fa fa-bars his-icon-side-menu"></i></a></div>
             </header>
             <!-- /site header -->
             <!-- Main navigation -->
             <ul id="side-nav" class="main-menu navbar-collapse collapsed">
-                <li class="has-sub active ">
+                <li class="has-sub">
                     <a href="/home/index"><i class="icon-home"></i><span class="title">Home</span></a>
                     <ul class="nav"></ul>
                 </li>
+                @*<li class="has-sub">
+                        <a href="/home/index"><i class="fa fa-user-md" style="padding-left:5px"></i><span class="title">Users</span></a>
+                        <ul class="nav">
+                            <li><a href="@Url.Action("Index", "User")"><span class="title">Users</span></a></li>
+                        </ul>
+                    </li>*@
                 <li class="has-sub">
-                    <a href="/home/index"><i class="fa fa-user-md" style="padding-left:5px"></i><span class="title">Users</span></a>
+                    <a href="@Url.Action("Index", "InPatient")"><i class="fa fa-wheelchair" style="padding-left:5px"></i><span class="title">Patients</span></a>
                     <ul class="nav">
-                        <li><a href="@Url.Action("Index", "User")"><span class="title">User Management</span></a></li>
+                        <li><a href="@Url.Action("Index", "InPatient")"><span class="title">I/P Profile</span></a></li>
+                        <li><a href="@Url.Action("Index", "OutPatient")"><span class="title">O/P Profile</span></a></li>
                     </ul>
                 </li>
                 <li class="has-sub">
-                    <a href="/home/index"><i class="fa fa-wheelchair" style="padding-left:5px"></i><span class="title">Patients</span></a>
-                    <ul class="nav">
-                        <li><a href="#/"><span class="title">Patient Management</span></a></li>
-                        <li><a href="#/"><span class="title">Metrics</span></a></li>
-                    </ul>
-                </li>
-                <li class="has-sub">
-                    <a href="/home/index"><i class="fa fa-bed" style="padding-left:5px"></i><span class="title">Rooms</span></a>
+                    <a href="#"><i class="fa fa-bed" style="padding-left:5px"></i><span class="title">Rooms</span></a>
                     <ul class="nav">
                         <li><a href="#/"><span class="title">Room Allocation</span></a></li>
                         <li><a href="#/"><span class="title">Bed Management</span></a></li>
                     </ul>
                 </li>
                 <li class="has-sub">
-                    <a href="/home/index"><i class="fa fa-medkit" style="padding-left:5px"></i><span class="title">Pharmacy</span></a>
+                    <a href="@Url.Action("Index", "MedInventory")"><i class="fa fa-medkit" style="padding-left:5px"></i><span class="title">Pharmacy</span></a>
                     <ul class="nav">
                         <li><a href="@Url.Action("Index", "MedInventory")"><span class="title">Medicine Inventory</span></a></li>
                         <li><a href="#/"><span class="title">Patient Prescription</span></a></li>
@@ -63,16 +78,18 @@
                         <li><a href="news-dashboard.html"><span class="title">Report 3</span></a></li>
                     </ul>
                 </li>
-                <li class="has-sub">
-                    <a href="index.html"><i class="icon-lock"></i><span class="title">Admin</span></a>
+                <li class="has-sub active">
+                    <a href="@Url.Action("Index", "User")"><i class="icon-lock"></i><span class="title">Admin</span></a>
                     <ul class="nav">
-                        <li class="active"><a href="@Url.Action("Index", "BloodGroup")"><span class="title">Blood Groups</span></a></li>
+                        <li class="active"><a href="@Url.Action("Index", "User")"><span class="title">Users</span></a></li>
+                        <li><a href="@Url.Action("Index", "BloodGroup")"><span class="title">Blood Groups</span></a></li>
                         <li><a href="@Url.Action("Index", "UserType")"><span class="title">User Types</span></a></li>
                         <li><a href="@Url.Action("Index", "Specialization")"><span class="title">Specialization</span></a></li>
                         <li><a href="@Url.Action("Index", "Intakes")"><span class="title">Intake Frequency</span></a></li>
                         <li><a href="@Url.Action("Index", "Brand")"><span class="title">Brands</span></a></li>
                         <li><a href="@Url.Action("Index", "BrandCategory")"><span class="title">Brand Categories</span></a></li>
                         <li><a href="@Url.Action("Index", "ConsultType")"><span class="title">Consultations</span></a></li>
+                        <li><a href="@Url.Action("Index", "ConsultationFee")"><span class="title">Consultation Fee</span></a></li>
                     </ul>
                 </li>
             </ul>
@@ -163,6 +180,18 @@
     <link href="~/light/css/plugins/datepicker/bootstrap-datepicker.css" rel="stylesheet" />
     <script src="~/Scripts/moment.js"></script>
     <script src="~/light/js/plugins/datepicker/bootstrap-datepicker.js"></script>
+    <script type='text/javascript'>
+        //$(function () {
+        //    $(".nav a").on("click", function () {
+        //        alert('text');
+        //        $(".nav").find(".active").removeClass("active");
+        //        $(".li.has-sub").find(".active").removeClass("active");
+        //        $(this).parent().addClass("active");
+        //    });
+        //});
+    </script>
+
     @RenderSection("scripts", required: false)
 </body>
 </html>
+

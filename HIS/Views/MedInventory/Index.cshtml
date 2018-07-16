@@ -58,19 +58,7 @@
                     { "data": "PricePerSheet" },
                     { "data": "BatchNo" },
                     { "data": "LotNo" },
-                    {
-                        "data": "ExpiryDate",
-                        "type": "date ",
-                        "render": function (value) {
-                            if (value === null) return "";
-                            var pattern = /Date\(([^)]+)\)/;
-                            var results = pattern.exec(value);
-                            var date = new Date(parseFloat(results[1]));
-                            var month = date.getMonth() + 1;
-                            var dt = date.getDate();
-                            return (month.length > 1 ? month : "0" + month) + "/" + (dt.length > 1 ? dt : "0" + dt) + "/" + date.getFullYear();
-                        }
-                    },
+                    { "data": "ExpiryDateDisplay" },
                     {
                         "data":"MedInventoryID", "render" : function (data) {
                         return "<a class='btn btn-default btn-sm' onclick=PopupForm('@Url.Action("AddModify","MedInventory")/" + data + "')><i class='fa fa-pencil'></i> Edit</a>";
@@ -97,13 +85,14 @@
                     resizable: false,
                     modal:true,
                     title: 'Add Modify Medicine',
-                    height: 500,
                     width: 850,
                     top:161,
                     close: function () {
                         Popup.dialog('destroy').remove();
+                    },
+                    open: function (event, ui) {
+                        $('.ui-dialog-content').css('overflow', 'hidden');
                     }
-
                 });
             });
         }

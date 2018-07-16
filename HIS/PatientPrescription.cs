@@ -19,10 +19,13 @@ namespace HIS
         public int MedInventoryID { get; set; }
         public int Quantity { get; set; }
         public int IntakeFrequencyID { get; set; }
-        public string Cooments { get; set; }
+        public string Comments { get; set; }
+        public int PrescribedBy { get; set; }
     
         public virtual IntakeFrequency IntakeFrequency { get; set; }
         public virtual MedicineInventory MedicineInventory { get; set; }
-        public virtual Patient Patient { get; set; }
+        public virtual InPatient InPatient { get; set; }
+        public virtual OutPatient OutPatient { get; set; }
+        public virtual User User { get; set; }
     }
 }

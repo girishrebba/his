@@ -19,8 +19,28 @@ namespace HIS.Controllers
         {
             using (HISDBEntities hs = new HISDBEntities())
             {
-                var users = (from u in hs.VUsers
-                             select u).ToList();
+
+                var users = (from u in hs.Users
+                         join ut in hs.UserTypes on u.UserTypeID equals ut.UserTypeID
+                         join spl in hs.Specializations on u.SpecializationID equals spl.SpecializationID
+                         select new { u, ut, spl }).AsEnumerable()
+                         .Select(x=> new User
+                         {
+                             UserID = x.u.UserID,
+                             NameDisplay = x.u.GetFullName(),
+                             DOBDisplay = x.u.GetDOBFormat(),
+                             GenderDisplay = x.u.GetGender(),
+                             Email = x.u.Email,
+                             Phone = x.u.Phone,
+                             MaritalStatusDisplay = x.u.GetMaritalStatus(),
+                             Qualification = x.u.Qualification,
+                             UserTypeName = x.ut.UserTypeName,
+                             DoctorTypeDisplay = x.spl.DoctorType,
+                             StatusDisplay = x.u.GetUserStatus()
+                         }).ToList();
+
+                //var users = (from u in hs.VUsers
+                //             select u).ToList();
 
                 return Json(new { data = users }, JsonRequestBehavior.AllowGet);
             }
@@ -66,6 +86,7 @@ namespace HIS.Controllers
                 if (v != null)
                 {
                     user = v.u;
+                    user.DOBDisplay = v.u.GetDOBFormat();
                 }
                 return user;
             }
@@ -102,7 +123,11 @@ namespace HIS.Controllers
         {
             using (HISDBEntities db = new HISDBEntities())
             {
-                if (user.UserID== 0)
+                if (!string.IsNullOrEmpty(user.DOBDisplay))
+                {
+                    user.DOB = DateTime.Parse(user.DOBDisplay);
+                }
+                if (user.UserID == 0)
                 {
                     db.Users.Add(user);
                     db.SaveChanges();

@@ -18,7 +18,9 @@ namespace HIS
         public string ENMRNO { get; set; }
         public string Observations { get; set; }
         public Nullable<System.DateTime> ObservationDate { get; set; }
+        public int DoctorID { get; set; }
     
-        public virtual Patient Patient { get; set; }
+        public virtual InPatient InPatient { get; set; }
+        public virtual User User { get; set; }
     }
 }

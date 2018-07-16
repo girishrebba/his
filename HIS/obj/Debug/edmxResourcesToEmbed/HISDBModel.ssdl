@@ -38,6 +38,17 @@
     <Property Name="ConsultTypeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="ConsultType" Type="varchar" MaxLength="50" Nullable="false" />
   </EntityType>
+  <EntityType Name="FeeCollection">
+    <Key>
+      <PropertyRef Name="FeeID" />
+    </Key>
+    <Property Name="FeeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ENMRNO" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="Amount" Type="money" Nullable="false" />
+    <Property Name="PaidOn" Type="datetime" Nullable="false" />
+    <Property Name="Purpose" Type="varchar" MaxLength="300" />
+    <Property Name="PaymentMode" Type="varchar" MaxLength="300" />
+  </EntityType>
   <EntityType Name="InPatientHistory">
     <Key>
       <PropertyRef Name="SNO" />
@@ -46,63 +57,9 @@
     <Property Name="ENMRNO" Type="varchar" MaxLength="30" Nullable="false" />
     <Property Name="Observations" Type="varchar(max)" />
     <Property Name="ObservationDate" Type="date" />
+    <Property Name="DoctorID" Type="int" Nullable="false" />
   </EntityType>
-  <EntityType Name="IntakeFrequency">
-    <Key>
-      <PropertyRef Name="FrequencyID" />
-    </Key>
-    <Property Name="FrequencyID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Frequency" Type="varchar" MaxLength="100" Nullable="false" />
-  </EntityType>
-  <EntityType Name="MedicineInventory">
-    <Key>
-      <PropertyRef Name="MedInventoryID" />
-    </Key>
-    <Property Name="MedInventoryID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="BrandID" Type="int" Nullable="false" />
-    <Property Name="BrandCategoryID" Type="int" Nullable="false" />
-    <Property Name="MedicineName" Type="varchar" MaxLength="100" Nullable="false" />
-    <Property Name="AvailableQty" Type="int" Nullable="false" />
-    <Property Name="PricePerItem" Type="decimal" Precision="6" Scale="2" />
-    <Property Name="PricePerSheet" Type="decimal" Precision="9" Scale="2" />
-    <Property Name="BatchNo" Type="varchar" MaxLength="30" Nullable="false" />
-    <Property Name="LotNo" Type="varchar" MaxLength="30" Nullable="false" />
-    <Property Name="ExpiryDate" Type="date" />
-  </EntityType>
-  <EntityType Name="PatientMetrics">
-    <Key>
-      <PropertyRef Name="SNO" />
-    </Key>
-    <Property Name="SNO" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="ENMRNO" Type="varchar" MaxLength="30" Nullable="false" />
-    <Property Name="Height" Type="decimal" Precision="6" Scale="2" />
-    <Property Name="Weight" Type="decimal" Precision="6" Scale="2" />
-    <Property Name="BMI" Type="decimal" Precision="10" Scale="4" />
-    <Property Name="HeartBeat" Type="int" />
-    <Property Name="BP" Type="decimal" Precision="10" Scale="4" />
-    <Property Name="Temperature" Type="decimal" Precision="10" Scale="4" />
-  </EntityType>
-  <EntityType Name="PatientPrescription">
-    <Key>
-      <PropertyRef Name="PrescriptionID" />
-    </Key>
-    <Property Name="PrescriptionID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="ENMRNO" Type="varchar" MaxLength="30" Nullable="false" />
-    <Property Name="MedInventoryID" Type="int" Nullable="false" />
-    <Property Name="Quantity" Type="int" Nullable="false" />
-    <Property Name="IntakeFrequencyID" Type="int" Nullable="false" />
-    <Property Name="Cooments" Type="varchar(max)" />
-  </EntityType>
-  <EntityType Name="PatientRoomAllocation">
-    <Key>
-      <PropertyRef Name="AllocationID" />
-    </Key>
-    <Property Name="AllocationID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="ENMRNO" Type="varchar" MaxLength="30" Nullable="false" />
-    <Property Name="RoomNo" Type="int" Nullable="false" />
-    <Property Name="BrandID" Type="int" Nullable="false" />
-  </EntityType>
-  <EntityType Name="Patients">
+  <EntityType Name="InPatients">
     <Key>
       <PropertyRef Name="ENMRNO" />
     </Key>
@@ -130,8 +87,95 @@
     <Property Name="Purpose" Type="varchar" MaxLength="100" />
     <Property Name="DoctorID" Type="int" Nullable="false" />
     <Property Name="Mask" Type="bit" />
-    <Property Name="PatientType" Type="int" />
     <Property Name="PatientHistory" Type="varchar(max)" />
+    <Property Name="Height" Type="decimal" Precision="6" Scale="2" />
+    <Property Name="Weight" Type="decimal" Precision="6" Scale="2" />
+    <Property Name="BMI" Type="decimal" Precision="10" Scale="4" />
+    <Property Name="HeartBeat" Type="int" />
+    <Property Name="BP" Type="decimal" Precision="10" Scale="4" />
+    <Property Name="Temperature" Type="decimal" Precision="10" Scale="4" />
+  </EntityType>
+  <EntityType Name="IntakeFrequency">
+    <Key>
+      <PropertyRef Name="FrequencyID" />
+    </Key>
+    <Property Name="FrequencyID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Frequency" Type="varchar" MaxLength="100" Nullable="false" />
+  </EntityType>
+  <EntityType Name="MedicineInventory">
+    <Key>
+      <PropertyRef Name="MedInventoryID" />
+    </Key>
+    <Property Name="MedInventoryID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="BrandID" Type="int" Nullable="false" />
+    <Property Name="BrandCategoryID" Type="int" Nullable="false" />
+    <Property Name="MedicineName" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="AvailableQty" Type="int" Nullable="false" />
+    <Property Name="PricePerItem" Type="decimal" Precision="6" Scale="2" />
+    <Property Name="PricePerSheet" Type="decimal" Precision="9" Scale="2" />
+    <Property Name="BatchNo" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="LotNo" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="ExpiryDate" Type="date" />
+  </EntityType>
+  <EntityType Name="OutPatients">
+    <Key>
+      <PropertyRef Name="ENMRNO" />
+    </Key>
+    <Property Name="SNO" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ENMRNO" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="FirstName" Type="varchar" MaxLength="50" />
+    <Property Name="MiddleName" Type="varchar" MaxLength="30" />
+    <Property Name="LastName" Type="varchar" MaxLength="50" />
+    <Property Name="Gender" Type="int" />
+    <Property Name="DOB" Type="date" />
+    <Property Name="BirthPlace" Type="varchar" MaxLength="50" />
+    <Property Name="Profession" Type="varchar" MaxLength="50" />
+    <Property Name="Email" Type="varchar" MaxLength="50" />
+    <Property Name="Phone" Type="varchar" MaxLength="10" />
+    <Property Name="BloodGroupID" Type="int" Nullable="false" />
+    <Property Name="MaritalStatus" Type="int" />
+    <Property Name="ReferredBy" Type="varchar" MaxLength="50" />
+    <Property Name="RefPhone" Type="varchar" MaxLength="10" />
+    <Property Name="Address1" Type="varchar(max)" />
+    <Property Name="Address2" Type="varchar(max)" />
+    <Property Name="City" Type="varchar" MaxLength="50" />
+    <Property Name="State" Type="varchar" MaxLength="50" />
+    <Property Name="PinCode" Type="varchar" MaxLength="6" />
+    <Property Name="Enrolled" Type="datetime" />
+    <Property Name="Purpose" Type="varchar" MaxLength="100" />
+    <Property Name="DoctorID" Type="int" Nullable="false" />
+    <Property Name="Mask" Type="bit" />
+    <Property Name="PatientHistory" Type="varchar(max)" />
+    <Property Name="Status" Type="bit" />
+    <Property Name="Height" Type="decimal" Precision="6" Scale="2" />
+    <Property Name="Weight" Type="decimal" Precision="6" Scale="2" />
+    <Property Name="BMI" Type="decimal" Precision="10" Scale="4" />
+    <Property Name="HeartBeat" Type="int" />
+    <Property Name="BP" Type="decimal" Precision="10" Scale="4" />
+    <Property Name="Temperature" Type="decimal" Precision="10" Scale="4" />
+  </EntityType>
+  <EntityType Name="PatientPrescription">
+    <Key>
+      <PropertyRef Name="PrescriptionID" />
+    </Key>
+    <Property Name="PrescriptionID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ENMRNO" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="MedInventoryID" Type="int" Nullable="false" />
+    <Property Name="Quantity" Type="int" Nullable="false" />
+    <Property Name="IntakeFrequencyID" Type="int" Nullable="false" />
+    <Property Name="Comments" Type="varchar(max)" />
+    <Property Name="PrescribedBy" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="PatientRoomAllocation">
+    <Key>
+      <PropertyRef Name="AllocationID" />
+    </Key>
+    <Property Name="AllocationID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ENMRNO" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="RoomNo" Type="int" Nullable="false" />
+    <Property Name="FromDate" Type="datetime" Nullable="false" />
+    <Property Name="EndDate" Type="datetime" />
+    <Property Name="DischargeSummary" Type="varchar(max)" />
   </EntityType>
   <EntityType Name="PatientVisitHistory">
     <Key>
@@ -142,8 +186,8 @@
     <Property Name="ConsultTypeID" Type="int" Nullable="false" />
     <Property Name="ENMRNO" Type="varchar" MaxLength="30" Nullable="false" />
     <Property Name="FEE" Type="money" Nullable="false" />
-    <Property Name="DiscountPercent" Type="decimal" Precision="6" Scale="2" />
-    <Property Name="PatientType" Type="int" />
+    <Property Name="Discount" Type="money" />
+    <Property Name="DoctorID" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="Rooms">
     <Key>
@@ -191,27 +235,6 @@
     <Property Name="UserTypeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="UserTypeName" Type="varchar" MaxLength="50" Nullable="false" />
   </EntityType>
-  <!--Errors Found During Generation:
-warning 6002: The table/view 'HIS.dbo.VUsers' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-  <EntityType Name="VUsers">
-    <Key>
-      <PropertyRef Name="UserID" />
-      <PropertyRef Name="Gender" />
-      <PropertyRef Name="MaritalStatus" />
-      <PropertyRef Name="Status" />
-    </Key>
-    <Property Name="UserID" Type="int" Nullable="false" />
-    <Property Name="Name" Type="varchar" MaxLength="132" />
-    <Property Name="DOB" Type="date" />
-    <Property Name="Gender" Type="varchar" MaxLength="6" Nullable="false" />
-    <Property Name="Email" Type="varchar" MaxLength="50" />
-    <Property Name="Phone" Type="varchar" MaxLength="10" />
-    <Property Name="MaritalStatus" Type="varchar" MaxLength="7" Nullable="false" />
-    <Property Name="Qualification" Type="varchar" MaxLength="20" />
-    <Property Name="DoctorType" Type="varchar" MaxLength="50" />
-    <Property Name="UserTypeName" Type="varchar" MaxLength="50" />
-    <Property Name="Status" Type="varchar" MaxLength="8" Nullable="false" />
-  </EntityType>
   <Association Name="FK_BrandCategories_BrandID">
     <End Role="Brands" Type="Self.Brands" Multiplicity="1" />
     <End Role="BrandCategories" Type="Self.BrandCategories" Multiplicity="*" />
@@ -248,11 +271,59 @@ warning 6002: The table/view 'HIS.dbo.VUsers' does not have a primary key define
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_IPH_ENMRNO">
-    <End Role="Patients" Type="Self.Patients" Multiplicity="1" />
+  <Association Name="FK_FeeCollection_ENMRNO">
+    <End Role="InPatients" Type="Self.InPatients" Multiplicity="1" />
+    <End Role="FeeCollection" Type="Self.FeeCollection" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="InPatients">
+        <PropertyRef Name="ENMRNO" />
+      </Principal>
+      <Dependent Role="FeeCollection">
+        <PropertyRef Name="ENMRNO" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_InPatientHistory_Doctor">
+    <End Role="Users" Type="Self.Users" Multiplicity="1" />
     <End Role="InPatientHistory" Type="Self.InPatientHistory" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="Patients">
+      <Principal Role="Users">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="InPatientHistory">
+        <PropertyRef Name="DoctorID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_InPatients_BloodGroup">
+    <End Role="BloodGroup" Type="Self.BloodGroup" Multiplicity="1" />
+    <End Role="InPatients" Type="Self.InPatients" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="BloodGroup">
+        <PropertyRef Name="GroupID" />
+      </Principal>
+      <Dependent Role="InPatients">
+        <PropertyRef Name="BloodGroupID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_InPatients_Doctor">
+    <End Role="Users" Type="Self.Users" Multiplicity="1" />
+    <End Role="InPatients" Type="Self.InPatients" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="InPatients">
+        <PropertyRef Name="DoctorID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_IPH_InPatients_ENMRNO">
+    <End Role="InPatients" Type="Self.InPatients" Multiplicity="1" />
+    <End Role="InPatientHistory" Type="Self.InPatientHistory" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="InPatients">
         <PropertyRef Name="ENMRNO" />
       </Principal>
       <Dependent Role="InPatientHistory">
@@ -284,51 +355,51 @@ warning 6002: The table/view 'HIS.dbo.VUsers' does not have a primary key define
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_PatientMetrics_ENMRNO">
-    <End Role="Patients" Type="Self.Patients" Multiplicity="1" />
-    <End Role="PatientMetrics" Type="Self.PatientMetrics" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Patients">
-        <PropertyRef Name="ENMRNO" />
-      </Principal>
-      <Dependent Role="PatientMetrics">
-        <PropertyRef Name="ENMRNO" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_Patients_BloodGroup">
+  <Association Name="FK_OutPatients_BloodGroup">
     <End Role="BloodGroup" Type="Self.BloodGroup" Multiplicity="1" />
-    <End Role="Patients" Type="Self.Patients" Multiplicity="*" />
+    <End Role="OutPatients" Type="Self.OutPatients" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="BloodGroup">
         <PropertyRef Name="GroupID" />
       </Principal>
-      <Dependent Role="Patients">
+      <Dependent Role="OutPatients">
         <PropertyRef Name="BloodGroupID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_Patients_Doctor">
+  <Association Name="FK_OutPatients_Doctor">
     <End Role="Users" Type="Self.Users" Multiplicity="1" />
-    <End Role="Patients" Type="Self.Patients" Multiplicity="*" />
+    <End Role="OutPatients" Type="Self.OutPatients" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Users">
         <PropertyRef Name="UserID" />
       </Principal>
-      <Dependent Role="Patients">
+      <Dependent Role="OutPatients">
         <PropertyRef Name="DoctorID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_PP_ENMRNO">
-    <End Role="Patients" Type="Self.Patients" Multiplicity="1" />
+  <Association Name="FK_PatientVisitHistory_Doctor">
+    <End Role="Users" Type="Self.Users" Multiplicity="1" />
+    <End Role="PatientVisitHistory" Type="Self.PatientVisitHistory" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="PatientVisitHistory">
+        <PropertyRef Name="DoctorID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PP_Doctor">
+    <End Role="Users" Type="Self.Users" Multiplicity="1" />
     <End Role="PatientPrescription" Type="Self.PatientPrescription" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="Patients">
-        <PropertyRef Name="ENMRNO" />
+      <Principal Role="Users">
+        <PropertyRef Name="UserID" />
       </Principal>
       <Dependent Role="PatientPrescription">
-        <PropertyRef Name="ENMRNO" />
+        <PropertyRef Name="PrescribedBy" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -356,11 +427,11 @@ warning 6002: The table/view 'HIS.dbo.VUsers' does not have a primary key define
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_PRA_ENMRNO">
-    <End Role="Patients" Type="Self.Patients" Multiplicity="1" />
+  <Association Name="FK_PRA_InPatients_ENMRNO">
+    <End Role="InPatients" Type="Self.InPatients" Multiplicity="1" />
     <End Role="PatientRoomAllocation" Type="Self.PatientRoomAllocation" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="Patients">
+      <Principal Role="InPatients">
         <PropertyRef Name="ENMRNO" />
       </Principal>
       <Dependent Role="PatientRoomAllocation">
@@ -392,11 +463,11 @@ warning 6002: The table/view 'HIS.dbo.VUsers' does not have a primary key define
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_PVH_Patient_ENMRNO">
-    <End Role="Patients" Type="Self.Patients" Multiplicity="1" />
+  <Association Name="FK_PVH_OutPatient_ENMRNO">
+    <End Role="OutPatients" Type="Self.OutPatients" Multiplicity="1" />
     <End Role="PatientVisitHistory" Type="Self.PatientVisitHistory" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="Patients">
+      <Principal Role="OutPatients">
         <PropertyRef Name="ENMRNO" />
       </Principal>
       <Dependent Role="PatientVisitHistory">
@@ -434,33 +505,19 @@ warning 6002: The table/view 'HIS.dbo.VUsers' does not have a primary key define
     <EntitySet Name="Brands" EntityType="Self.Brands" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ConsultationFee" EntityType="Self.ConsultationFee" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ConsultationType" EntityType="Self.ConsultationType" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="FeeCollection" EntityType="Self.FeeCollection" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="InPatientHistory" EntityType="Self.InPatientHistory" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="InPatients" EntityType="Self.InPatients" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="IntakeFrequency" EntityType="Self.IntakeFrequency" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="MedicineInventory" EntityType="Self.MedicineInventory" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="PatientMetrics" EntityType="Self.PatientMetrics" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="OutPatients" EntityType="Self.OutPatients" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PatientPrescription" EntityType="Self.PatientPrescription" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PatientRoomAllocation" EntityType="Self.PatientRoomAllocation" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="Patients" EntityType="Self.Patients" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PatientVisitHistory" EntityType="Self.PatientVisitHistory" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Rooms" EntityType="Self.Rooms" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Specialization" EntityType="Self.Specialization" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="UserType" EntityType="Self.UserType" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="VUsers" EntityType="Self.VUsers" store:Type="Views" store:Schema="dbo">
-      <DefiningQuery>SELECT 
-    [VUsers].[UserID] AS [UserID], 
-    [VUsers].[Name] AS [Name], 
-    [VUsers].[DOB] AS [DOB], 
-    [VUsers].[Gender] AS [Gender], 
-    [VUsers].[Email] AS [Email], 
-    [VUsers].[Phone] AS [Phone], 
-    [VUsers].[MaritalStatus] AS [MaritalStatus], 
-    [VUsers].[Qualification] AS [Qualification], 
-    [VUsers].[DoctorType] AS [DoctorType], 
-    [VUsers].[UserTypeName] AS [UserTypeName], 
-    [VUsers].[Status] AS [Status]
-    FROM [dbo].[VUsers] AS [VUsers]</DefiningQuery>
-    </EntitySet>
     <AssociationSet Name="FK_BrandCategories_BrandID" Association="Self.FK_BrandCategories_BrandID">
       <End Role="Brands" EntitySet="Brands" />
       <End Role="BrandCategories" EntitySet="BrandCategories" />
@@ -473,8 +530,24 @@ warning 6002: The table/view 'HIS.dbo.VUsers' does not have a primary key define
       <End Role="ConsultationType" EntitySet="ConsultationType" />
       <End Role="ConsultationFee" EntitySet="ConsultationFee" />
     </AssociationSet>
-    <AssociationSet Name="FK_IPH_ENMRNO" Association="Self.FK_IPH_ENMRNO">
-      <End Role="Patients" EntitySet="Patients" />
+    <AssociationSet Name="FK_FeeCollection_ENMRNO" Association="Self.FK_FeeCollection_ENMRNO">
+      <End Role="InPatients" EntitySet="InPatients" />
+      <End Role="FeeCollection" EntitySet="FeeCollection" />
+    </AssociationSet>
+    <AssociationSet Name="FK_InPatientHistory_Doctor" Association="Self.FK_InPatientHistory_Doctor">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="InPatientHistory" EntitySet="InPatientHistory" />
+    </AssociationSet>
+    <AssociationSet Name="FK_InPatients_BloodGroup" Association="Self.FK_InPatients_BloodGroup">
+      <End Role="BloodGroup" EntitySet="BloodGroup" />
+      <End Role="InPatients" EntitySet="InPatients" />
+    </AssociationSet>
+    <AssociationSet Name="FK_InPatients_Doctor" Association="Self.FK_InPatients_Doctor">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="InPatients" EntitySet="InPatients" />
+    </AssociationSet>
+    <AssociationSet Name="FK_IPH_InPatients_ENMRNO" Association="Self.FK_IPH_InPatients_ENMRNO">
+      <End Role="InPatients" EntitySet="InPatients" />
       <End Role="InPatientHistory" EntitySet="InPatientHistory" />
     </AssociationSet>
     <AssociationSet Name="FK_MI_BrandID" Association="Self.FK_MI_BrandID">
@@ -485,20 +558,20 @@ warning 6002: The table/view 'HIS.dbo.VUsers' does not have a primary key define
       <End Role="BrandCategories" EntitySet="BrandCategories" />
       <End Role="MedicineInventory" EntitySet="MedicineInventory" />
     </AssociationSet>
-    <AssociationSet Name="FK_PatientMetrics_ENMRNO" Association="Self.FK_PatientMetrics_ENMRNO">
-      <End Role="Patients" EntitySet="Patients" />
-      <End Role="PatientMetrics" EntitySet="PatientMetrics" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Patients_BloodGroup" Association="Self.FK_Patients_BloodGroup">
+    <AssociationSet Name="FK_OutPatients_BloodGroup" Association="Self.FK_OutPatients_BloodGroup">
       <End Role="BloodGroup" EntitySet="BloodGroup" />
-      <End Role="Patients" EntitySet="Patients" />
+      <End Role="OutPatients" EntitySet="OutPatients" />
     </AssociationSet>
-    <AssociationSet Name="FK_Patients_Doctor" Association="Self.FK_Patients_Doctor">
+    <AssociationSet Name="FK_OutPatients_Doctor" Association="Self.FK_OutPatients_Doctor">
       <End Role="Users" EntitySet="Users" />
-      <End Role="Patients" EntitySet="Patients" />
+      <End Role="OutPatients" EntitySet="OutPatients" />
     </AssociationSet>
-    <AssociationSet Name="FK_PP_ENMRNO" Association="Self.FK_PP_ENMRNO">
-      <End Role="Patients" EntitySet="Patients" />
+    <AssociationSet Name="FK_PatientVisitHistory_Doctor" Association="Self.FK_PatientVisitHistory_Doctor">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="PatientVisitHistory" EntitySet="PatientVisitHistory" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PP_Doctor" Association="Self.FK_PP_Doctor">
+      <End Role="Users" EntitySet="Users" />
       <End Role="PatientPrescription" EntitySet="PatientPrescription" />
     </AssociationSet>
     <AssociationSet Name="FK_PP_FrequencyID" Association="Self.FK_PP_FrequencyID">
@@ -509,8 +582,8 @@ warning 6002: The table/view 'HIS.dbo.VUsers' does not have a primary key define
       <End Role="MedicineInventory" EntitySet="MedicineInventory" />
       <End Role="PatientPrescription" EntitySet="PatientPrescription" />
     </AssociationSet>
-    <AssociationSet Name="FK_PRA_ENMRNO" Association="Self.FK_PRA_ENMRNO">
-      <End Role="Patients" EntitySet="Patients" />
+    <AssociationSet Name="FK_PRA_InPatients_ENMRNO" Association="Self.FK_PRA_InPatients_ENMRNO">
+      <End Role="InPatients" EntitySet="InPatients" />
       <End Role="PatientRoomAllocation" EntitySet="PatientRoomAllocation" />
     </AssociationSet>
     <AssociationSet Name="FK_PRA_RoomNo" Association="Self.FK_PRA_RoomNo">
@@ -521,8 +594,8 @@ warning 6002: The table/view 'HIS.dbo.VUsers' does not have a primary key define
       <End Role="ConsultationType" EntitySet="ConsultationType" />
       <End Role="PatientVisitHistory" EntitySet="PatientVisitHistory" />
     </AssociationSet>
-    <AssociationSet Name="FK_PVH_Patient_ENMRNO" Association="Self.FK_PVH_Patient_ENMRNO">
-      <End Role="Patients" EntitySet="Patients" />
+    <AssociationSet Name="FK_PVH_OutPatient_ENMRNO" Association="Self.FK_PVH_OutPatient_ENMRNO">
+      <End Role="OutPatients" EntitySet="OutPatients" />
       <End Role="PatientVisitHistory" EntitySet="PatientVisitHistory" />
     </AssociationSet>
     <AssociationSet Name="FK_User_Specialization" Association="Self.FK_User_Specialization">

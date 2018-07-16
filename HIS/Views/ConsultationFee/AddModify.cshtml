@@ -1,0 +1,28 @@
+﻿@model HIS.ConsultationFee
+@{
+    Layout = null;
+}
+
+@using (Html.BeginForm("AddModify", "ConsultationFee", FormMethod.Post, new { onsubmit = "return SubmitForm(this)" }))
+{
+    @Html.HiddenFor(model => model.ConsultationID)
+    <div class="form-group">
+        @Html.LabelFor(model => model.ConsultTypeID, "Consultation Type")
+        @Html.DropDownListFor(model => model.ConsultTypeID, ViewBag.ConsultationTypes as SelectList, "--Select--", new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.ConsultTypeID)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.DoctorID, "Doctor")
+        @Html.DropDownListFor(model => model.DoctorID, ViewBag.Users as SelectList, "--Select--", new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.DoctorID)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.Fee, new { @class = "control-label" })
+        @Html.EditorFor(model => model.Fee, new { htmlAttributes = new {@class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.Fee)
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Submit" class="btn btn-primary" />
+        <input type="reset" value="Reset" class="btn" />
+    </div>
+}
