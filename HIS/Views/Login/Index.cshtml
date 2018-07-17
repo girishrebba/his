@@ -2,14 +2,26 @@
 @{
     Layout = "~/Views/Shared/_LoginPartial.cshtml";
 }
+<style type="text/css">
+    .login-content {
+        width: 420px;
+        margin: 0.3px 200px !important;
+        padding: 30px 30px 15px;
+    }
 
+    .login-branding {
+        margin-left: 200px !important;
+        padding: 100px 0px 0px !important;
+        text-align: center;
+    }
+</style>
 @using (Html.BeginForm("Login", "Login", FormMethod.Post, new { @class = "login-form", enctype = "multipart/form-data" }))
 {
     <div class="login-container">
         <div class="login-branding">
-            @*<a><img src="~/light/images/HIS_Logo." alt="Mouldifi" title="Mouldifi"></a>*@
+            <a><img src="~/light/images/hms-logo_login.png" style="width:420px;" alt="Mouldifi" title="Sravanthi Hospitals"></a>
         </div>
-        <div class="login-content">
+        <div class="login-content mx-auto">
             <h2><strong>Welcome</strong>, please login</h2>
             <form method="post" action="index.html">
                 <div class="form-group">
