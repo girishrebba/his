@@ -107,15 +107,18 @@
       <PropertyRef Name="MedInventoryID" />
     </Key>
     <Property Name="MedInventoryID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="MedicineID" Type="int" Nullable="false" />
+    <Property Name="AvailableQty" Type="int" />
+  </EntityType>
+  <EntityType Name="MedicineMaster">
+    <Key>
+      <PropertyRef Name="MMID" />
+    </Key>
+    <Property Name="MMID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="BrandID" Type="int" Nullable="false" />
     <Property Name="BrandCategoryID" Type="int" Nullable="false" />
     <Property Name="MedicineName" Type="varchar" MaxLength="100" Nullable="false" />
-    <Property Name="AvailableQty" Type="int" Nullable="false" />
-    <Property Name="PricePerItem" Type="decimal" Precision="6" Scale="2" />
-    <Property Name="PricePerSheet" Type="decimal" Precision="9" Scale="2" />
-    <Property Name="BatchNo" Type="varchar" MaxLength="30" Nullable="false" />
-    <Property Name="LotNo" Type="varchar" MaxLength="30" Nullable="false" />
-    <Property Name="ExpiryDate" Type="date" />
+    <Property Name="MedDose" Type="varchar" MaxLength="100" Nullable="false" />
   </EntityType>
   <EntityType Name="OutPatients">
     <Key>
@@ -160,11 +163,14 @@
     </Key>
     <Property Name="PrescriptionID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="ENMRNO" Type="varchar" MaxLength="30" Nullable="false" />
-    <Property Name="MedInventoryID" Type="int" Nullable="false" />
+    <Property Name="MedicineID" Type="int" Nullable="false" />
     <Property Name="Quantity" Type="int" Nullable="false" />
     <Property Name="IntakeFrequencyID" Type="int" Nullable="false" />
     <Property Name="Comments" Type="varchar(max)" />
     <Property Name="PrescribedBy" Type="int" Nullable="false" />
+    <Property Name="DatePrescribed" Type="date" />
+    <Property Name="BatchNo" Type="varchar" MaxLength="30" />
+    <Property Name="LotNo" Type="varchar" MaxLength="30" />
   </EntityType>
   <EntityType Name="PatientRoomAllocation">
     <Key>
@@ -185,9 +191,25 @@
     <Property Name="DateOfVisit" Type="date" Nullable="false" />
     <Property Name="ConsultTypeID" Type="int" Nullable="false" />
     <Property Name="ENMRNO" Type="varchar" MaxLength="30" Nullable="false" />
-    <Property Name="FEE" Type="money" Nullable="false" />
+    <Property Name="Fee" Type="money" Nullable="false" />
     <Property Name="Discount" Type="money" />
     <Property Name="DoctorID" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="PurchaseOrder">
+    <Key>
+      <PropertyRef Name="OrderID" />
+    </Key>
+    <Property Name="OrderID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="PONumber" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="MedicineID" Type="int" Nullable="false" />
+    <Property Name="OrderedQty" Type="int" Nullable="false" />
+    <Property Name="OrderedDate" Type="date" Nullable="false" />
+    <Property Name="PricePerItem" Type="decimal" Precision="6" Scale="2" />
+    <Property Name="PricePerSheet" Type="decimal" Precision="9" Scale="2" />
+    <Property Name="BatchNo" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="LotNo" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="ExpiryDate" Type="date" />
+    <Property Name="ApprovedStatus" Type="bit" />
   </EntityType>
   <EntityType Name="Rooms">
     <Key>
@@ -331,26 +353,38 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_MI_BrandID">
-    <End Role="Brands" Type="Self.Brands" Multiplicity="1" />
+  <Association Name="FK_MI_MedicineID">
+    <End Role="MedicineMaster" Type="Self.MedicineMaster" Multiplicity="1" />
     <End Role="MedicineInventory" Type="Self.MedicineInventory" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MedicineMaster">
+        <PropertyRef Name="MMID" />
+      </Principal>
+      <Dependent Role="MedicineInventory">
+        <PropertyRef Name="MedicineID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_MM_BrandID">
+    <End Role="Brands" Type="Self.Brands" Multiplicity="1" />
+    <End Role="MedicineMaster" Type="Self.MedicineMaster" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Brands">
         <PropertyRef Name="BrandID" />
       </Principal>
-      <Dependent Role="MedicineInventory">
+      <Dependent Role="MedicineMaster">
         <PropertyRef Name="BrandID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_MI_CategoryID">
+  <Association Name="FK_MM_CategoryID">
     <End Role="BrandCategories" Type="Self.BrandCategories" Multiplicity="1" />
-    <End Role="MedicineInventory" Type="Self.MedicineInventory" Multiplicity="*" />
+    <End Role="MedicineMaster" Type="Self.MedicineMaster" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="BrandCategories">
         <PropertyRef Name="CategoryID" />
       </Principal>
-      <Dependent Role="MedicineInventory">
+      <Dependent Role="MedicineMaster">
         <PropertyRef Name="BrandCategoryID" />
       </Dependent>
     </ReferentialConstraint>
@@ -391,6 +425,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_PO_MedicineID">
+    <End Role="MedicineMaster" Type="Self.MedicineMaster" Multiplicity="1" />
+    <End Role="PurchaseOrder" Type="Self.PurchaseOrder" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MedicineMaster">
+        <PropertyRef Name="MMID" />
+      </Principal>
+      <Dependent Role="PurchaseOrder">
+        <PropertyRef Name="MedicineID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_PP_Doctor">
     <End Role="Users" Type="Self.Users" Multiplicity="1" />
     <End Role="PatientPrescription" Type="Self.PatientPrescription" Multiplicity="*" />
@@ -415,15 +461,15 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_PP_MedicineName">
-    <End Role="MedicineInventory" Type="Self.MedicineInventory" Multiplicity="1" />
+  <Association Name="FK_PP_Medicine">
+    <End Role="MedicineMaster" Type="Self.MedicineMaster" Multiplicity="1" />
     <End Role="PatientPrescription" Type="Self.PatientPrescription" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="MedicineInventory">
-        <PropertyRef Name="MedInventoryID" />
+      <Principal Role="MedicineMaster">
+        <PropertyRef Name="MMID" />
       </Principal>
       <Dependent Role="PatientPrescription">
-        <PropertyRef Name="MedInventoryID" />
+        <PropertyRef Name="MedicineID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -510,10 +556,12 @@
     <EntitySet Name="InPatients" EntityType="Self.InPatients" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="IntakeFrequency" EntityType="Self.IntakeFrequency" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="MedicineInventory" EntityType="Self.MedicineInventory" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="MedicineMaster" EntityType="Self.MedicineMaster" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="OutPatients" EntityType="Self.OutPatients" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PatientPrescription" EntityType="Self.PatientPrescription" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PatientRoomAllocation" EntityType="Self.PatientRoomAllocation" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PatientVisitHistory" EntityType="Self.PatientVisitHistory" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PurchaseOrder" EntityType="Self.PurchaseOrder" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Rooms" EntityType="Self.Rooms" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Specialization" EntityType="Self.Specialization" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
@@ -550,13 +598,17 @@
       <End Role="InPatients" EntitySet="InPatients" />
       <End Role="InPatientHistory" EntitySet="InPatientHistory" />
     </AssociationSet>
-    <AssociationSet Name="FK_MI_BrandID" Association="Self.FK_MI_BrandID">
-      <End Role="Brands" EntitySet="Brands" />
+    <AssociationSet Name="FK_MI_MedicineID" Association="Self.FK_MI_MedicineID">
+      <End Role="MedicineMaster" EntitySet="MedicineMaster" />
       <End Role="MedicineInventory" EntitySet="MedicineInventory" />
     </AssociationSet>
-    <AssociationSet Name="FK_MI_CategoryID" Association="Self.FK_MI_CategoryID">
+    <AssociationSet Name="FK_MM_BrandID" Association="Self.FK_MM_BrandID">
+      <End Role="Brands" EntitySet="Brands" />
+      <End Role="MedicineMaster" EntitySet="MedicineMaster" />
+    </AssociationSet>
+    <AssociationSet Name="FK_MM_CategoryID" Association="Self.FK_MM_CategoryID">
       <End Role="BrandCategories" EntitySet="BrandCategories" />
-      <End Role="MedicineInventory" EntitySet="MedicineInventory" />
+      <End Role="MedicineMaster" EntitySet="MedicineMaster" />
     </AssociationSet>
     <AssociationSet Name="FK_OutPatients_BloodGroup" Association="Self.FK_OutPatients_BloodGroup">
       <End Role="BloodGroup" EntitySet="BloodGroup" />
@@ -570,6 +622,10 @@
       <End Role="Users" EntitySet="Users" />
       <End Role="PatientVisitHistory" EntitySet="PatientVisitHistory" />
     </AssociationSet>
+    <AssociationSet Name="FK_PO_MedicineID" Association="Self.FK_PO_MedicineID">
+      <End Role="MedicineMaster" EntitySet="MedicineMaster" />
+      <End Role="PurchaseOrder" EntitySet="PurchaseOrder" />
+    </AssociationSet>
     <AssociationSet Name="FK_PP_Doctor" Association="Self.FK_PP_Doctor">
       <End Role="Users" EntitySet="Users" />
       <End Role="PatientPrescription" EntitySet="PatientPrescription" />
@@ -578,8 +634,8 @@
       <End Role="IntakeFrequency" EntitySet="IntakeFrequency" />
       <End Role="PatientPrescription" EntitySet="PatientPrescription" />
     </AssociationSet>
-    <AssociationSet Name="FK_PP_MedicineName" Association="Self.FK_PP_MedicineName">
-      <End Role="MedicineInventory" EntitySet="MedicineInventory" />
+    <AssociationSet Name="FK_PP_Medicine" Association="Self.FK_PP_Medicine">
+      <End Role="MedicineMaster" EntitySet="MedicineMaster" />
       <End Role="PatientPrescription" EntitySet="PatientPrescription" />
     </AssociationSet>
     <AssociationSet Name="FK_PRA_InPatients_ENMRNO" Association="Self.FK_PRA_InPatients_ENMRNO">

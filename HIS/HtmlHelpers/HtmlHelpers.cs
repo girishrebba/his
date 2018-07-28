@@ -27,6 +27,24 @@ namespace HIS.HtmlHelpers
                 string.IsNullOrEmpty(lastName) ? string.Empty : lastName);
         }
 
+        public static string GetMedicineWithDose(string medicineName, string dose)
+        {
+            return string.Format("{0} - {1}", medicineName, dose);
+        }
+
+        public static IEnumerable<TSource> DistinctBy<TSource, TKey>
+    (this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
+        {
+            HashSet<TKey> seenKeys = new HashSet<TKey>();
+            foreach (TSource element in source)
+            {
+                if (seenKeys.Add(keySelector(element)))
+                {
+                    yield return element;
+                }
+            }
+        }
+
         public static string GetFullAddress(string address1, string address2, string city, string state, string zip)
         {
             return string.Format("{0} {1} {2} {3} {4}",
@@ -72,6 +90,19 @@ namespace HIS.HtmlHelpers
                               .OrderBy(b => b.BrandName).AsEnumerable()
                               .Select(x => new Brand { BrandID = x.BrandID, BrandName = x.BrandName }).ToList();
                 return brands;
+            }
+        }
+
+        //Fetch Brand categories from database
+        public static List<BrandCategory> GetBrandCategories()
+        {
+            using (HISDBEntities dc = new HISDBEntities())
+            {
+                var brandCategories = (from bc in dc.BrandCategories
+                                       select new { bc.CategoryID, bc.Category, bc.BrandID })
+                              .OrderBy(b => b.Category).AsEnumerable()
+                              .Select(x => new BrandCategory { CategoryID = x.CategoryID, Category = x.Category, BrandID = x.BrandID }).ToList();
+                return brandCategories;
             }
         }
 
@@ -122,6 +153,18 @@ namespace HIS.HtmlHelpers
                              select new {ct.ConsultTypeID, ct.ConsultType }).AsEnumerable()
                              .Select(x => new ConsultationType { ConsultTypeID = x.ConsultTypeID, ConsultType = x.ConsultType }).ToList();
                 return consultTypes;
+            }
+        }
+
+        public static List<IntakeFrequency> GetIntakes()
+        {
+            using (HISDBEntities dc = new HISDBEntities())
+            {
+                var intakes = (from ifs in dc.IntakeFrequencies
+                                    select new { ifs.FrequencyID, ifs.Frequency }).AsEnumerable()
+                             .Select(x => new IntakeFrequency { FrequencyID = x.FrequencyID,
+                                 Frequency = x.Frequency }).ToList();
+                return intakes;
             }
         }
 

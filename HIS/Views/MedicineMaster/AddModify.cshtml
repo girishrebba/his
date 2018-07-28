@@ -1,0 +1,66 @@
+﻿@model HIS.MedicineMaster
+@{
+    Layout = null;
+}
+
+@using (Html.BeginForm("AddModify", "MedicineMaster", FormMethod.Post, new { onsubmit = "return SubmitForm(this)" }))
+{
+    @Html.HiddenFor(model => model.MMID)
+    <div class="form-horizontal">
+        <div class="form-group">
+            @Html.LabelFor(model => model.BrandID, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-sm-4">
+                @Html.DropDownListFor(model => model.BrandID, ViewBag.Brands as SelectList, "--Select--", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.BrandID)
+            </div>
+
+            @Html.LabelFor(model => model.BrandCategoryID, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-sm-4">
+                @Html.DropDownListFor(model => model.BrandCategoryID, ViewBag.BrandCategories as SelectList, "--Select--", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.BrandCategoryID)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.MedicineName, new { @class = "control-label col-md-2" })
+            <div class="col-sm-4">
+                @Html.EditorFor(model => model.MedicineName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.MedicineName)
+            </div>
+
+            @Html.LabelFor(model => model.MedDose, new { @class = "control-label col-md-2" })
+            <div class="col-sm-4">
+                @Html.EditorFor(model => model.MedDose, new { htmlAttributes = new {@class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.MedDose)
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-3 col-md-offset-5">
+                <input type="submit" value="Submit" class="btn btn-primary" />
+                <input type="reset" value="Reset" class="btn" />
+            </div>
+        </div>
+    </div>
+}
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("#BrandID").change(function () {
+            $.ajax({
+                url: '/MedicineMaster/GetCategories',
+                type: 'POST',
+                datatype: 'application/json',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    id: +$("#BrandID").val()
+                }),
+                success: function (res) {
+                    $("#BrandCategoryID").find("option:not(:first)").remove();
+                    $.each(res, function (data, value) {
+                        $("#BrandCategoryID").append($("<option></option>").val(value.CategoryID).html(value.Category));
+                    })
+                }
+            });
+        });
+    });
+</script>

@@ -63,35 +63,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="MedicineInventories">
-      <EntityTypeMapping TypeName="HISModel.MedicineInventory">
-        <MappingFragment StoreEntitySet="MedicineInventory">
-          <ScalarProperty Name="ExpiryDate" ColumnName="ExpiryDate" />
-          <ScalarProperty Name="MedInventoryID" ColumnName="MedInventoryID" />
-          <ScalarProperty Name="BrandID" ColumnName="BrandID" />
-          <ScalarProperty Name="BrandCategoryID" ColumnName="BrandCategoryID" />
-          <ScalarProperty Name="MedicineName" ColumnName="MedicineName" />
-          <ScalarProperty Name="AvailableQty" ColumnName="AvailableQty" />
-          <ScalarProperty Name="PricePerItem" ColumnName="PricePerItem" />
-          <ScalarProperty Name="PricePerSheet" ColumnName="PricePerSheet" />
-          <ScalarProperty Name="BatchNo" ColumnName="BatchNo" />
-          <ScalarProperty Name="LotNo" ColumnName="LotNo" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="PatientPrescriptions">
-      <EntityTypeMapping TypeName="HISModel.PatientPrescription">
-        <MappingFragment StoreEntitySet="PatientPrescription">
-          <ScalarProperty Name="PrescribedBy" ColumnName="PrescribedBy" />
-          <ScalarProperty Name="Comments" ColumnName="Comments" />
-          <ScalarProperty Name="PrescriptionID" ColumnName="PrescriptionID" />
-          <ScalarProperty Name="ENMRNO" ColumnName="ENMRNO" />
-          <ScalarProperty Name="MedInventoryID" ColumnName="MedInventoryID" />
-          <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-          <ScalarProperty Name="IntakeFrequencyID" ColumnName="IntakeFrequencyID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="PatientRoomAllocations">
       <EntityTypeMapping TypeName="HISModel.PatientRoomAllocation">
         <MappingFragment StoreEntitySet="PatientRoomAllocation">
@@ -107,7 +78,7 @@
     <EntitySetMapping Name="PatientVisitHistories">
       <EntityTypeMapping TypeName="HISModel.PatientVisitHistory">
         <MappingFragment StoreEntitySet="PatientVisitHistory">
-          <ScalarProperty Name="Fee" ColumnName="FEE" />
+          <ScalarProperty Name="Fee" ColumnName="Fee" />
           <ScalarProperty Name="Discount" ColumnName="Discount" />
           <ScalarProperty Name="DoctorID" ColumnName="DoctorID" />
           <ScalarProperty Name="SNO" ColumnName="SNO" />
@@ -251,6 +222,59 @@
           <ScalarProperty Name="Amount" ColumnName="Amount" />
           <ScalarProperty Name="ENMRNO" ColumnName="ENMRNO" />
           <ScalarProperty Name="FeeID" ColumnName="FeeID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MedicineInventories">
+      <EntityTypeMapping TypeName="HISModel.MedicineInventory">
+        <MappingFragment StoreEntitySet="MedicineInventory">
+          <ScalarProperty Name="AvailableQty" ColumnName="AvailableQty" />
+          <ScalarProperty Name="MedicineID" ColumnName="MedicineID" />
+          <ScalarProperty Name="MedInventoryID" ColumnName="MedInventoryID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MedicineMasters">
+      <EntityTypeMapping TypeName="HISModel.MedicineMaster">
+        <MappingFragment StoreEntitySet="MedicineMaster">
+          <ScalarProperty Name="MedDose" ColumnName="MedDose" />
+          <ScalarProperty Name="MedicineName" ColumnName="MedicineName" />
+          <ScalarProperty Name="BrandCategoryID" ColumnName="BrandCategoryID" />
+          <ScalarProperty Name="BrandID" ColumnName="BrandID" />
+          <ScalarProperty Name="MMID" ColumnName="MMID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PurchaseOrders">
+      <EntityTypeMapping TypeName="HISModel.PurchaseOrder">
+        <MappingFragment StoreEntitySet="PurchaseOrder">
+          <ScalarProperty Name="ApprovedStatus" ColumnName="ApprovedStatus" />
+          <ScalarProperty Name="ExpiryDate" ColumnName="ExpiryDate" />
+          <ScalarProperty Name="LotNo" ColumnName="LotNo" />
+          <ScalarProperty Name="BatchNo" ColumnName="BatchNo" />
+          <ScalarProperty Name="PricePerSheet" ColumnName="PricePerSheet" />
+          <ScalarProperty Name="PricePerItem" ColumnName="PricePerItem" />
+          <ScalarProperty Name="OrderedDate" ColumnName="OrderedDate" />
+          <ScalarProperty Name="OrderedQty" ColumnName="OrderedQty" />
+          <ScalarProperty Name="MedicineID" ColumnName="MedicineID" />
+          <ScalarProperty Name="PONumber" ColumnName="PONumber" />
+          <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PatientPrescriptions">
+      <EntityTypeMapping TypeName="HISModel.PatientPrescription">
+        <MappingFragment StoreEntitySet="PatientPrescription">
+          <ScalarProperty Name="LotNo" ColumnName="LotNo" />
+          <ScalarProperty Name="BatchNo" ColumnName="BatchNo" />
+          <ScalarProperty Name="DatePrescribed" ColumnName="DatePrescribed" />
+          <ScalarProperty Name="PrescribedBy" ColumnName="PrescribedBy" />
+          <ScalarProperty Name="Comments" ColumnName="Comments" />
+          <ScalarProperty Name="IntakeFrequencyID" ColumnName="IntakeFrequencyID" />
+          <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+          <ScalarProperty Name="MedicineID" ColumnName="MedicineID" />
+          <ScalarProperty Name="ENMRNO" ColumnName="ENMRNO" />
+          <ScalarProperty Name="PrescriptionID" ColumnName="PrescriptionID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

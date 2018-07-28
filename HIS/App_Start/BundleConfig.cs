@@ -26,7 +26,8 @@ namespace HIS
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/light/css/bootstrap.min.css",
                       "~/light/css/entypo.css",
-                      "~/light/css/font-awesome.min.css",     
+                      "~/Content/fontawesome.css",
+                      "~/Content/all.css",
                       "~/light/css/mouldifi-core.css",
                       "~/light/css/mouldifi-forms.css",
                       "~/Content/jquery-ui.min.css"));

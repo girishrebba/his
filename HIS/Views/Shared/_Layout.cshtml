@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome To | SRAVANTHI HIS</title>
+    <title>@ViewBag.Title | SRAVANTHI HIS</title>
     <link href="~/Content/Site.css" rel="stylesheet" />
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
@@ -43,12 +43,6 @@
                     <a href="/home/index"><i class="icon-home"></i><span class="title">Home</span></a>
                     <ul class="nav"></ul>
                 </li>
-                @*<li class="has-sub">
-                        <a href="/home/index"><i class="fa fa-user-md" style="padding-left:5px"></i><span class="title">Users</span></a>
-                        <ul class="nav">
-                            <li><a href="@Url.Action("Index", "User")"><span class="title">Users</span></a></li>
-                        </ul>
-                    </li>*@
                 <li class="has-sub">
                     <a href="@Url.Action("Index", "InPatient")"><i class="fa fa-wheelchair" style="padding-left:5px"></i><span class="title">Patients</span></a>
                     <ul class="nav">
@@ -66,7 +60,7 @@
                 <li class="has-sub">
                     <a href="@Url.Action("Index", "MedInventory")"><i class="fa fa-medkit" style="padding-left:5px"></i><span class="title">Pharmacy</span></a>
                     <ul class="nav">
-                        <li><a href="@Url.Action("Index", "MedInventory")"><span class="title">Medicine Inventory</span></a></li>
+                        <li><a href="@Url.Action("Index", "PurchaseOrder")"><span class="title">Purchase Orders</span></a></li>
                         <li><a href="#/"><span class="title">Patient Prescription</span></a></li>
                     </ul>
                 </li>
@@ -90,6 +84,7 @@
                         <li><a href="@Url.Action("Index", "BrandCategory")"><span class="title">Brand Categories</span></a></li>
                         <li><a href="@Url.Action("Index", "ConsultType")"><span class="title">Consultations</span></a></li>
                         <li><a href="@Url.Action("Index", "ConsultationFee")"><span class="title">Consultation Fee</span></a></li>
+                        <li><a href="@Url.Action("Index", "MedicineMaster")"><span class="title">Medicines</span></a></li>
                     </ul>
                 </li>
             </ul>
@@ -181,14 +176,6 @@
     <script src="~/Scripts/moment.js"></script>
     <script src="~/light/js/plugins/datepicker/bootstrap-datepicker.js"></script>
     <script type='text/javascript'>
-        //$(function () {
-        //    $(".nav a").on("click", function () {
-        //        alert('text');
-        //        $(".nav").find(".active").removeClass("active");
-        //        $(".li.has-sub").find(".active").removeClass("active");
-        //        $(this).parent().addClass("active");
-        //    });
-        //});
     </script>
 
     @RenderSection("scripts", required: false)

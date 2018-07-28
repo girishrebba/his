@@ -32,8 +32,6 @@ namespace HIS
         public virtual DbSet<ConsultationType> ConsultationTypes { get; set; }
         public virtual DbSet<InPatientHistory> InPatientHistories { get; set; }
         public virtual DbSet<IntakeFrequency> IntakeFrequencies { get; set; }
-        public virtual DbSet<MedicineInventory> MedicineInventories { get; set; }
-        public virtual DbSet<PatientPrescription> PatientPrescriptions { get; set; }
         public virtual DbSet<PatientRoomAllocation> PatientRoomAllocations { get; set; }
         public virtual DbSet<PatientVisitHistory> PatientVisitHistories { get; set; }
         public virtual DbSet<Room> Rooms { get; set; }
@@ -43,5 +41,9 @@ namespace HIS
         public virtual DbSet<InPatient> InPatients { get; set; }
         public virtual DbSet<OutPatient> OutPatients { get; set; }
         public virtual DbSet<FeeCollection> FeeCollections { get; set; }
+        public virtual DbSet<MedicineInventory> MedicineInventories { get; set; }
+        public virtual DbSet<MedicineMaster> MedicineMasters { get; set; }
+        public virtual DbSet<PurchaseOrder> PurchaseOrders { get; set; }
+        public virtual DbSet<PatientPrescription> PatientPrescriptions { get; set; }
     }
 }

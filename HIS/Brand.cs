@@ -18,7 +18,7 @@ namespace HIS
         public Brand()
         {
             this.BrandCategories = new HashSet<BrandCategory>();
-            this.MedicineInventories = new HashSet<MedicineInventory>();
+            this.MedicineMasters = new HashSet<MedicineMaster>();
         }
     
         public int BrandID { get; set; }
@@ -27,6 +27,6 @@ namespace HIS
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<BrandCategory> BrandCategories { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<MedicineInventory> MedicineInventories { get; set; }
+        public virtual ICollection<MedicineMaster> MedicineMasters { get; set; }
     }
 }

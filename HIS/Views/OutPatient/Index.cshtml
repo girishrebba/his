@@ -57,7 +57,7 @@
 
 @section scripts{
     <script>
-        var Popup, dataTable, viewPatient, newVisit;
+        var Popup, dataTable, viewPatient, newVisit, prescription;
         $(document).ready(function () {
             dataTable = $("#outPatientsTable").DataTable({
                 "ajax": {
@@ -76,7 +76,10 @@
                     { "data": "EnrolledDisplay" },
                     {
                         "data":"SNO", "render" : function (data) {
-                            return "<a class='btn btn-default btn-sm' title='Edit' onclick=PopupForm('@Url.Action("AddModify","OutPatient")/" + data + "')><i class='fa fa-pencil'></i></a><a class='btn btn-info btn-sm' title='View Patient' style='margin-left:5px' onclick=PopupViewPatient('@Url.Action("ViewPatient", "OutPatient")/" + data + "')><i class='fa fa-info-circle'></i></a><a class='btn btn-primary btn-sm' title='Consultation' style='margin-left:5px' onclick=PopupNewVisit('@Url.Action("NewVisit", "OutPatient")/" + data + "')><i class='fa fa-calendar'></i></a>";
+                            return "<a class='btn btn-default btn-sm' title='Edit' onclick=PopupForm('@Url.Action("AddModify","OutPatient")/" + data + "')><i class='fa fa-pencil-alt'></i></a>"+
+                                "<a class='btn btn-info btn-sm' title = 'View Patient' style = 'margin-left:5px' onclick = PopupViewPatient('@Url.Action("ViewPatient", "OutPatient")/" + data + "')><i class='fa fa-info-circle'></i></a>" +
+                                "<a class='btn btn-primary btn-sm' title='Consultation' style='margin-left:5px' onclick=PopupNewVisit('@Url.Action("NewVisit", "OutPatient")/" + data + "')> <i class='fa fa-calendar'></i></a>" +
+                                "<a class='btn btn-primary btn-sm' title='Prescription' style='margin-left:5px' onclick=PopupPrescription('@Url.Action("OPPrescription", "OutPatient")/" + data + "')><i class='fa fa-notes-medical'></i></a>";
                     },
                         "orderable": false,
                         "searchable": false
@@ -145,7 +148,7 @@
                         resizable: false,
                         modal: true,
                         title: 'New Consultation',
-                        width: 850,
+                        width: '75%',
                         close: function () {
                             newVisit.dialog('destroy').remove();
                         },
@@ -154,6 +157,28 @@
                         }
                     });
                 });
+        }
+
+        function PopupPrescription(url) {
+            var newPrescription = $('<div/>');
+            $.get(url)
+                .done(function (response) {
+                    newPrescription.html(response);
+                    newPP = newPrescription.dialog({
+                        autoOpen: true,
+                        resizable: false,
+                        modal: true,
+                        title: 'New Prescription',
+                        width: 850,
+                        close: function () {
+                            newPP.dialog('destroy').remove();
+                        },
+                        open: function (event, ui) {
+                            $('.ui-dialog-content').css('overflow', 'hidden');
+                        }
+                    });
+                });
+
         }
         function SubmitForm(form) {
             $.validator.setDefaults({
@@ -200,6 +225,42 @@
                     }
                 });
             }
+            return false;
+        }
+
+        function SubmitPrescriptionForm(form) {
+            var ppItems = [];
+            $('#MedicineWithDose').rules('remove', 'required');
+            $('#Quantity').rules('remove', 'required');
+            $('#IntakeFrequencyID').rules('remove', 'required');
+            var enmrNo = $('#ENMRNO').val();
+            $('#ppTable > tbody tr').not(':first').each(function (index, elem) {
+                var tbl = {};
+                tbl.ENMRNO = enmrNo;
+                tbl.MedicineID = $($(this).find('td:eq(0)')).html();
+                tbl.MedicineWithDose = $($(this).find('td:eq(1)')).html();
+                tbl.Quantity = $($(this).find('td:eq(2)')).html();
+                tbl.IntakeFrequencyID = $($(this).find('td:eq(3)')).html();
+                tbl.Comments = $($(this).find('td:eq(4)')).html();
+                ppItems.push(tbl);
+            });
+            $.ajax({
+                type: "POST",
+                contentType: "application/json",
+                url: form.action,
+                data: JSON.stringify(ppItems),
+                success: function (data) {
+                    if (data.success) {
+                        newPP.dialog('close');
+                        dataTable.ajax.reload();
+                        $.notify(data.message, {
+                            globalPosition: "top center",
+                            className: "success"
+                        })
+
+                    }
+                }
+            });
             return false;
         }
     </script>

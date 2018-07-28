@@ -17,7 +17,6 @@ namespace HIS
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public OutPatient()
         {
-            this.PatientPrescriptions = new HashSet<PatientPrescription>();
             this.PatientVisitHistories = new HashSet<PatientVisitHistory>();
         }
     
@@ -56,8 +55,6 @@ namespace HIS
     
         public virtual BloodGroup BloodGroup { get; set; }
         public virtual User User { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PatientPrescription> PatientPrescriptions { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PatientVisitHistory> PatientVisitHistories { get; set; }
     }

@@ -16,16 +16,17 @@ namespace HIS
     {
         public int PrescriptionID { get; set; }
         public string ENMRNO { get; set; }
-        public int MedInventoryID { get; set; }
+        public int MedicineID { get; set; }
         public int Quantity { get; set; }
         public int IntakeFrequencyID { get; set; }
         public string Comments { get; set; }
         public int PrescribedBy { get; set; }
+        public Nullable<System.DateTime> DatePrescribed { get; set; }
+        public string BatchNo { get; set; }
+        public string LotNo { get; set; }
     
         public virtual IntakeFrequency IntakeFrequency { get; set; }
-        public virtual MedicineInventory MedicineInventory { get; set; }
-        public virtual InPatient InPatient { get; set; }
-        public virtual OutPatient OutPatient { get; set; }
+        public virtual MedicineMaster MedicineMaster { get; set; }
         public virtual User User { get; set; }
     }
 }

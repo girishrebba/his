@@ -213,5 +213,80 @@ namespace HIS.Controllers
             pvh.ENMRNO = enmrNo;
             return View(pvh);
         }
+        public ActionResult GetOPPatientPrescriptions(string enmrNo)
+        {
+            using (HISDBEntities hs = new HISDBEntities())
+            {
+
+                var patientPrescriptions = (from pp in hs.PatientPrescriptions
+                                            join op in hs.OutPatients on pp.ENMRNO equals op.ENMRNO
+                                            join mm in hs.MedicineMasters on pp.MedicineID equals mm.MMID
+                                            join ifs in hs.IntakeFrequencies on pp.IntakeFrequencyID equals ifs.FrequencyID
+                                            join u in hs.Users on pp.PrescribedBy equals u.UserID
+                                            join ut in hs.UserTypes on u.UserTypeID equals ut.UserTypeID
+                                            where ut.UserTypeName.Equals("Doctor") && pp.ENMRNO.Equals(enmrNo)
+                                            select new
+                                            {
+                                                pp,
+                                                u,
+                                                mm,
+                                                ifs.Frequency
+                                            })
+                                  .OrderByDescending(b => b.pp.DatePrescribed)
+                                  .AsEnumerable()
+                                 .Select(x => new PatientPrescription
+                                 {
+                                     DateDisplay = HtmlHelpers.HtmlHelpers.DateFormat(x.pp.DatePrescribed),
+                                     ENMRNO = x.pp.ENMRNO,
+                                     DoctorName = HtmlHelpers.HtmlHelpers.GetFullName(x.u.FirstName, x.u.MiddleName, x.u.LastName),
+                                     Quantity = x.pp.Quantity,
+                                     MedicineWithDose = HtmlHelpers.HtmlHelpers.GetMedicineWithDose(x.mm.MedicineName, x.mm.MedDose),
+                                     IntakeDisplay = x.Frequency
+                                 }).ToList();
+                return Json(new { data = patientPrescriptions }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpGet]
+        public ActionResult OPPrescription(int id)
+        {
+            string enmrNo = string.Empty;
+            using (HISDBEntities hs = new HISDBEntities())
+            {
+                enmrNo = hs.OutPatients.Where(op => op.SNO == id).FirstOrDefault().ENMRNO;
+            }
+            List<User> Users = HtmlHelpers.HtmlHelpers.GetDoctors();
+            List<IntakeFrequency> Intakes = HtmlHelpers.HtmlHelpers.GetIntakes();
+            ViewBag.Intakes = new SelectList(Intakes, "FrequencyID", "Frequency");
+            ViewBag.Users = new SelectList(Users, "UserID", "NameDisplay");
+            PatientPrescription pp = new PatientPrescription();
+            pp.ENMRNO = enmrNo;
+            return View(pp);
+        }
+
+        [HttpPost]
+        public ActionResult OPPrescription(IList<PatientPrescription> prescriptions)
+        {
+            using (HISDBEntities db = new HISDBEntities())
+            {
+                if (prescriptions != null && prescriptions.Count() > 0)
+                {
+                    foreach (PatientPrescription pp in prescriptions)
+                    {
+                        pp.PrescribedBy = 1;
+                        pp.DatePrescribed = DateTime.Now;
+                        db.PatientPrescriptions.Add(pp);
+                    }
+                    db.SaveChanges();
+                    return Json(new { success = true, message = string.Format("Prescription for ENMRNO - {0} created Successfully", prescriptions[0].ENMRNO) }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Error occured" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+
+        }
+
     }
 }

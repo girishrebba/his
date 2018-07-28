@@ -145,8 +145,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\all.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\brands.css" />
+    <Content Include="Content\fontawesome.css" />
     <Content Include="Content\Gridmvc.css" />
     <Content Include="Content\his_customstyles.css" />
     <Content Include="Content\images\ui-bg_flat_0_aaaaaa_40x100.png" />
@@ -170,7 +173,12 @@
     <Content Include="Content\images\ui-icons_ffffff_256x240.png" />
     <Content Include="Content\jquery-ui.css" />
     <Content Include="Content\jquery-ui.min.css" />
+    <Content Include="Content\regular.css" />
     <Content Include="Content\Site.css" />
+    <Content Include="Content\solid.css" />
+    <Content Include="Content\svg-with-js.css" />
+    <Content Include="Content\v4-shims.css" />
+    <Content Include="Content\v4-shims.min.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="HISDBModel.Context.tt">
@@ -985,6 +993,21 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Login\Index.cshtml" />
+    <Content Include="webfonts\fa-brands-400.svg" />
+    <Content Include="webfonts\fa-regular-400.svg" />
+    <Content Include="webfonts\fa-solid-900.svg" />
+    <Content Include="webfonts\fa-solid-900.woff2" />
+    <Content Include="webfonts\fa-solid-900.woff" />
+    <Content Include="webfonts\fa-solid-900.ttf" />
+    <Content Include="webfonts\fa-solid-900.eot" />
+    <Content Include="webfonts\fa-regular-400.woff2" />
+    <Content Include="webfonts\fa-regular-400.woff" />
+    <Content Include="webfonts\fa-regular-400.ttf" />
+    <Content Include="webfonts\fa-regular-400.eot" />
+    <Content Include="webfonts\fa-brands-400.woff2" />
+    <Content Include="webfonts\fa-brands-400.woff" />
+    <Content Include="webfonts\fa-brands-400.ttf" />
+    <Content Include="webfonts\fa-brands-400.eot" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -1017,8 +1040,9 @@
     <Compile Include="Controllers\InPatientController.cs" />
     <Compile Include="Controllers\IntakesController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
-    <Compile Include="Controllers\MedInventoryController.cs" />
+    <Compile Include="Controllers\MedicineMasterController.cs" />
     <Compile Include="Controllers\OutPatientController.cs" />
+    <Compile Include="Controllers\PurchaseOrderController.cs" />
     <Compile Include="Controllers\SpecializationController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\UserTypeController.cs" />
@@ -1056,6 +1080,9 @@
     <Compile Include="MedicineInventory.cs">
       <DependentUpon>HISDBModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="MedicineMaster.cs">
+      <DependentUpon>HISDBModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\BloodGroup.cs" />
     <Compile Include="Models\Brand.cs" />
@@ -1065,9 +1092,11 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\InPatient.cs" />
     <Compile Include="Models\IntakeFrequency.cs" />
-    <Compile Include="Models\MedicineInventory.cs" />
+    <Compile Include="Models\MedicineMaster.cs" />
     <Compile Include="Models\OutPatient.cs" />
+    <Compile Include="Models\PatientPrescription.cs" />
     <Compile Include="Models\PatientVisitHistory.cs" />
+    <Compile Include="Models\PurchaseOrder.cs" />
     <Compile Include="Models\Specialization.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserType.cs" />
@@ -1084,6 +1113,9 @@
       <DependentUpon>HISDBModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PurchaseOrder.cs">
+      <DependentUpon>HISDBModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Room.cs">
       <DependentUpon>HISDBModel.tt</DependentUpon>
     </Compile>
@@ -1247,8 +1279,6 @@
     <Content Include="Views\User\AddModify.cshtml" />
     <Content Include="Views\ConsultType\Index.cshtml" />
     <Content Include="Views\ConsultType\AddModify.cshtml" />
-    <Content Include="Views\MedInventory\Index.cshtml" />
-    <Content Include="Views\MedInventory\AddModify.cshtml" />
     <Content Include="Views\InPatient\Index.cshtml" />
     <Content Include="Views\InPatient\ViewPatient.cshtml" />
     <Content Include="Views\InPatient\AddModify.cshtml" />
@@ -1258,6 +1288,14 @@
     <Content Include="Views\OutPatient\Index.cshtml" />
     <Content Include="Views\OutPatient\AddModify.cshtml" />
     <Content Include="Views\OutPatient\NewVisit.cshtml" />
+    <Content Include="Views\MedicineMaster\Index.cshtml" />
+    <Content Include="Views\MedicineMaster\AddModify.cshtml" />
+    <Content Include="Views\PurchaseOrder\Index.cshtml" />
+    <Content Include="Views\PurchaseOrder\AddModify.cshtml" />
+    <Content Include="Views\PurchaseOrder\CreatePO.cshtml" />
+    <Content Include="Views\PurchaseOrder\Approve.cshtml" />
+    <Content Include="Views\PurchaseOrder\DeletePO.cshtml" />
+    <Content Include="Views\OutPatient\OPPrescription.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

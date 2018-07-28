@@ -21,8 +21,8 @@ namespace HIS
             this.InPatients = new HashSet<InPatient>();
             this.OutPatients = new HashSet<OutPatient>();
             this.InPatientHistories = new HashSet<InPatientHistory>();
-            this.PatientPrescriptions = new HashSet<PatientPrescription>();
             this.PatientVisitHistories = new HashSet<PatientVisitHistory>();
+            this.PatientPrescriptions = new HashSet<PatientPrescription>();
         }
     
         public int UserID { get; set; }
@@ -52,8 +52,8 @@ namespace HIS
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<InPatientHistory> InPatientHistories { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PatientPrescription> PatientPrescriptions { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PatientVisitHistory> PatientVisitHistories { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PatientPrescription> PatientPrescriptions { get; set; }
     }
 }

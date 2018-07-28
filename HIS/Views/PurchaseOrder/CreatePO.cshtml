@@ -1,0 +1,224 @@
+﻿@model HIS.PurchaseOrder
+@using HIS.HtmlHelpers;
+@{
+    Layout = null;
+}
+
+<style>
+    td {
+        padding: 5px;
+    }
+
+    .table
+    {
+       margin-left : 1px;
+       margin-right:1px;
+    }
+
+    .table > thead > tr > th {
+        text-transform: none;
+        font-weight: bold;
+    }
+
+    .ui-dialog {
+        top: 60px !important;
+    } 
+</style>
+@using (Html.BeginForm("CreatePO", "PurchaseOrder", FormMethod.Post, new { id = "poForm", onsubmit = "return SubmitForm(this)" }))
+{
+    @*<div class="container">
+        <div class="row">
+            <div class="col-sm-12">*@
+                @*<h4 class="page-title">Purchase Order Form</h4>*@
+    //table table-condensed table - hover table - striped
+<div class="form-horizontal">
+    <div class="row">
+        <div class="form-group">
+            @Html.LabelFor(model => model.PONumber, new { @class = "control-label col-md-2" })
+            <div class="col-sm-2">
+                @Html.EditorFor(model => model.PONumber, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.PONumber)
+            </div>
+            @Html.LabelFor(model => model.OrderedDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-sm-2">
+                <div id="date-popup" class="input-group date">
+                    @Html.EditorFor(model => model.OrderedDate, new { htmlAttributes = new { Value = Html.DateFormat(Model.OrderedDate), @class = "datepicker form-control", @placeholder = "" } })
+                    <span class="btnorderpicker input-group-addon"><i class="fa fa-calendar"></i></span>
+                </div>
+                @Html.ValidationMessageFor(model => model.OrderedDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="row" style="border: 1px;">
+        <table class="table table-striped table-bordered" id="poTable">
+            <thead>
+                <tr>
+                    <th style="width:35%">Medicine</th>
+                    <th style="width:8%">Order Qty</th>
+                    <th style="width:10%">Item(Rs)</th>
+                    <th style="width:10%">Sheet(Rs)</th>
+                    <th style="width:11%">Batch#</th>
+                    <th style="width:11%">Lot#</th>
+                    <th style="width:15%">Expiry Date</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    @*<td>
+                        @Html.EditorFor(model => model.PONumber, new { htmlAttributes = new { @class = "form-control" } })
+                    </td>*@
+                    <td>
+                        @Html.EditorFor(model => model.MedicineWithDose, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.HiddenFor(model => model.MedicineID)
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.OrderedQty, new { htmlAttributes = new { Value = Model.OrderedQty > 0 ? Model.OrderedQty.ToString() : string.Empty, @class = "form-control" } })
+                    </td>
+                    @*<td>
+                        <div id="date-popup" class="input-group date">
+                            @Html.EditorFor(model => model.OrderedDate, new { htmlAttributes = new { Value = Html.DateFormat(Model.OrderedDate), @class = "datepicker form-control", @placeholder = "" } })
+                            <span class="btnorderpicker input-group-addon"><i class="fa fa-calendar"></i></span>
+                        </div>
+                    </td>*@
+                    <td>
+                        @Html.EditorFor(model => model.PricePerItem, new { htmlAttributes = new { @class = "form-control" } })
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.PricePerSheet, new { htmlAttributes = new { @class = "form-control" } })
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.BatchNo, new { htmlAttributes = new { @class = "form-control" } })
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.LotNo, new { htmlAttributes = new { @class = "form-control" } })
+                    </td>
+                    <td>
+                        <div id="date-popup" class="input-group date">
+                            @Html.EditorFor(model => model.ExpiryDate, new { htmlAttributes = new { Value = Html.DateFormat(Model.ExpiryDate), @class = "datepicker form-control", @placeholder = "" } })
+                            <span class="btnexpirypicker input-group-addon"><i class="fa fa-calendar"></i></span>
+                        </div>
+                    </td>
+                    <td><span class="btn btn-success fa fa-plus-circle" style="padding: 0px 3px" id="btnAdd"></span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="row">
+        <div class="form-group">
+            <div class="col-md-3 col-md-offset-5">
+                <input type="submit" value="Submit" id="btnSubmit" class="btn btn-primary disabled" />
+            </div>
+        </div>
+    </div>
+</div>
+            @*</div>
+        </div>
+    </div>*@
+}
+<script type="text/javascript">
+    $(function () {
+        //$("a.button.disabled").click(function () {
+        //    return (false);
+        //});
+
+        //$("#poTable").DataTable({
+        //    "scrollY": "200px"
+        //});
+
+        $('#btnAdd').click(function () {
+            var form = $("#poForm")
+            $.validator.unobtrusive.parse(form);
+            if ($(form).valid()) {
+                $('table#poTable > tbody').append('<tr>' +
+                    '<td style="display:none">' + $('#MedicineID').val()+'</td>'+ // MedicineID
+                    '<td>' + $('#MedicineWithDose').val() + '</td>' + // medicine
+                    '<td>' + $('#OrderedQty').val() + '</td>' + // order qty
+                    '<td>' + $('#PricePerItem').val() + '</td>' + // item cost
+                    '<td>' + $('#PricePerSheet').val() + '</td>' + // sheet cost
+                    '<td>' + $('#BatchNo').val() + '</td>' + // batch no
+                    '<td>' + $('#LotNo').val() + '</td>' + // lot no
+                    '<td>' + $('#ExpiryDate').val() + '</td>' + // expirty date
+                    '<td><span class="btn btn-danger fa fa-trash" style="padding: 0px 3px" onclick = "remove(this)"></span></td>' +
+                    '</tr>');
+
+                clearInputs();
+            }
+            return false;
+        });
+
+        $('#OrderedDate').datepicker({
+            keyboardNavigation: false,
+            forceParse: false,
+            todayHighlight: true,
+            todayBtn: false,
+            format: "mm/dd/yyyy"
+        });
+
+        $('.btnorderpicker').click(function () {
+            //alert('clicked');
+            $('#OrderedDate').datepicker('show');
+        });
+
+        $('#ExpiryDate').datepicker({
+            keyboardNavigation: false,
+            forceParse: false,
+            todayHighlight: true,
+            todayBtn: false,
+            format: "mm/dd/yyyy"
+        });
+
+        $('.btnexpirypicker').click(function () {
+            //alert('clicked');
+            $('#ExpiryDate').datepicker('show');
+        });
+
+        $('#btnSubmit').click(function () {
+            $('#MedicineWithDose').rules('remove', 'required');
+        });
+
+        $("#MedicineWithDose").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/PurchaseOrder/GetMedicines",
+                    type: "POST",
+                    dataType: "json",
+                    data: { Prefix: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return {
+                                label: item.MedicineDisplay,
+                                value: item.MedicineDisplay,
+                                id: item.MMID
+                            };
+                        }))
+                    },
+                    error: function () {
+                        alert('something went wrong !');
+                    }
+                })
+            },
+            select: function (e, i) {
+                $("#MedicineID").val(i.item.id);
+            },
+            minLength: 1
+        });
+    });
+
+    function remove(e) {
+        $(e).closest('tr').remove();
+        if ($('#poForm tr').length < 3)
+            $('#btnSubmit').addClass('disabled');
+    }
+
+    function clearInputs() {
+        $('#MedicineWithDose').val('');
+        $('#OrderedQty').val('');
+        $('#PricePerItem').val('');
+        $('#PricePerSheet').val('');
+        $('#BatchNo').val('');
+        $('#LotNo').val('');
+        $('#ExpiryDate').val('');
+        $('#btnSubmit').removeClass('disabled');
+    }
+</script>

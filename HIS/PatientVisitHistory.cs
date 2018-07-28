@@ -19,8 +19,8 @@ namespace HIS
         public int ConsultTypeID { get; set; }
         public string ENMRNO { get; set; }
         public int DoctorID { get; set; }
-        public decimal Fee { get; set; }
         public Nullable<decimal> Discount { get; set; }
+        public decimal Fee { get; set; }
     
         public virtual ConsultationType ConsultationType { get; set; }
         public virtual InPatient InPatient { get; set; }

@@ -1,0 +1,217 @@
+﻿@{
+    ViewBag.Title = "Purchase Orders";
+}
+
+<!-- Breadcrumb -->
+<ol class="breadcrumb breadcrumb-2">
+    <li><a href="index.html"><i class="glyphicon-cog"></i>Pharmacy</a></li>
+    <li class="active"><strong>Purchase Orders</strong></li>
+</ol>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="panel panel-default">
+            <div class="panel-heading clearfix">
+                <a class="btn btn-success" style="margin-bottom:10px" onclick="PopupForm('@Url.Action("CreatePO","PurchaseOrder")')"><i class="fa fa-plus"></i> Add New</a>
+            </div>
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table id="poNumbersList" class="table table-striped table-bordered" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Purchase#</th>
+                                <th>Order Date</th>
+                                <th>Status</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+        @section scripts{
+            <script type="text/javascript">
+                var Popup, dataTable, approvalPop, DelPop;
+                $(document).ready(function () {
+                    dataTable = $('#poNumbersList').DataTable({
+                        "ajax": {
+                            "url": "/PurchaseOrder/GetPoNumbers",
+                            "type": "GET",
+                            "datatype": "application/json",
+                            "contentType": 'application/json'
+                        },
+                        "columns": [
+                            { "data": "PONumber" },
+                            { "data": "OrderDateDisplay" },
+                            {
+                                "data": "ApprovedStatus", "render": function (data) {
+                                    return data === null || data === 0 ? "Pending" : "Approved";
+                                }
+                            },
+                            {
+                                "data": null, "render": function (data) {
+                                    return "<a class='btn btn-success btn-sm' title='Approve' onclick=PopupApprovalForm('@Url.Action("Approve","PurchaseOrder")/?poNumber=" + data.PONumber + "')><i class='fa fa-thumbs-up'></i></a><a class='btn btn-danger btn-sm' title='Delete' style='margin-left:5px' onclick=PopupDeleteForm('@Url.Action("DeletePO", "PurchaseOrder")/?poNumber=" + data.PONumber + "')><i class='fa fa-trash'></i></a>";
+                                },
+                                "orderable": false,
+                                "searchable": false,
+                                "width": "15%"
+
+                            }
+                        ],
+                        "aaSorting": []
+                    });
+                });
+
+
+                function PopupForm(url) {
+                    var formDiv = $('<div />');
+                    $.get(url)
+                        .done(function (response) {
+                            formDiv.html(response);
+
+                            Popup = formDiv.dialog({
+                                autoOpen: true,
+                                resizable: false,
+                                modal: true,
+                                title: 'Purchase Order Creation',
+                                width: '85%',
+                                close: function () {
+                                    Popup.dialog('destroy').remove();
+                                },
+                                open: function (event, ui) {
+                                    $('.ui-dialog-content').css('overflow', 'hidden');
+                                }
+                            });
+                        });
+                }
+
+                function PopupApprovalForm(url) {
+                    var approvalDiv = $('<div />');
+                    $.get(url)
+                        .done(function (response) {
+                            approvalDiv.html(response);
+
+                            approvalPop = approvalDiv.dialog({
+                                autoOpen: true,
+                                resizable: false,
+                                modal: true,
+                                title: 'Approval Form',
+                                width: '85%',
+                                close: function () {
+                                    approvalPop.dialog('destroy').remove();
+                                },
+                                open: function (event, ui) {
+                                    $('.ui-dialog-content').css('overflow', 'hidden');
+                                }
+                            });
+                        });
+                }
+
+                function PopupDeleteForm(url) {
+                    var deleteDiv = $('<div />');
+                    $.get(url)
+                        .done(function (response) {
+                            deleteDiv.html(response);
+                            DelPop = deleteDiv.dialog({
+                                autoOpen: true,
+                                resizable: false,
+                                modal: true,
+                                title: 'Delete Form',
+                                width: '85%',
+                                close: function () {
+                                    DelPop.dialog('destroy').remove();
+                                },
+                                open: function (event, ui) {
+                                    $('.ui-dialog-content').css('overflow', 'hidden');
+                                }
+                            });
+                        });
+                }
+
+                function SubmitForm(form) {
+                    var poItems = [];
+                    $('#MedicineWithDose').rules('remove', 'required');
+                    $('#OrderedQty').rules('remove', 'required');
+                    $('#PricePerItem').rules('remove', 'required');
+                    $('#PricePerSheet').rules('remove', 'required');
+                    $('#ExpiryDate').rules('remove', 'required');
+                    var poNumber = $('#PONumber').val();
+                    var orderDate = $('#OrderedDate').val();
+                    $('#poTable > tbody tr').not(':first').each(function (index, elem) {
+                        var tbl = {};
+                        tbl.PONumber = poNumber;
+                        tbl.MedicineID = $($(this).find('td:eq(0)')).html();
+                        tbl.MedicineWithDose = $($(this).find('td:eq(1)')).html();
+                        tbl.OrderedQty = $($(this).find('td:eq(2)')).html();
+                        tbl.OrderedDate = orderDate;
+                        tbl.PricePerItem = $($(this).find('td:eq(3)')).html();
+                        tbl.PricePerSheet = $($(this).find('td:eq(4)')).html();
+                        tbl.BatchNo = $($(this).find('td:eq(5)')).html();
+                        tbl.LotNo = $($(this).find('td:eq(6)')).html();
+                        tbl.ExpiryDate = $($(this).find('td:eq(7)')).html();
+                        poItems.push(tbl);
+                    });
+                    $.ajax({
+                        type: "POST",
+                        contentType: "application/json",
+                        url: form.action,
+                        data: JSON.stringify(poItems),
+                        success: function (data) {
+                            if (data.success) {
+                                Popup.dialog('close');
+                                dataTable.ajax.reload();
+
+                                $.notify(data.message, {
+                                    globalPosition: "top center",
+                                    className: "success"
+                                })
+
+                            }
+                        }
+                    });
+                    return false;
+                }
+
+                function SubmitApprovalForm(form) {
+                    $.ajax({
+                        type: "POST",
+                        dataType: "json",
+                        url: form.action,
+                        data: {'poNumber': $('#poNumber').val()},
+                            success: function (data) {
+                                if (data.success) {
+                                    approvalPop.dialog('close');
+                                    dataTable.ajax.reload();
+                                    $.notify(data.message, {
+                                        globalPosition: "top center",
+                                        className: "success"
+                                    })
+                                }
+                            }
+                        }); 
+                    return false;
+                }
+                function SubmitDeleteForm(form) {
+                    $.ajax({
+                        type: "POST",
+                        url: form.action,
+                        data: { 'poNumber': $('#poNumber').val() },
+                        success: function (data) {
+                            if (data.success) {
+                                DelPop.dialog('close');
+                                dataTable.ajax.reload();
+                                $.notify(data.message, {
+                                    globalPosition: "top center",
+                                    className: "success"
+                                })
+                            }
+                        }
+                    });
+                    return false;
+                }
+                        </script>
+                    }
+
+

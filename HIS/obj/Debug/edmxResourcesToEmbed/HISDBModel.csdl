@@ -17,7 +17,7 @@
     <Property Name="Category" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
     <Property Name="BrandID" Type="Int32" Nullable="false" />
     <NavigationProperty Name="Brand" Relationship="Self.FK_BrandCategories_BrandID" FromRole="BrandCategories" ToRole="Brands" />
-    <NavigationProperty Name="MedicineInventories" Relationship="Self.FK_MI_CategoryID" FromRole="BrandCategories" ToRole="MedicineInventory" />
+    <NavigationProperty Name="MedicineMasters" Relationship="HISModel.FK_MM_CategoryID" FromRole="BrandCategory" ToRole="MedicineMaster" />
   </EntityType>
   <EntityType Name="Brand">
     <Key>
@@ -26,7 +26,7 @@
     <Property Name="BrandID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="BrandName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
     <NavigationProperty Name="BrandCategories" Relationship="Self.FK_BrandCategories_BrandID" FromRole="Brands" ToRole="BrandCategories" />
-    <NavigationProperty Name="MedicineInventories" Relationship="Self.FK_MI_BrandID" FromRole="Brands" ToRole="MedicineInventory" />
+    <NavigationProperty Name="MedicineMasters" Relationship="HISModel.FK_MM_BrandID" FromRole="Brand" ToRole="MedicineMaster" />
   </EntityType>
   <EntityType Name="ConsultationFee">
     <Key>
@@ -66,42 +66,7 @@
     </Key>
     <Property Name="FrequencyID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="Frequency" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
-    <NavigationProperty Name="PatientPrescriptions" Relationship="Self.FK_PP_FrequencyID" FromRole="IntakeFrequency" ToRole="PatientPrescription" />
-  </EntityType>
-  <EntityType Name="MedicineInventory">
-    <Key>
-      <PropertyRef Name="MedInventoryID" />
-    </Key>
-    <Property Name="MedInventoryID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="BrandID" Type="Int32" Nullable="false" />
-    <Property Name="BrandCategoryID" Type="Int32" Nullable="false" />
-    <Property Name="MedicineName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
-    <Property Name="AvailableQty" Type="Int32" Nullable="false" />
-    <Property Name="PricePerItem" Type="Decimal" Precision="6" Scale="2" />
-    <Property Name="PricePerSheet" Type="Decimal" Precision="9" Scale="2" />
-    <Property Name="BatchNo" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
-    <Property Name="LotNo" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
-    <NavigationProperty Name="BrandCategory" Relationship="Self.FK_MI_CategoryID" FromRole="MedicineInventory" ToRole="BrandCategories" />
-    <NavigationProperty Name="Brand" Relationship="Self.FK_MI_BrandID" FromRole="MedicineInventory" ToRole="Brands" />
-    <NavigationProperty Name="PatientPrescriptions" Relationship="Self.FK_PP_MedicineName" FromRole="MedicineInventory" ToRole="PatientPrescription" />
-    <Property Name="ExpiryDate" Type="DateTime" Precision="0" />
-  </EntityType>
-  <EntityType Name="PatientPrescription">
-    <Key>
-      <PropertyRef Name="PrescriptionID" />
-    </Key>
-    <Property Name="PrescriptionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="ENMRNO" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
-    <Property Name="MedInventoryID" Type="Int32" Nullable="false" />
-    <Property Name="Quantity" Type="Int32" Nullable="false" />
-    <Property Name="IntakeFrequencyID" Type="Int32" Nullable="false" />
-    <NavigationProperty Name="IntakeFrequency" Relationship="Self.FK_PP_FrequencyID" FromRole="PatientPrescription" ToRole="IntakeFrequency" />
-    <NavigationProperty Name="MedicineInventory" Relationship="Self.FK_PP_MedicineName" FromRole="PatientPrescription" ToRole="MedicineInventory" />
-    <NavigationProperty Name="InPatient" Relationship="HISModel.FK_PP_ENMRNO" FromRole="PatientPrescription" ToRole="InPatient" />
-    <Property Name="Comments" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-    <Property Name="PrescribedBy" Type="Int32" Nullable="false" />
-    <NavigationProperty Name="OutPatient" Relationship="HISModel.FK_PP_OutPatients_ENMRNO" FromRole="PatientPrescription" ToRole="OutPatient" />
-    <NavigationProperty Name="User" Relationship="HISModel.FK_PP_Doctor" FromRole="PatientPrescription" ToRole="User" />
+    <NavigationProperty Name="PatientPrescriptions" Relationship="HISModel.FK_PP_FrequencyID" FromRole="IntakeFrequency" ToRole="PatientPrescription" />
   </EntityType>
   <EntityType Name="PatientRoomAllocation">
     <Key>
@@ -129,8 +94,8 @@
     <Property Name="DoctorID" Type="Int32" Nullable="false" />
     <NavigationProperty Name="OutPatient" Relationship="HISModel.FK_PVH_OutPatient_ENMRNO" FromRole="PatientVisitHistory" ToRole="OutPatient" />
     <NavigationProperty Name="User" Relationship="HISModel.FK_PatientVisitHistory_Doctor" FromRole="PatientVisitHistory" ToRole="User" />
-    <Property Name="Fee" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
     <Property Name="Discount" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="Fee" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
   </EntityType>
   <EntityType Name="Room">
     <Key>
@@ -178,8 +143,8 @@
     <NavigationProperty Name="InPatients" Relationship="HISModel.FK_InPatients_Doctor" FromRole="User" ToRole="InPatient" />
     <NavigationProperty Name="OutPatients" Relationship="HISModel.FK_OutPatients_Doctor" FromRole="User" ToRole="OutPatient" />
     <NavigationProperty Name="InPatientHistories" Relationship="HISModel.FK_InPatientHistory_Doctor" FromRole="User" ToRole="InPatientHistory" />
-    <NavigationProperty Name="PatientPrescriptions" Relationship="HISModel.FK_PP_Doctor" FromRole="User" ToRole="PatientPrescription" />
     <NavigationProperty Name="PatientVisitHistories" Relationship="HISModel.FK_PatientVisitHistory_Doctor" FromRole="User" ToRole="PatientVisitHistory" />
+    <NavigationProperty Name="PatientPrescriptions" Relationship="HISModel.FK_PP_Doctor" FromRole="User" ToRole="PatientPrescription" />
   </EntityType>
   <EntityType Name="UserType">
     <Key>
@@ -197,30 +162,6 @@
         <PropertyRef Name="BrandID" />
       </Principal>
       <Dependent Role="BrandCategories">
-        <PropertyRef Name="BrandID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_MI_CategoryID">
-    <End Role="BrandCategories" Type="Self.BrandCategory" Multiplicity="1" />
-    <End Role="MedicineInventory" Type="Self.MedicineInventory" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="BrandCategories">
-        <PropertyRef Name="CategoryID" />
-      </Principal>
-      <Dependent Role="MedicineInventory">
-        <PropertyRef Name="BrandCategoryID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_MI_BrandID">
-    <End Role="Brands" Type="Self.Brand" Multiplicity="1" />
-    <End Role="MedicineInventory" Type="Self.MedicineInventory" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Brands">
-        <PropertyRef Name="BrandID" />
-      </Principal>
-      <Dependent Role="MedicineInventory">
         <PropertyRef Name="BrandID" />
       </Dependent>
     </ReferentialConstraint>
@@ -258,30 +199,6 @@
       </Principal>
       <Dependent Role="PatientVisitHistory">
         <PropertyRef Name="ConsultTypeID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_PP_FrequencyID">
-    <End Role="IntakeFrequency" Type="Self.IntakeFrequency" Multiplicity="1" />
-    <End Role="PatientPrescription" Type="Self.PatientPrescription" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="IntakeFrequency">
-        <PropertyRef Name="FrequencyID" />
-      </Principal>
-      <Dependent Role="PatientPrescription">
-        <PropertyRef Name="IntakeFrequencyID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_PP_MedicineName">
-    <End Role="MedicineInventory" Type="Self.MedicineInventory" Multiplicity="1" />
-    <End Role="PatientPrescription" Type="Self.PatientPrescription" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="MedicineInventory">
-        <PropertyRef Name="MedInventoryID" />
-      </Principal>
-      <Dependent Role="PatientPrescription">
-        <PropertyRef Name="MedInventoryID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -329,8 +246,6 @@
     <EntitySet Name="ConsultationTypes" EntityType="Self.ConsultationType" />
     <EntitySet Name="InPatientHistories" EntityType="Self.InPatientHistory" />
     <EntitySet Name="IntakeFrequencies" EntityType="Self.IntakeFrequency" />
-    <EntitySet Name="MedicineInventories" EntityType="Self.MedicineInventory" />
-    <EntitySet Name="PatientPrescriptions" EntityType="Self.PatientPrescription" />
     <EntitySet Name="PatientRoomAllocations" EntityType="Self.PatientRoomAllocation" />
     <EntitySet Name="PatientVisitHistories" EntityType="Self.PatientVisitHistory" />
     <EntitySet Name="Rooms" EntityType="Self.Room" />
@@ -340,14 +255,6 @@
     <AssociationSet Name="FK_BrandCategories_BrandID" Association="Self.FK_BrandCategories_BrandID">
       <End Role="Brands" EntitySet="Brands" />
       <End Role="BrandCategories" EntitySet="BrandCategories" />
-    </AssociationSet>
-    <AssociationSet Name="FK_MI_CategoryID" Association="Self.FK_MI_CategoryID">
-      <End Role="BrandCategories" EntitySet="BrandCategories" />
-      <End Role="MedicineInventory" EntitySet="MedicineInventories" />
-    </AssociationSet>
-    <AssociationSet Name="FK_MI_BrandID" Association="Self.FK_MI_BrandID">
-      <End Role="Brands" EntitySet="Brands" />
-      <End Role="MedicineInventory" EntitySet="MedicineInventories" />
     </AssociationSet>
     <AssociationSet Name="FK_Consultation_Doctor" Association="Self.FK_Consultation_Doctor">
       <End Role="Users" EntitySet="Users" />
@@ -360,14 +267,6 @@
     <AssociationSet Name="FK_PVH_Consultation_Type" Association="Self.FK_PVH_Consultation_Type">
       <End Role="ConsultationType" EntitySet="ConsultationTypes" />
       <End Role="PatientVisitHistory" EntitySet="PatientVisitHistories" />
-    </AssociationSet>
-    <AssociationSet Name="FK_PP_FrequencyID" Association="Self.FK_PP_FrequencyID">
-      <End Role="IntakeFrequency" EntitySet="IntakeFrequencies" />
-      <End Role="PatientPrescription" EntitySet="PatientPrescriptions" />
-    </AssociationSet>
-    <AssociationSet Name="FK_PP_MedicineName" Association="Self.FK_PP_MedicineName">
-      <End Role="MedicineInventory" EntitySet="MedicineInventories" />
-      <End Role="PatientPrescription" EntitySet="PatientPrescriptions" />
     </AssociationSet>
     <AssociationSet Name="FK_PRA_RoomNo" Association="Self.FK_PRA_RoomNo">
       <End Role="Rooms" EntitySet="Rooms" />
@@ -399,10 +298,6 @@
       <End Role="User" EntitySet="Users" />
       <End Role="InPatient" EntitySet="InPatients" />
     </AssociationSet>
-    <AssociationSet Name="FK_PP_ENMRNO" Association="HISModel.FK_PP_ENMRNO">
-      <End Role="InPatient" EntitySet="InPatients" />
-      <End Role="PatientPrescription" EntitySet="PatientPrescriptions" />
-    </AssociationSet>
     <AssociationSet Name="FK_PRA_ENMRNO" Association="HISModel.FK_PRA_ENMRNO">
       <End Role="InPatient" EntitySet="InPatients" />
       <End Role="PatientRoomAllocation" EntitySet="PatientRoomAllocations" />
@@ -424,14 +319,6 @@
       <End Role="User" EntitySet="Users" />
       <End Role="InPatientHistory" EntitySet="InPatientHistories" />
     </AssociationSet>
-    <AssociationSet Name="FK_PP_OutPatients_ENMRNO" Association="HISModel.FK_PP_OutPatients_ENMRNO">
-      <End Role="OutPatient" EntitySet="OutPatients" />
-      <End Role="PatientPrescription" EntitySet="PatientPrescriptions" />
-    </AssociationSet>
-    <AssociationSet Name="FK_PP_Doctor" Association="HISModel.FK_PP_Doctor">
-      <End Role="User" EntitySet="Users" />
-      <End Role="PatientPrescription" EntitySet="PatientPrescriptions" />
-    </AssociationSet>
     <AssociationSet Name="FK_PVH_OutPatient_ENMRNO" Association="HISModel.FK_PVH_OutPatient_ENMRNO">
       <End Role="OutPatient" EntitySet="OutPatients" />
       <End Role="PatientVisitHistory" EntitySet="PatientVisitHistories" />
@@ -439,6 +326,38 @@
     <AssociationSet Name="FK_PatientVisitHistory_Doctor" Association="HISModel.FK_PatientVisitHistory_Doctor">
       <End Role="User" EntitySet="Users" />
       <End Role="PatientVisitHistory" EntitySet="PatientVisitHistories" />
+    </AssociationSet>
+    <EntitySet Name="MedicineInventories" EntityType="HISModel.MedicineInventory" />
+    <EntitySet Name="MedicineMasters" EntityType="HISModel.MedicineMaster" />
+    <EntitySet Name="PurchaseOrders" EntityType="HISModel.PurchaseOrder" />
+    <AssociationSet Name="FK_MM_CategoryID" Association="HISModel.FK_MM_CategoryID">
+      <End Role="BrandCategory" EntitySet="BrandCategories" />
+      <End Role="MedicineMaster" EntitySet="MedicineMasters" />
+    </AssociationSet>
+    <AssociationSet Name="FK_MM_BrandID" Association="HISModel.FK_MM_BrandID">
+      <End Role="Brand" EntitySet="Brands" />
+      <End Role="MedicineMaster" EntitySet="MedicineMasters" />
+    </AssociationSet>
+    <AssociationSet Name="FK_MI_MedicineID" Association="HISModel.FK_MI_MedicineID">
+      <End Role="MedicineMaster" EntitySet="MedicineMasters" />
+      <End Role="MedicineInventory" EntitySet="MedicineInventories" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PO_MedicineID" Association="HISModel.FK_PO_MedicineID">
+      <End Role="MedicineMaster" EntitySet="MedicineMasters" />
+      <End Role="PurchaseOrder" EntitySet="PurchaseOrders" />
+    </AssociationSet>
+    <EntitySet Name="PatientPrescriptions" EntityType="HISModel.PatientPrescription" />
+    <AssociationSet Name="FK_PP_FrequencyID" Association="HISModel.FK_PP_FrequencyID">
+      <End Role="IntakeFrequency" EntitySet="IntakeFrequencies" />
+      <End Role="PatientPrescription" EntitySet="PatientPrescriptions" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PP_Medicine" Association="HISModel.FK_PP_Medicine">
+      <End Role="MedicineMaster" EntitySet="MedicineMasters" />
+      <End Role="PatientPrescription" EntitySet="PatientPrescriptions" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PP_Doctor" Association="HISModel.FK_PP_Doctor">
+      <End Role="User" EntitySet="Users" />
+      <End Role="PatientPrescription" EntitySet="PatientPrescriptions" />
     </AssociationSet>
   </EntityContainer>
   <EntityType Name="InPatient">
@@ -473,7 +392,6 @@
     <NavigationProperty Name="BloodGroup" Relationship="HISModel.FK_InPatients_BloodGroup" FromRole="InPatient" ToRole="BloodGroup" />
     <NavigationProperty Name="InPatientHistories" Relationship="HISModel.FK_IPH_ENMRNO" FromRole="InPatient" ToRole="InPatientHistory" />
     <NavigationProperty Name="User" Relationship="HISModel.FK_InPatients_Doctor" FromRole="InPatient" ToRole="User" />
-    <NavigationProperty Name="PatientPrescriptions" Relationship="HISModel.FK_PP_ENMRNO" FromRole="InPatient" ToRole="PatientPrescription" />
     <NavigationProperty Name="PatientRoomAllocations" Relationship="HISModel.FK_PRA_ENMRNO" FromRole="InPatient" ToRole="PatientRoomAllocation" />
     <NavigationProperty Name="PatientVisitHistories" Relationship="HISModel.FK_PVH_Patient_ENMRNO" FromRole="InPatient" ToRole="PatientVisitHistory" />
     <NavigationProperty Name="FeeCollections" Relationship="HISModel.FK_FeeCollection_ENMRNO" FromRole="InPatient" ToRole="FeeCollection" />
@@ -516,7 +434,6 @@
     <Property Name="Status" Type="Boolean" />
     <NavigationProperty Name="BloodGroup" Relationship="HISModel.FK_OutPatients_BloodGroup" FromRole="OutPatient" ToRole="BloodGroup" />
     <NavigationProperty Name="User" Relationship="HISModel.FK_OutPatients_Doctor" FromRole="OutPatient" ToRole="User" />
-    <NavigationProperty Name="PatientPrescriptions" Relationship="HISModel.FK_PP_OutPatients_ENMRNO" FromRole="OutPatient" ToRole="PatientPrescription" />
     <Property Name="Height" Type="Decimal" Precision="6" Scale="2" />
     <Property Name="Weight" Type="Decimal" Precision="6" Scale="2" />
     <Property Name="BMI" Type="Decimal" Precision="10" Scale="4" />
@@ -570,18 +487,6 @@
       </Principal>
       <Dependent Role="InPatient">
         <PropertyRef Name="DoctorID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_PP_ENMRNO">
-    <End Type="HISModel.InPatient" Role="InPatient" Multiplicity="1" />
-    <End Type="HISModel.PatientPrescription" Role="PatientPrescription" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="InPatient">
-        <PropertyRef Name="ENMRNO" />
-      </Principal>
-      <Dependent Role="PatientPrescription">
-        <PropertyRef Name="ENMRNO" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -657,30 +562,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_PP_OutPatients_ENMRNO">
-    <End Type="HISModel.OutPatient" Role="OutPatient" Multiplicity="1" />
-    <End Type="HISModel.PatientPrescription" Role="PatientPrescription" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="OutPatient">
-        <PropertyRef Name="ENMRNO" />
-      </Principal>
-      <Dependent Role="PatientPrescription">
-        <PropertyRef Name="ENMRNO" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_PP_Doctor">
-    <End Type="HISModel.User" Role="User" Multiplicity="1" />
-    <End Type="HISModel.PatientPrescription" Role="PatientPrescription" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="User">
-        <PropertyRef Name="UserID" />
-      </Principal>
-      <Dependent Role="PatientPrescription">
-        <PropertyRef Name="PrescribedBy" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_PVH_OutPatient_ENMRNO">
     <End Type="HISModel.OutPatient" Role="OutPatient" Multiplicity="1" />
     <End Type="HISModel.PatientVisitHistory" Role="PatientVisitHistory" Multiplicity="*" />
@@ -702,6 +583,149 @@
       </Principal>
       <Dependent Role="PatientVisitHistory">
         <PropertyRef Name="DoctorID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="MedicineInventory">
+    <Key>
+      <PropertyRef Name="MedInventoryID" />
+    </Key>
+    <Property Name="MedInventoryID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="MedicineID" Type="Int32" Nullable="false" />
+    <Property Name="AvailableQty" Type="Int32" />
+    <NavigationProperty Name="MedicineMaster" Relationship="HISModel.FK_MI_MedicineID" FromRole="MedicineInventory" ToRole="MedicineMaster" />
+  </EntityType>
+  <EntityType Name="MedicineMaster">
+    <Key>
+      <PropertyRef Name="MMID" />
+    </Key>
+    <Property Name="MMID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="BrandID" Type="Int32" Nullable="false" />
+    <Property Name="BrandCategoryID" Type="Int32" Nullable="false" />
+    <Property Name="MedicineName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="MedDose" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="BrandCategory" Relationship="HISModel.FK_MM_CategoryID" FromRole="MedicineMaster" ToRole="BrandCategory" />
+    <NavigationProperty Name="Brand" Relationship="HISModel.FK_MM_BrandID" FromRole="MedicineMaster" ToRole="Brand" />
+    <NavigationProperty Name="MedicineInventories" Relationship="HISModel.FK_MI_MedicineID" FromRole="MedicineMaster" ToRole="MedicineInventory" />
+    <NavigationProperty Name="PurchaseOrders" Relationship="HISModel.FK_PO_MedicineID" FromRole="MedicineMaster" ToRole="PurchaseOrder" />
+    <NavigationProperty Name="PatientPrescriptions" Relationship="HISModel.FK_PP_Medicine" FromRole="MedicineMaster" ToRole="PatientPrescription" />
+  </EntityType>
+  <EntityType Name="PurchaseOrder">
+    <Key>
+      <PropertyRef Name="OrderID" />
+    </Key>
+    <Property Name="OrderID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="PONumber" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="MedicineID" Type="Int32" Nullable="false" />
+    <Property Name="OrderedQty" Type="Int32" Nullable="false" />
+    <Property Name="OrderedDate" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="PricePerItem" Type="Decimal" Precision="6" Scale="2" />
+    <Property Name="PricePerSheet" Type="Decimal" Precision="9" Scale="2" />
+    <Property Name="BatchNo" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="LotNo" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="ExpiryDate" Type="DateTime" Precision="0" />
+    <Property Name="ApprovedStatus" Type="Boolean" />
+    <NavigationProperty Name="MedicineMaster" Relationship="HISModel.FK_PO_MedicineID" FromRole="PurchaseOrder" ToRole="MedicineMaster" />
+  </EntityType>
+  <Association Name="FK_MM_CategoryID">
+    <End Type="HISModel.BrandCategory" Role="BrandCategory" Multiplicity="1" />
+    <End Type="HISModel.MedicineMaster" Role="MedicineMaster" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="BrandCategory">
+        <PropertyRef Name="CategoryID" />
+      </Principal>
+      <Dependent Role="MedicineMaster">
+        <PropertyRef Name="BrandCategoryID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_MM_BrandID">
+    <End Type="HISModel.Brand" Role="Brand" Multiplicity="1" />
+    <End Type="HISModel.MedicineMaster" Role="MedicineMaster" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Brand">
+        <PropertyRef Name="BrandID" />
+      </Principal>
+      <Dependent Role="MedicineMaster">
+        <PropertyRef Name="BrandID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_MI_MedicineID">
+    <End Type="HISModel.MedicineMaster" Role="MedicineMaster" Multiplicity="1" />
+    <End Type="HISModel.MedicineInventory" Role="MedicineInventory" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MedicineMaster">
+        <PropertyRef Name="MMID" />
+      </Principal>
+      <Dependent Role="MedicineInventory">
+        <PropertyRef Name="MedicineID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PO_MedicineID">
+    <End Type="HISModel.MedicineMaster" Role="MedicineMaster" Multiplicity="1" />
+    <End Type="HISModel.PurchaseOrder" Role="PurchaseOrder" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MedicineMaster">
+        <PropertyRef Name="MMID" />
+      </Principal>
+      <Dependent Role="PurchaseOrder">
+        <PropertyRef Name="MedicineID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="PatientPrescription">
+    <Key>
+      <PropertyRef Name="PrescriptionID" />
+    </Key>
+    <Property Name="PrescriptionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ENMRNO" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="MedicineID" Type="Int32" Nullable="false" />
+    <Property Name="Quantity" Type="Int32" Nullable="false" />
+    <Property Name="IntakeFrequencyID" Type="Int32" Nullable="false" />
+    <Property Name="Comments" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="PrescribedBy" Type="Int32" Nullable="false" />
+    <Property Name="DatePrescribed" Type="DateTime" Precision="0" />
+    <Property Name="BatchNo" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="LotNo" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="IntakeFrequency" Relationship="HISModel.FK_PP_FrequencyID" FromRole="PatientPrescription" ToRole="IntakeFrequency" />
+    <NavigationProperty Name="MedicineMaster" Relationship="HISModel.FK_PP_Medicine" FromRole="PatientPrescription" ToRole="MedicineMaster" />
+    <NavigationProperty Name="User" Relationship="HISModel.FK_PP_Doctor" FromRole="PatientPrescription" ToRole="User" />
+  </EntityType>
+  <Association Name="FK_PP_FrequencyID">
+    <End Type="HISModel.IntakeFrequency" Role="IntakeFrequency" Multiplicity="1" />
+    <End Type="HISModel.PatientPrescription" Role="PatientPrescription" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="IntakeFrequency">
+        <PropertyRef Name="FrequencyID" />
+      </Principal>
+      <Dependent Role="PatientPrescription">
+        <PropertyRef Name="IntakeFrequencyID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PP_Medicine">
+    <End Type="HISModel.MedicineMaster" Role="MedicineMaster" Multiplicity="1" />
+    <End Type="HISModel.PatientPrescription" Role="PatientPrescription" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MedicineMaster">
+        <PropertyRef Name="MMID" />
+      </Principal>
+      <Dependent Role="PatientPrescription">
+        <PropertyRef Name="MedicineID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PP_Doctor">
+    <End Type="HISModel.User" Role="User" Multiplicity="1" />
+    <End Type="HISModel.PatientPrescription" Role="PatientPrescription" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="PatientPrescription">
+        <PropertyRef Name="PrescribedBy" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

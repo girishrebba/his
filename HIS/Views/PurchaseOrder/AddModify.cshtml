@@ -1,0 +1,136 @@
+﻿@model HIS.PurchaseOrder
+@using HIS.HtmlHelpers;
+@{
+    Layout = null;
+}
+
+@using (Html.BeginForm("AddModify", "PurchaseOrder", FormMethod.Post, new { onsubmit = "return SubmitForm(this)" }))
+{
+    @Html.HiddenFor(model => model.OrderID)
+<div class="form-horizontal">
+    <div class="form-group">
+        @Html.LabelFor(model => model.PONumber, new { @class = "control-label col-md-2" })
+        <div class="col-sm-4">
+            @Html.EditorFor(model => model.PONumber, new { htmlAttributes = new {@class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.PONumber)
+        </div>
+        @Html.LabelFor(model => model.MedicineWithDose, new { @class = "control-label col-md-2" })
+        <div class="col-sm-4">
+            @Html.EditorFor(model => model.MedicineWithDose, new { htmlAttributes = new {@class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.MedicineID)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.OrderedDate, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-sm-4">
+            <div id="date-popup" class="input-group date">
+                @Html.EditorFor(model => model.OrderedDate, new { htmlAttributes = new { Value = Html.DateFormat(Model.OrderedDate), @class = "datepicker form-control", @placeholder = "" } })
+                <span class="btnorderpicker input-group-addon"><i class="fa fa-calendar"></i></span>
+            </div>
+            @Html.ValidationMessageFor(model => model.OrderedDate, "", new { @class = "text-danger" })
+        </div>
+        @Html.LabelFor(model => model.OrderedQty, new { @class = "control-label col-md-2" })
+        <div class="col-sm-4">
+            @Html.EditorFor(model => model.OrderedQty, new { htmlAttributes = new { Value = Model.OrderedQty > 0 ? Model.OrderedQty.ToString() : string.Empty, @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.OrderedQty)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.PricePerItem, new { @class = "control-label col-md-2" })
+        <div class="col-sm-4">
+            @Html.EditorFor(model => model.PricePerItem, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.PricePerItem)
+        </div>
+
+        @Html.LabelFor(model => model.PricePerSheet, new { @class = "control-label col-md-2" })
+        <div class="col-sm-4">
+            @Html.EditorFor(model => model.PricePerSheet, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.PricePerSheet)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.BatchNo, new { @class = "control-label col-md-2" })
+        <div class="col-sm-4">
+            @Html.EditorFor(model => model.BatchNo, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+        @Html.LabelFor(model => model.LotNo, new { @class = "control-label col-md-2" })
+        <div class="col-sm-4">
+            @Html.EditorFor(model => model.LotNo, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.ExpiryDate, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-sm-4">
+            <div id="date-popup" class="input-group date">
+                @Html.EditorFor(model => model.ExpiryDate, new { htmlAttributes = new { Value = Html.DateFormat(Model.ExpiryDate), @class = "datepicker form-control", @placeholder = "" } })
+                <span class="btnexpirypicker input-group-addon"><i class="fa fa-calendar"></i></span>
+            </div>
+            @Html.ValidationMessageFor(model => model.ExpiryDate, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-3 col-md-offset-5">
+            <input type="submit" value="Submit" class="btn btn-primary" />
+            <input type="reset" value="Reset" class="btn" />
+        </div>
+    </div>
+</div>
+}
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        $('#OrderedDate').datepicker({
+            keyboardNavigation: false,
+            forceParse: false,
+            todayHighlight: true,
+            todayBtn: false,
+            format: "mm/dd/yyyy"
+        });
+
+        $('.btnorderpicker').click(function () {
+            //alert('clicked');
+            $('#OrderedDate').datepicker('show');
+        });
+
+        $('#ExpiryDate').datepicker({
+            keyboardNavigation: false,
+            forceParse: false,
+            todayHighlight: true,
+            todayBtn: false,
+            format: "mm/dd/yyyy"
+        });
+
+        $('.btnexpirypicker').click(function () {
+            //alert('clicked');
+            $('#ExpiryDate').datepicker('show');
+        });
+
+        $("#MedicineWithDose").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/PurchaseOrder/GetMedicines",
+                    type: "POST",
+                    dataType: "json",
+                    data: { Prefix: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return {
+                                label: item.MedicineDisplay,
+                                value: item.MMID
+                            };
+                        }))
+                    },
+                    error: function () {
+                        alert('something went wrong !');
+                    }
+                })
+            },
+            messages: {
+                noResults: "",
+                results: ""
+            }
+        });
+    });
+</script>

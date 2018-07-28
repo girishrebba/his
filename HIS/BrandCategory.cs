@@ -17,7 +17,7 @@ namespace HIS
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public BrandCategory()
         {
-            this.MedicineInventories = new HashSet<MedicineInventory>();
+            this.MedicineMasters = new HashSet<MedicineMaster>();
         }
     
         public int CategoryID { get; set; }
@@ -26,6 +26,6 @@ namespace HIS
     
         public virtual Brand Brand { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<MedicineInventory> MedicineInventories { get; set; }
+        public virtual ICollection<MedicineMaster> MedicineMasters { get; set; }
     }
 }
