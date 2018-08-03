@@ -47,7 +47,7 @@
 
 @section scripts{
     <script>
-        var Popup, dataTable, viewPatient;
+        var Popup, dataTable, viewPatient, fee, observation, bedPopUp;
         $(document).ready(function () {
             dataTable = $("#inPatientsTable").DataTable({
                 "ajax": {
@@ -66,11 +66,14 @@
                     { "data": "EnrolledDisplay" },
                     {
                         "data":"SNO", "render" : function (data) {
-                            return "<a class='btn btn-default btn-sm' title='Edit' onclick=PopupForm('@Url.Action("AddModify","InPatient")/" + data + "')><i class='fa fa-pencil-alt'></i></a><a class='btn btn-info btn-sm' title='View Patient' style='margin-left:5px' onclick=PopupViewPatient('@Url.Action("ViewPatient", "InPatient")/" + data + "')><i class='fa fa-info-circle'></i></a><a class='btn btn-primary btn-sm' title='Bed' style='margin-left:5px' onclick=PopupViewPatient('@Url.Action("ViewPatient", "InPatient")/" + data + "')><i class='fa fa-bed'></i></a>";
+                            return "<a class='btn btn-default btn-sm' title='Edit' onclick=PopupPatient('@Url.Action("AddModify","InPatient")/" + data + "')><i class='fa fa-pencil-alt'></i>"
+                                + "</a><a class='btn btn-info btn-sm' title='View Patient' style='margin-left:5px' onclick=PopupViewPatient('@Url.Action("ViewPatient", "InPatient")/" + data + "')><i class='fa fa-info-circle'></i></a>"
+                                + "<a class='btn btn-primary btn-sm' title='Bed' style='margin-left:5px' onclick=PopupPatientAllocationView('@Url.Action("BedAllocation", "InPatient")/" + data + "')><i class='fa fa-bed'></i></a>"
+                                + "<a class='btn btn-primary btn-sm' title='Fee' style='margin-left:5px' onclick=PopupFee('@Url.Action("Fee", "InPatient")/" + data + "')><i class='fa fa-rupee-sign'></i></a>"
+                                + "<a class='btn btn-primary btn-sm' title='Observation' style='margin-left:5px' onclick=PopupObservations('@Url.Action("Observations", "InPatient")/" + data + "')><i class='fa fa-briefcase-medical'></i></a>";
                     },
                         "orderable": false,
                         "searchable": false
-                        
                     }
                 ],
                 "order": [[7, "desc"],[0, "desc"]],
@@ -80,8 +83,8 @@
             });
         });
 
-
-        function PopupForm(url) {
+        // Popup Add Edit Patient
+        function PopupPatient(url) {
             var formDiv = $('<div/>');
             $.get(url)
             .done(function (response) {
@@ -103,7 +106,7 @@
                 });
             });
         }
-
+        // Popup View Patient
         function PopupViewPatient(url) {
             var formDiv = $('<div/>');
             $.get(url)
@@ -126,7 +129,75 @@
                     });
                 });
         }
+        // Popup Fee
+        function PopupFee(url) {
+            var formDiv = $('<div/>');
+            $.get(url)
+                .done(function (response) {
+                    formDiv.html(response);
 
+                    fee = formDiv.dialog({
+                        autoOpen: true,
+                        resizable: false,
+                        modal: true,
+                        title: 'Fee Collection',
+                        width: 850,
+                        top: 147,
+                        close: function () {
+                            fee.dialog('destroy').remove();
+                        },
+                        open: function (event, ui) {
+                            $('.ui-dialog-content').css('overflow', 'hidden');
+                        }
+                    });
+                });
+        }
+        // Popup Observations
+        function PopupObservations(url) {
+            var formDiv = $('<div/>');
+            $.get(url)
+                .done(function (response) {
+                    formDiv.html(response);
+
+                    observation = formDiv.dialog({
+                        autoOpen: true,
+                        resizable: false,
+                        modal: true,
+                        title: 'Observations',
+                        width: 850,
+                        top: 147,
+                        close: function () {
+                            observation.dialog('destroy').remove();
+                        },
+                        open: function (event, ui) {
+                            $('.ui-dialog-content').css('overflow', 'hidden');
+                        }
+                    });
+                });
+        }
+        function PopupPatientAllocationView(url) {
+            var formDiv = $('<div/>');
+            $.get(url)
+                .done(function (response) {
+                    formDiv.html(response);
+
+                    bedPopUp = formDiv.dialog({
+                        autoOpen: true,
+                        resizable: false,
+                        modal: true,
+                        title: 'Patient Bed Allocation',
+                        width: 850,
+                        top: 161,
+                        close: function () {
+                            bedPopUp.dialog('destroy').remove();
+                        },
+                        open: function (event, ui) {
+                            $('.ui-dialog-content').css('overflow', 'hidden');
+                        }
+                    });
+                });
+        }
+        // Submit Patient
         function SubmitForm(form) {
             $.validator.setDefaults({
                 ignore: []
@@ -152,6 +223,54 @@
             }
            return false; 
                  
+        }
+        // Submit Patient Fee
+        function SubmitFeeForm(form) {
+            $.validator.unobtrusive.parse(form);
+            if ($(form).valid()) {
+                $.ajax({
+                    type: "POST",
+                    url: form.action,
+                    data: $(form).serialize(),
+                    success: function (data) {
+                        if (data.success) {
+                            fee.dialog('close');
+                            dataTable.ajax.reload();
+
+                            $.notify(data.message, {
+                                globalPosition: "top center",
+                                className: "success"
+                            })
+                        }
+                    }
+                });
+            }
+            return false;
+
+        }
+
+        // Submit Patient Observations
+        function SubmitObservationForm(form) {
+            $.validator.unobtrusive.parse(form);
+            if ($(form).valid()) {
+                $.ajax({
+                    type: "POST",
+                    url: form.action,
+                    data: $(form).serialize(),
+                    success: function (data) {
+                        if (data.success) {
+                            observation.dialog('close');
+                            dataTable.ajax.reload();
+
+                            $.notify(data.message, {
+                                globalPosition: "top center",
+                                className: "success"
+                            })
+                        }
+                    }
+                });
+            }
+            return false;
         }
     </script>
 }

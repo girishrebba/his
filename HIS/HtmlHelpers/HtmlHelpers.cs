@@ -32,6 +32,26 @@ namespace HIS.HtmlHelpers
             return string.Format("{0} - {1}", medicineName, dose);
         }
 
+        public static string Get_IN_ENMR(int id)
+        {
+            string enmrNo = string.Empty;
+            using (HISDBEntities hs = new HISDBEntities())
+            {
+                enmrNo = hs.InPatients.Where(op => op.SNO == id).FirstOrDefault().ENMRNO;
+            }
+            return enmrNo;
+        }
+
+        public static string Get_OUT_ENMR(int id)
+        {
+            string enmrNo = string.Empty;
+            using (HISDBEntities hs = new HISDBEntities())
+            {
+                enmrNo = hs.OutPatients.Where(op => op.SNO == id).FirstOrDefault().ENMRNO;
+            }
+            return enmrNo;
+        }
+
         public static IEnumerable<TSource> DistinctBy<TSource, TKey>
     (this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
         {

@@ -12,18 +12,16 @@ namespace HIS
     using System;
     using System.Collections.Generic;
     
-    public partial class PatientRoomAllocation
+    public partial class Bed
     {
-        public int AllocationID { get; set; }
-        public string ENMRNO { get; set; }
-        public int RoomNo { get; set; }
         public int BedNo { get; set; }
-        public System.DateTime FromDate { get; set; }
-        public Nullable<System.DateTime> EndDate { get; set; }
-        public string DischargeSummary { get; set; }
-        public int AllocationStatus { get; set; }
+        public string BedName { get; set; }
+        public string Description { get; set; }
+        public Nullable<int> BedStatus { get; set; }
+        public string BedType { get; set; }
+        public Nullable<int> RoomNo { get; set; }
+        public Nullable<System.DateTime> NextAvailbility { get; set; }
     
-        public virtual InPatient InPatient { get; set; }
         public virtual Room Room { get; set; }
     }
 }

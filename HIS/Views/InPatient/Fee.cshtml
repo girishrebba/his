@@ -1,0 +1,123 @@
+﻿@model HIS.FeeCollection
+@{
+    Layout = null;
+}
+
+<style>
+    .ui-widget-content a {
+        color: #fff !important
+    }
+    .feeHistoryGrid {
+        height: 180px;
+        overflow-y: scroll;
+    }
+</style>
+@using HIS.HtmlHelpers
+@using (Html.BeginForm("Fee", "InPatient", FormMethod.Post, new { onsubmit = "return SubmitFeeForm(this)" }))
+{
+    @Html.HiddenFor(model => model.ENMRNO)
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading clearfix">
+                    ENMRNO: <span class="lableDisplay">@Model.ENMRNO </span>
+                </div>
+                <div class="panel-body ">
+                        <div class="table-responsive">
+                            <table id="feeHistoryTable" class="table table-striped table-bordered" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Amount</th>
+                                        <th>Purpose</th>
+                                        <th>Payment Mode</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>        
+                    <div class="panel-heading clearfix">
+                        <a id="addNew" class="btn btn-success" style="margin-bottom:10px"><i class="fa fa-plus"></i> Add New</a>
+                    </div>
+                    <div id="feeForm" class="form-horizontal hidden">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Amount, "Amount:", new { @class = "control-label col-md-2" })
+                            <div class="col-sm-4">
+                                @Html.EditorFor(model => model.Amount, new { htmlAttributes = new { Value = Model.Amount > 0 ? Model.Amount.ToString() : string.Empty, @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Amount)
+                            </div>
+                            @Html.LabelFor(model => model.PaidOn, "Date:", htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-sm-4">
+                                <div id="date-popup" class="input-group date">
+                                    @Html.EditorFor(model => model.PaidOn, new { htmlAttributes = new { Value = Html.DateFormat(Model.PaidOn), @class = "datepicker form-control", @placeholder = "" } })
+                                    <span class="btnpicker input-group-addon"><i class="fa fa-calendar"></i></span>
+                                </div>
+                                @Html.ValidationMessageFor(model => model.PaidOn, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Purpose, "Purpose:", new { @class = "control-label col-md-2" })
+                            <div class="col-sm-4">
+                                @Html.EditorFor(model => model.Purpose, new { htmlAttributes = new { Value = Model.Amount > 0 ? Model.Amount.ToString() : string.Empty, @class = "form-control" } })
+                            </div>
+                            @Html.LabelFor(model => model.PaymentMode, "Pay Mode:", new { @class = "control-label col-md-2" })
+                            <div class="col-sm-4">
+                                @Html.EditorFor(model => model.PaymentMode, new { htmlAttributes = new { Value = Model.Amount > 0 ? Model.Amount.ToString() : string.Empty, @class = "form-control" } })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3 col-md-offset-5">
+                                <input type="submit" value="Submit" class="btn btn-primary" />
+                                <input type="reset" value="Reset" class="btn" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+}
+
+<script type="text/javascript">
+    var myJsVariable = @Html.Raw(Json.Encode(Model.ENMRNO));
+    $("#feeHistoryTable").DataTable({
+        "ajax": {
+            "url": '/InPatient/GetFeeHistory',
+            "data": { 'enmrNo': myJsVariable },
+            "type": "GET",
+            "datatype": "json"
+        },
+        "columns": [
+            { "data": "PaidDateDisplay" },
+            { "data": "Amount" },
+            { "data": "Purpose" },
+            { "data": "PaymentMode" }
+        ],
+        "language": {
+            "emptyTable": "No Fee history found"
+        },
+        "scrollY": "100px",
+        "scrollCollapse": true,
+        "paging": false,
+        "info": false,
+        "searching": false,
+        "order": [[0, "desc"]],
+    });
+         $('#addNew').click(function (e) {
+            e.preventDefault();
+            $('#feeForm').removeClass('hidden');
+    });
+
+    $('#PaidOn').datepicker({
+        keyboardNavigation: false,
+        forceParse: false,
+        todayHighlight: true,
+        todayBtn: false,
+        format: "mm/dd/yyyy"
+    });
+
+    $('.btnpicker').click(function (event) {
+        event.preventDefault();
+        $('#PaidOn').datepicker('show');
+    });
+</script>

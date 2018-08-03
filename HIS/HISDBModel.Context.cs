@@ -12,6 +12,8 @@ namespace HIS
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Entity.Core.Objects;
+    using System.Linq;
     
     public partial class HISDBEntities : DbContext
     {
@@ -32,9 +34,7 @@ namespace HIS
         public virtual DbSet<ConsultationType> ConsultationTypes { get; set; }
         public virtual DbSet<InPatientHistory> InPatientHistories { get; set; }
         public virtual DbSet<IntakeFrequency> IntakeFrequencies { get; set; }
-        public virtual DbSet<PatientRoomAllocation> PatientRoomAllocations { get; set; }
         public virtual DbSet<PatientVisitHistory> PatientVisitHistories { get; set; }
-        public virtual DbSet<Room> Rooms { get; set; }
         public virtual DbSet<Specialization> Specializations { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserType> UserTypes { get; set; }
@@ -45,5 +45,17 @@ namespace HIS
         public virtual DbSet<MedicineMaster> MedicineMasters { get; set; }
         public virtual DbSet<PurchaseOrder> PurchaseOrders { get; set; }
         public virtual DbSet<PatientPrescription> PatientPrescriptions { get; set; }
+        public virtual DbSet<Bed> Beds { get; set; }
+        public virtual DbSet<PatientRoomAllocation> PatientRoomAllocations { get; set; }
+        public virtual DbSet<Room> Rooms { get; set; }
+    
+        public virtual int ConvertOutPatientToInPatient(string eNMRNO)
+        {
+            var eNMRNOParameter = eNMRNO != null ?
+                new ObjectParameter("ENMRNO", eNMRNO) :
+                new ObjectParameter("ENMRNO", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ConvertOutPatientToInPatient", eNMRNOParameter);
+        }
     }
 }

@@ -118,14 +118,6 @@
 }
 <script type="text/javascript">
     $(function () {
-        //$("a.button.disabled").click(function () {
-        //    return (false);
-        //});
-
-        //$("#poTable").DataTable({
-        //    "scrollY": "200px"
-        //});
-
         $('#btnAdd').click(function () {
             var form = $("#poForm")
             $.validator.unobtrusive.parse(form);
@@ -156,7 +148,6 @@
         });
 
         $('.btnorderpicker').click(function () {
-            //alert('clicked');
             $('#OrderedDate').datepicker('show');
         });
 
@@ -169,7 +160,6 @@
         });
 
         $('.btnexpirypicker').click(function () {
-            //alert('clicked');
             $('#ExpiryDate').datepicker('show');
         });
 

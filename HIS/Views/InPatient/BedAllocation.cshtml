@@ -1,0 +1,91 @@
+﻿@model HIS.PatientRoomAllocation
+@{
+    Layout = null;
+}
+
+@using (Html.BeginForm("SavePatinetRoomAllocation", "InPatient", FormMethod.Post, new { onsubmit = "return SubmitForm(this)" }))
+{
+    @Html.HiddenFor(model => model.AllocationID)
+<div class="form-horizontal">
+    <div class="form-group">
+        @Html.LabelFor(model => model.ENMRNO, new { @class = "control-label col-md-2" })
+        <div class="col-sm-4">
+            @Html.EditorFor(model => model.ENMRNO, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.ENMRNO)
+        </div>
+
+        @Html.LabelFor(model => model.RoomNo, "Room No:", htmlAttributes: new { @class = "control-label col-sm-2" })
+        <div class="col-sm-4">
+            @Html.DropDownListFor(model => model.RoomNo, ViewBag.Rooms as SelectList, "--Select--", new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.RoomNo)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.BedNo, "Bed No:", htmlAttributes: new { @class = "control-label col-sm-2" })
+        <div class="col-sm-4">
+            @Html.DropDownListFor(model => model.BedNo, ViewBag.Beds as SelectList, "--Select--", new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.BedNo)
+        </div>
+
+
+        </div>
+
+
+    <div class="form-group">
+
+        @Html.LabelFor(model => model.FromDate, "FromDate", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-sm-4">
+            <div id="date-popup" class="input-group date">
+                @Html.EditorFor(model => model.FromDate, new { htmlAttributes = new { @class = "datepicker form-control" } })
+                <span class="input-group-addon btnpicker"><i class="fa fa-calendar"></i></span>
+            </div>
+            @Html.ValidationMessageFor(model => model.FromDate, "", new { @class = "text-danger" })
+        </div>
+
+        @Html.LabelFor(model => model.EndDate, "EndDate", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-sm-4">
+            <div id="date-popup" class="input-group date">
+                @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "datepicker form-control" } })
+                <span class="input-group-addon btnpicker"><i class="fa fa-calendar"></i></span>
+            </div>
+            @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+
+
+    <div class="form-group">
+
+        @Html.LabelFor(model => model.DischargeSummary, "Discharge Summary:")
+        @Html.TextAreaFor(model => model.DischargeSummary, new { @class = "form-control rounded-0", @rows = 3 })
+
+    </div>
+
+
+    <div class="form-group">
+        <div class="col-md-3 col-md-offset-5">
+            <input type="submit" value="Submit" class="btn btn-primary" />
+            <input type="reset" value="Reset" class="btn" />
+        </div>
+    </div>
+</div>
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.datepicker').datepicker({
+            keyboardNavigation: false,
+            forceParse: false,
+            todayHighlight: true,
+            todayBtn: false,
+            format: "mm/dd/yyyy"
+        });
+
+        $('.btnpicker').click(function () {
+            //alert('clicked');
+            $('.datepicker').datepicker('show');
+        });
+    });
+
+
+</script>

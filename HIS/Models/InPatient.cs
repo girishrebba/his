@@ -71,7 +71,7 @@ namespace HIS
         [Required(ErrorMessage = "Address is Required", AllowEmptyStrings = false)]
         public string Address1 { get; set; }
         [Required(ErrorMessage = "Enroll date is Required", AllowEmptyStrings = false)]
-        public Nullable<System.DateTime> Enrolled { get; set; }
+        public Nullable<DateTime> Enrolled { get; set; }
         [Required(ErrorMessage = "Doctor is Required", AllowEmptyStrings = false)]
         public int DoctorID { get; set; }
         [Required(ErrorMessage = "Blood Group is Required", AllowEmptyStrings = false)]

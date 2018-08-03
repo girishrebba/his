@@ -24,6 +24,7 @@ namespace HIS
         public Nullable<System.DateTime> DatePrescribed { get; set; }
         public string BatchNo { get; set; }
         public string LotNo { get; set; }
+        public int VisitID { get; set; }
     
         public virtual IntakeFrequency IntakeFrequency { get; set; }
         public virtual MedicineMaster MedicineMaster { get; set; }

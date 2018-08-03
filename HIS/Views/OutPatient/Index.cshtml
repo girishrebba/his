@@ -76,10 +76,11 @@
                     { "data": "EnrolledDisplay" },
                     {
                         "data":"SNO", "render" : function (data) {
-                            return "<a class='btn btn-default btn-sm' title='Edit' onclick=PopupForm('@Url.Action("AddModify","OutPatient")/" + data + "')><i class='fa fa-pencil-alt'></i></a>"+
-                                "<a class='btn btn-info btn-sm' title = 'View Patient' style = 'margin-left:5px' onclick = PopupViewPatient('@Url.Action("ViewPatient", "OutPatient")/" + data + "')><i class='fa fa-info-circle'></i></a>" +
-                                "<a class='btn btn-primary btn-sm' title='Consultation' style='margin-left:5px' onclick=PopupNewVisit('@Url.Action("NewVisit", "OutPatient")/" + data + "')> <i class='fa fa-calendar'></i></a>" +
-                                "<a class='btn btn-primary btn-sm' title='Prescription' style='margin-left:5px' onclick=PopupPrescription('@Url.Action("OPPrescription", "OutPatient")/" + data + "')><i class='fa fa-notes-medical'></i></a>";
+                            return "<a class='btn btn-default btn-sm' title='Edit' onclick=PopupForm('@Url.Action("AddModify","OutPatient")/" + data + "')><i class='fa fa-pencil-alt'></i></a>"
+                                + "<a class='btn btn-info btn-sm' title = 'View Patient' style = 'margin-left:5px' onclick = PopupViewPatient('@Url.Action("ViewPatient", "OutPatient")/" + data + "')><i class='fa fa-info-circle'></i></a>"
+                                + "<a class='btn btn-primary btn-sm' title='Consultation' style='margin-left:5px' onclick=PopupNewVisit('@Url.Action("NewVisit", "OutPatient")/" + data + "')> <i class='fa fa-calendar'></i></a>"
+                                + "<a class='btn btn-primary btn-sm' title='Prescription' style='margin-left:5px' onclick=PopupPrescription('@Url.Action("OPPrescription", "OutPatient")/" + data + "')><i class='fa fa-notes-medical'></i></a>"
+                                + "<a class='btn btn-primary btn-sm' title='Admit as IP' style='margin-left:5px' onclick=onclick=ConvertOpToIp("+data+")><i class='fa fa-hospital'></i></a>";
                     },
                         "orderable": false,
                         "searchable": false
@@ -234,14 +235,16 @@
             $('#Quantity').rules('remove', 'required');
             $('#IntakeFrequencyID').rules('remove', 'required');
             var enmrNo = $('#ENMRNO').val();
+            var visitID = $('#VisitID').val();
             $('#ppTable > tbody tr').not(':first').each(function (index, elem) {
                 var tbl = {};
                 tbl.ENMRNO = enmrNo;
+                tbl.VisitID = visitID;
                 tbl.MedicineID = $($(this).find('td:eq(0)')).html();
                 tbl.MedicineWithDose = $($(this).find('td:eq(1)')).html();
                 tbl.Quantity = $($(this).find('td:eq(2)')).html();
                 tbl.IntakeFrequencyID = $($(this).find('td:eq(3)')).html();
-                tbl.Comments = $($(this).find('td:eq(4)')).html();
+                tbl.Comments = $($(this).find('td:eq(5)')).html();
                 ppItems.push(tbl);
             });
             $.ajax({
@@ -262,6 +265,27 @@
                 }
             });
             return false;
+        }
+
+        function ConvertOpToIp(id) {
+            if(confirm('Are You Sure to Convert as In Patient?'))
+            {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("ConvertOpToIp", "OutPatient")/' + id,
+                    success: function (data) {
+                        if (data.success)
+                        {
+                            $.notify(data.message, {
+                                globalPosition: "top center",
+                                className: "success"
+                            })
+                            window.location.href = '@Url.Action("Index", "InPatient")';
+                        }
+                    }
+
+                });
+            }
         }
     </script>
 }

@@ -152,5 +152,172 @@ namespace HIS.Controllers
                 return inPatient;
             }
         }
+
+        [HttpGet]
+        public ActionResult Fee(int id = 0)
+        {
+            string enmrNo = string.Empty;
+            enmrNo = HtmlHelpers.HtmlHelpers.Get_IN_ENMR(id);
+            
+            FeeCollection fc = new FeeCollection();
+            fc.ENMRNO = enmrNo;
+            //ViewBag.FeeList = feeList;
+            return View(fc);
+        }
+
+        public ActionResult GetFeeHistory(string enmrNo)
+        {
+            using (HISDBEntities hs = new HISDBEntities())
+            {
+                    var feeList = (from f in hs.FeeCollections
+                               join ip in hs.InPatients on f.ENMRNO equals ip.ENMRNO
+                                   where f.ENMRNO.Equals(enmrNo)
+                                   select new { f }).OrderByDescending(c => c.f.PaidOn).AsEnumerable()
+                                   .Select(x => new FeeCollection
+                                   {
+                                       PaidDateDisplay = HtmlHelpers.HtmlHelpers.DateFormat(x.f.PaidOn),
+                                       Amount = x.f.Amount,
+                                       Purpose = x.f.Purpose,
+                                       PaymentMode = x.f.PaymentMode
+                                   }).ToList();
+                
+                return Json(new { data = feeList }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public ActionResult GetObservationHistory(string enmrNo)
+        {
+            using (HISDBEntities hs = new HISDBEntities())
+            {
+               var ipHistory = (from hist in hs.InPatientHistories
+                             join ip in hs.InPatients on hist.ENMRNO equals ip.ENMRNO
+                             join u in hs.Users on hist.DoctorID equals u.UserID
+                             join ut in hs.UserTypes on u.UserTypeID equals ut.UserTypeID
+                             where ut.UserTypeName.Equals("Doctor") && hist.ENMRNO.Equals(enmrNo)
+                             select new { hist, u }).OrderByDescending(c => c.hist.ObservationDate).AsEnumerable()
+                               .Select(x => new InPatientHistory
+                               {
+                                   DateDisplay = HtmlHelpers.HtmlHelpers.DateFormat(x.hist.ObservationDate),
+                                   Observations = x.hist.Observations,
+                                   DoctorName = HtmlHelpers.HtmlHelpers.GetFullName(x.u.FirstName, x.u.MiddleName, x.u.LastName)
+                               }).ToList();
+
+                return Json(new { data = ipHistory }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult Fee(FeeCollection fc)
+        {
+            if (fc != null)
+            {
+                using (HISDBEntities hs = new HISDBEntities())
+                {
+                    hs.FeeCollections.Add(fc);
+                    hs.SaveChanges();
+                    return Json(new { success = true, message = "Fee added Successfully" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            else
+            {
+                return Json(new { success = false, message = "Error in Fee Adding, Please try Again!!" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpGet]
+        public ActionResult Observations(int id = 0)
+        {
+            string enmrNo = string.Empty;
+            enmrNo = HtmlHelpers.HtmlHelpers.Get_IN_ENMR(id);
+            List<User> Users = HtmlHelpers.HtmlHelpers.GetDoctors();
+            List<InPatientHistory> ipHistory = new List<InPatientHistory>();
+            InPatientHistory iph = new InPatientHistory { ENMRNO = enmrNo };
+            ViewBag.Users = new SelectList(Users, "UserID", "NameDisplay");
+            return View(iph);
+        }
+
+        [HttpPost]
+        public ActionResult Observations(InPatientHistory iph)
+        {
+            if (iph != null)
+            {
+                using (HISDBEntities hs = new HISDBEntities())
+                {
+                    hs.InPatientHistories.Add(iph);
+                    hs.SaveChanges();
+                    return Json(new { success = true, message = "Observation recorded Successfully" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            else
+            {
+                return Json(new { success = false, message = "Error in Observation recording, Please try Again!!" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpGet]
+        public ActionResult BedAllocation(int id)
+        {
+            return View(GetPatientBedDetails(id));
+        }
+
+        [HttpPost]
+        public ActionResult SavePatinetRoomAllocation(PatientRoomAllocation ip)
+        {
+            using (HISDBEntities db = new HISDBEntities())
+            {
+                if (ip.AllocationID == 0)
+                {
+                    db.PatientRoomAllocations.Add(ip);
+                    db.SaveChanges();
+                    return Json(new { success = true, message = "Saved Successfully" }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    db.Entry(ip).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return Json(new { success = true, message = "Updated Successfully" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+        }
+
+        public PatientRoomAllocation GetPatientBedDetails(int id)
+        {
+            PatientRoomAllocation roomalloc = new PatientRoomAllocation();
+            using (HISDBEntities dc = new HISDBEntities())
+            {
+                var enmrno = (from e in dc.InPatients where e.SNO == id select e.ENMRNO).FirstOrDefault();
+                var roomallocation = (from pra in dc.PatientRoomAllocations
+                                      where pra.ENMRNO.Equals(enmrno)
+                                      select new { pra }).FirstOrDefault();
+
+                List<Room> room = (from u in dc.Rooms
+                                   select new { u })
+                              .OrderBy(b => b.u.RoomNo).AsEnumerable()
+                              .Select(x => new Room { RoomNo = x.u.RoomNo, RoomName = x.u.RoomName }).ToList();
+
+                List<Bed> beds = (from u in dc.Beds
+                                  select new { u })
+                             .OrderBy(b => b.u.BedNo).AsEnumerable()
+                             .Select(x => new Bed { BedNo = x.u.BedNo, BedName = x.u.BedName }).ToList();
+
+                ViewBag.Rooms = new SelectList(room, "RoomNo", "RoomName");
+                ViewBag.Beds = new SelectList(beds, "BedNo", "BedName");
+                roomalloc.ENMRNO = enmrno;
+                if (roomallocation != null)
+                {
+                    roomalloc.ENMRNO = roomallocation.pra.ENMRNO;
+                    roomalloc.AllocationID = roomallocation.pra.AllocationID;
+                    roomalloc.AllocationStatus = roomallocation.pra.AllocationStatus;
+                    roomalloc.BedNo = roomallocation.pra.BedNo;
+                    roomalloc.DischargeSummary = roomallocation.pra.DischargeSummary;
+                    roomalloc.FromDate = roomallocation.pra.FromDate;
+                    roomalloc.EndDate = roomallocation.pra.EndDate;
+                    roomalloc.RoomNo = roomallocation.pra.RoomNo;
+                    ViewBag.Rooms = new SelectList(room, "RoomNo", "RoomName", roomallocation.pra.RoomNo);
+                    ViewBag.Beds = new SelectList(beds, "BedNo", "BedName", roomallocation.pra.BedNo);
+                }
+                return roomalloc;
+            }
+        }
     }
 }
