@@ -44,10 +44,14 @@ namespace HIS
         public virtual DbSet<MedicineInventory> MedicineInventories { get; set; }
         public virtual DbSet<MedicineMaster> MedicineMasters { get; set; }
         public virtual DbSet<PurchaseOrder> PurchaseOrders { get; set; }
-        public virtual DbSet<PatientPrescription> PatientPrescriptions { get; set; }
-        public virtual DbSet<Bed> Beds { get; set; }
         public virtual DbSet<PatientRoomAllocation> PatientRoomAllocations { get; set; }
+        public virtual DbSet<PatientPrescription> PatientPrescriptions { get; set; }
+        public virtual DbSet<BedType> BedTypes { get; set; }
+        public virtual DbSet<RoomType> RoomTypes { get; set; }
         public virtual DbSet<Room> Rooms { get; set; }
+        public virtual DbSet<Permission> Permissions { get; set; }
+        public virtual DbSet<UserPermission> UserPermissions { get; set; }
+        public virtual DbSet<Bed> Beds { get; set; }
     
         public virtual int ConvertOutPatientToInPatient(string eNMRNO)
         {

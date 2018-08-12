@@ -12,16 +12,9 @@ namespace HIS
     using System;
     using System.Collections.Generic;
     
-    public partial class Bed
+    public partial class Permission
     {
-        public int BedNo { get; set; }
-        public string BedName { get; set; }
-        public string Description { get; set; }
-        public Nullable<int> BedStatus { get; set; }
-        public int BedTypeID { get; set; }
-        public Nullable<int> RoomNo { get; set; }
-        public Nullable<System.DateTime> NextAvailbility { get; set; }
-    
-        public virtual Room Room { get; set; }
+        public int Permission_Id { get; set; }
+        public string PermissionDescription { get; set; }
     }
 }

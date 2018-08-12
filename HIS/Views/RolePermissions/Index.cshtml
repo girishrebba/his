@@ -1,0 +1,174 @@
+﻿@model HIS.RolePermissions
+
+@{
+    ViewBag.Title = "Role & Permissions";
+}
+
+
+<style type="text/css">
+    .TFtable {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        .TFtable td {
+            padding: 7px;
+            border: #4e95f4 1px solid;
+        }
+        /* provide some minimal visual accomodation for IE8 and below */
+        .TFtable tr {
+            background: #b8d1f3;
+        }
+            /*  Define the background color for all the ODD background rows  */
+            .TFtable tr:nth-child(odd) {
+                background: #b8d1f3;
+            }
+            /*  Define the background color for all the EVEN background rows  */
+            .TFtable tr:nth-child(even) {
+                background: #dae5f4;
+            }
+</style>
+
+
+
+<script src="~/Scripts/jquery-1.12.4.min.js"></script>
+@*@using (Html.BeginForm("CreateRP", "RolePermissions", FormMethod.Post, new { id = "RPForm", onsubmit = "return SubmitForm(this)" }))
+    {*@
+@*<div class="container">
+    <div class="row">
+        <div class="col-sm-12">*@
+@*<h4 class="page-title">Purchase Order Form</h4>*@
+@*//table table-condensed table - hover table - striped*@
+<div class="form-horizontal">
+    <div id="dynamicTable">
+
+    </div>
+    <input type="submit" value="Submit" id="btnSubmit" class="btn btn-success" />
+    <div class="row">
+        <div class="form-group">
+            <div class="col-md-3 col-md-offset-5">
+
+            </div>
+        </div>
+    </div>
+</div>
+@*</div>
+        </div>
+    </div>*@
+@*}*@
+
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        // mytable = $('<table></table>').attr({ id: "basicTable" });
+        //myheader = $('<thead><tr><td></td></tr></thead>').attr({ id: "TableHeader" });
+        var rows;
+        var cols;
+
+
+        $.ajax({
+            type: "POST",
+            url: '/RolePermissions/GetRoles',
+            success: function (data) {
+                if (data != null) {
+                    var str;
+                    //$("#dynamicTable").append("<table id='mytable' class='table table- striped table- bordered'>");
+                    //$("#dynamicTable").append("<thead>");
+                    //$("#dynamicTable").append("<tr style='border:2px solid black;'>");
+                    //$("#dynamicTable").append("<th>      </th>");
+
+                    var str = "<table id='mytab' class='table table- striped table- bordered'><thead><tr><th></th>"
+
+                    for (var i = 0; i < data.data.length; i++) {
+                        // $("#dynamicTable").append("<th style='padding:10px;border: #4e95f4 1px solid;'>" + data.data[i]["UserTypeName"] + "</th>");
+                        str += "<th>" + data.data[i]["UserTypeName"] + "</th>";
+                        //$('<td></td>').text(data.data[i][1]).appendTo(myheader);
+                        //$("#dynamicTable").append("<th></th>");
+                    }
+                    //$("#dynamicTable").append("</tr>");
+                    //$("#dynamicTable").append("</thead>");
+                    cols = data.data.length;
+                    //$("#dynamicTable").append("<tbody>");
+
+                    str += "</tr ></thead><tbody>";
+
+
+                    $.ajax({
+                        type: "POST",
+                        url: '/RolePermissions/GetPermissions',
+                        success: function (dt) {
+                            if (dt != null) {
+                                var cnt = 0;
+                                //Rows loop
+                                for (var j = 0; j < dt.dt.length; j++) {
+                                    //$("#dynamicTable").append("<tr  style='padding:5px;border: #4e95f4 1px solid;'>");
+                                    str += "<tr>";
+                                    // $('<td></td>').html('<input type="checkbox"/>').appendTo(row);
+                                    //   $("#dynamicTable").append("<td  style='border: #4e95f4 1px solid;'>" + dt.dt[j]["PermissionDescription"] + "</td>");
+                                    str += "<td>" + dt.dt[j]["PermissionDescription"] + "</td>";
+                                    // Columns loop
+                                    for (var i = 0; i < data.data.length; i++) {
+
+                                        if (dt.userpermission[cnt][1] == true) {
+                                            //     $("#dynamicTable").append("<td style='padding:10px;'><input id=" + dt.dt[j]["Permission_Id"] + '_' + data.data[i]["UserTypeID"] + " type='checkbox' checked='true'/></td>");
+                                            str += "<td><input id=" + dt.dt[j]["Permission_Id"] + '_' + data.data[i]["UserTypeID"] + " type='checkbox' checked='true'/></td>";
+                                        }
+                                        else {
+                                            //$("#dynamicTable").append("<td style='padding:10px;'><input id=" + dt.dt[j]["Permission_Id"] + '_' + data.data[i]["UserTypeID"] + " type='checkbox'/></td>");
+                                            str += "<td><input id=" + dt.dt[j]["Permission_Id"] + '_' + data.data[i]["UserTypeID"] + " type='checkbox'/></td>";
+                                        }
+                                        cnt++;
+                                    }
+                                    //  $("#dynamicTable").append("</tr>");
+                                    str += "</tr >";
+                                }
+
+                                str += "</tbody></table>";
+                                $("#dynamicTable").append(str);
+
+                            }
+                        }
+                    });
+                    //  $("#dynamicTable").append("</tbody>");
+                    //  $("#dynamicTable").append("</table>");
+                    //$('#dynamicTable').addClass('table table-condensed table - hover table - striped');
+                   
+                }
+
+            }
+
+        });
+
+
+
+        $('#btnSubmit').click(function () {
+            
+            var selected = [];
+            $('#dynamicTable input:checked').each(function () {
+                selected.push($(this).attr('id'));
+            });
+
+
+            $.ajax({
+                type: "POST",
+                url: "/RolePermissions/test",
+                dataType: "json",
+                data: { chkboxes: selected },
+                success: function (data) {
+                    alert("Record added successfully.");
+                },
+                error: function (error) {
+                    jsonValue = jQuery.parseJSON(error.responseText);
+                    alert("Error : " + jsonValue);
+                }
+            });
+
+        });
+
+    });
+
+</script>
+

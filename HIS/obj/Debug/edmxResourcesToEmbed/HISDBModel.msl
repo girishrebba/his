@@ -63,18 +63,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="PatientRoomAllocations">
-      <EntityTypeMapping TypeName="HISModel.PatientRoomAllocation">
-        <MappingFragment StoreEntitySet="PatientRoomAllocation">
-          <ScalarProperty Name="DischargeSummary" ColumnName="DischargeSummary" />
-          <ScalarProperty Name="EndDate" ColumnName="EndDate" />
-          <ScalarProperty Name="FromDate" ColumnName="FromDate" />
-          <ScalarProperty Name="AllocationID" ColumnName="AllocationID" />
-          <ScalarProperty Name="ENMRNO" ColumnName="ENMRNO" />
-          <ScalarProperty Name="RoomNo" ColumnName="RoomNo" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="PatientVisitHistories">
       <EntityTypeMapping TypeName="HISModel.PatientVisitHistory">
         <MappingFragment StoreEntitySet="PatientVisitHistory">
@@ -85,19 +73,6 @@
           <ScalarProperty Name="DateOfVisit" ColumnName="DateOfVisit" />
           <ScalarProperty Name="ConsultTypeID" ColumnName="ConsultTypeID" />
           <ScalarProperty Name="ENMRNO" ColumnName="ENMRNO" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Rooms">
-      <EntityTypeMapping TypeName="HISModel.Room">
-        <MappingFragment StoreEntitySet="Rooms">
-          <ScalarProperty Name="SNO" ColumnName="SNO" />
-          <ScalarProperty Name="RoomNo" ColumnName="RoomNo" />
-          <ScalarProperty Name="RoomType" ColumnName="RoomType" />
-          <ScalarProperty Name="Description" ColumnName="Description" />
-          <ScalarProperty Name="CostPerDay" ColumnName="CostPerDay" />
-          <ScalarProperty Name="RoomStatus" ColumnName="RoomStatus" />
-          <ScalarProperty Name="NextAvailbility" ColumnName="NextAvailbility" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -262,9 +237,24 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="PatientRoomAllocations">
+      <EntityTypeMapping TypeName="HISModel.PatientRoomAllocation">
+        <MappingFragment StoreEntitySet="PatientRoomAllocation">
+          <ScalarProperty Name="AllocationStatus" ColumnName="AllocationStatus" />
+          <ScalarProperty Name="DischargeSummary" ColumnName="DischargeSummary" />
+          <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+          <ScalarProperty Name="FromDate" ColumnName="FromDate" />
+          <ScalarProperty Name="BedNo" ColumnName="BedNo" />
+          <ScalarProperty Name="RoomNo" ColumnName="RoomNo" />
+          <ScalarProperty Name="ENMRNO" ColumnName="ENMRNO" />
+          <ScalarProperty Name="AllocationID" ColumnName="AllocationID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="PatientPrescriptions">
       <EntityTypeMapping TypeName="HISModel.PatientPrescription">
         <MappingFragment StoreEntitySet="PatientPrescription">
+          <ScalarProperty Name="VisitID" ColumnName="VisitID" />
           <ScalarProperty Name="LotNo" ColumnName="LotNo" />
           <ScalarProperty Name="BatchNo" ColumnName="BatchNo" />
           <ScalarProperty Name="DatePrescribed" ColumnName="DatePrescribed" />
@@ -275,6 +265,66 @@
           <ScalarProperty Name="MedicineID" ColumnName="MedicineID" />
           <ScalarProperty Name="ENMRNO" ColumnName="ENMRNO" />
           <ScalarProperty Name="PrescriptionID" ColumnName="PrescriptionID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="BedTypes">
+      <EntityTypeMapping TypeName="HISModel.BedType">
+        <MappingFragment StoreEntitySet="BedType">
+          <ScalarProperty Name="BedTypeDescription" ColumnName="BedTypeDescription" />
+          <ScalarProperty Name="BedType1" ColumnName="BedType" />
+          <ScalarProperty Name="BedTypeID" ColumnName="BedTypeID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RoomTypes">
+      <EntityTypeMapping TypeName="HISModel.RoomType">
+        <MappingFragment StoreEntitySet="RoomType">
+          <ScalarProperty Name="RoomType1" ColumnName="RoomType" />
+          <ScalarProperty Name="RoomTypeID" ColumnName="RoomTypeID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Rooms">
+      <EntityTypeMapping TypeName="HISModel.Room">
+        <MappingFragment StoreEntitySet="Rooms">
+          <ScalarProperty Name="RoomBedCapacity" ColumnName="RoomBedCapacity" />
+          <ScalarProperty Name="NextAvailbility" ColumnName="NextAvailbility" />
+          <ScalarProperty Name="RoomStatus" ColumnName="RoomStatus" />
+          <ScalarProperty Name="CostPerDay" ColumnName="CostPerDay" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="RoomTypeID" ColumnName="RoomTypeID" />
+          <ScalarProperty Name="RoomName" ColumnName="RoomName" />
+          <ScalarProperty Name="RoomNo" ColumnName="RoomNo" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Permissions">
+      <EntityTypeMapping TypeName="HISModel.Permission">
+        <MappingFragment StoreEntitySet="Permissions">
+          <ScalarProperty Name="PermissionDescription" ColumnName="PermissionDescription" />
+          <ScalarProperty Name="Permission_Id" ColumnName="Permission_Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserPermissions">
+      <EntityTypeMapping TypeName="HISModel.UserPermission">
+        <MappingFragment StoreEntitySet="UserPermission">
+          <ScalarProperty Name="PermissionID" ColumnName="PermissionID" />
+          <ScalarProperty Name="UserTypeID" ColumnName="UserTypeID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Beds">
+      <EntityTypeMapping TypeName="HISModel.Bed">
+        <MappingFragment StoreEntitySet="Beds">
+          <ScalarProperty Name="NextAvailbility" ColumnName="NextAvailbility" />
+          <ScalarProperty Name="RoomNo" ColumnName="RoomNo" />
+          <ScalarProperty Name="BedTypeID" ColumnName="BedTypeID" />
+          <ScalarProperty Name="BedStatus" ColumnName="BedStatus" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="BedName" ColumnName="BedName" />
+          <ScalarProperty Name="BedNo" ColumnName="BedNo" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

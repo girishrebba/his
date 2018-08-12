@@ -33,7 +33,7 @@ namespace HIS.Controllers
                              Description = x.u.Description,                            
                              DateDisplay = x.u.NextAvailbilityDateFormat(),
                              BedStatusDisplay = x.u.GetBedStatus(),
-                             BedType = x.u.GetBedType()
+                             BedTypeDisplay = x.u.GetBedType()
                          }).ToList();
 
 
@@ -44,6 +44,14 @@ namespace HIS.Controllers
         [HttpGet]
         public ActionResult AddModify(int id = 0)
         {
+            using (HISDBEntities dc = new HISDBEntities())
+            {
+                List<BedType> beds = (from u in dc.BedTypes
+                                      select new { u })
+                           .OrderBy(b => b.u.BedTypeID).AsEnumerable()
+                           .Select(x => new BedType { BedTypeID = x.u.BedTypeID, BedType1 = x.u.BedType1 }).ToList();
+                ViewBag.BedTypeList = new SelectList(beds, "BedTypeID", "BedType1");
+            }
             List<Room> Rooms = GetRoomIds();
             if (id == 0)
             {

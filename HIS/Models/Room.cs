@@ -23,9 +23,17 @@ namespace HIS
 
         public string GetRoomType()
         {
-            if (this.RoomType == "0")
-                return "Non-A/C";           
-            else return "A/C";
+            using (HISDBEntities hs = new HISDBEntities())
+            {
+                var data = (from pra in hs.RoomTypes
+                            where pra.RoomTypeID == this.RoomTypeID
+                            select pra.RoomType1).FirstOrDefault();
+                if (data != "" && data != null)
+                {
+                    this.RoomTypeDisplay = data;
+                }
+            }
+            return this.RoomTypeDisplay != null ? this.RoomTypeDisplay : string.Empty;
         }
 
         public string GetRoomStatus()
@@ -50,8 +58,8 @@ namespace HIS
     {
         [Required(ErrorMessage = "Room Number is Required", AllowEmptyStrings = false)]
         public string RoomNo { get; set; }
-        [Required(ErrorMessage = "Room Type is Required", AllowEmptyStrings = false)]
-        public string RoomType { get; set; }
+        //[Required(ErrorMessage = "Room Type is Required", AllowEmptyStrings = false)]
+        //public string RoomType { get; set; }
         [Required(ErrorMessage = "Description is Required", AllowEmptyStrings = false)]
         public string Description { get; set; }
         [Required(ErrorMessage = "Costperday is Required", AllowEmptyStrings = false)]

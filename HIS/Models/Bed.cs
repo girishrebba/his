@@ -33,11 +33,17 @@ namespace HIS
 
         public string GetBedType()
         {
-            if (this.BedType == "0")
-                return "Ordinary";
-            else if (this.BedType == "1")
-                return "Delux";
-            else return "Luxury";
+            using (HISDBEntities hs = new HISDBEntities())
+            {
+                var data = (from pra in hs.BedTypes
+                            where pra.BedTypeID == this.BedTypeID
+                            select pra.BedType1).FirstOrDefault();
+                if (data != "" && data != null)
+                {
+                    this.BedTypeDisplay = data;                
+                }
+            }
+            return this.BedTypeDisplay != null ? this.BedTypeDisplay : string.Empty;
         }
 
         public string GetBedStatus()
@@ -57,8 +63,8 @@ namespace HIS
     {
         [Required(ErrorMessage = "Bed Number is Required", AllowEmptyStrings = false)]
         public string BedNo { get; set; }
-        [Required(ErrorMessage = "Bed Type is Required", AllowEmptyStrings = false)]
-        public string BedType { get; set; }
+        //[Required(ErrorMessage = "Bed Type is Required", AllowEmptyStrings = false)]
+        //public string BedType { get; set; }
         [Required(ErrorMessage = "Description is Required", AllowEmptyStrings = false)]
         public string Description { get; set; }
         

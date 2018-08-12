@@ -11,7 +11,7 @@ namespace HIS.Controllers
     {
         // GET: Rooms
         public ActionResult Index()
-        {
+        {            
             return View();
         }
 
@@ -31,7 +31,7 @@ namespace HIS.Controllers
                              RoomStatusDisplay = x.u.GetRoomStatus(),
                               DateDisplay = x.u.NextAvailbilityDateFormat(),
                               RoomBedCapacity = x.u.RoomBedCapacity,
-                              RoomType= x.u.GetRoomType()
+                              RoomTypeDisplay= x.u.GetRoomType()
                          }).ToList();
 
 
@@ -42,6 +42,15 @@ namespace HIS.Controllers
         [HttpGet]
         public ActionResult AddModify(int id = 0)
         {
+            using (HISDBEntities dc = new HISDBEntities())
+            {
+                List<RoomType> room = (from u in dc.RoomTypes
+                                       select new { u })
+                            .OrderBy(b => b.u.RoomTypeID).AsEnumerable()
+                            .Select(x => new RoomType { RoomTypeID = x.u.RoomTypeID, RoomType1 = x.u.RoomType1 }).ToList();
+                ViewBag.RoomTypeList = new SelectList(room, "RoomTypeID", "RoomType1");
+            }
+
             if (id == 0)
                 return View(new Room());
             else

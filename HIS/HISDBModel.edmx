@@ -13,9 +13,17 @@
           <Property Name="BedName" Type="nvarchar" MaxLength="30" Nullable="false" />
           <Property Name="Description" Type="nvarchar(max)" />
           <Property Name="BedStatus" Type="int" />
-          <Property Name="BedType" Type="nvarchar" MaxLength="20" />
+          <Property Name="BedTypeID" Type="int" Nullable="false" />
           <Property Name="RoomNo" Type="int" />
           <Property Name="NextAvailbility" Type="date" />
+        </EntityType>
+        <EntityType Name="BedType">
+          <Key>
+            <PropertyRef Name="BedTypeID" />
+          </Key>
+          <Property Name="BedTypeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BedType" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="BedTypeDescription" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="BloodGroup">
           <Key>
@@ -188,7 +196,7 @@
           <Property Name="DatePrescribed" Type="date" />
           <Property Name="BatchNo" Type="varchar" MaxLength="30" />
           <Property Name="LotNo" Type="varchar" MaxLength="30" />
-          <Property Name="VisitID" Type="int" Nullable="false" />
+          <Property Name="VisitID" Type="int" />
         </EntityType>
         <EntityType Name="PatientRoomAllocation">
           <Key>
@@ -215,6 +223,13 @@
           <Property Name="Discount" Type="money" />
           <Property Name="DoctorID" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="Permissions">
+          <Key>
+            <PropertyRef Name="Permission_Id" />
+          </Key>
+          <Property Name="Permission_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PermissionDescription" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
         <EntityType Name="PurchaseOrder">
           <Key>
             <PropertyRef Name="OrderID" />
@@ -237,12 +252,19 @@
           </Key>
           <Property Name="RoomNo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="RoomName" Type="nvarchar" MaxLength="30" Nullable="false" />
-          <Property Name="RoomType" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="RoomTypeID" Type="int" Nullable="false" />
           <Property Name="Description" Type="varchar(max)" />
           <Property Name="CostPerDay" Type="int" Nullable="false" />
           <Property Name="RoomStatus" Type="int" />
           <Property Name="NextAvailbility" Type="date" />
           <Property Name="RoomBedCapacity" Type="int" />
+        </EntityType>
+        <EntityType Name="RoomType">
+          <Key>
+            <PropertyRef Name="RoomTypeID" />
+          </Key>
+          <Property Name="RoomTypeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RoomType" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="Specialization">
           <Key>
@@ -250,6 +272,14 @@
           </Key>
           <Property Name="SpecializationID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="DoctorType" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserPermission">
+          <Key>
+            <PropertyRef Name="UserTypeID" />
+            <PropertyRef Name="PermissionID" />
+          </Key>
+          <Property Name="UserTypeID" Type="int" Nullable="false" />
+          <Property Name="PermissionID" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Users">
           <Key>
@@ -578,11 +608,9 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Function Name="ConvertOutPatientToInPatient" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="ENMRNO" Type="varchar" Mode="In" />
-        </Function>
         <EntityContainer Name="HISModelStoreContainer">
           <EntitySet Name="Beds" EntityType="Self.Beds" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BedType" EntityType="Self.BedType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BloodGroup" EntityType="Self.BloodGroup" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BrandCategories" EntityType="Self.BrandCategories" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Brands" EntityType="Self.Brands" Schema="dbo" store:Type="Tables" />
@@ -598,9 +626,12 @@
           <EntitySet Name="PatientPrescription" EntityType="Self.PatientPrescription" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PatientRoomAllocation" EntityType="Self.PatientRoomAllocation" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PatientVisitHistory" EntityType="Self.PatientVisitHistory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Permissions" EntityType="Self.Permissions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PurchaseOrder" EntityType="Self.PurchaseOrder" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Rooms" EntityType="Self.Rooms" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RoomType" EntityType="Self.RoomType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Specialization" EntityType="Self.Specialization" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserPermission" EntityType="Self.UserPermission" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserType" EntityType="Self.UserType" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_Beds_RoomNo" Association="Self.FK_Beds_RoomNo">
@@ -1006,6 +1037,14 @@
             <End Role="MedicineMaster" EntitySet="MedicineMasters" />
             <End Role="PurchaseOrder" EntitySet="PurchaseOrders" />
           </AssociationSet>
+          <FunctionImport Name="ConvertOutPatientToInPatient">
+          <Parameter Name="ENMRNO" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="PatientRoomAllocations" EntityType="HISModel.PatientRoomAllocation" />
+          <AssociationSet Name="FK_PRA_InPatients_ENMRNO" Association="HISModel.FK_PRA_InPatients_ENMRNO">
+            <End Role="InPatient" EntitySet="InPatients" />
+            <End Role="PatientRoomAllocation" EntitySet="PatientRoomAllocations" />
+          </AssociationSet>
           <EntitySet Name="PatientPrescriptions" EntityType="HISModel.PatientPrescription" />
           <AssociationSet Name="FK_PP_FrequencyID" Association="HISModel.FK_PP_FrequencyID">
             <End Role="IntakeFrequency" EntitySet="IntakeFrequencies" />
@@ -1019,23 +1058,19 @@
             <End Role="User" EntitySet="Users" />
             <End Role="PatientPrescription" EntitySet="PatientPrescriptions" />
           </AssociationSet>
-          <FunctionImport Name="ConvertOutPatientToInPatient">
-          <Parameter Name="ENMRNO" Mode="In" Type="String" />
-          </FunctionImport>
-          <EntitySet Name="Beds" EntityType="HISModel.Bed" />
-          <EntitySet Name="PatientRoomAllocations" EntityType="HISModel.PatientRoomAllocation" />
+          <EntitySet Name="BedTypes" EntityType="HISModel.BedType" />
+          <EntitySet Name="RoomTypes" EntityType="HISModel.RoomType" />
           <EntitySet Name="Rooms" EntityType="HISModel.Room" />
-          <AssociationSet Name="FK_Beds_RoomNo" Association="HISModel.FK_Beds_RoomNo">
-            <End Role="Room" EntitySet="Rooms" />
-            <End Role="Bed" EntitySet="Beds" />
-          </AssociationSet>
-          <AssociationSet Name="FK_PRA_InPatients_ENMRNO" Association="HISModel.FK_PRA_InPatients_ENMRNO">
-            <End Role="InPatient" EntitySet="InPatients" />
-            <End Role="PatientRoomAllocation" EntitySet="PatientRoomAllocations" />
-          </AssociationSet>
           <AssociationSet Name="FK_PRA_RoomNo" Association="HISModel.FK_PRA_RoomNo">
             <End Role="Room" EntitySet="Rooms" />
             <End Role="PatientRoomAllocation" EntitySet="PatientRoomAllocations" />
+          </AssociationSet>
+          <EntitySet Name="Permissions" EntityType="HISModel.Permission" />
+          <EntitySet Name="UserPermissions" EntityType="HISModel.UserPermission" />
+          <EntitySet Name="Beds" EntityType="HISModel.Bed" />
+          <AssociationSet Name="FK_Beds_RoomNo" Association="HISModel.FK_Beds_RoomNo">
+            <End Role="Room" EntitySet="Rooms" />
+            <End Role="Bed" EntitySet="Beds" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="InPatient">
@@ -1341,6 +1376,33 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="PatientRoomAllocation">
+          <Key>
+            <PropertyRef Name="AllocationID" />
+          </Key>
+          <Property Name="AllocationID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ENMRNO" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="RoomNo" Type="Int32" Nullable="false" />
+          <Property Name="BedNo" Type="Int32" Nullable="false" />
+          <Property Name="FromDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EndDate" Type="DateTime" Precision="3" />
+          <Property Name="DischargeSummary" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="AllocationStatus" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="InPatient" Relationship="HISModel.FK_PRA_InPatients_ENMRNO" FromRole="PatientRoomAllocation" ToRole="InPatient" />
+          <NavigationProperty Name="Room" Relationship="HISModel.FK_PRA_RoomNo" FromRole="PatientRoomAllocation" ToRole="Room" />
+        </EntityType>
+        <Association Name="FK_PRA_InPatients_ENMRNO">
+          <End Type="HISModel.InPatient" Role="InPatient" Multiplicity="1" />
+          <End Type="HISModel.PatientRoomAllocation" Role="PatientRoomAllocation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="InPatient">
+              <PropertyRef Name="ENMRNO" />
+            </Principal>
+            <Dependent Role="PatientRoomAllocation">
+              <PropertyRef Name="ENMRNO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityType Name="PatientPrescription">
           <Key>
             <PropertyRef Name="PrescriptionID" />
@@ -1355,10 +1417,10 @@
           <Property Name="DatePrescribed" Type="DateTime" Precision="0" />
           <Property Name="BatchNo" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="LotNo" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="VisitID" Type="Int32" />
           <NavigationProperty Name="IntakeFrequency" Relationship="HISModel.FK_PP_FrequencyID" FromRole="PatientPrescription" ToRole="IntakeFrequency" />
           <NavigationProperty Name="MedicineMaster" Relationship="HISModel.FK_PP_Medicine" FromRole="PatientPrescription" ToRole="MedicineMaster" />
           <NavigationProperty Name="User" Relationship="HISModel.FK_PP_Doctor" FromRole="PatientPrescription" ToRole="User" />
-          <Property Name="VisitID" Type="Int32" Nullable="false" />
         </EntityType>
         <Association Name="FK_PP_FrequencyID">
           <End Type="HISModel.IntakeFrequency" Role="IntakeFrequency" Multiplicity="1" />
@@ -1396,6 +1458,63 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="BedType">
+          <Key>
+            <PropertyRef Name="BedTypeID" />
+          </Key>
+          <Property Name="BedTypeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BedType1" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BedTypeDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="RoomType">
+          <Key>
+            <PropertyRef Name="RoomTypeID" />
+          </Key>
+          <Property Name="RoomTypeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RoomType1" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Room">
+          <Key>
+            <PropertyRef Name="RoomNo" />
+          </Key>
+          <Property Name="RoomNo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RoomName" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="RoomTypeID" Type="Int32" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="CostPerDay" Type="Int32" Nullable="false" />
+          <Property Name="RoomStatus" Type="Int32" />
+          <Property Name="NextAvailbility" Type="DateTime" Precision="0" />
+          <Property Name="RoomBedCapacity" Type="Int32" />
+          <NavigationProperty Name="PatientRoomAllocations" Relationship="HISModel.FK_PRA_RoomNo" FromRole="Room" ToRole="PatientRoomAllocation" />
+          <NavigationProperty Name="Beds" Relationship="HISModel.FK_Beds_RoomNo" FromRole="Room" ToRole="Bed" />
+        </EntityType>
+        <Association Name="FK_PRA_RoomNo">
+          <End Type="HISModel.Room" Role="Room" Multiplicity="1" />
+          <End Type="HISModel.PatientRoomAllocation" Role="PatientRoomAllocation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Room">
+              <PropertyRef Name="RoomNo" />
+            </Principal>
+            <Dependent Role="PatientRoomAllocation">
+              <PropertyRef Name="RoomNo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Permission">
+          <Key>
+            <PropertyRef Name="Permission_Id" />
+          </Key>
+          <Property Name="Permission_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PermissionDescription" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="UserPermission">
+          <Key>
+            <PropertyRef Name="UserTypeID" />
+            <PropertyRef Name="PermissionID" />
+          </Key>
+          <Property Name="UserTypeID" Type="Int32" Nullable="false" />
+          <Property Name="PermissionID" Type="Int32" Nullable="false" />
+        </EntityType>
         <EntityType Name="Bed">
           <Key>
             <PropertyRef Name="BedNo" />
@@ -1404,40 +1523,10 @@
           <Property Name="BedName" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="BedStatus" Type="Int32" />
-          <Property Name="BedType" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="BedTypeID" Type="Int32" Nullable="false" />
           <Property Name="RoomNo" Type="Int32" />
           <Property Name="NextAvailbility" Type="DateTime" Precision="0" />
           <NavigationProperty Name="Room" Relationship="HISModel.FK_Beds_RoomNo" FromRole="Bed" ToRole="Room" />
-        </EntityType>
-        <EntityType Name="PatientRoomAllocation">
-          <Key>
-            <PropertyRef Name="AllocationID" />
-          </Key>
-          <Property Name="AllocationID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ENMRNO" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="RoomNo" Type="Int32" Nullable="false" />
-          <Property Name="BedNo" Type="Int32" Nullable="false" />
-          <Property Name="FromDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="EndDate" Type="DateTime" Precision="3" />
-          <Property Name="DischargeSummary" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="AllocationStatus" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="InPatient" Relationship="HISModel.FK_PRA_InPatients_ENMRNO" FromRole="PatientRoomAllocation" ToRole="InPatient" />
-          <NavigationProperty Name="Room" Relationship="HISModel.FK_PRA_RoomNo" FromRole="PatientRoomAllocation" ToRole="Room" />
-        </EntityType>
-        <EntityType Name="Room">
-          <Key>
-            <PropertyRef Name="RoomNo" />
-          </Key>
-          <Property Name="RoomNo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="RoomName" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="RoomType" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="CostPerDay" Type="Int32" Nullable="false" />
-          <Property Name="RoomStatus" Type="Int32" />
-          <Property Name="NextAvailbility" Type="DateTime" Precision="0" />
-          <Property Name="RoomBedCapacity" Type="Int32" />
-          <NavigationProperty Name="Beds" Relationship="HISModel.FK_Beds_RoomNo" FromRole="Room" ToRole="Bed" />
-          <NavigationProperty Name="PatientRoomAllocations" Relationship="HISModel.FK_PRA_RoomNo" FromRole="Room" ToRole="PatientRoomAllocation" />
         </EntityType>
         <Association Name="FK_Beds_RoomNo">
           <End Type="HISModel.Room" Role="Room" Multiplicity="0..1" />
@@ -1447,30 +1536,6 @@
               <PropertyRef Name="RoomNo" />
             </Principal>
             <Dependent Role="Bed">
-              <PropertyRef Name="RoomNo" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_PRA_InPatients_ENMRNO">
-          <End Type="HISModel.InPatient" Role="InPatient" Multiplicity="1" />
-          <End Type="HISModel.PatientRoomAllocation" Role="PatientRoomAllocation" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="InPatient">
-              <PropertyRef Name="ENMRNO" />
-            </Principal>
-            <Dependent Role="PatientRoomAllocation">
-              <PropertyRef Name="ENMRNO" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_PRA_RoomNo">
-          <End Type="HISModel.Room" Role="Room" Multiplicity="1" />
-          <End Type="HISModel.PatientRoomAllocation" Role="PatientRoomAllocation" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Room">
-              <PropertyRef Name="RoomNo" />
-            </Principal>
-            <Dependent Role="PatientRoomAllocation">
               <PropertyRef Name="RoomNo" />
             </Dependent>
           </ReferentialConstraint>
@@ -1717,6 +1782,20 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="PatientRoomAllocations">
+            <EntityTypeMapping TypeName="HISModel.PatientRoomAllocation">
+              <MappingFragment StoreEntitySet="PatientRoomAllocation">
+                <ScalarProperty Name="AllocationStatus" ColumnName="AllocationStatus" />
+                <ScalarProperty Name="DischargeSummary" ColumnName="DischargeSummary" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="FromDate" ColumnName="FromDate" />
+                <ScalarProperty Name="BedNo" ColumnName="BedNo" />
+                <ScalarProperty Name="RoomNo" ColumnName="RoomNo" />
+                <ScalarProperty Name="ENMRNO" ColumnName="ENMRNO" />
+                <ScalarProperty Name="AllocationID" ColumnName="AllocationID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="PatientPrescriptions">
             <EntityTypeMapping TypeName="HISModel.PatientPrescription">
               <MappingFragment StoreEntitySet="PatientPrescription">
@@ -1734,31 +1813,20 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="ConvertOutPatientToInPatient" FunctionName="HISModel.Store.ConvertOutPatientToInPatient" />
-          <EntitySetMapping Name="Beds">
-            <EntityTypeMapping TypeName="HISModel.Bed">
-              <MappingFragment StoreEntitySet="Beds">
-                <ScalarProperty Name="NextAvailbility" ColumnName="NextAvailbility" />
-                <ScalarProperty Name="RoomNo" ColumnName="RoomNo" />
-                <ScalarProperty Name="BedType" ColumnName="BedType" />
-                <ScalarProperty Name="BedStatus" ColumnName="BedStatus" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="BedName" ColumnName="BedName" />
-                <ScalarProperty Name="BedNo" ColumnName="BedNo" />
+          <EntitySetMapping Name="BedTypes">
+            <EntityTypeMapping TypeName="HISModel.BedType">
+              <MappingFragment StoreEntitySet="BedType">
+                <ScalarProperty Name="BedTypeDescription" ColumnName="BedTypeDescription" />
+                <ScalarProperty Name="BedType1" ColumnName="BedType" />
+                <ScalarProperty Name="BedTypeID" ColumnName="BedTypeID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="PatientRoomAllocations">
-            <EntityTypeMapping TypeName="HISModel.PatientRoomAllocation">
-              <MappingFragment StoreEntitySet="PatientRoomAllocation">
-                <ScalarProperty Name="AllocationStatus" ColumnName="AllocationStatus" />
-                <ScalarProperty Name="DischargeSummary" ColumnName="DischargeSummary" />
-                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
-                <ScalarProperty Name="FromDate" ColumnName="FromDate" />
-                <ScalarProperty Name="BedNo" ColumnName="BedNo" />
-                <ScalarProperty Name="RoomNo" ColumnName="RoomNo" />
-                <ScalarProperty Name="ENMRNO" ColumnName="ENMRNO" />
-                <ScalarProperty Name="AllocationID" ColumnName="AllocationID" />
+          <EntitySetMapping Name="RoomTypes">
+            <EntityTypeMapping TypeName="HISModel.RoomType">
+              <MappingFragment StoreEntitySet="RoomType">
+                <ScalarProperty Name="RoomType1" ColumnName="RoomType" />
+                <ScalarProperty Name="RoomTypeID" ColumnName="RoomTypeID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1770,13 +1838,42 @@
                 <ScalarProperty Name="RoomStatus" ColumnName="RoomStatus" />
                 <ScalarProperty Name="CostPerDay" ColumnName="CostPerDay" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="RoomType" ColumnName="RoomType" />
+                <ScalarProperty Name="RoomTypeID" ColumnName="RoomTypeID" />
                 <ScalarProperty Name="RoomName" ColumnName="RoomName" />
                 <ScalarProperty Name="RoomNo" ColumnName="RoomNo" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-        </EntityContainerMapping>
+          <EntitySetMapping Name="Permissions">
+            <EntityTypeMapping TypeName="HISModel.Permission">
+              <MappingFragment StoreEntitySet="Permissions">
+                <ScalarProperty Name="PermissionDescription" ColumnName="PermissionDescription" />
+                <ScalarProperty Name="Permission_Id" ColumnName="Permission_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserPermissions">
+            <EntityTypeMapping TypeName="HISModel.UserPermission">
+              <MappingFragment StoreEntitySet="UserPermission">
+                <ScalarProperty Name="PermissionID" ColumnName="PermissionID" />
+                <ScalarProperty Name="UserTypeID" ColumnName="UserTypeID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Beds">
+            <EntityTypeMapping TypeName="HISModel.Bed">
+              <MappingFragment StoreEntitySet="Beds">
+                <ScalarProperty Name="NextAvailbility" ColumnName="NextAvailbility" />
+                <ScalarProperty Name="RoomNo" ColumnName="RoomNo" />
+                <ScalarProperty Name="BedTypeID" ColumnName="BedTypeID" />
+                <ScalarProperty Name="BedStatus" ColumnName="BedStatus" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="BedName" ColumnName="BedName" />
+                <ScalarProperty Name="BedNo" ColumnName="BedNo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
   </edmx:Runtime>

@@ -1,5 +1,25 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Schema Namespace="HISModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Beds">
+    <Key>
+      <PropertyRef Name="BedNo" />
+    </Key>
+    <Property Name="BedNo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="BedName" Type="nvarchar" MaxLength="30" Nullable="false" />
+    <Property Name="Description" Type="nvarchar(max)" />
+    <Property Name="BedStatus" Type="int" />
+    <Property Name="BedTypeID" Type="int" Nullable="false" />
+    <Property Name="RoomNo" Type="int" />
+    <Property Name="NextAvailbility" Type="date" />
+  </EntityType>
+  <EntityType Name="BedType">
+    <Key>
+      <PropertyRef Name="BedTypeID" />
+    </Key>
+    <Property Name="BedTypeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="BedType" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="BedTypeDescription" Type="nvarchar(max)" />
+  </EntityType>
   <EntityType Name="BloodGroup">
     <Key>
       <PropertyRef Name="GroupID" />
@@ -171,6 +191,7 @@
     <Property Name="DatePrescribed" Type="date" />
     <Property Name="BatchNo" Type="varchar" MaxLength="30" />
     <Property Name="LotNo" Type="varchar" MaxLength="30" />
+    <Property Name="VisitID" Type="int" />
   </EntityType>
   <EntityType Name="PatientRoomAllocation">
     <Key>
@@ -179,9 +200,11 @@
     <Property Name="AllocationID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="ENMRNO" Type="varchar" MaxLength="30" Nullable="false" />
     <Property Name="RoomNo" Type="int" Nullable="false" />
+    <Property Name="BedNo" Type="int" Nullable="false" />
     <Property Name="FromDate" Type="datetime" Nullable="false" />
     <Property Name="EndDate" Type="datetime" />
     <Property Name="DischargeSummary" Type="varchar(max)" />
+    <Property Name="AllocationStatus" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="PatientVisitHistory">
     <Key>
@@ -194,6 +217,13 @@
     <Property Name="Fee" Type="money" Nullable="false" />
     <Property Name="Discount" Type="money" />
     <Property Name="DoctorID" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Permissions">
+    <Key>
+      <PropertyRef Name="Permission_Id" />
+    </Key>
+    <Property Name="Permission_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="PermissionDescription" Type="nvarchar" MaxLength="50" Nullable="false" />
   </EntityType>
   <EntityType Name="PurchaseOrder">
     <Key>
@@ -215,13 +245,21 @@
     <Key>
       <PropertyRef Name="RoomNo" />
     </Key>
-    <Property Name="SNO" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="RoomNo" Type="int" Nullable="false" />
-    <Property Name="RoomType" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="RoomNo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="RoomName" Type="nvarchar" MaxLength="30" Nullable="false" />
+    <Property Name="RoomTypeID" Type="int" Nullable="false" />
     <Property Name="Description" Type="varchar(max)" />
     <Property Name="CostPerDay" Type="int" Nullable="false" />
     <Property Name="RoomStatus" Type="int" />
     <Property Name="NextAvailbility" Type="date" />
+    <Property Name="RoomBedCapacity" Type="int" />
+  </EntityType>
+  <EntityType Name="RoomType">
+    <Key>
+      <PropertyRef Name="RoomTypeID" />
+    </Key>
+    <Property Name="RoomTypeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="RoomType" Type="nvarchar" MaxLength="50" Nullable="false" />
   </EntityType>
   <EntityType Name="Specialization">
     <Key>
@@ -229,6 +267,14 @@
     </Key>
     <Property Name="SpecializationID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="DoctorType" Type="varchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="UserPermission">
+    <Key>
+      <PropertyRef Name="UserTypeID" />
+      <PropertyRef Name="PermissionID" />
+    </Key>
+    <Property Name="UserTypeID" Type="int" Nullable="false" />
+    <Property Name="PermissionID" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="Users">
     <Key>
@@ -257,6 +303,18 @@
     <Property Name="UserTypeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="UserTypeName" Type="varchar" MaxLength="50" Nullable="false" />
   </EntityType>
+  <Association Name="FK_Beds_RoomNo">
+    <End Role="Rooms" Type="Self.Rooms" Multiplicity="0..1" />
+    <End Role="Beds" Type="Self.Beds" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Rooms">
+        <PropertyRef Name="RoomNo" />
+      </Principal>
+      <Dependent Role="Beds">
+        <PropertyRef Name="RoomNo" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_BrandCategories_BrandID">
     <End Role="Brands" Type="Self.Brands" Multiplicity="1" />
     <End Role="BrandCategories" Type="Self.BrandCategories" Multiplicity="*" />
@@ -546,6 +604,8 @@
     </ReferentialConstraint>
   </Association>
   <EntityContainer Name="HISModelStoreContainer">
+    <EntitySet Name="Beds" EntityType="Self.Beds" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="BedType" EntityType="Self.BedType" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="BloodGroup" EntityType="Self.BloodGroup" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="BrandCategories" EntityType="Self.BrandCategories" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Brands" EntityType="Self.Brands" Schema="dbo" store:Type="Tables" />
@@ -561,11 +621,18 @@
     <EntitySet Name="PatientPrescription" EntityType="Self.PatientPrescription" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PatientRoomAllocation" EntityType="Self.PatientRoomAllocation" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PatientVisitHistory" EntityType="Self.PatientVisitHistory" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Permissions" EntityType="Self.Permissions" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PurchaseOrder" EntityType="Self.PurchaseOrder" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Rooms" EntityType="Self.Rooms" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="RoomType" EntityType="Self.RoomType" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Specialization" EntityType="Self.Specialization" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="UserPermission" EntityType="Self.UserPermission" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="UserType" EntityType="Self.UserType" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Beds_RoomNo" Association="Self.FK_Beds_RoomNo">
+      <End Role="Rooms" EntitySet="Rooms" />
+      <End Role="Beds" EntitySet="Beds" />
+    </AssociationSet>
     <AssociationSet Name="FK_BrandCategories_BrandID" Association="Self.FK_BrandCategories_BrandID">
       <End Role="Brands" EntitySet="Brands" />
       <End Role="BrandCategories" EntitySet="BrandCategories" />
