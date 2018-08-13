@@ -52,6 +52,8 @@ namespace HIS
         public virtual DbSet<Permission> Permissions { get; set; }
         public virtual DbSet<UserPermission> UserPermissions { get; set; }
         public virtual DbSet<Bed> Beds { get; set; }
+        public virtual DbSet<PatientTest> PatientTests { get; set; }
+        public virtual DbSet<TestType> TestTypes { get; set; }
     
         public virtual int ConvertOutPatientToInPatient(string eNMRNO)
         {
@@ -60,6 +62,15 @@ namespace HIS
                 new ObjectParameter("ENMRNO", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ConvertOutPatientToInPatient", eNMRNOParameter);
+        }
+    
+        public virtual int ConvertOutPatientToInPatient1(string eNMRNO)
+        {
+            var eNMRNOParameter = eNMRNO != null ?
+                new ObjectParameter("ENMRNO", eNMRNO) :
+                new ObjectParameter("ENMRNO", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ConvertOutPatientToInPatient1", eNMRNOParameter);
         }
     }
 }

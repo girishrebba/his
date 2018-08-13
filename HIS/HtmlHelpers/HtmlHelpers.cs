@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Configuration;
+using System.IO;
 
 namespace HIS.HtmlHelpers
 {
@@ -30,6 +31,11 @@ namespace HIS.HtmlHelpers
         public static string GetMedicineWithDose(string medicineName, string dose)
         {
             return string.Format("{0} - {1}", medicineName, dose);
+        }
+
+        public static string GetMedicineWithDoseAvailableQty(string medicineName, string dose, int qty)
+        {
+            return string.Format("{0} - {1}(Available - {2})", medicineName, dose, qty);
         }
 
         public static string Get_IN_ENMR(int id)
@@ -226,6 +232,15 @@ namespace HIS.HtmlHelpers
         {
             int enmrno = Math.Max(Convert.ToInt32(ipEnmr), Convert.ToInt32(opEnmr));
             return enmrno+1;
+        }
+
+        public static void CreatePatientDirectory(string patientType, string enmrNo)
+        {
+            var path = Path.Combine(System.Web.HttpContext.Current.Server.MapPath(@"~/PatientRecords/"), enmrNo);
+            if(!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
         }
     }
 }

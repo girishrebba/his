@@ -9,7 +9,9 @@ namespace HIS
         public string DateDisplay { get; set; }
         public string IntakeDisplay { get; set; }
         public string DoctorName { get; set; }
-        public string CurrentVsit { get; set; }
+        public string VisitName { get; set; }
+        public decimal ItemCost { get; set; }
+        public decimal TotalCost { get; set; }
     }
 
     public class PPMetaData

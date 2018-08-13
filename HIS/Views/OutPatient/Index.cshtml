@@ -41,7 +41,6 @@
                                 <th>Name</th>
                                 <th>DOB</th>
                                 <th>Gender</th>
-                                <th>Address</th>
                                 <th>Phone</th>
                                 <th>Doctor</th>
                                 <th>Enrolled</th>
@@ -57,7 +56,7 @@
 
 @section scripts{
     <script>
-        var Popup, dataTable, viewPatient, newVisit, prescription;
+        var Popup, dataTable, viewPatient, newVisit, prescription, deliverPopUp;
         $(document).ready(function () {
             dataTable = $("#outPatientsTable").DataTable({
                 "ajax": {
@@ -70,17 +69,17 @@
                     { "data": "Name" },
                     { "data": "DOBDisplay" },
                     { "data": "GenderDisplay" },
-                    { "data": "Address" },
                     { "data": "Phone" },
                     { "data": "DoctorName" },
                     { "data": "EnrolledDisplay" },
                     {
-                        "data":"SNO", "render" : function (data) {
-                            return "<a class='btn btn-default btn-sm' title='Edit' onclick=PopupForm('@Url.Action("AddModify","OutPatient")/" + data + "')><i class='fa fa-pencil-alt'></i></a>"
-                                + "<a class='btn btn-info btn-sm' title = 'View Patient' style = 'margin-left:5px' onclick = PopupViewPatient('@Url.Action("ViewPatient", "OutPatient")/" + data + "')><i class='fa fa-info-circle'></i></a>"
-                                + "<a class='btn btn-primary btn-sm' title='Consultation' style='margin-left:5px' onclick=PopupNewVisit('@Url.Action("NewVisit", "OutPatient")/" + data + "')> <i class='fa fa-calendar'></i></a>"
-                                + "<a class='btn btn-primary btn-sm' title='Prescription' style='margin-left:5px' onclick=PopupPrescription('@Url.Action("OPPrescription", "OutPatient")/" + data + "')><i class='fa fa-notes-medical'></i></a>"
-                                + "<a class='btn btn-primary btn-sm' title='Admit as IP' style='margin-left:5px' onclick=onclick=ConvertOpToIp("+data+")><i class='fa fa-hospital'></i></a>";
+                        "data": "ENMRNO", "render": function (data) {
+                            return "<a class='btn btn-default btn-sm' title='Edit' onclick=PopupForm('@Url.Action("AddModify","OutPatient")/?enmrNo=" + data + "')><i class='fa fa-pencil-alt'></i></a>"
+                                + "<a class='btn btn-info btn-sm' title = 'View Patient' style = 'margin-left:5px' onclick = PopupViewPatient('@Url.Action("ViewPatient", "OutPatient")/?enmrNo=" + data + "')><i class='fa fa-info-circle'></i></a>"
+                                + "<a class='btn btn-primary btn-sm' title='Consultation' style='margin-left:5px' onclick=PopupNewVisit('@Url.Action("NewVisit", "OutPatient")/?enmrNo=" + data + "')> <i class='fa fa-calendar'></i></a>"
+                                + "<a class='btn btn-primary btn-sm' title='Prescription' style='margin-left:5px' onclick=PopupPrescription('@Url.Action("OPPrescription", "OutPatient")/?enmrNo=" + data + "')><i class='fa fa-prescription'></i></a>"
+                                + "<a class='btn btn-primary btn-sm' title='Deliver Prescription' style='margin-left:5px' onclick=PopupDeliverPrescription('@Url.Action("DeliverPrescription", "OutPatient")/?enmrNo=" + data + "')><i class='fa fa-prescription-bottle-alt'></i></a>"
+                                + "<a class='btn btn-primary btn-sm' title='Admit as IP' style='margin-left:5px' onclick=ConvertOpToIp("+JSON.stringify(data)+")><i class='fa fa-hospital'></i></a>";
                     },
                         "orderable": false,
                         "searchable": false
@@ -179,7 +178,27 @@
                         }
                     });
                 });
-
+        }
+        //PopupDeliverPrescription
+        function PopupDeliverPrescription(url) {
+            var deliverPrescription = $('<div/>');
+            $.get(url)
+                .done(function (response) {
+                    deliverPrescription.html(response);
+                    deliverPopUp = deliverPrescription.dialog({
+                        autoOpen: true,
+                        resizable: false,
+                        modal: true,
+                        title: 'Deliver Prescription',
+                        width: '80%',
+                        close: function () {
+                            deliverPopUp.dialog('destroy').remove();
+                        },
+                        open: function (event, ui) {
+                            $('.ui-dialog-content').css('overflow', 'hidden');
+                        }
+                    });
+                });
         }
         function SubmitForm(form) {
             $.validator.setDefaults({
@@ -267,12 +286,48 @@
             return false;
         }
 
-        function ConvertOpToIp(id) {
+        function SubmitDeliverPrescriptionForm(form) {
+            var prescriptions = [];
+
+            var enmrNo = $('#ENMRNO').val();
+            var visitID = $('#VisitID').val();
+            $(form).find('#ppTable > tbody tr').each(function (index, elem) {
+                var tbl = {};
+                tbl.ENMRNO = enmrNo;
+                tbl.VisitID = visitID;
+                tbl.MedicineID = $($(this).find('td:eq(1)')).html();
+                tbl.DeliverQty = $($(this).find('td:eq(4)')).find('.deliverQty').val();
+                tbl.BatchNo = $($(this).find('td:eq(8)')).find('.batchNo').val();
+                tbl.LotNo = $($(this).find('td:eq(9)')).find('.lotNo').val();
+                prescriptions.push(tbl);
+            });
+            //alert(JSON.stringify(prescriptions));
+            $.ajax({
+                type: "POST",
+                contentType: "application/json",
+                url: form.action,
+                data: JSON.stringify(prescriptions),
+                success: function (data) {
+                    if (data.success) {
+                        deliverPopUp.dialog('close');
+                        dataTable.ajax.reload();
+                        $.notify(data.message, {
+                            globalPosition: "top center",
+                            className: "success"
+                        })
+                    }
+                }
+            });
+            return false;
+        }
+
+        function ConvertOpToIp(enmr) {
+            //alert(enmr);
             if(confirm('Are You Sure to Convert as In Patient?'))
             {
                 $.ajax({
                     type: "POST",
-                    url: '@Url.Action("ConvertOpToIp", "OutPatient")/' + id,
+                    url: '@Url.Action("ConvertOpToIp", "OutPatient")/?enmrNo=' + enmr,
                     success: function (data) {
                         if (data.success)
                         {

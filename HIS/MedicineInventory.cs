@@ -17,6 +17,7 @@ namespace HIS
         public int MedInventoryID { get; set; }
         public int MedicineID { get; set; }
         public Nullable<int> AvailableQty { get; set; }
+        public Nullable<decimal> PricePerItem { get; set; }
     
         public virtual MedicineMaster MedicineMaster { get; set; }
     }

@@ -1047,6 +1047,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InPatientController.cs" />
     <Compile Include="Controllers\IntakesController.cs" />
+    <Compile Include="Controllers\LabController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\MedicineMasterController.cs" />
     <Compile Include="Controllers\OutPatientController.cs" />
@@ -1131,6 +1132,9 @@
     <Compile Include="PatientRoomAllocation.cs">
       <DependentUpon>HISDBModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="PatientTest.cs">
+      <DependentUpon>HISDBModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="PatientVisitHistory.cs">
       <DependentUpon>HISDBModel.tt</DependentUpon>
     </Compile>
@@ -1151,6 +1155,9 @@
       <DependentUpon>HISDBModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Startup.cs" />
+    <Compile Include="TestType.cs">
+      <DependentUpon>HISDBModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="User.cs">
       <DependentUpon>HISDBModel.tt</DependentUpon>
     </Compile>
@@ -1341,6 +1348,9 @@
     <Content Include="Views\RoomType\Index.cshtml" />
     <Content Include="Views\RoomType\AddModify.cshtml" />
     <Content Include="Views\Rooms\AddModify.cshtml" />
+    <Content Include="Views\OutPatient\DeliverPrescription.cshtml" />
+    <Content Include="Views\PurchaseOrder\EditPO.cshtml" />
+    <Content Include="Views\PurchaseOrder\ViewPO.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1350,6 +1360,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="PatientRecords\" />
+    <Folder Include="Views\Lab\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

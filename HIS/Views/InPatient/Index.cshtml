@@ -31,7 +31,7 @@
                                 <th>Name</th>
                                 <th>DOB</th>
                                 <th>Gender</th>
-                                <th>Address</th>
+                                @*<th>Address</th>*@
                                 <th>Phone</th>
                                 <th>Doctor</th>
                                 <th>Enrolled</th>
@@ -60,7 +60,7 @@
                     { "data": "Name" },
                     { "data": "DOBDisplay" },
                     { "data": "GenderDisplay" },
-                    { "data": "Address" },
+                    //{ "data": "Address" },
                     { "data": "Phone" },
                     { "data": "DoctorName" },
                     { "data": "EnrolledDisplay" },
@@ -70,7 +70,8 @@
                                 + "</a><a class='btn btn-info btn-sm' title='View Patient' style='margin-left:5px' onclick=PopupViewPatient('@Url.Action("ViewPatient", "InPatient")/" + data + "')><i class='fa fa-info-circle'></i></a>"
                                 + "<a class='btn btn-primary btn-sm' title='Bed' style='margin-left:5px' onclick=PopupPatientAllocationView('@Url.Action("BedAllocation", "InPatient")/" + data + "')><i class='fa fa-bed'></i></a>"
                                 + "<a class='btn btn-primary btn-sm' title='Fee' style='margin-left:5px' onclick=PopupFee('@Url.Action("Fee", "InPatient")/" + data + "')><i class='fa fa-rupee-sign'></i></a>"
-                                + "<a class='btn btn-primary btn-sm' title='Observation' style='margin-left:5px' onclick=PopupObservations('@Url.Action("Observations", "InPatient")/" + data + "')><i class='fa fa-briefcase-medical'></i></a>";
+                                + "<a class='btn btn-primary btn-sm' title='Observation' style='margin-left:5px' onclick=PopupObservations('@Url.Action("Observations", "InPatient")/" + data + "')><i class='fa fa-briefcase-medical'></i></a>"
+                                + "<a class='btn btn-primary btn-sm' title='Observation' style='margin-left:5px' onclick=PopupObservations('@Url.Action("Observations", "InPatient")/" + data + "')><i class='fa fa-flask'></i></a>";
                     },
                         "orderable": false,
                         "searchable": false

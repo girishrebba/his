@@ -21,6 +21,11 @@
         height :180px;
         overflow-y:scroll;
     }
+
+    .prescriptionGrid {
+        height: 150px;
+        overflow-y: scroll;
+    }
 </style>
 @using HIS.HtmlHelpers
 @using (Html.BeginForm("OPPrescription", "OutPatient", FormMethod.Post, new { id = "ppForm", onsubmit = "return SubmitPrescriptionForm(this)" }))
@@ -28,93 +33,95 @@
     @Html.HiddenFor(model => model.ENMRNO)
     @Html.HiddenFor(model => model.VisitID)
     <div class="form-horizontal">
-
         <div class="row">
             <div class="col-lg-12">
                 <div class="panel panel-default">
                     <div class="panel-heading clearfix">
                         ENMRNO: <span class="lableDisplay">@Model.ENMRNO </span>
                     </div>
-                    <div class="historyGrid">
-                        @foreach (var p in ViewBag.History)
-                        {
-                        <div class="panel-body">
-                            <div class="panel panel-default">
-                                <div class="panel-heading" style="padding-left:1px;">
-                                    <span class="lableDisplay">@p.VisitName </span>
+                    @if (!ViewBag.IsNewVisit)
+                    {
+                        <div class="historyGrid">
+                            @foreach (var p in ViewBag.History)
+                            {
+                                <div class="panel-body">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading" style="padding-left:1px;">
+                                            <span class="lableDisplay">@p.VisitName </span>
+                                        </div>
+                                        <div class="table-responsive">
+                                            <table class="table table-striped table-bordered" style="width:100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Medicine</th>
+                                                        <th>Quantity</th>
+                                                        <th>Intake</th>
+                                                        <th>Doctor</th>
+                                                        <th>Date</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var his in p.Prescriptions)
+                                                    {
+                                                        <tr>
+                                                            <td>@his.MedicineWithDose</td>
+                                                            <td>@his.Quantity</td>
+                                                            <td>@his.IntakeDisplay</td>
+                                                            <td>@his.DoctorName</td>
+                                                            <td>@his.DateDisplay</td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="table-responsive">
-                                    <table class="table table-striped table-bordered" style="width:100%">
-                                        <thead>
-                                            <tr>
-                                                <th>Medicine</th>
-                                                <th>Quantity</th>
-                                                <th>Intake</th>
-                                                <th>Doctor</th>
-                                                <th>Date</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach (var his in p.Prescriptions)
-                                            {
-                                                <tr>
-                                                    <td>@his.MedicineWithDose</td>
-                                                    <td>@his.Quantity</td>
-                                                    <td>@his.IntakeDisplay</td>
-                                                    <td>@his.DoctorName</td>
-                                                    <td>@his.DateDisplay</td>
-                                                </tr>
-                                            }
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
                             }
                         </div>
+                    }
+
                 </div>
             </div>
         </div>
-        <div class="row" style="border: 1px;">
+        <div class="row @(@ViewBag.IsLastVisitPrescribed == true ? "hidden" : "")" style="border: 1px;">
             @*<div class="panel panel-default">*@
-                <div class="panel-heading clearfix">
-                    <span class="lableDisplay">@Model.CurrentVsit </span>
-                </div>
-                <div class="panel-body">
-                    <div class="table-responsive">
-                        <table class="table table-striped table-bordered" id="ppTable">
-                            <thead>
-                                <tr>
-                                    <th style="width:35%">Medicine</th>
-                                    <th style="width:5%">Quantity</th>
-                                    <th style="width:25%">Intake</th>
-                                    <th style="width:35%">Comments</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        @Html.EditorFor(model => model.MedicineWithDose, new { htmlAttributes = new { @class = "form-control" } })
-                                        @Html.HiddenFor(model => model.MedicineID)
-                                    </td>
-                                    <td>
-                                        @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { Value = Model.Quantity > 0 ? Model.Quantity.ToString() : string.Empty, @class = "form-control" } })
-                                    </td>
-                                    <td>
-                                        @Html.DropDownListFor(model => model.IntakeFrequencyID, ViewBag.Intakes as SelectList, "--Select--", new { @class = "form-control" })
-                                    </td>
-                                    <td>
-                                        @Html.TextAreaFor(model => model.Comments, new { @class = "form-control rounded-0", @rows = 2 })
-                                    </td>
-                                    <td><span class="btn btn-success fa fa-plus-circle" style="padding: 0px 3px" id="btnAdd"></span></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                @*</div>*@
+            <div class="panel-heading clearfix">
+                <span class="lableDisplay">@Model.VisitName</span>
             </div>
+            <div class="panel-body prescriptionGrid">
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered" id="ppTable">
+                        <thead>
+                            <tr>
+                                <th style="width:35%">Medicine</th>
+                                <th style="width:5%">Quantity</th>
+                                <th style="width:25%">Intake</th>
+                                <th style="width:35%">Comments</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    @Html.EditorFor(model => model.MedicineWithDose, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.HiddenFor(model => model.MedicineID)
+                                </td>
+                                <td>
+                                    @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { Value = Model.Quantity > 0 ? Model.Quantity.ToString() : string.Empty, @class = "form-control" } })
+                                </td>
+                                <td>
+                                    @Html.DropDownListFor(model => model.IntakeFrequencyID, ViewBag.Intakes as SelectList, "--Select--", new { @class = "form-control" })
+                                </td>
+                                <td>
+                                    @Html.TextAreaFor(model => model.Comments, new { @class = "form-control rounded-0", @rows = 2 })
+                                </td>
+                                <td><span class="btn btn-success fa fa-plus-circle" style="padding: 0px 3px" id="btnAdd"></span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            @*</div>*@
             <div class="row">
                 <div class="form-group">
                     <div class="col-md-3 col-md-offset-5">
@@ -122,7 +129,8 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>      
+    </div>
 }
 
 <script type="text/javascript">
@@ -154,7 +162,7 @@
             $("#MedicineWithDose").autocomplete({
                 source: function (request, response) {
                     $.ajax({
-                        url: "/PurchaseOrder/GetMedicines",
+                        url: "/OutPatient/GetMedicinesWithQuantity",
                         type: "POST",
                         dataType: "json",
                         data: { Prefix: request.term },

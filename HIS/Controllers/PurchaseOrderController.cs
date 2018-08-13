@@ -32,34 +32,42 @@ namespace HIS.Controllers
 
         [HttpGet]
         public ActionResult GetShippedMedicines(string poNumber)
+        {       
+                List<PurchaseOrder> shippedMedicines = GetPOItems(poNumber);
+                return Json(new { data = shippedMedicines }, JsonRequestBehavior.AllowGet);       
+        }
+
+        public List<PurchaseOrder> GetPOItems(string poNumber)
         {
             using (HISDBEntities hs = new HISDBEntities())
             {
-                var shippedMedicines = (from po in hs.PurchaseOrders
-                                        join mm in hs.MedicineMasters on po.MedicineID equals mm.MMID
-                                        where po.PONumber.Equals(poNumber)
-                                        select new
-                                        {
-                                            po,
-                                            mm.MedicineName,
-                                            mm.MedDose
-                                        }).OrderByDescending(p => p.po.OrderID)
-                                        .AsEnumerable().
-                                           Select(x => new PurchaseOrder
-                                           {
-                                               OrderID = x.po.OrderID,
-                                               PONumber = x.po.PONumber,
-                                               MedicineWithDose = HtmlHelpers.HtmlHelpers.GetMedicineWithDose(x.MedicineName, x.MedDose),
-                                               OrderedQty = x.po.OrderedQty,
-                                               OrderDateDisplay = HtmlHelpers.HtmlHelpers.DateFormat(x.po.OrderedDate),
-                                               ExpiryDateDisplay = HtmlHelpers.HtmlHelpers.DateFormat(x.po.ExpiryDate),
-                                               ApprovedStatus = x.po.ApprovedStatus,
-                                               PricePerItem = x.po.PricePerItem,
-                                               PricePerSheet = x.po.PricePerSheet,
-                                               BatchNo = x.po.BatchNo,
-                                               LotNo = x.po.LotNo
-                                           }).ToList();
-                return Json(new { data = shippedMedicines }, JsonRequestBehavior.AllowGet);
+                return (from po in hs.PurchaseOrders
+                        join mm in hs.MedicineMasters on po.MedicineID equals mm.MMID
+                        where po.PONumber.Equals(poNumber)
+                        select new
+                        {
+                            po,
+                            mm.MedicineName,
+                            mm.MedDose
+                        }).OrderByDescending(p => p.po.OrderID)
+                                                    .AsEnumerable().
+                                                       Select(x => new PurchaseOrder
+                                                       {
+                                                           OrderID = x.po.OrderID,
+                                                           PONumber = x.po.PONumber,
+                                                           MedicineID = x.po.MedicineID,
+                                                           MedicineWithDose = HtmlHelpers.HtmlHelpers.GetMedicineWithDose(x.MedicineName, x.MedDose),
+                                                           OrderedQty = x.po.OrderedQty,
+                                                           OrderDateDisplay = HtmlHelpers.HtmlHelpers.DateFormat(x.po.OrderedDate),
+                                                           OrderedDate = x.po.OrderedDate,
+                                                           ExpiryDateDisplay = HtmlHelpers.HtmlHelpers.DateFormat(x.po.ExpiryDate),
+                                                           ExpiryDate = x.po.ExpiryDate,
+                                                           ApprovedStatus = x.po.ApprovedStatus,
+                                                           PricePerItem = x.po.PricePerItem,
+                                                           PricePerSheet = x.po.PricePerSheet,
+                                                           BatchNo = x.po.BatchNo,
+                                                           LotNo = x.po.LotNo
+                                                       }).ToList();
             }
         }
 
@@ -101,6 +109,7 @@ namespace HIS.Controllers
                     {
                         var m = minventory[0];
                         m.AvailableQty = m.AvailableQty + po.OrderedQty;
+                        m.PricePerItem = po.PricePerItem;
                         hs.Entry(m).State = EntityState.Modified;
                         
                     }
@@ -118,6 +127,13 @@ namespace HIS.Controllers
 
         [HttpGet]
         public ActionResult DeletePO(string poNumber)
+        {
+            ViewBag.PoNumber = poNumber;
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult ViewPO(string poNumber)
         {
             ViewBag.PoNumber = poNumber;
             return View();
@@ -249,7 +265,12 @@ namespace HIS.Controllers
         }
 
         public ActionResult CreatePO()
-        {               
+        {
+            return EmptyPurchaseOrder();
+        }
+
+        private ActionResult EmptyPurchaseOrder()
+        {
             return View(new PurchaseOrder
             {
                 PONumber = string.Empty,
@@ -263,6 +284,34 @@ namespace HIS.Controllers
                 ExpiryDate = DateTime.MinValue
 
             });
+        }
+        
+        [HttpGet]
+        public ActionResult EditPO(string poNumber)
+        {
+            List<PurchaseOrder> shippedMedicines = GetPOItems(poNumber);
+            return View(shippedMedicines);
+        }
+
+        [HttpPost]
+        public ActionResult EditPO(List<PurchaseOrder> items)
+        {
+            using (HISDBEntities db = new HISDBEntities())
+            {
+                if (items != null && items.Count() > 0)
+                {
+                    foreach (PurchaseOrder po in items)
+                    {
+                        db.Entry(po).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+                    return Json(new { success = true, message = string.Format("PO# - {0} adjusted Successfully", items[0].PONumber) }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Error occured" }, JsonRequestBehavior.AllowGet);
+                }
+            }
         }
 
         [HttpPost]

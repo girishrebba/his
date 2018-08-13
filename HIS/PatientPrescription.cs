@@ -25,6 +25,8 @@ namespace HIS
         public string BatchNo { get; set; }
         public string LotNo { get; set; }
         public Nullable<int> VisitID { get; set; }
+        public Nullable<bool> IsDelivered { get; set; }
+        public Nullable<int> DeliverQty { get; set; }
     
         public virtual IntakeFrequency IntakeFrequency { get; set; }
         public virtual MedicineMaster MedicineMaster { get; set; }

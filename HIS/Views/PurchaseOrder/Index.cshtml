@@ -2,6 +2,17 @@
     ViewBag.Title = "Purchase Orders";
 }
 
+<style type="text/css">
+    .lableDisplay {
+        padding-top: 8px;
+        color: #32CD32;
+        font-weight: bold;
+    }
+
+    .ui-dialog {
+        top: 60px !important;
+    }
+</style>
 <!-- Breadcrumb -->
 <ol class="breadcrumb breadcrumb-2">
     <li><a href="index.html"><i class="glyphicon-cog"></i>Pharmacy</a></li>
@@ -33,7 +44,7 @@
 </div>
         @section scripts{
             <script type="text/javascript">
-                var Popup, dataTable, approvalPop, DelPop;
+                var Popup, dataTable, approvalPop, DelPop, AdjPop;
                 $(document).ready(function () {
                     dataTable = $('#poNumbersList').DataTable({
                         "ajax": {
@@ -52,7 +63,13 @@
                             },
                             {
                                 "data": null, "render": function (data) {
-                                    return "<a class='btn btn-success btn-sm' title='Approve' onclick=PopupApprovalForm('@Url.Action("Approve","PurchaseOrder")/?poNumber=" + data.PONumber + "')><i class='fa fa-thumbs-up'></i></a><a class='btn btn-danger btn-sm' title='Delete' style='margin-left:5px' onclick=PopupDeleteForm('@Url.Action("DeletePO", "PurchaseOrder")/?poNumber=" + data.PONumber + "')><i class='fa fa-trash'></i></a>";
+                                    if (data.ApprovedStatus === null || data.ApprovedStatus === 0) {
+                                        return "<a class='btn btn-success btn-sm' title='Approve' onclick=PopupApprovalForm('@Url.Action("Approve","PurchaseOrder")/?poNumber=" + data.PONumber + "')><i class='fa fa-thumbs-up'></i></a><a class='btn btn-primary btn-sm' title='Edit' style='margin-left:5px' onclick=PopupAdjustForm('@Url.Action("EditPO", "PurchaseOrder")/?poNumber=" + data.PONumber + "')><i class='fa fa-pencil-alt'></i></a>";
+                                    }
+                                    else {
+                                        return "<a class='btn btn-primary btn-sm' title='View Only' onclick=PopupViewForm('@Url.Action("ViewPO","PurchaseOrder")/?poNumber=" + data.PONumber + "')><i class='fa fa-eye'></i></a>";
+                                    }
+                                    
                                 },
                                 "orderable": false,
                                 "searchable": false,
@@ -109,6 +126,27 @@
                         });
                 }
 
+                function PopupViewForm(url) {
+                    var viewDiv = $('<div />');
+                    $.get(url)
+                        .done(function (response) {
+                            viewDiv.html(response);
+                            ViewPop = viewDiv.dialog({
+                                autoOpen: true,
+                                resizable: false,
+                                modal: true,
+                                title: 'View Purchase Order',
+                                width: '85%',
+                                close: function () {
+                                    ViewPop.dialog('destroy').remove();
+                                },
+                                open: function (event, ui) {
+                                    $('.ui-dialog-content').css('overflow', 'hidden');
+                                }
+                            });
+                        });
+                }
+
                 function PopupDeleteForm(url) {
                     var deleteDiv = $('<div />');
                     $.get(url)
@@ -128,7 +166,28 @@
                                 }
                             });
                         });
-                }
+                } 
+
+                function PopupAdjustForm(url) {
+                    var adjustDiv = $('<div />');
+                    $.get(url)
+                        .done(function (response) {
+                            adjustDiv.html(response);
+                            AdjPop = adjustDiv.dialog({
+                                autoOpen: true,
+                                resizable: false,
+                                modal: true,
+                                title: 'Adjust Purchase order',
+                                width: '85%',
+                                close: function () {
+                                    AdjPop.dialog('destroy').remove();
+                                },
+                                open: function (event, ui) {
+                                    $('.ui-dialog-content').css('overflow', 'hidden');
+                                }
+                            });
+                        });
+                } 
 
                 function SubmitForm(form) {
                     var poItems = [];
@@ -190,9 +249,10 @@
                                     })
                                 }
                             }
-                        }); 
+                        });
                     return false;
                 }
+                
                 function SubmitDeleteForm(form) {
                     $.ajax({
                         type: "POST",
@@ -209,6 +269,47 @@
                             }
                         }
                     });
+                    return false;
+                }
+
+                function SubmitAdjustPoForm(form) {
+                    $.validator.unobtrusive.parse(form);
+                    if ($(form).valid()) {
+                        var items = [];
+                        var poNumber = $('#PONumber').val();
+                        var orderDate = $('#OrderedDate').val();
+                        $(form).find('#poTable > tbody tr').each(function (index, elem) {
+                            var tbl = {};
+                            tbl.PONumber = poNumber;
+                            tbl.OrderID = $($(this).find('td:eq(0)')).html();
+                            tbl.MedicineID = $($(this).find('td:eq(1)')).html();
+                            tbl.MedicineWithDose = $($(this).find('td:eq(2)')).html();
+                            tbl.OrderedQty = $($(this).find('td:eq(3)')).find('.orderedQty').val();
+                            tbl.OrderedDate = orderDate;
+                            tbl.PricePerItem = $($(this).find('td:eq(4)')).find('.pricePerItem').val();
+                            tbl.PricePerSheet = $($(this).find('td:eq(5)')).find('.pricePerSheet').val();
+                            tbl.BatchNo = $($(this).find('td:eq(6)')).find('.batchNo').val();
+                            tbl.LotNo = $($(this).find('td:eq(7)')).find('.lotNo').val();
+                            tbl.ExpiryDate = $($(this).find('td:eq(8)')).find('.datepicker').val();
+                            items.push(tbl);
+                        });
+                        $.ajax({
+                            type: "POST",
+                            contentType: "application/json",
+                            url: form.action,
+                            data: JSON.stringify(items),
+                            success: function (data) {
+                                if (data.success) {
+                                    AdjPop.dialog('close');
+                                    dataTable.ajax.reload();
+                                    $.notify(data.message, {
+                                        globalPosition: "top center",
+                                        className: "success"
+                                    })
+                                }
+                            }
+                        });
+                    }
                     return false;
                 }
                         </script>
