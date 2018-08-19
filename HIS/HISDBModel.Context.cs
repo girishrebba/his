@@ -49,11 +49,11 @@ namespace HIS
         public virtual DbSet<BedType> BedTypes { get; set; }
         public virtual DbSet<RoomType> RoomTypes { get; set; }
         public virtual DbSet<Room> Rooms { get; set; }
-        public virtual DbSet<Permission> Permissions { get; set; }
         public virtual DbSet<UserPermission> UserPermissions { get; set; }
         public virtual DbSet<Bed> Beds { get; set; }
         public virtual DbSet<PatientTest> PatientTests { get; set; }
         public virtual DbSet<TestType> TestTypes { get; set; }
+        public virtual DbSet<Permission> Permissions { get; set; }
     
         public virtual int ConvertOutPatientToInPatient(string eNMRNO)
         {

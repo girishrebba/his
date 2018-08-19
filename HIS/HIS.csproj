@@ -364,6 +364,7 @@
     <Content Include="light\js\plugins\datatables\dataTables.foundation.min.js" />
     <Content Include="light\js\plugins\datatables\dataTables.jqueryui.js" />
     <Content Include="light\js\plugins\datatables\dataTables.jqueryui.min.js" />
+    <Content Include="light\js\plugins\datatables\dataTables.responsive.min.js" />
     <Content Include="light\js\plugins\datatables\dataTables.semanticui.js" />
     <Content Include="light\js\plugins\datatables\dataTables.semanticui.min.js" />
     <Content Include="light\js\plugins\datatables\extensions\AutoFill\css\autoFill.bootstrap.css" />
@@ -885,6 +886,7 @@
     <Content Include="light\js\plugins\datatables\jszip.min.js" />
     <Content Include="light\js\plugins\datatables\license.txt" />
     <Content Include="light\js\plugins\datatables\pdfmake.min.js" />
+    <Content Include="light\js\plugins\datatables\responsive.dataTables.min.css" />
     <Content Include="light\js\plugins\datatables\vfs_fonts.js" />
     <Content Include="light\js\plugins\datepicker\bootstrap-datepicker.js" />
     <Content Include="light\js\plugins\dropzone\dropzone.js" />
@@ -1010,6 +1012,10 @@
     <Content Include="webfonts\fa-brands-400.eot" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Action Filters\SessionActionFilter.cs" />
+    <Compile Include="Action Filters\HisAttribute.cs" />
+    <Compile Include="Action Filters\HisUser.cs" />
+    <Compile Include="Action Filters\His_ExtendedMethods.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
@@ -1047,7 +1053,6 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InPatientController.cs" />
     <Compile Include="Controllers\IntakesController.cs" />
-    <Compile Include="Controllers\LabController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\MedicineMasterController.cs" />
     <Compile Include="Controllers\OutPatientController.cs" />

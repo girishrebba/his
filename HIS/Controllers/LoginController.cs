@@ -25,6 +25,8 @@ namespace HIS.Controllers
 
                 if (user != null)
                 {
+                    Session["UserID"] = user.UserID;
+                    Session["UserName"] = user.UserName;
                     int cid = Convert.ToInt16(user.UserID);
                     return RedirectToAction("../BloodGroup/Index");
                 }
@@ -38,5 +40,13 @@ namespace HIS.Controllers
             return View("Index");
 
         }
+
+        public ActionResult LogOut()
+        {
+            Session["UserID"] = null;
+            Session["UserName"] = null;
+            return RedirectToAction("../Login/Index");
+        }
+
     }
 }

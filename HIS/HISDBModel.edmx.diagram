@@ -52,10 +52,10 @@
         <EntityTypeShape EntityType="HISModel.RoomType" Width="1.5" PointX="0.75" PointY="3.75" />
         <EntityTypeShape EntityType="HISModel.Room" Width="1.5" PointX="13.375" PointY="1" />
         <AssociationConnector Association="HISModel.FK_PRA_RoomNo" />
-        <EntityTypeShape EntityType="HISModel.Permission" Width="1.5" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="HISModel.UserPermission" Width="1.5" PointX="2.75" PointY="0.75" />
         <EntityTypeShape EntityType="HISModel.Bed" Width="1.5" PointX="15.625" PointY="1.25" />
         <AssociationConnector Association="HISModel.FK_Beds_RoomNo" />
+        <EntityTypeShape EntityType="HISModel.Permission" Width="1.5" PointX="5.375" PointY="3.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

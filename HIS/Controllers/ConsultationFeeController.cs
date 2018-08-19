@@ -5,12 +5,15 @@ using System.Web;
 using System.Web.Mvc;
 using System.Data.Entity;
 using HIS.HtmlHelpers;
+using HIS.Action_Filters;
 
 namespace HIS.Controllers
 {
+    [SessionActionFilter]
     public class ConsultationFeeController : Controller
     {
         // GET: ConsultationFee
+        [His]
         public ActionResult Index()
         {
             return View();

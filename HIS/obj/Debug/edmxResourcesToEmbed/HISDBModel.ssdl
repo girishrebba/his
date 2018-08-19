@@ -129,6 +129,7 @@
     <Property Name="MedInventoryID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="MedicineID" Type="int" Nullable="false" />
     <Property Name="AvailableQty" Type="int" />
+    <Property Name="PricePerItem" Type="decimal" Precision="6" Scale="2" />
   </EntityType>
   <EntityType Name="MedicineMaster">
     <Key>
@@ -192,6 +193,8 @@
     <Property Name="BatchNo" Type="varchar" MaxLength="30" />
     <Property Name="LotNo" Type="varchar" MaxLength="30" />
     <Property Name="VisitID" Type="int" />
+    <Property Name="IsDelivered" Type="bit" />
+    <Property Name="DeliverQty" Type="int" />
   </EntityType>
   <EntityType Name="PatientRoomAllocation">
     <Key>
@@ -205,6 +208,19 @@
     <Property Name="EndDate" Type="datetime" />
     <Property Name="DischargeSummary" Type="varchar(max)" />
     <Property Name="AllocationStatus" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="PatientTests">
+    <Key>
+      <PropertyRef Name="SNO" />
+    </Key>
+    <Property Name="SNO" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ENMRNO" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="TestID" Type="int" Nullable="false" />
+    <Property Name="TestDate" Type="datetime" />
+    <Property Name="PrescribedDoctor" Type="int" Nullable="false" />
+    <Property Name="RecordedValues" Type="decimal" Precision="18" Scale="0" />
+    <Property Name="TestImpression" Type="nvarchar(max)" />
+    <Property Name="ReportPath" Type="nvarchar" MaxLength="200" />
   </EntityType>
   <EntityType Name="PatientVisitHistory">
     <Key>
@@ -224,6 +240,7 @@
     </Key>
     <Property Name="Permission_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="PermissionDescription" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="PermissionStatus" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="PurchaseOrder">
     <Key>
@@ -267,6 +284,14 @@
     </Key>
     <Property Name="SpecializationID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="DoctorType" Type="varchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="TestTypes">
+    <Key>
+      <PropertyRef Name="TestID" />
+    </Key>
+    <Property Name="TestID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TestName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="TestCost" Type="money" />
   </EntityType>
   <EntityType Name="UserPermission">
     <Key>
@@ -471,6 +496,30 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_PatientTests_TestID">
+    <End Role="TestTypes" Type="Self.TestTypes" Multiplicity="1" />
+    <End Role="PatientTests" Type="Self.PatientTests" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TestTypes">
+        <PropertyRef Name="TestID" />
+      </Principal>
+      <Dependent Role="PatientTests">
+        <PropertyRef Name="TestID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PatientTests_UserID">
+    <End Role="Users" Type="Self.Users" Multiplicity="1" />
+    <End Role="PatientTests" Type="Self.PatientTests" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="PatientTests">
+        <PropertyRef Name="PrescribedDoctor" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_PatientVisitHistory_Doctor">
     <End Role="Users" Type="Self.Users" Multiplicity="1" />
     <End Role="PatientVisitHistory" Type="Self.PatientVisitHistory" Multiplicity="*" />
@@ -603,6 +652,9 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Function Name="ConvertOutPatientToInPatient" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="ENMRNO" Type="varchar" Mode="In" />
+  </Function>
   <EntityContainer Name="HISModelStoreContainer">
     <EntitySet Name="Beds" EntityType="Self.Beds" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="BedType" EntityType="Self.BedType" Schema="dbo" store:Type="Tables" />
@@ -620,12 +672,14 @@
     <EntitySet Name="OutPatients" EntityType="Self.OutPatients" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PatientPrescription" EntityType="Self.PatientPrescription" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PatientRoomAllocation" EntityType="Self.PatientRoomAllocation" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PatientTests" EntityType="Self.PatientTests" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PatientVisitHistory" EntityType="Self.PatientVisitHistory" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Permissions" EntityType="Self.Permissions" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PurchaseOrder" EntityType="Self.PurchaseOrder" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Rooms" EntityType="Self.Rooms" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="RoomType" EntityType="Self.RoomType" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Specialization" EntityType="Self.Specialization" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TestTypes" EntityType="Self.TestTypes" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="UserPermission" EntityType="Self.UserPermission" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="UserType" EntityType="Self.UserType" Schema="dbo" store:Type="Tables" />
@@ -684,6 +738,14 @@
     <AssociationSet Name="FK_OutPatients_Doctor" Association="Self.FK_OutPatients_Doctor">
       <End Role="Users" EntitySet="Users" />
       <End Role="OutPatients" EntitySet="OutPatients" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PatientTests_TestID" Association="Self.FK_PatientTests_TestID">
+      <End Role="TestTypes" EntitySet="TestTypes" />
+      <End Role="PatientTests" EntitySet="PatientTests" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PatientTests_UserID" Association="Self.FK_PatientTests_UserID">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="PatientTests" EntitySet="PatientTests" />
     </AssociationSet>
     <AssociationSet Name="FK_PatientVisitHistory_Doctor" Association="Self.FK_PatientVisitHistory_Doctor">
       <End Role="Users" EntitySet="Users" />

@@ -4,12 +4,15 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Data.Entity;
+using HIS.Action_Filters;
 
 namespace HIS.Controllers
 {
+    [SessionActionFilter]
     public class RoomTypeController : Controller
     {
         // GET: RoomType
+        [His]
         public ActionResult Index()
         {
             return View();

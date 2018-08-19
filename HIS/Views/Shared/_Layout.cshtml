@@ -46,21 +46,30 @@
                 <li class="has-sub">
                     <a href="@Url.Action("Index", "InPatient")"><i class="fa fa-wheelchair" style="padding-left:5px"></i><span class="title">Patients</span></a>
                     <ul class="nav">
+                        @if (ViewContext.Controller.HasPermission("InPatient-index"))
+                    {
                         <li><a href="@Url.Action("Index", "InPatient")"><span class="title">I/P Profile</span></a></li>
+                }
+                        @if (ViewContext.Controller.HasPermission("OutPatient-index"))
+                    {
                         <li><a href="@Url.Action("Index", "OutPatient")"><span class="title">O/P Profile</span></a></li>
+                }
                     </ul>
                 </li>
-                <li class="has-sub">
+                @*<li class="has-sub">
                     <a href="@Url.Action("Index", "Rooms")"><i class="fa fa-bed" style="padding-left:5px"></i><span class="title">Room Managment</span></a>
                     <ul class="nav">
                         <li><a href="@Url.Action("Index", "Rooms")"><span class="title">Rooms</span></a></li>
                         <li><a href="@Url.Action("Index", "Beds")"><span class="title">Bed Management</span></a></li>
                     </ul>
-                </li>
+                </li>*@
                 <li class="has-sub">
                     <a href="@Url.Action("Index", "MedInventory")"><i class="fa fa-medkit" style="padding-left:5px"></i><span class="title">Pharmacy</span></a>
                     <ul class="nav">
+                        @if (ViewContext.Controller.HasPermission("PurchaseOrder-index"))
+                    {
                         <li><a href="@Url.Action("Index", "PurchaseOrder")"><span class="title">Purchase Orders</span></a></li>
+                }
                     </ul>
                 </li>
                 <li class="has-sub">
@@ -74,20 +83,70 @@
                 <li class="has-sub active">
                     <a href="@Url.Action("Index", "User")"><i class="icon-lock"></i><span class="title">Admin</span></a>
                     <ul class="nav">
+                        @if (ViewContext.Controller.HasPermission("User-index"))
+                    {
                         <li class="active"><a href="@Url.Action("Index", "User")"><span class="title">Users</span></a></li>
+                }
+                        @if (ViewContext.Controller.HasPermission("BloodGroup-index"))
+                    {
                         <li><a href="@Url.Action("Index", "BloodGroup")"><span class="title">Blood Groups</span></a></li>
+                }
+                        @if (ViewContext.Controller.HasPermission("UserType-index"))
+                    {
                         <li><a href="@Url.Action("Index", "UserType")"><span class="title">User Types</span></a></li>
+                }
+                        @if (ViewContext.Controller.HasPermission("Permissions-index"))
+                    {
                         <li><a href="@Url.Action("Index", "Permissions")"><span class="title">Permissions</span></a></li>
+                }
+                        @if (ViewContext.Controller.HasPermission("RolePermissions-index"))
+                    {
                         <li><a href="@Url.Action("Index", "RolePermissions")"><span class="title">User Permissions</span></a></li>
+                }
+                        @if (ViewContext.Controller.HasPermission("Specialization-index"))
+                    {
                         <li><a href="@Url.Action("Index", "Specialization")"><span class="title">Specialization</span></a></li>
+                }
+                        @if (ViewContext.Controller.HasPermission("Intakes-index"))
+                    {
                         <li><a href="@Url.Action("Index", "Intakes")"><span class="title">Intake Frequency</span></a></li>
+                }
+                        @if (ViewContext.Controller.HasPermission("Brand-index"))
+                    {
                         <li><a href="@Url.Action("Index", "Brand")"><span class="title">Brands</span></a></li>
+                }
+                        @if (ViewContext.Controller.HasPermission("BrandCategory-index"))
+                    {
                         <li><a href="@Url.Action("Index", "BrandCategory")"><span class="title">Brand Categories</span></a></li>
+                }
+                        @if (ViewContext.Controller.HasPermission("BedType-index"))
+                    {
                         <li><a href="@Url.Action("Index", "BedType")"><span class="title">Bed Type</span></a></li>
+                }
+                        @if (ViewContext.Controller.HasPermission("RoomType-index"))
+                    {
                         <li><a href="@Url.Action("Index", "RoomType")"><span class="title">Room Type</span></a></li>
+                }
+                        @if (ViewContext.Controller.HasPermission("Rooms-index"))
+                    {
+                        <li><a href="@Url.Action("Index", "Rooms")"><span class="title">Rooms</span></a></li>
+                }
+                        @if (ViewContext.Controller.HasPermission("Beds-index"))
+                    {
+                        <li><a href="@Url.Action("Index", "Beds")"><span class="title">Bed Management</span></a></li>
+                }
+                        @if (ViewContext.Controller.HasPermission("ConsultType-index"))
+                    {
                         <li><a href="@Url.Action("Index", "ConsultType")"><span class="title">Consultations</span></a></li>
+                }                        
+                        @if (ViewContext.Controller.HasPermission("ConsultationFee-index"))
+                    {
                         <li><a href="@Url.Action("Index", "ConsultationFee")"><span class="title">Consultation Fee</span></a></li>
+                }
+                        @if (ViewContext.Controller.HasPermission("MedicineMaster-index"))
+                    {
                         <li><a href="@Url.Action("Index", "MedicineMaster")"><span class="title">Medicines</span></a></li>
+                }
                     </ul>
                 </li>
             </ul>
@@ -102,11 +161,11 @@
                     <!-- User info -->
                     <ul class="user-info pull-left">
                         <li class="profile-info dropdown">
-                            <a data-toggle="dropdown" class="dropdown-toggle" href="#" aria-expanded="false">Girish Rebba<span class="caret"></span></a>
+                            <a data-toggle="dropdown" class="dropdown-toggle" href="#" aria-expanded="false">@Session["UserName"]<span class="caret"></span></a>
                             <!-- User action menu -->
                             <ul class="dropdown-menu">
                                 <li><a href="#/"><i class="icon-user"></i>My profile</a></li>
-                                <li><a href="#/"><i class="icon-logout"></i>Logout</a></li>
+                                <li><a href="../../Login/LogOut"><i class="icon-logout"></i>Logout</a></li>
                             </ul>
                             <!-- /user action menu -->
                         </li>
@@ -163,6 +222,8 @@
     <script src="~/light/js/functions.js"></script>
     <script src="~/light/js/plugins/datatables/jquery.dataTables.min.js"></script>
     <script src="~/light/js/plugins/datatables/dataTables.bootstrap.min.js"></script>
+    <script src="~/light/js/plugins/datatables/dataTables.responsive.min.js"></script>
+    <link href="~/light/js/plugins/datatables/responsive.dataTables.min.css" rel="stylesheet" />
     <script src="~/light/js/plugins/datatables/extensions/Buttons/js/dataTables.buttons.min.js"></script>
     <script src="~/light/js/plugins/datatables/jszip.min.js"></script>
     <script src="~/light/js/plugins/datatables/pdfmake.min.js"></script>

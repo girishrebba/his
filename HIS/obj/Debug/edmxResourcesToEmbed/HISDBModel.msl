@@ -203,6 +203,7 @@
     <EntitySetMapping Name="MedicineInventories">
       <EntityTypeMapping TypeName="HISModel.MedicineInventory">
         <MappingFragment StoreEntitySet="MedicineInventory">
+          <ScalarProperty Name="PricePerItem" ColumnName="PricePerItem" />
           <ScalarProperty Name="AvailableQty" ColumnName="AvailableQty" />
           <ScalarProperty Name="MedicineID" ColumnName="MedicineID" />
           <ScalarProperty Name="MedInventoryID" ColumnName="MedInventoryID" />
@@ -254,6 +255,8 @@
     <EntitySetMapping Name="PatientPrescriptions">
       <EntityTypeMapping TypeName="HISModel.PatientPrescription">
         <MappingFragment StoreEntitySet="PatientPrescription">
+          <ScalarProperty Name="DeliverQty" ColumnName="DeliverQty" />
+          <ScalarProperty Name="IsDelivered" ColumnName="IsDelivered" />
           <ScalarProperty Name="VisitID" ColumnName="VisitID" />
           <ScalarProperty Name="LotNo" ColumnName="LotNo" />
           <ScalarProperty Name="BatchNo" ColumnName="BatchNo" />
@@ -299,14 +302,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="Permissions">
-      <EntityTypeMapping TypeName="HISModel.Permission">
-        <MappingFragment StoreEntitySet="Permissions">
-          <ScalarProperty Name="PermissionDescription" ColumnName="PermissionDescription" />
-          <ScalarProperty Name="Permission_Id" ColumnName="Permission_Id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="UserPermissions">
       <EntityTypeMapping TypeName="HISModel.UserPermission">
         <MappingFragment StoreEntitySet="UserPermission">
@@ -325,6 +320,39 @@
           <ScalarProperty Name="Description" ColumnName="Description" />
           <ScalarProperty Name="BedName" ColumnName="BedName" />
           <ScalarProperty Name="BedNo" ColumnName="BedNo" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="ConvertOutPatientToInPatient1" FunctionName="HISModel.Store.ConvertOutPatientToInPatient" />
+    <EntitySetMapping Name="PatientTests">
+      <EntityTypeMapping TypeName="HISModel.PatientTest">
+        <MappingFragment StoreEntitySet="PatientTests">
+          <ScalarProperty Name="ReportPath" ColumnName="ReportPath" />
+          <ScalarProperty Name="TestImpression" ColumnName="TestImpression" />
+          <ScalarProperty Name="RecordedValues" ColumnName="RecordedValues" />
+          <ScalarProperty Name="PrescribedDoctor" ColumnName="PrescribedDoctor" />
+          <ScalarProperty Name="TestDate" ColumnName="TestDate" />
+          <ScalarProperty Name="TestID" ColumnName="TestID" />
+          <ScalarProperty Name="ENMRNO" ColumnName="ENMRNO" />
+          <ScalarProperty Name="SNO" ColumnName="SNO" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TestTypes">
+      <EntityTypeMapping TypeName="HISModel.TestType">
+        <MappingFragment StoreEntitySet="TestTypes">
+          <ScalarProperty Name="TestCost" ColumnName="TestCost" />
+          <ScalarProperty Name="TestName" ColumnName="TestName" />
+          <ScalarProperty Name="TestID" ColumnName="TestID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Permissions">
+      <EntityTypeMapping TypeName="HISModel.Permission">
+        <MappingFragment StoreEntitySet="Permissions">
+          <ScalarProperty Name="PermissionStatus" ColumnName="PermissionStatus" />
+          <ScalarProperty Name="PermissionDescription" ColumnName="PermissionDescription" />
+          <ScalarProperty Name="Permission_Id" ColumnName="Permission_Id" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

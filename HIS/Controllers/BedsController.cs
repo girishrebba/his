@@ -5,12 +5,15 @@ using System.Web;
 using System.Web.Mvc;
 using System.Data.Entity;
 using System.Data.Entity.Validation;
+using HIS.Action_Filters;
 
 namespace HIS.Controllers
 {
+    [SessionActionFilter]
     public class BedsController : Controller
     {
         // GET: Beds
+        [His]
         public ActionResult Index()
         {
             return View();

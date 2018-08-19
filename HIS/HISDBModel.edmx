@@ -245,6 +245,7 @@
           </Key>
           <Property Name="Permission_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="PermissionDescription" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="PermissionStatus" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="PurchaseOrder">
           <Key>
@@ -1127,7 +1128,6 @@
             <End Role="Room" EntitySet="Rooms" />
             <End Role="PatientRoomAllocation" EntitySet="PatientRoomAllocations" />
           </AssociationSet>
-          <EntitySet Name="Permissions" EntityType="HISModel.Permission" />
           <EntitySet Name="UserPermissions" EntityType="HISModel.UserPermission" />
           <EntitySet Name="Beds" EntityType="HISModel.Bed" />
           <AssociationSet Name="FK_Beds_RoomNo" Association="HISModel.FK_Beds_RoomNo">
@@ -1147,6 +1147,7 @@
             <End Role="User" EntitySet="Users" />
             <End Role="PatientTest" EntitySet="PatientTests" />
           </AssociationSet>
+          <EntitySet Name="Permissions" EntityType="HISModel.Permission" />
         </EntityContainer>
         <EntityType Name="InPatient">
           <Key>
@@ -1578,13 +1579,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="Permission">
-          <Key>
-            <PropertyRef Name="Permission_Id" />
-          </Key>
-          <Property Name="Permission_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="PermissionDescription" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-        </EntityType>
         <EntityType Name="UserPermission">
           <Key>
             <PropertyRef Name="UserTypeID" />
@@ -1666,6 +1660,14 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Permission">
+          <Key>
+            <PropertyRef Name="Permission_Id" />
+          </Key>
+          <Property Name="Permission_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PermissionDescription" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PermissionStatus" Type="Boolean" Nullable="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1973,14 +1975,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Permissions">
-            <EntityTypeMapping TypeName="HISModel.Permission">
-              <MappingFragment StoreEntitySet="Permissions">
-                <ScalarProperty Name="PermissionDescription" ColumnName="PermissionDescription" />
-                <ScalarProperty Name="Permission_Id" ColumnName="Permission_Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="UserPermissions">
             <EntityTypeMapping TypeName="HISModel.UserPermission">
               <MappingFragment StoreEntitySet="UserPermission">
@@ -2023,6 +2017,15 @@
                 <ScalarProperty Name="TestCost" ColumnName="TestCost" />
                 <ScalarProperty Name="TestName" ColumnName="TestName" />
                 <ScalarProperty Name="TestID" ColumnName="TestID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Permissions">
+            <EntityTypeMapping TypeName="HISModel.Permission">
+              <MappingFragment StoreEntitySet="Permissions">
+                <ScalarProperty Name="PermissionStatus" ColumnName="PermissionStatus" />
+                <ScalarProperty Name="PermissionDescription" ColumnName="PermissionDescription" />
+                <ScalarProperty Name="Permission_Id" ColumnName="Permission_Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

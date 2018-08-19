@@ -119,6 +119,7 @@
     <NavigationProperty Name="InPatientHistories" Relationship="HISModel.FK_InPatientHistory_Doctor" FromRole="User" ToRole="InPatientHistory" />
     <NavigationProperty Name="PatientVisitHistories" Relationship="HISModel.FK_PatientVisitHistory_Doctor" FromRole="User" ToRole="PatientVisitHistory" />
     <NavigationProperty Name="PatientPrescriptions" Relationship="HISModel.FK_PP_Doctor" FromRole="User" ToRole="PatientPrescription" />
+    <NavigationProperty Name="PatientTests" Relationship="HISModel.FK_PatientTests_UserID" FromRole="User" ToRole="PatientTest" />
   </EntityType>
   <EntityType Name="UserType">
     <Key>
@@ -326,13 +327,26 @@
       <End Role="Room" EntitySet="Rooms" />
       <End Role="PatientRoomAllocation" EntitySet="PatientRoomAllocations" />
     </AssociationSet>
-    <EntitySet Name="Permissions" EntityType="HISModel.Permission" />
     <EntitySet Name="UserPermissions" EntityType="HISModel.UserPermission" />
     <EntitySet Name="Beds" EntityType="HISModel.Bed" />
     <AssociationSet Name="FK_Beds_RoomNo" Association="HISModel.FK_Beds_RoomNo">
       <End Role="Room" EntitySet="Rooms" />
       <End Role="Bed" EntitySet="Beds" />
     </AssociationSet>
+    <FunctionImport Name="ConvertOutPatientToInPatient1">
+      <Parameter Name="ENMRNO" Mode="In" Type="String" />
+    </FunctionImport>
+    <EntitySet Name="PatientTests" EntityType="HISModel.PatientTest" />
+    <EntitySet Name="TestTypes" EntityType="HISModel.TestType" />
+    <AssociationSet Name="FK_PatientTests_TestID" Association="HISModel.FK_PatientTests_TestID">
+      <End Role="TestType" EntitySet="TestTypes" />
+      <End Role="PatientTest" EntitySet="PatientTests" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PatientTests_UserID" Association="HISModel.FK_PatientTests_UserID">
+      <End Role="User" EntitySet="Users" />
+      <End Role="PatientTest" EntitySet="PatientTests" />
+    </AssociationSet>
+    <EntitySet Name="Permissions" EntityType="HISModel.Permission" />
   </EntityContainer>
   <EntityType Name="InPatient">
     <Key>
@@ -556,6 +570,7 @@
     <Property Name="MedicineID" Type="Int32" Nullable="false" />
     <Property Name="AvailableQty" Type="Int32" />
     <NavigationProperty Name="MedicineMaster" Relationship="HISModel.FK_MI_MedicineID" FromRole="MedicineInventory" ToRole="MedicineMaster" />
+    <Property Name="PricePerItem" Type="Decimal" Precision="6" Scale="2" />
   </EntityType>
   <EntityType Name="MedicineMaster">
     <Key>
@@ -682,6 +697,8 @@
     <NavigationProperty Name="IntakeFrequency" Relationship="HISModel.FK_PP_FrequencyID" FromRole="PatientPrescription" ToRole="IntakeFrequency" />
     <NavigationProperty Name="MedicineMaster" Relationship="HISModel.FK_PP_Medicine" FromRole="PatientPrescription" ToRole="MedicineMaster" />
     <NavigationProperty Name="User" Relationship="HISModel.FK_PP_Doctor" FromRole="PatientPrescription" ToRole="User" />
+    <Property Name="IsDelivered" Type="Boolean" />
+    <Property Name="DeliverQty" Type="Int32" />
   </EntityType>
   <Association Name="FK_PP_FrequencyID">
     <End Type="HISModel.IntakeFrequency" Role="IntakeFrequency" Multiplicity="1" />
@@ -761,13 +778,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <EntityType Name="Permission">
-    <Key>
-      <PropertyRef Name="Permission_Id" />
-    </Key>
-    <Property Name="Permission_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="PermissionDescription" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-  </EntityType>
   <EntityType Name="UserPermission">
     <Key>
       <PropertyRef Name="UserTypeID" />
@@ -801,4 +811,60 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <EntityType Name="PatientTest">
+    <Key>
+      <PropertyRef Name="SNO" />
+    </Key>
+    <Property Name="SNO" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ENMRNO" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="TestID" Type="Int32" Nullable="false" />
+    <Property Name="TestDate" Type="DateTime" Precision="3" />
+    <Property Name="PrescribedDoctor" Type="Int32" Nullable="false" />
+    <Property Name="RecordedValues" Type="Decimal" Precision="18" Scale="0" />
+    <Property Name="TestImpression" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="ReportPath" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="TestType" Relationship="HISModel.FK_PatientTests_TestID" FromRole="PatientTest" ToRole="TestType" />
+    <NavigationProperty Name="User" Relationship="HISModel.FK_PatientTests_UserID" FromRole="PatientTest" ToRole="User" />
+  </EntityType>
+  <EntityType Name="TestType">
+    <Key>
+      <PropertyRef Name="TestID" />
+    </Key>
+    <Property Name="TestID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TestName" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="TestCost" Type="Decimal" Precision="19" Scale="4" />
+    <NavigationProperty Name="PatientTests" Relationship="HISModel.FK_PatientTests_TestID" FromRole="TestType" ToRole="PatientTest" />
+  </EntityType>
+  <Association Name="FK_PatientTests_TestID">
+    <End Type="HISModel.TestType" Role="TestType" Multiplicity="1" />
+    <End Type="HISModel.PatientTest" Role="PatientTest" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TestType">
+        <PropertyRef Name="TestID" />
+      </Principal>
+      <Dependent Role="PatientTest">
+        <PropertyRef Name="TestID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PatientTests_UserID">
+    <End Type="HISModel.User" Role="User" Multiplicity="1" />
+    <End Type="HISModel.PatientTest" Role="PatientTest" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="PatientTest">
+        <PropertyRef Name="PrescribedDoctor" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Permission">
+    <Key>
+      <PropertyRef Name="Permission_Id" />
+    </Key>
+    <Property Name="Permission_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="PermissionDescription" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="PermissionStatus" Type="Boolean" Nullable="false" />
+  </EntityType>
 </Schema>

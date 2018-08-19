@@ -5,11 +5,15 @@ using System.Web;
 using System.Web.Mvc;
 using System.Data.Entity;
 using System.IO;
+using HIS.Action_Filters;
+
 namespace HIS.Controllers
 {
+    [SessionActionFilter]
     public class OutPatientController : Controller
     {
         // GET: OutPatient
+        [His]
         public ActionResult Index()
         {
             return View();

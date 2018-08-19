@@ -16,5 +16,6 @@ namespace HIS
     {
         public int Permission_Id { get; set; }
         public string PermissionDescription { get; set; }
+        public bool PermissionStatus { get; set; }
     }
 }
