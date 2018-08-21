@@ -218,6 +218,7 @@
     <Property Name="TestID" Type="int" Nullable="false" />
     <Property Name="TestDate" Type="datetime" />
     <Property Name="PrescribedDoctor" Type="int" Nullable="false" />
+    <Property Name="VisitID" Type="int" />
     <Property Name="RecordedValues" Type="decimal" Precision="18" Scale="0" />
     <Property Name="TestImpression" Type="nvarchar(max)" />
     <Property Name="ReportPath" Type="nvarchar" MaxLength="200" />

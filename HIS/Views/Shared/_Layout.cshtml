@@ -6,6 +6,7 @@
     <title>@ViewBag.Title | SRAVANTHI HIS</title>
     <link href="~/Content/Site.css" rel="stylesheet" />
     @Styles.Render("~/Content/css")
+    <link href="~/Content/chosen.css" rel="stylesheet" />
     @Scripts.Render("~/bundles/modernizr")
     <link href="~/Content/his_customstyles.css" rel="stylesheet" />
     <style type="text/css">
@@ -40,20 +41,25 @@
             <!-- Main navigation -->
             <ul id="side-nav" class="main-menu navbar-collapse collapsed">
                 <li class="has-sub">
-                    <a href="/home/index"><i class="icon-home"></i><span class="title">Home</span></a>
-                    <ul class="nav"></ul>
+                    <a href="@Url.Action("Index", "Home")"><i class="icon-home"></i><span class="title">Home</span></a>
+                    <ul class="nav">
+                        @if (ViewContext.Controller.HasPermission("Home-index"))
+                        {
+                            <li><a href="@Url.Action("Index", "Home")"><span class="title">Dashboard</span></a></li>
+                        }
+                    </ul>
                 </li>
                 <li class="has-sub">
                     <a href="@Url.Action("Index", "InPatient")"><i class="fa fa-wheelchair" style="padding-left:5px"></i><span class="title">Patients</span></a>
                     <ul class="nav">
                         @if (ViewContext.Controller.HasPermission("InPatient-index"))
-                    {
+                        {
                         <li><a href="@Url.Action("Index", "InPatient")"><span class="title">I/P Profile</span></a></li>
-                }
+                        }
                         @if (ViewContext.Controller.HasPermission("OutPatient-index"))
-                    {
+                        {
                         <li><a href="@Url.Action("Index", "OutPatient")"><span class="title">O/P Profile</span></a></li>
-                }
+                        }
                     </ul>
                 </li>
                 @*<li class="has-sub">
@@ -67,9 +73,9 @@
                     <a href="@Url.Action("Index", "MedInventory")"><i class="fa fa-medkit" style="padding-left:5px"></i><span class="title">Pharmacy</span></a>
                     <ul class="nav">
                         @if (ViewContext.Controller.HasPermission("PurchaseOrder-index"))
-                    {
+                        {
                         <li><a href="@Url.Action("Index", "PurchaseOrder")"><span class="title">Purchase Orders</span></a></li>
-                }
+                        }
                     </ul>
                 </li>
                 <li class="has-sub">
@@ -84,70 +90,74 @@
                     <a href="@Url.Action("Index", "User")"><i class="icon-lock"></i><span class="title">Admin</span></a>
                     <ul class="nav">
                         @if (ViewContext.Controller.HasPermission("User-index"))
-                    {
-                        <li class="active"><a href="@Url.Action("Index", "User")"><span class="title">Users</span></a></li>
-                }
+                        {
+                            <li class="active"><a href="@Url.Action("Index", "User")"><span class="title">Users</span></a></li>
+                        }
                         @if (ViewContext.Controller.HasPermission("BloodGroup-index"))
-                    {
-                        <li><a href="@Url.Action("Index", "BloodGroup")"><span class="title">Blood Groups</span></a></li>
-                }
+                        {
+                            <li><a href="@Url.Action("Index", "BloodGroup")"><span class="title">Blood Groups</span></a></li>
+                        }
                         @if (ViewContext.Controller.HasPermission("UserType-index"))
-                    {
-                        <li><a href="@Url.Action("Index", "UserType")"><span class="title">User Types</span></a></li>
-                }
+                        {
+                            <li><a href="@Url.Action("Index", "UserType")"><span class="title">User Types</span></a></li>
+                        }
                         @if (ViewContext.Controller.HasPermission("Permissions-index"))
-                    {
-                        <li><a href="@Url.Action("Index", "Permissions")"><span class="title">Permissions</span></a></li>
-                }
+                        {
+                            <li><a href="@Url.Action("Index", "Permissions")"><span class="title">Permissions</span></a></li>
+                        }
                         @if (ViewContext.Controller.HasPermission("RolePermissions-index"))
-                    {
-                        <li><a href="@Url.Action("Index", "RolePermissions")"><span class="title">User Permissions</span></a></li>
-                }
+                        {
+                            <li><a href="@Url.Action("Index", "RolePermissions")"><span class="title">User Permissions</span></a></li>
+                        }
                         @if (ViewContext.Controller.HasPermission("Specialization-index"))
-                    {
-                        <li><a href="@Url.Action("Index", "Specialization")"><span class="title">Specialization</span></a></li>
-                }
+                        {
+                            <li><a href="@Url.Action("Index", "Specialization")"><span class="title">Specialization</span></a></li>
+                        }
                         @if (ViewContext.Controller.HasPermission("Intakes-index"))
-                    {
-                        <li><a href="@Url.Action("Index", "Intakes")"><span class="title">Intake Frequency</span></a></li>
-                }
+                        {
+                            <li><a href="@Url.Action("Index", "Intakes")"><span class="title">Intake Frequency</span></a></li>
+                        }
                         @if (ViewContext.Controller.HasPermission("Brand-index"))
-                    {
-                        <li><a href="@Url.Action("Index", "Brand")"><span class="title">Brands</span></a></li>
-                }
+                        {
+                            <li><a href="@Url.Action("Index", "Brand")"><span class="title">Brands</span></a></li>
+                        }
                         @if (ViewContext.Controller.HasPermission("BrandCategory-index"))
-                    {
-                        <li><a href="@Url.Action("Index", "BrandCategory")"><span class="title">Brand Categories</span></a></li>
-                }
+                        {
+                            <li><a href="@Url.Action("Index", "BrandCategory")"><span class="title">Brand Categories</span></a></li>
+                        }
                         @if (ViewContext.Controller.HasPermission("BedType-index"))
-                    {
-                        <li><a href="@Url.Action("Index", "BedType")"><span class="title">Bed Type</span></a></li>
-                }
+                        {
+                            <li><a href="@Url.Action("Index", "BedType")"><span class="title">Bed Type</span></a></li>
+                        }
                         @if (ViewContext.Controller.HasPermission("RoomType-index"))
-                    {
-                        <li><a href="@Url.Action("Index", "RoomType")"><span class="title">Room Type</span></a></li>
-                }
+                        {
+                            <li><a href="@Url.Action("Index", "RoomType")"><span class="title">Room Type</span></a></li>
+                        }
                         @if (ViewContext.Controller.HasPermission("Rooms-index"))
-                    {
-                        <li><a href="@Url.Action("Index", "Rooms")"><span class="title">Rooms</span></a></li>
-                }
+                        {
+                            <li><a href="@Url.Action("Index", "Rooms")"><span class="title">Rooms</span></a></li>
+                        }
                         @if (ViewContext.Controller.HasPermission("Beds-index"))
-                    {
-                        <li><a href="@Url.Action("Index", "Beds")"><span class="title">Bed Management</span></a></li>
-                }
+                        {
+                            <li><a href="@Url.Action("Index", "Beds")"><span class="title">Bed Management</span></a></li>
+                        }
                         @if (ViewContext.Controller.HasPermission("ConsultType-index"))
-                    {
-                        <li><a href="@Url.Action("Index", "ConsultType")"><span class="title">Consultations</span></a></li>
-                }                        
+                        {
+                            <li><a href="@Url.Action("Index", "ConsultType")"><span class="title">Consultations</span></a></li>
+                        }
                         @if (ViewContext.Controller.HasPermission("ConsultationFee-index"))
-                    {
-                        <li><a href="@Url.Action("Index", "ConsultationFee")"><span class="title">Consultation Fee</span></a></li>
-                }
+                        {
+                            <li><a href="@Url.Action("Index", "ConsultationFee")"><span class="title">Consultation Fee</span></a></li>
+                        }
                         @if (ViewContext.Controller.HasPermission("MedicineMaster-index"))
-                    {
-                        <li><a href="@Url.Action("Index", "MedicineMaster")"><span class="title">Medicines</span></a></li>
-                }
-                    </ul>
+                        {
+                            <li><a href="@Url.Action("Index", "MedicineMaster")"><span class="title">Medicines</span></a></li>
+                        }
+                        @if (ViewContext.Controller.HasPermission("Lab-index"))
+                        {
+                            <li><a href="@Url.Action("Index", "Lab")"><span class="title">Lab Tests</span></a></li>
+                        } 
+                        </ul>
                 </li>
             </ul>
             <!-- /main navigation -->
@@ -239,9 +249,7 @@
     <link href="~/light/css/plugins/datepicker/bootstrap-datepicker.css" rel="stylesheet" />
     <script src="~/Scripts/moment.js"></script>
     <script src="~/light/js/plugins/datepicker/bootstrap-datepicker.js"></script>
-    <script type='text/javascript'>
-    </script>
-
+    <script src="~/Scripts/chosen.jquery.min.js"></script>
     @RenderSection("scripts", required: false)
 </body>
 </html>

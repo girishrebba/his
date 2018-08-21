@@ -223,6 +223,7 @@
           <Property Name="TestID" Type="int" Nullable="false" />
           <Property Name="TestDate" Type="datetime" />
           <Property Name="PrescribedDoctor" Type="int" Nullable="false" />
+          <Property Name="VisitID" Type="int" />
           <Property Name="RecordedValues" Type="decimal" Precision="18" Scale="0" />
           <Property Name="TestImpression" Type="nvarchar(max)" />
           <Property Name="ReportPath" Type="nvarchar" MaxLength="200" />
@@ -1626,6 +1627,7 @@
           <Property Name="ReportPath" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="TestType" Relationship="HISModel.FK_PatientTests_TestID" FromRole="PatientTest" ToRole="TestType" />
           <NavigationProperty Name="User" Relationship="HISModel.FK_PatientTests_UserID" FromRole="PatientTest" ToRole="User" />
+          <Property Name="VisitID" Type="Int32" />
         </EntityType>
         <EntityType Name="TestType">
           <Key>
@@ -2000,6 +2002,7 @@
           <EntitySetMapping Name="PatientTests">
             <EntityTypeMapping TypeName="HISModel.PatientTest">
               <MappingFragment StoreEntitySet="PatientTests">
+                <ScalarProperty Name="VisitID" ColumnName="VisitID" />
                 <ScalarProperty Name="ReportPath" ColumnName="ReportPath" />
                 <ScalarProperty Name="TestImpression" ColumnName="TestImpression" />
                 <ScalarProperty Name="RecordedValues" ColumnName="RecordedValues" />

@@ -182,6 +182,17 @@ namespace HIS.HtmlHelpers
             }
         }
 
+        public static List<TestType> GetTestTypes()
+        {
+            using (HISDBEntities dc = new HISDBEntities())
+            {
+                var testTypes = (from tt in dc.TestTypes
+                                    select new { tt.TestID, tt.TestName }).AsEnumerable()
+                             .Select(x => new TestType { TestID = x.TestID, TestName = x.TestName }).ToList();
+                return testTypes;
+            }
+        }
+
         public static List<IntakeFrequency> GetIntakes()
         {
             using (HISDBEntities dc = new HISDBEntities())

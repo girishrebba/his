@@ -371,6 +371,39 @@ namespace HIS.Controllers
             }
         }
 
+        public List<PatientTest> GetPatientTests(string enmrNo, int visitID)
+        {
+            using (HISDBEntities hs = new HISDBEntities())
+            {
+
+                var patientTests = (from pt in hs.PatientTests
+                                            join op in hs.OutPatients on pt.ENMRNO equals op.ENMRNO
+                                            join tt in hs.TestTypes on pt.TestID equals tt.TestID
+                                            join u in hs.Users on pt.PrescribedDoctor equals u.UserID
+                                            join ut in hs.UserTypes on u.UserTypeID equals ut.UserTypeID
+                                            where ut.UserTypeName.Equals("Doctor") && pt.ENMRNO == enmrNo && pt.VisitID == visitID
+                                            select new
+                                            {
+                                                pt,
+                                                u,
+                                                tt
+                                            })
+                                  .OrderByDescending(b => b.pt.TestDate)
+                                  .AsEnumerable()
+                                 .Select(x => new PatientTest
+                                 {
+                                     TestName = x.tt.TestName,
+                                     DateDisplay = HtmlHelpers.HtmlHelpers.DateFormat(x.pt.TestDate),
+                                     DoctorName = HtmlHelpers.HtmlHelpers.GetFullName(x.u.FirstName, x.u.MiddleName, x.u.LastName),
+                                     RecordedValues = x.pt.RecordedValues,
+                                     TestImpression = x.pt.TestImpression,
+                                     ReportPath = x.pt.ReportPath
+                                 }).ToList();
+
+                return patientTests;
+            }
+        }
+
         [HttpGet]
         public ActionResult OPPrescription(string enmrNo)
         {
@@ -399,6 +432,7 @@ namespace HIS.Controllers
             pp.ENMRNO = enmrNo;
             pp.VisitID = visitID;
             pp.VisitName = currentVisit;
+            pp.TestTypes = HtmlHelpers.HtmlHelpers.GetTestTypes();
             return View(pp);
         }
 
@@ -415,6 +449,7 @@ namespace HIS.Controllers
                     var visitPrescription = new PatientPrescriptionHistory();
                     visitPrescription.VisitName = VisitNameWithDate(pre);
                     visitPrescription.Prescriptions = GetPatientPrescriptions(pre.ENMRNO, pre.SNO);
+                    visitPrescription.PatientTests = GetPatientTests(pre.ENMRNO, pre.SNO);
                     prescriptionsHistory.Add(visitPrescription);
                 }
                 return prescriptionsHistory;
@@ -446,11 +481,26 @@ namespace HIS.Controllers
             {
                 if (prescriptions != null && prescriptions.Count() > 0)
                 {
+                    var suggestedTestsIfAny = prescriptions[0];
                     foreach (PatientPrescription pp in prescriptions)
                     {
                         pp.PrescribedBy = 1;
                         pp.DatePrescribed = DateTime.Now;
                         db.PatientPrescriptions.Add(pp);
+                    }
+
+                    //Save Tests
+                    if(suggestedTestsIfAny.TestIds != null)
+                    {
+                        foreach(var id in suggestedTestsIfAny.TestIds)
+                        {
+                            var patientTest = new PatientTest {ENMRNO = suggestedTestsIfAny.ENMRNO,
+                                TestID = Convert.ToInt32(id),
+                                PrescribedDoctor = 1,
+                                VisitID = suggestedTestsIfAny.VisitID
+                            };
+                            db.PatientTests.Add(patientTest);
+                        }
                     }
                     db.SaveChanges();
                     return Json(new { success = true, message = string.Format("Prescription for ENMRNO - {0} created Successfully", prescriptions[0].ENMRNO) }, JsonRequestBehavior.AllowGet);

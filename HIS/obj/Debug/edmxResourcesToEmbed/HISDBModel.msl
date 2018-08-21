@@ -327,6 +327,7 @@
     <EntitySetMapping Name="PatientTests">
       <EntityTypeMapping TypeName="HISModel.PatientTest">
         <MappingFragment StoreEntitySet="PatientTests">
+          <ScalarProperty Name="VisitID" ColumnName="VisitID" />
           <ScalarProperty Name="ReportPath" ColumnName="ReportPath" />
           <ScalarProperty Name="TestImpression" ColumnName="TestImpression" />
           <ScalarProperty Name="RecordedValues" ColumnName="RecordedValues" />

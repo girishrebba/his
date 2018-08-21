@@ -149,6 +149,9 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\brands.css" />
+    <Content Include="Content\chosen-sprite%402x.png" />
+    <Content Include="Content\chosen-sprite.png" />
+    <Content Include="Content\chosen.css" />
     <Content Include="Content\fontawesome.css" />
     <Content Include="Content\Gridmvc.css" />
     <Content Include="Content\his_customstyles.css" />
@@ -955,6 +958,8 @@
     <Content Include="light\video.html" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\chosen.jquery.js" />
+    <Content Include="Scripts\chosen.jquery.min.js" />
     <Content Include="Scripts\gridmvc.js" />
     <Content Include="Scripts\gridmvc.lang.ru.js" />
     <Content Include="Scripts\gridmvc.min.js" />
@@ -974,6 +979,9 @@
     <None Include="Scripts\jquery-1.12.4.intellisense.js" />
     <Content Include="Scripts\jquery-1.12.4.js" />
     <Content Include="Scripts\jquery-1.12.4.min.js" />
+    <None Include="Scripts\jquery-1.4.1-vsdoc.js" />
+    <Content Include="Scripts\jquery-1.4.1.js" />
+    <Content Include="Scripts\jquery-1.4.1.min.js" />
     <Content Include="Scripts\jquery-ui-1.12.1.js" />
     <Content Include="Scripts\jquery-ui-1.12.1.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
@@ -1053,6 +1061,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InPatientController.cs" />
     <Compile Include="Controllers\IntakesController.cs" />
+    <Compile Include="Controllers\LabController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\MedicineMasterController.cs" />
     <Compile Include="Controllers\OutPatientController.cs" />
@@ -1119,6 +1128,7 @@
     <Compile Include="Models\PatientPrescription.cs" />
     <Compile Include="Models\PatientPrescriptionHistory.cs" />
     <Compile Include="Models\PatientRoomAllocation.cs" />
+    <Compile Include="Models\PatientTest.cs" />
     <Compile Include="Models\PatientVisitHistory.cs" />
     <Compile Include="Models\Permissions.cs" />
     <Compile Include="Models\PurchaseOrder.cs" />
@@ -1356,6 +1366,8 @@
     <Content Include="Views\OutPatient\DeliverPrescription.cshtml" />
     <Content Include="Views\PurchaseOrder\EditPO.cshtml" />
     <Content Include="Views\PurchaseOrder\ViewPO.cshtml" />
+    <Content Include="Views\Lab\AddModify.cshtml" />
+    <Content Include="Views\Lab\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1366,7 +1378,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="PatientRecords\" />
-    <Folder Include="Views\Lab\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

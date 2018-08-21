@@ -825,6 +825,7 @@
     <Property Name="ReportPath" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="TestType" Relationship="HISModel.FK_PatientTests_TestID" FromRole="PatientTest" ToRole="TestType" />
     <NavigationProperty Name="User" Relationship="HISModel.FK_PatientTests_UserID" FromRole="PatientTest" ToRole="User" />
+    <Property Name="VisitID" Type="Int32" />
   </EntityType>
   <EntityType Name="TestType">
     <Key>

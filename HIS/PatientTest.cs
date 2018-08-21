@@ -22,6 +22,7 @@ namespace HIS
         public Nullable<decimal> RecordedValues { get; set; }
         public string TestImpression { get; set; }
         public string ReportPath { get; set; }
+        public Nullable<int> VisitID { get; set; }
     
         public virtual TestType TestType { get; set; }
         public virtual User User { get; set; }

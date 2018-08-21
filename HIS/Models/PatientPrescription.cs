@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
 using System.ComponentModel.DataAnnotations;
 
 namespace HIS
@@ -12,6 +15,8 @@ namespace HIS
         public string VisitName { get; set; }
         public decimal ItemCost { get; set; }
         public decimal TotalCost { get; set; }
+        public List<TestType> TestTypes { get; set; }
+        public string[] TestIds { get; set; }
     }
 
     public class PPMetaData

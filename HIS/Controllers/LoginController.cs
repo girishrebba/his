@@ -28,7 +28,7 @@ namespace HIS.Controllers
                     Session["UserID"] = user.UserID;
                     Session["UserName"] = user.UserName;
                     int cid = Convert.ToInt16(user.UserID);
-                    return RedirectToAction("../BloodGroup/Index");
+                    return RedirectToAction("../Home/Index");
                 }
                 else
                 {

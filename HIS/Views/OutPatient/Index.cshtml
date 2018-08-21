@@ -264,6 +264,7 @@
                 tbl.Quantity = $($(this).find('td:eq(2)')).html();
                 tbl.IntakeFrequencyID = $($(this).find('td:eq(3)')).html();
                 tbl.Comments = $($(this).find('td:eq(5)')).html();
+                tbl.TestIds = $('#TestIds').val();
                 ppItems.push(tbl);
             });
             $.ajax({
