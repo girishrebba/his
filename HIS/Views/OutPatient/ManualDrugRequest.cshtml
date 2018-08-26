@@ -1,0 +1,177 @@
+﻿@model HIS.MDRModel
+@using HIS.HtmlHelpers;
+@{
+    Layout = null;
+}
+
+<style>
+    td {
+        padding: 5px;
+    }
+
+    .table {
+        margin-left: 1px;
+        margin-right: 1px;
+    }
+
+        .table > thead > tr > th {
+            text-transform: none;
+            font-weight: bold;
+        }
+
+    .ui-dialog {
+        top: 60px !important;
+    }
+</style>
+@using (Html.BeginForm("ManualDrugRequest", "OutPatient", FormMethod.Post, new { id = "mdrForm", onsubmit = "return SubmitMDRForm(this)" }))
+{
+    <div class="form-horizontal">
+        <div class="col-md-12">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ENMRNO, "ENMRNO:", new { @class = "control-label col-md-2" })
+                    <div class="col-sm-4 lableDisplay">
+                        @Html.DisplayFor(model => model.ENMRNO, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    @Html.LabelFor(model => model.PrescribedBy, "Doctor:", htmlAttributes: new { @class = "control-label col-sm-2" })
+                    <div class="col-sm-4">
+                        @Html.DropDownListFor(model => model.PrescribedBy, ViewBag.Users as SelectList, "--Select--", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.PrescribedBy)
+                    </div>
+                </div>
+        </div>
+        <div class="row" style="border: 1px;">
+            <table class="table table-striped table-bordered" id="mdrTable">
+                <thead>
+                    <tr>
+                        <th style="width:55%">Medicine</th>
+                        <th style="width:10%">Quantity</th>
+                        <th style="width:13%">Price</th>
+                        <th style="width:11%">Batch#</th>
+                        <th style="width:11%">Lot#</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            @Html.EditorFor(model => model.MedicineWithDose, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.HiddenFor(model => model.MedicineID)
+                            @Html.HiddenFor(model => model.ItemPrice)
+                        </td>
+                        <td>
+                            @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { Value = Model.Quantity > 0 ? Model.Quantity.ToString() : string.Empty, @class = "form-control quantity" } })
+                        </td>
+                        <td>
+                            @Html.EditorFor(model => model.TotalCost, new { htmlAttributes = new { @class = "form-control totalCost" } })
+                        </td>
+                        <td>
+                            @Html.EditorFor(model => model.BatchNo, new { htmlAttributes = new { @class = "form-control" } })
+                        </td>
+                        <td>
+                            @Html.EditorFor(model => model.LotNo, new { htmlAttributes = new { @class = "form-control" } })
+                        </td>
+                        <td><span class="btn btn-success fa fa-plus-circle" style="padding: 0px 3px" id="btnAdd"></span></td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="2" align="right">Total:</td>
+                        <td colspan="4" align="left" id="grandTotal"></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <div class="col-md-3 col-md-offset-5">
+                    <input type="submit" value="Deliver & Print" id="btnSubmit" class="btn btn-primary disabled" />
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<script type="text/javascript">
+    $(function () {
+        $('#btnAdd').click(function () {
+            var form = $("#mdrForm")
+            $.validator.unobtrusive.parse(form);
+            if ($(form).valid()) {
+                $('table#mdrTable > tbody').append('<tr>' +
+                    '<td style="display:none">' + $('#MedicineID').val()+'</td>'+ // MedicineID
+                    '<td>' + $('#MedicineWithDose').val() + '</td>' + // medicine
+                    '<td>' + $('#Quantity').val() + '</td>' + // order qty
+                    '<td class="totalCostTD">' + $('#TotalCost').val() + '</td>' + // item cost
+                    '<td>' + $('#BatchNo').val() + '</td>' + // batch no
+                    '<td>' + $('#LotNo').val() + '</td>' + // lot no
+                    '<td><span class="btn btn-danger fa fa-trash" style="padding: 0px 3px" onclick = "remove(this)"></span></td>' +
+                    '</tr>');
+
+                clearInputs();
+                calculateTotalPrice();
+            }
+            return false;
+        });
+
+        $('#btnSubmit').click(function () {
+            $('#MedicineWithDose').rules('remove', 'required');
+        });
+
+        $(".quantity").on('change keyup paste mouseup', function () {
+            var itemPrice = $('#ItemPrice').val();
+            var totalPrice = $(this).val() * itemPrice;
+            $('#TotalCost').val(totalPrice.toFixed(2));
+        });
+
+        $("#MedicineWithDose").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/OutPatient/GetMedicinesWithQuantity",
+                    type: "POST",
+                    dataType: "json",
+                    data: { Prefix: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return {
+                                label: item.MedicineDisplay,
+                                value: item.MedicineDisplay,
+                                id: item.MMID,
+                                itemPrice: item.ItemPrice
+                            };
+                        }))
+                    },
+                    error: function () {
+                        alert('something went wrong !');
+                    }
+                })
+            },
+            select: function (e, i) {
+                $("#MedicineID").val(i.item.id);
+                $("#ItemPrice").val(i.item.itemPrice);
+            },
+            minLength: 1
+        });
+    });
+
+    function calculateTotalPrice() {
+        var itemSum = 0;
+        $('.totalCostTD').each(function () {
+            itemSum += parseFloat($(this).html());
+        });
+        $('#grandTotal').html(itemSum.toFixed(2));
+    }
+
+    function remove(e) {
+        $(e).closest('tr').remove();
+        calculateTotalPrice();
+    }
+
+    function clearInputs() {
+        $('#MedicineWithDose').val('');
+        $('#MedicineID').val(0);
+        $('#Quantity').val('');
+        $('#TotalCost').val('');
+        $('#BatchNo').val('');
+        $('#LotNo').val('');
+        $('#ItemPrice').val('');
+    }
+</script>

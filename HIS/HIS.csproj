@@ -1123,6 +1123,7 @@
     <Compile Include="Models\InPatient.cs" />
     <Compile Include="Models\InPatientHistory.cs" />
     <Compile Include="Models\IntakeFrequency.cs" />
+    <Compile Include="Models\MDRModel.cs" />
     <Compile Include="Models\MedicineMaster.cs" />
     <Compile Include="Models\OutPatient.cs" />
     <Compile Include="Models\PatientPrescription.cs" />
@@ -1368,6 +1369,8 @@
     <Content Include="Views\PurchaseOrder\ViewPO.cshtml" />
     <Content Include="Views\Lab\AddModify.cshtml" />
     <Content Include="Views\Lab\Index.cshtml" />
+    <Content Include="Views\OutPatient\ManualDrugRequest.cshtml" />
+    <Content Include="Views\OutPatient\PatientTests.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

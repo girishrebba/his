@@ -124,6 +124,46 @@ namespace HIS.Controllers
         }
 
         [HttpGet]
+        public ActionResult ManualDrugRequest(string enmrNo)
+        {
+            ViewBag.Users = new SelectList(HtmlHelpers.HtmlHelpers.GetDoctors(), "UserID", "NameDisplay");
+            return View(new MDRModel
+            {
+                ENMRNO = enmrNo,
+                MedicineID = 0,
+                Quantity = 0,
+                TotalCost = 0,
+                BatchNo = string.Empty,
+                LotNo = string.Empty
+            });
+        }
+
+        [HttpPost]
+        public ActionResult ManualDrugRequest(List<PatientPrescription> mdrRequest)
+        {
+            using (HISDBEntities db = new HISDBEntities())
+            {
+                if (mdrRequest != null && mdrRequest.Count() > 0)
+                {
+                    foreach (PatientPrescription pp in mdrRequest)
+                    {
+                        db.PatientPrescriptions.Add(pp);
+                        var medInv = db.MedicineInventories.Where(miv => miv.MedicineID == pp.MedicineID).First();
+                        medInv.AvailableQty = medInv.AvailableQty - pp.DeliverQty;
+                        db.Entry(medInv).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+                    return Json(new { success = true, message = string.Format("Manual Drug Request for ENMRNO - {0} delivered Successfully", mdrRequest[0].ENMRNO) }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Error occured" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+
+        }
+
+        [HttpGet]
         public ActionResult AddModify(string enmrNo = null)
         {
             List<BloodGroup> BloodGroups = HtmlHelpers.HtmlHelpers.GetBloodGroups();
@@ -381,17 +421,18 @@ namespace HIS.Controllers
                                             join tt in hs.TestTypes on pt.TestID equals tt.TestID
                                             join u in hs.Users on pt.PrescribedDoctor equals u.UserID
                                             join ut in hs.UserTypes on u.UserTypeID equals ut.UserTypeID
-                                            where ut.UserTypeName.Equals("Doctor") && pt.ENMRNO == enmrNo && pt.VisitID == visitID
+                                            where ut.UserTypeName.Equals("Doctor") && pt.ENMRNO == enmrNo && pt.VisitID == visitID && pt.RecordedValues == null
                                             select new
                                             {
                                                 pt,
                                                 u,
                                                 tt
                                             })
-                                  .OrderByDescending(b => b.pt.TestDate)
+                                  .OrderByDescending(b => b.pt.SNO)
                                   .AsEnumerable()
                                  .Select(x => new PatientTest
                                  {
+                                     ENMRNO = x.pt.ENMRNO,
                                      TestName = x.tt.TestName,
                                      DateDisplay = HtmlHelpers.HtmlHelpers.DateFormat(x.pt.TestDate),
                                      DoctorName = HtmlHelpers.HtmlHelpers.GetFullName(x.u.FirstName, x.u.MiddleName, x.u.LastName),
@@ -532,15 +573,74 @@ namespace HIS.Controllers
                 var medicines = (from mm in hs.MedicineMasters
                                  join mi in hs.MedicineInventories on mm.MMID equals mi.MedicineID
                                  where mm.MedicineName.StartsWith(Prefix)
-                                 select new { mm, mi.AvailableQty }).AsEnumerable()
+                                 select new { mm, mi }).AsEnumerable()
                                  .Select(m => new MedicineMaster
                                  {
                                      MMID = m.mm.MMID,
-                                     MedicineDisplay = HtmlHelpers.HtmlHelpers.GetMedicineWithDoseAvailableQty(m.mm.MedicineName, m.mm.MedDose, m.AvailableQty.Value)
+                                     MedicineDisplay = HtmlHelpers.HtmlHelpers.GetMedicineWithDoseAvailableQty(m.mm.MedicineName, m.mm.MedDose, m.mi.AvailableQty.Value),
+                                     ItemPrice = m.mi.PricePerItem
                                  }).ToList();
                 return Json(medicines, JsonRequestBehavior.AllowGet);
             }
         }
 
+        [HttpGet]
+        public ActionResult PatientTests(string enmrNo)
+        {
+            var latestVisit = new PatientVisitHistory();
+            var patientTests = new List<PatientTest>();
+            using (var hs = new HISDBEntities())
+            {
+                latestVisit = hs.PatientVisitHistories.Where(pvh => pvh.ENMRNO == enmrNo).OrderByDescending(pvh => pvh.SNO).FirstOrDefault();
+
+                patientTests = GetPatientTests(enmrNo, latestVisit.SNO);
+                string visitName = VisitName(latestVisit.ConsultTypeID);
+                if (patientTests.Count() > 0)
+                {
+                    patientTests[0].VisitName = VisitName(latestVisit.ConsultTypeID);
+                    
+                }
+            }
+            return View(patientTests);
+        }
+
+        [HttpPost]
+        public ActionResult PatientTests(List<PatientTest> ptItems)
+        {
+            using (HISDBEntities db = new HISDBEntities())
+            {
+                if (ptItems != null && ptItems.Count() > 0)
+                {
+                    foreach (PatientTest pt in ptItems)
+                    {
+                        pt.PrescribedDoctor = 1;
+                        db.PatientTests.Add(pt);
+                    }
+                    db.SaveChanges();
+                    return Json(new { success = true, message = string.Format("Prescription for ENMRNO - {0} created Successfully", ptItems[0].ENMRNO) }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Error occured" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+        }
+
+        [HttpPost]
+        public JsonResult GetTestName(string Prefix)
+        {
+            using (HISDBEntities hs = new HISDBEntities())
+            {
+                var medicines = (from tt in hs.TestTypes
+                                 where tt.TestName.StartsWith(Prefix)
+                                 select new { tt }).AsEnumerable()
+                                 .Select(t => new TestType
+                                 {
+                                     TestID = t.tt.TestID,
+                                     TestName = t.tt.TestName
+                                 }).ToList();
+                return Json(medicines, JsonRequestBehavior.AllowGet);
+            }
+        }
     }
 }

@@ -119,6 +119,9 @@
           <Property Name="HeartBeat" Type="int" />
           <Property Name="BP" Type="decimal" Precision="10" Scale="4" />
           <Property Name="Temperature" Type="decimal" Precision="10" Scale="4" />
+          <Property Name="OthContact" Type="varchar" MaxLength="10" />
+          <Property Name="PrevENMR" Type="varchar" MaxLength="30" />
+          <Property Name="DiscSummary" Type="varchar(max)" />
         </EntityType>
         <EntityType Name="IntakeFrequency">
           <Key>
@@ -182,6 +185,8 @@
           <Property Name="HeartBeat" Type="int" />
           <Property Name="BP" Type="decimal" Precision="10" Scale="4" />
           <Property Name="Temperature" Type="decimal" Precision="10" Scale="4" />
+          <Property Name="OthContact" Type="varchar" MaxLength="10" />
+          <Property Name="PrevENMR" Type="varchar" MaxLength="30" />
         </EntityType>
         <EntityType Name="PatientPrescription">
           <Key>
@@ -1191,6 +1196,9 @@
           <Property Name="BP" Type="Decimal" Precision="10" Scale="4" />
           <Property Name="Temperature" Type="Decimal" Precision="10" Scale="4" />
           <NavigationProperty Name="PatientRoomAllocations" Relationship="HISModel.FK_PRA_InPatients_ENMRNO" FromRole="InPatient" ToRole="PatientRoomAllocation" />
+          <Property Name="OthContact" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="PrevENMR" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="DiscSummary" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="OutPatient">
           <Key>
@@ -1231,6 +1239,8 @@
           <Property Name="BP" Type="Decimal" Precision="10" Scale="4" />
           <Property Name="Temperature" Type="Decimal" Precision="10" Scale="4" />
           <NavigationProperty Name="PatientVisitHistories" Relationship="HISModel.FK_PVH_OutPatient_ENMRNO" FromRole="OutPatient" ToRole="PatientVisitHistory" />
+          <Property Name="OthContact" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="PrevENMR" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
         </EntityType>
         <Association Name="FK_InPatients_BloodGroup">
           <End Type="HISModel.BloodGroup" Role="BloodGroup" Multiplicity="1" />
@@ -1791,6 +1801,9 @@
           <EntitySetMapping Name="InPatients">
             <EntityTypeMapping TypeName="HISModel.InPatient">
               <MappingFragment StoreEntitySet="InPatients">
+                <ScalarProperty Name="DiscSummary" ColumnName="DiscSummary" />
+                <ScalarProperty Name="PrevENMR" ColumnName="PrevENMR" />
+                <ScalarProperty Name="OthContact" ColumnName="OthContact" />
                 <ScalarProperty Name="Temperature" ColumnName="Temperature" />
                 <ScalarProperty Name="BP" ColumnName="BP" />
                 <ScalarProperty Name="HeartBeat" ColumnName="HeartBeat" />
@@ -1828,6 +1841,8 @@
           <EntitySetMapping Name="OutPatients">
             <EntityTypeMapping TypeName="HISModel.OutPatient">
               <MappingFragment StoreEntitySet="OutPatients">
+                <ScalarProperty Name="PrevENMR" ColumnName="PrevENMR" />
+                <ScalarProperty Name="OthContact" ColumnName="OthContact" />
                 <ScalarProperty Name="Temperature" ColumnName="Temperature" />
                 <ScalarProperty Name="BP" ColumnName="BP" />
                 <ScalarProperty Name="HeartBeat" ColumnName="HeartBeat" />

@@ -21,7 +21,6 @@ namespace HIS
 
     public class PPMetaData
     {
-        
         [Required(ErrorMessage = "Please enter Medicine", AllowEmptyStrings = false)]
         public int MedicineWithDose { get; set; }
         

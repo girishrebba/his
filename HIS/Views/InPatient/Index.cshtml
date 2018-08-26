@@ -20,7 +20,7 @@
     <div class="col-lg-12">
         <div class="panel panel-default">
             <div class="panel-heading clearfix">
-                <a class="btn btn-success" style="margin-bottom:10px" onclick="PopupForm('@Url.Action("AddModify","InPatient")')"><i class="fa fa-plus"></i> In Patient</a>
+                <a class="btn btn-success" style="margin-bottom:10px" onclick="PopupPatient('@Url.Action("AddModify","InPatient")', false)"><i class="fa fa-plus"></i> In Patient</a>
             </div>
             <div class="panel-body">
                 <div class="table-responsive">
@@ -29,7 +29,7 @@
                             <tr>
                                 <th>ENMRNO</th>
                                 <th>Name</th>
-                                <th>DOB</th>
+                                @*<th>DOB</th>*@
                                 <th>Gender</th>
                                 @*<th>Address</th>*@
                                 <th>Phone</th>
@@ -58,7 +58,7 @@
                 "columns": [
                     { "data": "ENMRNO" },
                     { "data": "Name" },
-                    { "data": "DOBDisplay" },
+                    //{ "data": "DOBDisplay" },
                     { "data": "GenderDisplay" },
                     //{ "data": "Address" },
                     { "data": "Phone" },
@@ -66,18 +66,19 @@
                     { "data": "EnrolledDisplay" },
                     {
                         "data":"SNO", "render" : function (data) {
-                            return "<a class='btn btn-default btn-sm' title='Edit' onclick=PopupPatient('@Url.Action("AddModify","InPatient")/" + data + "')><i class='fa fa-pencil-alt'></i>"
+                            return "<a class='btn btn-default btn-sm' title='Edit' onclick=PopupPatient('@Url.Action("AddModify","InPatient")/" + data + "',false)><i class='fa fa-user-edit'></i>"
                                 + "</a><a class='btn btn-info btn-sm' title='View Patient' style='margin-left:5px' onclick=PopupViewPatient('@Url.Action("ViewPatient", "InPatient")/" + data + "')><i class='fa fa-info-circle'></i></a>"
                                 + "<a class='btn btn-primary btn-sm' title='Bed' style='margin-left:5px' onclick=PopupPatientAllocationView('@Url.Action("BedAllocation", "InPatient")/" + data + "')><i class='fa fa-bed'></i></a>"
                                 + "<a class='btn btn-primary btn-sm' title='Fee' style='margin-left:5px' onclick=PopupFee('@Url.Action("Fee", "InPatient")/" + data + "')><i class='fa fa-rupee-sign'></i></a>"
                                 + "<a class='btn btn-primary btn-sm' title='Observation' style='margin-left:5px' onclick=PopupObservations('@Url.Action("Observations", "InPatient")/" + data + "')><i class='fa fa-briefcase-medical'></i></a>"
-                                + "<a class='btn btn-primary btn-sm' title='Observation' style='margin-left:5px' onclick=PopupObservations('@Url.Action("Observations", "InPatient")/" + data + "')><i class='fa fa-flask'></i></a>";
+                                + "<a class='btn btn-primary btn-sm' title='Observation' style='margin-left:5px' onclick=PopupObservations('@Url.Action("Observations", "InPatient")/" + data + "')><i class='fa fa-flask'></i></a>"
+                                + "<a class='btn btn-default btn-sm' title='Discharge' style='margin-left:5px' onclick=PopupPatient('@Url.Action("AddModify","InPatient")/" + data + "',true)><i class='fa fa-sign-out-alt'></i>";
                     },
                         "orderable": false,
                         "searchable": false
                     }
                 ],
-                "order": [[7, "desc"],[0, "desc"]],
+                "order": [[5, "desc"],[0, "desc"]],
                 "language": {
                     "emptyTable" : "No data found, Please click on <b>Add New</b> Button"
                 }
@@ -85,27 +86,32 @@
         });
 
         // Popup Add Edit Patient
-        function PopupPatient(url) {
+        function PopupPatient(url, isDischarge) {
+            alert(isDischarge);
             var formDiv = $('<div/>');
             $.get(url)
-            .done(function (response) {
-                formDiv.html(response);
+                .done(function (response) {
+                    formDiv.html(response);
 
-                Popup = formDiv.dialog({
-                    autoOpen: true,
-                    resizable: false,
-                    modal:true,
-                    title: 'Add Modify In Patient',
-                    width: 850,
-                    top: 147,
-                    close: function () {
-                        Popup.dialog('destroy').remove();
-                    },
-                    open: function (event, ui) {
-                        $('.ui-dialog-content').css('overflow', 'hidden');
-                    }
+                    Popup = formDiv.dialog({
+                        autoOpen: true,
+                        resizable: false,
+                        modal: true,
+                        title: 'Add Modify In Patient',
+                        width: 850,
+                        top: 147,
+                        close: function () {
+                            Popup.dialog('destroy').remove();
+                        },
+                        open: function (event, ui) {
+                            $('.ui-dialog-content').css('overflow', 'hidden');
+                            if (isDischarge == true) {
+                                $('.nav-tabs a[href="#dischargeTab"]').tab('show');
+                            }
+                        }
+                    });
                 });
-            });
+            //Popup.activeDischargeTab();
         }
         // Popup View Patient
         function PopupViewPatient(url) {

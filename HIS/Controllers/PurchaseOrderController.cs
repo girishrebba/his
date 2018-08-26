@@ -219,7 +219,8 @@ namespace HIS.Controllers
                                  where mm.MedicineName.StartsWith(Prefix)
                                  select new { mm }).AsEnumerable()
                                  .Select(m => new MedicineMaster { MMID = m.mm.MMID,
-                                 MedicineDisplay = HtmlHelpers.HtmlHelpers.GetMedicineWithDose(m.mm.MedicineName, m.mm.MedDose)}).ToList();
+                                 MedicineDisplay = HtmlHelpers.HtmlHelpers.GetMedicineWithDose(m.mm.MedicineName, m.mm.MedDose),
+                                 }).ToList();
                 return Json(medicines, JsonRequestBehavior.AllowGet);
             }         
         }
@@ -305,7 +306,14 @@ namespace HIS.Controllers
                 {
                     foreach (PurchaseOrder po in items)
                     {
-                        db.Entry(po).State = EntityState.Modified;
+                        if (po.OrderID == 0)
+                        {
+                            db.PurchaseOrders.Add(po);
+                        }
+                        else
+                        {
+                            db.Entry(po).State = EntityState.Modified;
+                        }
                         db.SaveChanges();
                     }
                     return Json(new { success = true, message = string.Format("PO# - {0} adjusted Successfully", items[0].PONumber) }, JsonRequestBehavior.AllowGet);

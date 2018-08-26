@@ -52,6 +52,8 @@ namespace HIS
         public Nullable<int> HeartBeat { get; set; }
         public Nullable<decimal> BP { get; set; }
         public Nullable<decimal> Temperature { get; set; }
+        public string OthContact { get; set; }
+        public string PrevENMR { get; set; }
     
         public virtual BloodGroup BloodGroup { get; set; }
         public virtual User User { get; set; }

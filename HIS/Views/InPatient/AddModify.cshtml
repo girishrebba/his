@@ -41,6 +41,7 @@
             <li><a data-toggle="tab" href="#historyTab">Patient History</a></li>
             <li><a data-toggle="tab" href="#metricsTab">Metrics</a></li>
             <li><a data-toggle="tab" href="#referralTab">Referral Info</a></li>
+            <li><a data-toggle="tab" href="#dischargeTab">Discharge Summary</a></li>
         </ul>
         <div class="tab-content" id="tabContent">
             <div id="profileTab" class="tab-pane fade in active" role="tabpanel">
@@ -80,22 +81,22 @@
                         @Html.LabelFor(model => model.Gender, "Gender:", new { @class = "control-label col-sm-2" })
                         <div class="col-sm-4">
                             @Html.DropDownList("Gender", new List<SelectListItem>(){
-                               new SelectListItem { Text = "--Select--", Value = "" },
-                               new SelectListItem { Text = "Male", Value = "0"  },
-                               new SelectListItem { Text = "Female", Value =  "1"},
-                               new SelectListItem { Text = "Others", Value =  "2"}
-                               },
-                            htmlAttributes: new { @class = "form-control" })
+                                   new SelectListItem { Text = "--Select--", Value = "" },
+                                   new SelectListItem { Text = "Male", Value = "0"  },
+                                   new SelectListItem { Text = "Female", Value =  "1"},
+                                   new SelectListItem { Text = "Others", Value =  "2"}
+                                   },
+                         htmlAttributes: new { @class = "form-control" })
                         </div>
                         @Html.LabelFor(model => model.MaritalStatus, "Marital Status:", htmlAttributes: new { @class = "control-label col-sm-2" })
                         <div class="col-sm-4">
                             @Html.DropDownList("MaritalStatus", new List<SelectListItem>(){
-                               new SelectListItem { Text = "--Select--", Value = "" },
-                               new SelectListItem { Text = "Single", Value = "0"  },
-                               new SelectListItem { Text = "Married", Value =  "1"},
-                               new SelectListItem { Text = "Others", Value =  "2"}
-                               },
-                            htmlAttributes: new { @class = "form-control" })
+                                   new SelectListItem { Text = "--Select--", Value = "" },
+                                   new SelectListItem { Text = "Single", Value = "0"  },
+                                   new SelectListItem { Text = "Married", Value =  "1"},
+                                   new SelectListItem { Text = "Others", Value =  "2"}
+                                   },
+                         htmlAttributes: new { @class = "form-control" })
                         </div>
                     </div>
                     <div class="form-group">
@@ -185,10 +186,14 @@
                     </div>
                     <div class="form-group">
                         <div class="col-sm-8 col-sm-offset-4">
-                            @*<a class="btn btn-primary back previoustab">Previous</a>
-        <a class="btn btn-primary continue nexttab">Next</a>*@
                             <input type="button" value="Previous" class="btn btn-primary previoustab" />
                             <input type="button" value="Next" class="btn btn-primary nexttab" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.OthContact, "Other Contact:", new { @class = "control-label col-sm-2" })
+                        <div class="col-sm-4">
+                            @Html.EditorFor(model => model.OthContact, new { htmlAttributes = new { @class = "form-control" } })
                         </div>
                     </div>
                 </div>
@@ -201,7 +206,7 @@
                 <div class="form-group">
                     <div class="col-sm-8 col-sm-offset-4">
                         @*<a class="btn btn-primary back previoustab">Previous</a>
-                        <a class="btn btn-primary continue nexttab">Next</a>*@
+                    <a class="btn btn-primary continue nexttab">Next</a>*@
                         <input type="button" value="Previous" class="btn btn-primary previoustab" />
                         <input type="button" value="Next" class="btn btn-primary nexttab" />
                     </div>
@@ -261,15 +266,33 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        @Html.LabelFor(model => model.PrevENMR, "Previous ENMR:", new { @class = "control-label col-sm-2" })
+                        <div class="col-sm-4">
+                            @Html.EditorFor(model => model.PrevENMR, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <div class="col-sm-8 col-sm-offset-4">
                             @*<a class="btn btn-primary back previoustab">Previous</a>*@
                             <input type="button" value="Previous" class="btn btn-primary previoustab" />
-                            <input type="submit" value="Submit" class="btn btn-primary" />
+                            <input type="button" value="Next" class="btn btn-primary nexttab" />
                         </div>
                     </div>
                 </div>
                 <div class="form-horizontal" id="errorDiv">
                     @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div id="dischargeTab" class="tab-pane fade in" role="tabpanel">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.DiscSummary, "Discharge Summary:")
+                    @Html.TextAreaFor(model => model.DiscSummary, new { @class = "form-control rounded-0", @rows = 10, @autofocus = "true" })
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-8 col-sm-offset-4">
+                        <input type="button" value="Previous" class="btn btn-primary previoustab" />
+                        <input type="submit" value="Submit" class="btn btn-primary" />
+                    </div>
                 </div>
             </div>
         </div>
@@ -278,6 +301,7 @@
 
 <script type="text/javascript">
     $(function () {
+        //$('#tabs a:last').tab('show');
         $('.nexttab').click(function () {
             $('.nav-tabs > .active').next('li').find('a').trigger('click');
         });
@@ -286,6 +310,7 @@
             $('.nav-tabs > .active').prev('li').find('a').trigger('click');
         });
 
+        //tabContent
         $('#DOB').datepicker({
             keyboardNavigation: false,
             forceParse: false,
@@ -312,6 +337,5 @@
             $('#Enrolled').datepicker('show');
         });
     });
-
 </script>
 
