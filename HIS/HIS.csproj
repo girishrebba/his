@@ -299,7 +299,6 @@
     <Content Include="light\images\led.jpg" />
     <Content Include="light\images\like-icon.png" />
     <Content Include="light\images\loading.gif" />
-    <Content Include="light\images\logo.PNG" />
     <Content Include="light\images\mac.jpg" />
     <Content Include="light\images\macbook-40.jpg" />
     <Content Include="light\images\man-3.jpg" />
@@ -971,6 +970,7 @@
       <DependentUpon>HISDBModel.edmx</DependentUpon>
     </Content>
     <Content Include="light\js\jquery-1.12.4.min.map" />
+    <None Include="Properties\PublishProfiles\HisApp - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />

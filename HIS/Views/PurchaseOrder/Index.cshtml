@@ -64,10 +64,12 @@
                             {
                                 "data": null, "render": function (data) {
                                     if (data.ApprovedStatus === null || data.ApprovedStatus === 0) {
-                                        return "<a class='btn btn-success btn-sm' title='Approve' onclick=PopupApprovalForm('@Url.Action("Approve","PurchaseOrder")/?poNumber=" + data.PONumber + "')><i class='fa fa-thumbs-up'></i></a><a class='btn btn-primary btn-sm' title='Edit' style='margin-left:5px' onclick=PopupAdjustForm('@Url.Action("EditPO", "PurchaseOrder")/?poNumber=" + data.PONumber + "')><i class='fa fa-pencil-alt'></i></a>";
+                                        return "@if (ViewContext.Controller.HasPermission("PurchaseOrder-Approve")){<a class='btn btn-success btn-sm' title='Approve' onclick=PopupApprovalForm('@Url.Action("Approve","PurchaseOrder")/?poNumber=" + data.PONumber + "')><i class='fa fa-thumbs-up'></i></a>} @if (ViewContext.Controller.HasPermission("PurchaseOrder-EditPO"))
+                                        {<a class='btn btn-primary btn-sm' title='Edit' style='margin-left:5px' onclick=PopupAdjustForm('@Url.Action("EditPO", "PurchaseOrder")/?poNumber=" + data.PONumber + "')><i class='fa fa-pencil-alt'></i></a>}";
                                     }
                                     else {
-                                        return "<a class='btn btn-primary btn-sm' title='View Only' onclick=PopupViewForm('@Url.Action("ViewPO","PurchaseOrder")/?poNumber=" + data.PONumber + "')><i class='fa fa-eye'></i></a>";
+                                        return "@if (ViewContext.Controller.HasPermission("PurchaseOrder-Approve"))
+                                        {<a class='btn btn-primary btn-sm' title='View Only' onclick=PopupViewForm('@Url.Action("ViewPO","PurchaseOrder")/?poNumber=" + data.PONumber + "')><i class='fa fa-eye'></i></a>}";
                                     }
                                     
                                 },

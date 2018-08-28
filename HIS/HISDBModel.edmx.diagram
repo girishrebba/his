@@ -51,13 +51,13 @@
         <EntityTypeShape EntityType="HISModel.UserPermission" Width="1.5" PointX="2.75" PointY="0.75" />
         <EntityTypeShape EntityType="HISModel.Bed" Width="1.5" PointX="15.625" PointY="1.25" />
         <AssociationConnector Association="HISModel.FK_Beds_RoomNo" />
-        <EntityTypeShape EntityType="HISModel.Permission" Width="1.5" PointX="5.375" PointY="3.75" />
         <EntityTypeShape EntityType="HISModel.PatientPrescription" Width="1.5" PointX="13.5" PointY="9.375" />
         <EntityTypeShape EntityType="HISModel.PrescriptionMaster" Width="1.5" PointX="5.25" PointY="13.125" />
         <AssociationConnector Association="HISModel.FK_PP_FrequencyID" />
         <AssociationConnector Association="HISModel.FK_PP_Medicine" />
         <AssociationConnector Association="HISModel.FK_PM_Doctor" />
         <AssociationConnector Association="HISModel.FK_PP_PMID" />
+        <EntityTypeShape EntityType="HISModel.Permission" Width="1.5" PointX="5.375" PointY="3.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -648,8 +648,9 @@ namespace HIS.Controllers
                     {
                         pt.PrescribedDoctor = 1;
                         db.PatientTests.Add(pt);
+                        db.SaveChanges();
                     }
-                    db.SaveChanges();
+                    
                     return Json(new { success = true, message = string.Format("Prescription for ENMRNO - {0} created Successfully", ptItems[0].ENMRNO) }, JsonRequestBehavior.AllowGet);
                 }
                 else

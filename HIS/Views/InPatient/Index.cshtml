@@ -46,7 +46,7 @@
 </div>
 
 @section scripts{
-    <script>
+<script>
         var Popup, dataTable, viewPatient, fee, observation, bedPopUp;
         $(document).ready(function () {
             dataTable = $("#inPatientsTable").DataTable({
@@ -66,14 +66,19 @@
                     { "data": "EnrolledDisplay" },
                     {
                         "data":"SNO", "render" : function (data) {
-                            return "<a class='btn btn-default btn-sm' title='Edit' onclick=PopupPatient('@Url.Action("AddModify","InPatient")/" + data + "',false)><i class='fa fa-user-edit'></i>"
-                                + "</a><a class='btn btn-info btn-sm' title='View Patient' style='margin-left:5px' onclick=PopupViewPatient('@Url.Action("ViewPatient", "InPatient")/" + data + "')><i class='fa fa-info-circle'></i></a>"
-                                + "<a class='btn btn-primary btn-sm' title='Bed' style='margin-left:5px' onclick=PopupPatientAllocationView('@Url.Action("BedAllocation", "InPatient")/" + data + "')><i class='fa fa-bed'></i></a>"
-                                + "<a class='btn btn-primary btn-sm' title='Fee' style='margin-left:5px' onclick=PopupFee('@Url.Action("Fee", "InPatient")/" + data + "')><i class='fa fa-rupee-sign'></i></a>"
-                                + "<a class='btn btn-primary btn-sm' title='Observation' style='margin-left:5px' onclick=PopupObservations('@Url.Action("Observations", "InPatient")/" + data + "')><i class='fa fa-briefcase-medical'></i></a>"
-                                + "<a class='btn btn-primary btn-sm' title='Observation' style='margin-left:5px' onclick=PopupObservations('@Url.Action("Observations", "InPatient")/" + data + "')><i class='fa fa-flask'></i></a>"
-                                + "<a class='btn btn-default btn-sm' title='Discharge' style='margin-left:5px' onclick=PopupPatient('@Url.Action("AddModify","InPatient")/" + data + "',true)><i class='fa fa-sign-out-alt'></i>";
-                    },
+                            return "@if (ViewContext.Controller.HasPermission("InPatient-AddModify")){<a class='btn btn-default btn-sm' title='Edit' onclick=PopupPatient('@Url.Action("AddModify","InPatient")/" + data + "',false)><i class='fa fa-user-edit'></i>"
+                                + "</a>}@if (ViewContext.Controller.HasPermission("InPatient-ViewPatient"))
+                                {<a class='btn btn-info btn-sm' title='View Patient' style='margin-left:5px' onclick=PopupViewPatient('@Url.Action("ViewPatient", "InPatient")/" + data + "')><i class='fa fa-info-circle'></i></a>}"
+                                + "@if (ViewContext.Controller.HasPermission("InPatient-BedAllocation")){
+                                    <a class='btn btn-primary btn-sm' title='Bed' style='margin-left:5px' onclick=PopupPatientAllocationView('@Url.Action("BedAllocation", "InPatient")/" + data + "')><i class='fa fa-bed'></i></a>}"
+                                    + "@if (ViewContext.Controller.HasPermission("InPatient-Fee")){
+                                        <a class='btn btn-primary btn-sm' title='Fee' style='margin-left:5px' onclick=PopupFee('@Url.Action("Fee", "InPatient")/" + data + "')><i class='fa fa-rupee-sign'></i></a>}"
+                                    + "@if (ViewContext.Controller.HasPermission("InPatient-Observations")){
+                                        <a class='btn btn-primary btn-sm' title='Observation' style='margin-left:5px' onclick=PopupObservations('@Url.Action("Observations", "InPatient")/" + data + "')><i class='fa fa-briefcase-medical'></i></a>}"
+                                    + "@if (ViewContext.Controller.HasPermission("InPatient-Observations")){
+                                        <a class='btn btn-primary btn-sm' title='Observation' style='margin-left:5px' onclick=PopupObservations('@Url.Action("Observations", "InPatient")/" + data + "')><i class='fa fa-flask'></i></a>}"
+                                    + "@if (ViewContext.Controller.HasPermission("InPatient-AddModify")){<a class='btn btn-default btn-sm' title='Discharge' style='margin-left:5px' onclick=PopupPatient('@Url.Action("AddModify","InPatient")/" + data + "',true)><i class='fa fa-sign-out-alt'></i></a>}";
+                                    },
                         "orderable": false,
                         "searchable": false
                     }
@@ -228,8 +233,8 @@
                     }
                 });
             }
-           return false; 
-                 
+           return false;
+
         }
         // Submit Patient Fee
         function SubmitFeeForm(form) {
@@ -279,7 +284,7 @@
             }
             return false;
         }
-    </script>
+</script>
 }
 
 

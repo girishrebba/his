@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Data.Entity;
 using HIS.Action_Filters;
+using System.ComponentModel;
 
 namespace HIS.Controllers
 {
@@ -13,6 +14,7 @@ namespace HIS.Controllers
     {
         // GET: Brand
         [His]
+        [Description(" - Brand view page.")]
         public ActionResult Index()
         {
             return View();
@@ -30,6 +32,7 @@ namespace HIS.Controllers
         }
 
         [HttpGet]
+        [Description(" - Brand Add/Edit page.")]
         public ActionResult AddModify(int id = 0)
         {
             if (id == 0)
@@ -64,6 +67,7 @@ namespace HIS.Controllers
         }
 
         [HttpPost]
+        [Description(" - Brand delete page.")]
         public ActionResult Delete(int id)
         {
             using (HISDBEntities db = new HISDBEntities())

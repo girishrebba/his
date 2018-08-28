@@ -45,7 +45,7 @@ namespace HIS.Controllers
         {
             Session["UserID"] = null;
             Session["UserName"] = null;
-            return RedirectToAction("../Login/Index");
+            return RedirectToAction("../Login");
         }
 
     }

@@ -116,6 +116,9 @@
     <EntitySetMapping Name="InPatients">
       <EntityTypeMapping TypeName="HISModel.InPatient">
         <MappingFragment StoreEntitySet="InPatients">
+          <ScalarProperty Name="DiscSummary" ColumnName="DiscSummary" />
+          <ScalarProperty Name="PrevENMR" ColumnName="PrevENMR" />
+          <ScalarProperty Name="OthContact" ColumnName="OthContact" />
           <ScalarProperty Name="Temperature" ColumnName="Temperature" />
           <ScalarProperty Name="BP" ColumnName="BP" />
           <ScalarProperty Name="HeartBeat" ColumnName="HeartBeat" />
@@ -153,6 +156,8 @@
     <EntitySetMapping Name="OutPatients">
       <EntityTypeMapping TypeName="HISModel.OutPatient">
         <MappingFragment StoreEntitySet="OutPatients">
+          <ScalarProperty Name="PrevENMR" ColumnName="PrevENMR" />
+          <ScalarProperty Name="OthContact" ColumnName="OthContact" />
           <ScalarProperty Name="Temperature" ColumnName="Temperature" />
           <ScalarProperty Name="BP" ColumnName="BP" />
           <ScalarProperty Name="HeartBeat" ColumnName="HeartBeat" />
@@ -191,6 +196,7 @@
     <EntitySetMapping Name="FeeCollections">
       <EntityTypeMapping TypeName="HISModel.FeeCollection">
         <MappingFragment StoreEntitySet="FeeCollection">
+          <ScalarProperty Name="LastFourDigits" ColumnName="LastFourDigits" />
           <ScalarProperty Name="PaymentMode" ColumnName="PaymentMode" />
           <ScalarProperty Name="Purpose" ColumnName="Purpose" />
           <ScalarProperty Name="PaidOn" ColumnName="PaidOn" />
@@ -252,25 +258,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="PatientPrescriptions">
-      <EntityTypeMapping TypeName="HISModel.PatientPrescription">
-        <MappingFragment StoreEntitySet="PatientPrescription">
-          <ScalarProperty Name="DeliverQty" ColumnName="DeliverQty" />
-          <ScalarProperty Name="IsDelivered" ColumnName="IsDelivered" />
-          <ScalarProperty Name="VisitID" ColumnName="VisitID" />
-          <ScalarProperty Name="LotNo" ColumnName="LotNo" />
-          <ScalarProperty Name="BatchNo" ColumnName="BatchNo" />
-          <ScalarProperty Name="DatePrescribed" ColumnName="DatePrescribed" />
-          <ScalarProperty Name="PrescribedBy" ColumnName="PrescribedBy" />
-          <ScalarProperty Name="Comments" ColumnName="Comments" />
-          <ScalarProperty Name="IntakeFrequencyID" ColumnName="IntakeFrequencyID" />
-          <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-          <ScalarProperty Name="MedicineID" ColumnName="MedicineID" />
-          <ScalarProperty Name="ENMRNO" ColumnName="ENMRNO" />
-          <ScalarProperty Name="PrescriptionID" ColumnName="PrescriptionID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="BedTypes">
       <EntityTypeMapping TypeName="HISModel.BedType">
         <MappingFragment StoreEntitySet="BedType">
@@ -327,6 +314,8 @@
     <EntitySetMapping Name="PatientTests">
       <EntityTypeMapping TypeName="HISModel.PatientTest">
         <MappingFragment StoreEntitySet="PatientTests">
+          <ScalarProperty Name="PaidAmunt" ColumnName="PaidAmunt" />
+          <ScalarProperty Name="Discount" ColumnName="Discount" />
           <ScalarProperty Name="VisitID" ColumnName="VisitID" />
           <ScalarProperty Name="ReportPath" ColumnName="ReportPath" />
           <ScalarProperty Name="TestImpression" ColumnName="TestImpression" />
@@ -348,9 +337,40 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="PatientPrescriptions">
+      <EntityTypeMapping TypeName="HISModel.PatientPrescription">
+        <MappingFragment StoreEntitySet="PatientPrescription">
+          <ScalarProperty Name="PMID" ColumnName="PMID" />
+          <ScalarProperty Name="PTID" ColumnName="PTID" />
+          <ScalarProperty Name="DeliverQty" ColumnName="DeliverQty" />
+          <ScalarProperty Name="LotNo" ColumnName="LotNo" />
+          <ScalarProperty Name="BatchNo" ColumnName="BatchNo" />
+          <ScalarProperty Name="Comments" ColumnName="Comments" />
+          <ScalarProperty Name="IntakeFrequencyID" ColumnName="IntakeFrequencyID" />
+          <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+          <ScalarProperty Name="MedicineID" ColumnName="MedicineID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PrescriptionMasters">
+      <EntityTypeMapping TypeName="HISModel.PrescriptionMaster">
+        <MappingFragment StoreEntitySet="PrescriptionMaster">
+          <ScalarProperty Name="PaidAmount" ColumnName="PaidAmount" />
+          <ScalarProperty Name="Discount" ColumnName="Discount" />
+          <ScalarProperty Name="IsDelivered" ColumnName="IsDelivered" />
+          <ScalarProperty Name="VisitID" ColumnName="VisitID" />
+          <ScalarProperty Name="DatePrescribed" ColumnName="DatePrescribed" />
+          <ScalarProperty Name="PrescribedBy" ColumnName="PrescribedBy" />
+          <ScalarProperty Name="ENMRNO" ColumnName="ENMRNO" />
+          <ScalarProperty Name="PMID" ColumnName="PMID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="CreateMasterPrescription" FunctionName="HISModel.Store.CreateMasterPrescription" />
     <EntitySetMapping Name="Permissions">
       <EntityTypeMapping TypeName="HISModel.Permission">
         <MappingFragment StoreEntitySet="Permissions">
+          <ScalarProperty Name="Toottip" ColumnName="Toottip" />
           <ScalarProperty Name="PermissionStatus" ColumnName="PermissionStatus" />
           <ScalarProperty Name="PermissionDescription" ColumnName="PermissionDescription" />
           <ScalarProperty Name="Permission_Id" ColumnName="Permission_Id" />

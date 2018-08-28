@@ -6,20 +6,23 @@ using System.Web.Mvc;
 using System.Data.Entity;
 using System.Reflection;
 using HIS.Action_Filters;
+using System.ComponentModel;
 
 namespace HIS.Controllers
 {
-    [SessionActionFilter]
+   // [SessionActionFilter]
     public class PermissionsController : Controller
     {
         // GET: Permissions
-        [His]
+        //[His]
+       // [ActionName("View")]
+        [Description(" - Permissions view page.")]
         public ActionResult Index()
         {
             return View();
         }
-
-        public ActionResult GetPermissions()
+        
+        public JsonResult GetPermissions()
         {
             using (HISDBEntities hs = new HISDBEntities())
             {
@@ -30,7 +33,7 @@ namespace HIS.Controllers
             }
         }
 
-        public ActionResult Getcontrollers()
+        public JsonResult Getcontrollers()
         {
 
             Assembly asm = Assembly.GetAssembly(typeof(HIS.MvcApplication));
@@ -38,7 +41,9 @@ namespace HIS.Controllers
             SelectMany(t => t.GetMethods(BindingFlags.Instance | BindingFlags.DeclaredOnly | BindingFlags.Public))
             .Where(d => d.ReturnType.Name == "ActionResult").Select(n => new
             {
-                Controller = n.DeclaringType?.Name.Replace("Controller", "")
+                Controller = n.DeclaringType?.Name.Replace("Controller", ""),
+                Action = n.Name,
+                Description = string.Join(",", n.GetCustomAttribute<DescriptionAttribute>()?.Description)
             }).Distinct().ToList();  
 
            return Json(new { data = controlleractionlist.ToList() }, JsonRequestBehavior.AllowGet);
@@ -112,18 +117,30 @@ namespace HIS.Controllers
 
                 foreach (var i in chkboxes)
                 {
-                    chk += i +"','";
-                    //string[] data = i.Split('_');
-                    Permission p = db.Permissions.Where(x => x.PermissionDescription == i).FirstOrDefault<Permission>();
+                    chk += i + "','";
+                    string pd,ttooltip = "";
+                    if (i.Contains('_'))
+                    {
+                        string[] data = i.Split('_');
+                        pd = data[0];
+                        ttooltip = data[1];
+                    }
+                    else
+                    {
+                        pd = i;
+                    }
+                    Permission p = db.Permissions.Where(x => x.PermissionDescription == pd).FirstOrDefault<Permission>();
                     if (p != null)
                     {
                         p.PermissionStatus = true;
+                        p.Toottip = ttooltip;
                         db.Entry(p).State = EntityState.Modified;
                         db.SaveChanges();
                     }
                     else {
                         Permission pa = new Permission();
-                        pa.PermissionDescription = i;
+                        pa.PermissionDescription = pd;
+                        pa.Toottip = ttooltip;
                         pa.PermissionStatus = true;
                         db.Permissions.Add(pa);
                         db.SaveChanges();

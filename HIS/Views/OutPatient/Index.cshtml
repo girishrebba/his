@@ -74,21 +74,29 @@
                     { "data": "EnrolledDisplay" },
                     {
                         "data": "ENMRNO", "render": function (data) {
-                            return "<a class='btn btn-default btn-sm' title='Edit' onclick=PopupForm('@Url.Action("AddModify","OutPatient")/?enmrNo=" + data + "')><i class='fa fa-pencil-alt'></i></a>"
-                                + "<a class='btn btn-info btn-sm' title = 'View Patient' style = 'margin-left:5px' onclick = PopupViewPatient('@Url.Action("ViewPatient", "OutPatient")/?enmrNo=" + data + "')><i class='fa fa-info-circle'></i></a>"
-                                + "<a class='btn btn-primary btn-sm' title='Consultation' style='margin-left:5px' onclick=PopupNewVisit('@Url.Action("NewVisit", "OutPatient")/?enmrNo=" + data + "')> <i class='fa fa-calendar'></i></a>"
-                                + "<a class='btn btn-primary btn-sm' title='Prescription' style='margin-left:5px' onclick=PopupPrescription('@Url.Action("OPPrescription", "OutPatient")/?enmrNo=" + data + "')><i class='fa fa-prescription'></i></a>"
-                                + "<a class='btn btn-primary btn-sm' title='Deliver Prescription' style='margin-left:5px' onclick=PopupDeliverPrescription('@Url.Action("DeliverPrescription", "OutPatient")/?enmrNo=" + data + "')><i class='fa fa-prescription-bottle-alt'></i></a>"
-                                + "<a class='btn btn-primary btn-sm' title='Admit as IP' style='margin-left:5px' onclick=ConvertOpToIp(" + JSON.stringify(data) + ")><i class='fa fa-hospital'></i></a>"
-                                + "<a class='btn btn-primary btn-sm' title='Manual Drug Request' style='margin-left:5px' onclick=PopupMDRForm('@Url.Action("ManualDrugRequest", "OutPatient")/?enmrNo=" + data + "')><i class='fa fa-capsules'></i></a>"
-                                + "<a class='btn btn-primary btn-sm' title='Lab' style='margin-left:5px' onclick=PopupPatientTests('@Url.Action("PatientTests", "OutPatient")/?enmrNo=" + data + "')><i class='fa fa-flask'></i></a>";
-                    },
+                            return "@if (ViewContext.Controller.HasPermission("OutPatient-AddModify"))
+                            {<a class='btn btn-default btn-sm' title='Edit' onclick=PopupForm('@Url.Action("AddModify","OutPatient")/?enmrNo=" + data + "')><i class='fa fa-pencil-alt'></i></a>}"
+                                + "@if (ViewContext.Controller.HasPermission("OutPatient-ViewPatient")){
+                                    <a class='btn btn-info btn-sm' title = 'View Patient' style = 'margin-left:5px' onclick = PopupViewPatient('@Url.Action("ViewPatient", "OutPatient")/?enmrNo=" + data + "')><i class='fa fa-info-circle'></i></a>}"
+                                + "@if (ViewContext.Controller.HasPermission("OutPatient-NewVisit")){
+                                    <a class='btn btn-primary btn-sm' title='Consultation' style='margin-left:5px' onclick=PopupNewVisit('@Url.Action("NewVisit", "OutPatient")/?enmrNo=" + data + "')> <i class='fa fa-calendar'></i></a>}"
+                                + "@if (ViewContext.Controller.HasPermission("OutPatient-OPPrescription")){
+                                    <a class='btn btn-primary btn-sm' title='Prescription' style='margin-left:5px' onclick=PopupPrescription('@Url.Action("OPPrescription", "OutPatient")/?enmrNo=" + data + "')><i class='fa fa-prescription'></i></a>}"
+                                + "@if (ViewContext.Controller.HasPermission("OutPatient-DeliverPrescription")){
+                                    <a class='btn btn-primary btn-sm' title='Deliver Prescription' style='margin-left:5px' onclick=PopupDeliverPrescription('@Url.Action("DeliverPrescription", "OutPatient")/?enmrNo=" + data + "')><i class='fa fa-prescription-bottle-alt'></i></a>}"
+                                + "@if (ViewContext.Controller.HasPermission("OutPatient-ConvertOpToIp")){
+                                    <a class='btn btn-primary btn-sm' title='Admit as IP' style='margin-left:5px' onclick=ConvertOpToIp(" + JSON.stringify(data) + ")><i class='fa fa-hospital'></i></a>}"
+                                + "@if (ViewContext.Controller.HasPermission("OutPatient-ManualDrugRequest")){
+                                    <a class='btn btn-primary btn-sm' title='Manual Drug Request' style='margin-left:5px' onclick=PopupMDRForm('@Url.Action("ManualDrugRequest", "OutPatient")/?enmrNo=" + data + "')><i class='fa fa-capsules'></i></a>}"
+                                + "@if (ViewContext.Controller.HasPermission("OutPatient-PatientTests")){
+                                    <a class='btn btn-primary btn-sm' title='Lab' style='margin-left:5px' onclick=PopupPatientTests('@Url.Action("PatientTests", "OutPatient")/?enmrNo=" + data + "')><i class='fa fa-flask'></i></a>}";
+                                },
                         "orderable": false,
                         "searchable": false
 
                     }
                 ],
-                "order": [[7, "desc"], [0, "desc"]],
+                "order": [[0, "desc"]],
                 "language": {
                     "emptyTable" : "No data found, Please click on <b>Add New</b> Button"
                 }

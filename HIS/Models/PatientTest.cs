@@ -29,5 +29,8 @@ namespace HIS
         [Display(Name = "Prescribed Doctor")]
         public string PrescribedDoctor { get; set; }
         public int SNO { get; set; }
+
+        [RegularExpression(@"([a-zA-Z0-9\s_\\.\-:])+(.pdf|.docx|.doc)$", ErrorMessage = "Only pdf/doc/docx files allowed.")]
+        public HttpPostedFileBase ReportPath { get; set; }
     }
 }

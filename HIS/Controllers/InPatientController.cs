@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using System.Data.Entity;
 using HIS.Action_Filters;
 
+using System.ComponentModel;
 
 
 namespace HIS.Controllers
@@ -15,6 +16,7 @@ namespace HIS.Controllers
     {
         // GET: InPatient
         [His]
+        [Description(" - Inpatient View page.")]
         public ActionResult Index()
         {
             return View();
@@ -83,6 +85,7 @@ namespace HIS.Controllers
         }
 
         [HttpGet]
+        [Description(" - Inpatient Add/Edit page.")]
         public ActionResult AddModify(int id = 0)
         {
             List<BloodGroup> BloodGroups = GetBloodGroups();
@@ -158,6 +161,7 @@ namespace HIS.Controllers
         }
 
         [HttpGet]
+        [Description(" -  Inpatient Fee details page.")]
         public ActionResult Fee(int id = 0)
         {
             string enmrNo = string.Empty;
@@ -229,6 +233,7 @@ namespace HIS.Controllers
         }
 
         [HttpGet]
+        [Description(" -  Inpatient Observations page.")]
         public ActionResult Observations(int id = 0)
         {
             string enmrNo = string.Empty;
@@ -259,6 +264,7 @@ namespace HIS.Controllers
         }
 
         [HttpGet]
+        [Description(" -  Inpatient Bedallocation page.")]
         public ActionResult BedAllocation(int id)
         {
             return View(GetPatientBedDetails(id));

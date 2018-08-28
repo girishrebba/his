@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using System.Data.Entity;
 using HIS.HtmlHelpers;
 using HIS.Action_Filters;
+using System.ComponentModel;
 
 namespace HIS.Controllers
 {
@@ -14,6 +15,7 @@ namespace HIS.Controllers
     {
         // GET: ConsultationFee
         [His]
+        [Description(" - Consultation Fee View page.")]
         public ActionResult Index()
         {
             return View();
@@ -45,6 +47,7 @@ namespace HIS.Controllers
         }
 
         [HttpGet]
+        [Description(" - Consultation Fee Add/Edit page.")]
         public ActionResult AddModify(int id = 0)
         {
             List<User> Users = HtmlHelpers.HtmlHelpers.GetUsers();
@@ -118,6 +121,7 @@ namespace HIS.Controllers
         }
 
         [HttpPost]
+        [Description(" - Consultation delete page.")]
         public ActionResult Delete(int id)
         {
             using (HISDBEntities db = new HISDBEntities())

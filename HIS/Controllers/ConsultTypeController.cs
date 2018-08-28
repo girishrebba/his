@@ -5,12 +5,16 @@ using System.Web;
 using System.Web.Mvc;
 using System.Data.Entity;
 using HIS.Action_Filters;
+using System.ComponentModel;
 
 namespace HIS.Controllers
 {
+    [SessionActionFilter]
     public class ConsultTypeController : Controller
     {
         // GET: ConsultType
+        [His]
+        [Description(" - ConsultType View page.")]
         public ActionResult Index()
         {
             return View();
@@ -28,6 +32,7 @@ namespace HIS.Controllers
         }
 
         [HttpGet]
+        [Description(" - ConsultType Add/Edit page.")]
         public ActionResult AddModify(int id = 0)
         {
             if (id == 0)
@@ -62,6 +67,7 @@ namespace HIS.Controllers
         }
 
         [HttpPost]
+        [Description(" - ConsultType Delete page.")]
         public ActionResult Delete(int id)
         {
             using (HISDBEntities db = new HISDBEntities())

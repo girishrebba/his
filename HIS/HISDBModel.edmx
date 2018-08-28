@@ -251,6 +251,7 @@
           <Property Name="Permission_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="PermissionDescription" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="PermissionStatus" Type="bit" Nullable="false" />
+          <Property Name="Toottip" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="PrescriptionMaster">
           <Key>
@@ -1175,7 +1176,6 @@
             <End Role="User" EntitySet="Users" />
             <End Role="PatientTest" EntitySet="PatientTests" />
           </AssociationSet>
-          <EntitySet Name="Permissions" EntityType="HISModel.Permission" />
           <EntitySet Name="PatientPrescriptions" EntityType="HISModel.PatientPrescription" />
           <EntitySet Name="PrescriptionMasters" EntityType="HISModel.PrescriptionMaster" />
           <AssociationSet Name="FK_PP_FrequencyID" Association="HISModel.FK_PP_FrequencyID">
@@ -1200,6 +1200,7 @@
             <Parameter Name="VisitID" Mode="In" Type="Int32" />
             <Parameter Name="PMID" Mode="InOut" Type="Int32" />
           </FunctionImport>
+          <EntitySet Name="Permissions" EntityType="HISModel.Permission" />
         </EntityContainer>
         <EntityType Name="InPatient">
           <Key>
@@ -1664,14 +1665,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="Permission">
-          <Key>
-            <PropertyRef Name="Permission_Id" />
-          </Key>
-          <Property Name="Permission_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="PermissionDescription" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="PermissionStatus" Type="Boolean" Nullable="false" />
-        </EntityType>
         <EntityType Name="PatientPrescription">
           <Key>
             <PropertyRef Name="PTID" />
@@ -1752,6 +1745,15 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Permission">
+          <Key>
+            <PropertyRef Name="Permission_Id" />
+          </Key>
+          <Property Name="Permission_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PermissionDescription" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PermissionStatus" Type="Boolean" Nullable="false" />
+          <Property Name="Toottip" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2094,15 +2096,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Permissions">
-            <EntityTypeMapping TypeName="HISModel.Permission">
-              <MappingFragment StoreEntitySet="Permissions">
-                <ScalarProperty Name="PermissionStatus" ColumnName="PermissionStatus" />
-                <ScalarProperty Name="PermissionDescription" ColumnName="PermissionDescription" />
-                <ScalarProperty Name="Permission_Id" ColumnName="Permission_Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="PatientPrescriptions">
             <EntityTypeMapping TypeName="HISModel.PatientPrescription">
               <MappingFragment StoreEntitySet="PatientPrescription">
@@ -2133,6 +2126,16 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="CreateMasterPrescription" FunctionName="HISModel.Store.CreateMasterPrescription" />
+          <EntitySetMapping Name="Permissions">
+            <EntityTypeMapping TypeName="HISModel.Permission">
+              <MappingFragment StoreEntitySet="Permissions">
+                <ScalarProperty Name="Toottip" ColumnName="Toottip" />
+                <ScalarProperty Name="PermissionStatus" ColumnName="PermissionStatus" />
+                <ScalarProperty Name="PermissionDescription" ColumnName="PermissionDescription" />
+                <ScalarProperty Name="Permission_Id" ColumnName="Permission_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

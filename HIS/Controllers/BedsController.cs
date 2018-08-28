@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using System.Data.Entity;
 using System.Data.Entity.Validation;
 using HIS.Action_Filters;
+using System.ComponentModel;
 
 namespace HIS.Controllers
 {
@@ -14,13 +15,14 @@ namespace HIS.Controllers
     {
         // GET: Beds
         [His]
+        [Description(" -  - Beds master view permission.")]
         public ActionResult Index()
         {
             return View();
         }
 
 
-        public ActionResult GetBeds()
+        public JsonResult GetBeds()
         {
             using (HISDBEntities hs = new HISDBEntities())
             {
@@ -45,6 +47,7 @@ namespace HIS.Controllers
         }
 
         [HttpGet]
+        [Description(" -  - Beds master Add/Edit permission.")]
         public ActionResult AddModify(int id = 0)
         {
             using (HISDBEntities dc = new HISDBEntities())
@@ -76,6 +79,7 @@ namespace HIS.Controllers
         }
 
         [HttpPost]
+        [Description(" -  - Beds master Add/Edit permission.")]
         public ActionResult AddModify(Bed b)
         {
             using (HISDBEntities db = new HISDBEntities())
@@ -113,6 +117,7 @@ namespace HIS.Controllers
         }
 
         [HttpPost]
+        [Description(" -  - Beds master delete permission.")]
         public ActionResult Delete(int id)
         {
             using (HISDBEntities db = new HISDBEntities())

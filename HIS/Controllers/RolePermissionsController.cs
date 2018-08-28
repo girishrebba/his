@@ -7,11 +7,11 @@ using HIS.Action_Filters;
 
 namespace HIS.Controllers
 {
-    [SessionActionFilter]
+    //[SessionActionFilter]
     public class RolePermissionsController : Controller
     {
         // GET: RolePermissions
-        [His]
+        //[His]
         public ActionResult Index()
         {
             return View();
@@ -39,7 +39,7 @@ namespace HIS.Controllers
                              orderby bg.UserTypeID
                              select new { bg.UserTypeID, bg.UserTypeName }).ToList();
 
-                var per = (from bg in hs.Permissions
+                var per = (from bg in hs.Permissions orderby bg.PermissionDescription
                            select bg).ToList();
 
                 ////var userper = (from bg in hs.UserPermissions

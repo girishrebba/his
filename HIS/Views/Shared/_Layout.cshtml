@@ -250,6 +250,16 @@
     <script src="~/Scripts/moment.js"></script>
     <script src="~/light/js/plugins/datepicker/bootstrap-datepicker.js"></script>
     <script src="~/Scripts/chosen.jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#tabs a').click(function () {
+                //Removes the active class from any <li> elements
+                $('#tabs li.active').removeClass('active');
+                //Adds it to the current element
+                $(this).parent('li').addClass('active');
+            });
+        });
+    </script>
     @RenderSection("scripts", required: false)
 </body>
 </html>
