@@ -8,6 +8,8 @@ namespace HIS
 {
     public partial class PatientPrescription
     {
+        public string ENMRNO { get; set; }
+        public int VisitID { get; set; }
         public string MedicineWithDose { get; set; }
         public string DateDisplay { get; set; }
         public string IntakeDisplay { get; set; }
@@ -17,6 +19,8 @@ namespace HIS
         public decimal TotalCost { get; set; }
         public List<TestType> TestTypes { get; set; }
         public string[] TestIds { get; set; }
+        public decimal Discount { get; set; }
+        public decimal PaidAmount { get; set; }
     }
 
     public class PPMetaData

@@ -1157,6 +1157,9 @@
     <Compile Include="Permission.cs">
       <DependentUpon>HISDBModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="PrescriptionMaster.cs">
+      <DependentUpon>HISDBModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PurchaseOrder.cs">
       <DependentUpon>HISDBModel.tt</DependentUpon>

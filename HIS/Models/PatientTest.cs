@@ -17,12 +17,12 @@ namespace HIS
 
     public class PatientTestMetaData
     {
-        [Required(ErrorMessage = "Test Name is required", AllowEmptyStrings = false)]
-        [Display(Name = "Test Name")]
+        //[Required(ErrorMessage = "Test Name is required", AllowEmptyStrings = false)]
+        //[Display(Name = "Test Name")]
         public string TestName { get; set; }
 
-        [Required(ErrorMessage = "Test Date is required", AllowEmptyStrings = false)]
-        [Display(Name = "Test Date")]
+        //[Required(ErrorMessage = "Test Date is required", AllowEmptyStrings = false)]
+        //[Display(Name = "Test Date")]
         public string TestDate { get; set; }
 
         [Required(ErrorMessage = "Prescribed Doctor is required", AllowEmptyStrings = false)]

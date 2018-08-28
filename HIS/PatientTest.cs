@@ -23,6 +23,8 @@ namespace HIS
         public string TestImpression { get; set; }
         public string ReportPath { get; set; }
         public Nullable<int> VisitID { get; set; }
+        public Nullable<decimal> Discount { get; set; }
+        public Nullable<decimal> PaidAmunt { get; set; }
     
         public virtual TestType TestType { get; set; }
         public virtual User User { get; set; }

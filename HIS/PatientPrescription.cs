@@ -14,22 +14,18 @@ namespace HIS
     
     public partial class PatientPrescription
     {
-        public int PrescriptionID { get; set; }
-        public string ENMRNO { get; set; }
         public int MedicineID { get; set; }
         public int Quantity { get; set; }
         public int IntakeFrequencyID { get; set; }
         public string Comments { get; set; }
-        public int PrescribedBy { get; set; }
-        public Nullable<System.DateTime> DatePrescribed { get; set; }
         public string BatchNo { get; set; }
         public string LotNo { get; set; }
-        public Nullable<int> VisitID { get; set; }
-        public Nullable<bool> IsDelivered { get; set; }
         public Nullable<int> DeliverQty { get; set; }
+        public int PTID { get; set; }
+        public int PMID { get; set; }
     
         public virtual IntakeFrequency IntakeFrequency { get; set; }
         public virtual MedicineMaster MedicineMaster { get; set; }
-        public virtual User User { get; set; }
+        public virtual PrescriptionMaster PrescriptionMaster { get; set; }
     }
 }

@@ -44,10 +44,6 @@
         <AssociationConnector Association="HISModel.FK_PO_MedicineID" />
         <EntityTypeShape EntityType="HISModel.PatientRoomAllocation" Width="1.5" PointX="18.625" PointY="5.125" />
         <AssociationConnector Association="HISModel.FK_PRA_InPatients_ENMRNO" />
-        <EntityTypeShape EntityType="HISModel.PatientPrescription" Width="1.5" PointX="13.5" PointY="8.875" />
-        <AssociationConnector Association="HISModel.FK_PP_FrequencyID" />
-        <AssociationConnector Association="HISModel.FK_PP_Medicine" />
-        <AssociationConnector Association="HISModel.FK_PP_Doctor" />
         <EntityTypeShape EntityType="HISModel.BedType" Width="1.5" PointX="5.75" PointY="0.75" />
         <EntityTypeShape EntityType="HISModel.RoomType" Width="1.5" PointX="0.75" PointY="3.75" />
         <EntityTypeShape EntityType="HISModel.Room" Width="1.5" PointX="13.375" PointY="1" />
@@ -56,6 +52,12 @@
         <EntityTypeShape EntityType="HISModel.Bed" Width="1.5" PointX="15.625" PointY="1.25" />
         <AssociationConnector Association="HISModel.FK_Beds_RoomNo" />
         <EntityTypeShape EntityType="HISModel.Permission" Width="1.5" PointX="5.375" PointY="3.75" />
+        <EntityTypeShape EntityType="HISModel.PatientPrescription" Width="1.5" PointX="13.5" PointY="9.375" />
+        <EntityTypeShape EntityType="HISModel.PrescriptionMaster" Width="1.5" PointX="5.25" PointY="13.125" />
+        <AssociationConnector Association="HISModel.FK_PP_FrequencyID" />
+        <AssociationConnector Association="HISModel.FK_PP_Medicine" />
+        <AssociationConnector Association="HISModel.FK_PM_Doctor" />
+        <AssociationConnector Association="HISModel.FK_PP_PMID" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

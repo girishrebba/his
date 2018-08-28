@@ -39,7 +39,7 @@
                             <tr>
                                 <th>ENMRNO</th>
                                 <th>Name</th>
-                                <th>DOB</th>
+                                @*<th>DOB</th>*@
                                 <th>Gender</th>
                                 <th>Phone</th>
                                 <th>Doctor</th>
@@ -67,7 +67,7 @@
                 "columns": [
                     { "data": "ENMRNO" },
                     { "data": "Name" },
-                    { "data": "DOBDisplay" },
+                    //{ "data": "DOBDisplay" },
                     { "data": "GenderDisplay" },
                     { "data": "Phone" },
                     { "data": "DoctorName" },
@@ -213,9 +213,9 @@
                         resizable: false,
                         modal: true,
                         title: 'Manual Drug Request',
-                        width: 850,
+                        width: '65%',
                         close: function () {
-                            newPP.dialog('destroy').remove();
+                            MDRpopup.dialog('destroy').remove();
                         },
                         open: function (event, ui) {
                             $('.ui-dialog-content').css('overflow', 'hidden');
@@ -333,9 +333,11 @@
 
         function SubmitDeliverPrescriptionForm(form) {
             var prescriptions = [];
-
             var enmrNo = $('#ENMRNO').val();
             var visitID = $('#VisitID').val();
+            var discount = $('#Discount').val();
+            var amountToBePaid = $('#paidAmount').html();
+            var PmID = $('#PMID').val();
             $(form).find('#ppTable > tbody tr').each(function (index, elem) {
                 var tbl = {};
                 tbl.ENMRNO = enmrNo;
@@ -344,6 +346,9 @@
                 tbl.DeliverQty = $($(this).find('td:eq(4)')).find('.deliverQty').val();
                 tbl.BatchNo = $($(this).find('td:eq(8)')).find('.batchNo').val();
                 tbl.LotNo = $($(this).find('td:eq(9)')).find('.lotNo').val();
+                tbl.Discount = discount;
+                tbl.PaidAmount = amountToBePaid;
+                tbl.PMID = PmID;
                 prescriptions.push(tbl);
             });
             $.ajax({
@@ -388,22 +393,26 @@
 
         function SubmitMDRForm(form) {
             var mdrRequest = [];
-            $('#MedicineWithDose').rules('remove', 'required');
-            $('#Quantity').rules('remove', 'required');
-            $('#PrescribedBy').rules('remove', 'required');
+            $.validator.setDefaults({
+                ignore: []
+            });
             var enmrNo = $('#ENMRNO').val();
             var doctorID = $('#DoctorID').val();
-            $(form).find('#mdrTable > tbody tr').each(function (index, elem) {
+            var discount = $('#Discount').val();
+            var amountPaid = $('#paidAmount').html();
+            $(form).find('#mdrTable > tbody tr').not(':first').each(function (index, elem) {
                 var tbl = {};
                 tbl.ENMRNO = enmrNo;
                 tbl.DoctorID = doctorID,
                 tbl.IsDelivered = true,
                 tbl.VisitID = 0;
                 tbl.MedicineID = $($(this).find('td:eq(0)')).html();
-                tbl.DeliverQty = $($(this).find('td:eq(1)')).html();
-                tbl.Quantity = $($(this).find('td:eq(1)')).html();
-                tbl.BatchNo = $($(this).find('td:eq(8)')).find('.batchNo').val();
-                tbl.LotNo = $($(this).find('td:eq(9)')).find('.lotNo').val();
+                tbl.DeliverQty = $($(this).find('td:eq(2)')).html();
+                tbl.Quantity = $($(this).find('td:eq(2)')).html();
+                tbl.BatchNo = $($(this).find('td:eq(4)')).html();
+                tbl.LotNo = $($(this).find('td:eq(5)')).html();
+                tbl.Discount = discount;
+                tbl.PaidAmount = amountPaid;
                 mdrRequest.push(tbl);
             });
             $.ajax({
@@ -413,7 +422,7 @@
                 data: JSON.stringify(mdrRequest),
                 success: function (data) {
                     if (data.success) {
-                        deliverPopUp.dialog('close');
+                        MDRpopup.dialog('close');
                         dataTable.ajax.reload();
                         $.notify(data.message, {
                             globalPosition: "top center",

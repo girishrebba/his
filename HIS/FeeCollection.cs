@@ -20,6 +20,7 @@ namespace HIS
         public System.DateTime PaidOn { get; set; }
         public string Purpose { get; set; }
         public string PaymentMode { get; set; }
+        public string LastFourDigits { get; set; }
     
         public virtual InPatient InPatient { get; set; }
     }

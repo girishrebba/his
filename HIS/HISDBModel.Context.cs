@@ -45,7 +45,6 @@ namespace HIS
         public virtual DbSet<MedicineMaster> MedicineMasters { get; set; }
         public virtual DbSet<PurchaseOrder> PurchaseOrders { get; set; }
         public virtual DbSet<PatientRoomAllocation> PatientRoomAllocations { get; set; }
-        public virtual DbSet<PatientPrescription> PatientPrescriptions { get; set; }
         public virtual DbSet<BedType> BedTypes { get; set; }
         public virtual DbSet<RoomType> RoomTypes { get; set; }
         public virtual DbSet<Room> Rooms { get; set; }
@@ -54,6 +53,8 @@ namespace HIS
         public virtual DbSet<PatientTest> PatientTests { get; set; }
         public virtual DbSet<TestType> TestTypes { get; set; }
         public virtual DbSet<Permission> Permissions { get; set; }
+        public virtual DbSet<PatientPrescription> PatientPrescriptions { get; set; }
+        public virtual DbSet<PrescriptionMaster> PrescriptionMasters { get; set; }
     
         public virtual int ConvertOutPatientToInPatient(string eNMRNO)
         {
@@ -71,6 +72,23 @@ namespace HIS
                 new ObjectParameter("ENMRNO", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ConvertOutPatientToInPatient1", eNMRNOParameter);
+        }
+    
+        public virtual int CreateMasterPrescription(string eNMRNO, Nullable<int> doctorID, Nullable<int> visitID, ObjectParameter pMID)
+        {
+            var eNMRNOParameter = eNMRNO != null ?
+                new ObjectParameter("ENMRNO", eNMRNO) :
+                new ObjectParameter("ENMRNO", typeof(string));
+    
+            var doctorIDParameter = doctorID.HasValue ?
+                new ObjectParameter("DoctorID", doctorID) :
+                new ObjectParameter("DoctorID", typeof(int));
+    
+            var visitIDParameter = visitID.HasValue ?
+                new ObjectParameter("VisitID", visitID) :
+                new ObjectParameter("VisitID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("CreateMasterPrescription", eNMRNOParameter, doctorIDParameter, visitIDParameter, pMID);
         }
     }
 }

@@ -73,6 +73,7 @@
           <Property Name="PaidOn" Type="datetime" Nullable="false" />
           <Property Name="Purpose" Type="varchar" MaxLength="300" />
           <Property Name="PaymentMode" Type="varchar" MaxLength="300" />
+          <Property Name="LastFourDigits" Type="varchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="InPatientHistory">
           <Key>
@@ -190,20 +191,16 @@
         </EntityType>
         <EntityType Name="PatientPrescription">
           <Key>
-            <PropertyRef Name="PrescriptionID" />
+            <PropertyRef Name="PTID" />
           </Key>
-          <Property Name="PrescriptionID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="ENMRNO" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="PTID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PMID" Type="int" Nullable="false" />
           <Property Name="MedicineID" Type="int" Nullable="false" />
           <Property Name="Quantity" Type="int" Nullable="false" />
           <Property Name="IntakeFrequencyID" Type="int" Nullable="false" />
           <Property Name="Comments" Type="varchar(max)" />
-          <Property Name="PrescribedBy" Type="int" Nullable="false" />
-          <Property Name="DatePrescribed" Type="date" />
           <Property Name="BatchNo" Type="varchar" MaxLength="30" />
           <Property Name="LotNo" Type="varchar" MaxLength="30" />
-          <Property Name="VisitID" Type="int" />
-          <Property Name="IsDelivered" Type="bit" />
           <Property Name="DeliverQty" Type="int" />
         </EntityType>
         <EntityType Name="PatientRoomAllocation">
@@ -232,6 +229,8 @@
           <Property Name="RecordedValues" Type="decimal" Precision="18" Scale="0" />
           <Property Name="TestImpression" Type="nvarchar(max)" />
           <Property Name="ReportPath" Type="nvarchar" MaxLength="200" />
+          <Property Name="Discount" Type="decimal" Precision="4" Scale="2" />
+          <Property Name="PaidAmunt" Type="money" />
         </EntityType>
         <EntityType Name="PatientVisitHistory">
           <Key>
@@ -252,6 +251,19 @@
           <Property Name="Permission_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="PermissionDescription" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="PermissionStatus" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PrescriptionMaster">
+          <Key>
+            <PropertyRef Name="PMID" />
+          </Key>
+          <Property Name="PMID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ENMRNO" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="PrescribedBy" Type="int" Nullable="false" />
+          <Property Name="DatePrescribed" Type="date" />
+          <Property Name="VisitID" Type="int" />
+          <Property Name="IsDelivered" Type="bit" />
+          <Property Name="Discount" Type="decimal" Precision="4" Scale="2" />
+          <Property Name="PaidAmount" Type="money" />
         </EntityType>
         <EntityType Name="PurchaseOrder">
           <Key>
@@ -543,6 +555,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_PM_Doctor">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="PrescriptionMaster" Type="Self.PrescriptionMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="PrescriptionMaster">
+              <PropertyRef Name="PrescribedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_PO_MedicineID">
           <End Role="MedicineMaster" Type="Self.MedicineMaster" Multiplicity="1" />
           <End Role="PurchaseOrder" Type="Self.PurchaseOrder" Multiplicity="*" />
@@ -552,18 +576,6 @@
             </Principal>
             <Dependent Role="PurchaseOrder">
               <PropertyRef Name="MedicineID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_PP_Doctor">
-          <End Role="Users" Type="Self.Users" Multiplicity="1" />
-          <End Role="PatientPrescription" Type="Self.PatientPrescription" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Users">
-              <PropertyRef Name="UserID" />
-            </Principal>
-            <Dependent Role="PatientPrescription">
-              <PropertyRef Name="PrescribedBy" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -588,6 +600,18 @@
             </Principal>
             <Dependent Role="PatientPrescription">
               <PropertyRef Name="MedicineID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PP_PMID">
+          <End Role="PrescriptionMaster" Type="Self.PrescriptionMaster" Multiplicity="1" />
+          <End Role="PatientPrescription" Type="Self.PatientPrescription" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PrescriptionMaster">
+              <PropertyRef Name="PMID" />
+            </Principal>
+            <Dependent Role="PatientPrescription">
+              <PropertyRef Name="PMID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -666,6 +690,12 @@
         <Function Name="ConvertOutPatientToInPatient" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ENMRNO" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="CreateMasterPrescription" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ENMRNO" Type="varchar" Mode="In" />
+          <Parameter Name="DoctorID" Type="int" Mode="In" />
+          <Parameter Name="VisitID" Type="int" Mode="In" />
+          <Parameter Name="PMID" Type="int" Mode="InOut" />
+        </Function>
         <EntityContainer Name="HISModelStoreContainer">
           <EntitySet Name="Beds" EntityType="Self.Beds" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BedType" EntityType="Self.BedType" Schema="dbo" store:Type="Tables" />
@@ -686,6 +716,7 @@
           <EntitySet Name="PatientTests" EntityType="Self.PatientTests" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PatientVisitHistory" EntityType="Self.PatientVisitHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Permissions" EntityType="Self.Permissions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PrescriptionMaster" EntityType="Self.PrescriptionMaster" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PurchaseOrder" EntityType="Self.PurchaseOrder" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Rooms" EntityType="Self.Rooms" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RoomType" EntityType="Self.RoomType" Schema="dbo" store:Type="Tables" />
@@ -762,13 +793,13 @@
             <End Role="Users" EntitySet="Users" />
             <End Role="PatientVisitHistory" EntitySet="PatientVisitHistory" />
           </AssociationSet>
+          <AssociationSet Name="FK_PM_Doctor" Association="Self.FK_PM_Doctor">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="PrescriptionMaster" EntitySet="PrescriptionMaster" />
+          </AssociationSet>
           <AssociationSet Name="FK_PO_MedicineID" Association="Self.FK_PO_MedicineID">
             <End Role="MedicineMaster" EntitySet="MedicineMaster" />
             <End Role="PurchaseOrder" EntitySet="PurchaseOrder" />
-          </AssociationSet>
-          <AssociationSet Name="FK_PP_Doctor" Association="Self.FK_PP_Doctor">
-            <End Role="Users" EntitySet="Users" />
-            <End Role="PatientPrescription" EntitySet="PatientPrescription" />
           </AssociationSet>
           <AssociationSet Name="FK_PP_FrequencyID" Association="Self.FK_PP_FrequencyID">
             <End Role="IntakeFrequency" EntitySet="IntakeFrequency" />
@@ -776,6 +807,10 @@
           </AssociationSet>
           <AssociationSet Name="FK_PP_Medicine" Association="Self.FK_PP_Medicine">
             <End Role="MedicineMaster" EntitySet="MedicineMaster" />
+            <End Role="PatientPrescription" EntitySet="PatientPrescription" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PP_PMID" Association="Self.FK_PP_PMID">
+            <End Role="PrescriptionMaster" EntitySet="PrescriptionMaster" />
             <End Role="PatientPrescription" EntitySet="PatientPrescription" />
           </AssociationSet>
           <AssociationSet Name="FK_PRA_InPatients_ENMRNO" Association="Self.FK_PRA_InPatients_ENMRNO">
@@ -925,8 +960,8 @@
           <NavigationProperty Name="OutPatients" Relationship="HISModel.FK_OutPatients_Doctor" FromRole="User" ToRole="OutPatient" />
           <NavigationProperty Name="InPatientHistories" Relationship="HISModel.FK_InPatientHistory_Doctor" FromRole="User" ToRole="InPatientHistory" />
           <NavigationProperty Name="PatientVisitHistories" Relationship="HISModel.FK_PatientVisitHistory_Doctor" FromRole="User" ToRole="PatientVisitHistory" />
-          <NavigationProperty Name="PatientPrescriptions" Relationship="HISModel.FK_PP_Doctor" FromRole="User" ToRole="PatientPrescription" />
           <NavigationProperty Name="PatientTests" Relationship="HISModel.FK_PatientTests_UserID" FromRole="User" ToRole="PatientTest" />
+          <NavigationProperty Name="PrescriptionMasters" Relationship="HISModel.FK_PM_Doctor" FromRole="User" ToRole="PrescriptionMaster" />
         </EntityType>
         <EntityType Name="UserType">
           <Key>
@@ -1114,19 +1149,6 @@
             <End Role="InPatient" EntitySet="InPatients" />
             <End Role="PatientRoomAllocation" EntitySet="PatientRoomAllocations" />
           </AssociationSet>
-          <EntitySet Name="PatientPrescriptions" EntityType="HISModel.PatientPrescription" />
-          <AssociationSet Name="FK_PP_FrequencyID" Association="HISModel.FK_PP_FrequencyID">
-            <End Role="IntakeFrequency" EntitySet="IntakeFrequencies" />
-            <End Role="PatientPrescription" EntitySet="PatientPrescriptions" />
-          </AssociationSet>
-          <AssociationSet Name="FK_PP_Medicine" Association="HISModel.FK_PP_Medicine">
-            <End Role="MedicineMaster" EntitySet="MedicineMasters" />
-            <End Role="PatientPrescription" EntitySet="PatientPrescriptions" />
-          </AssociationSet>
-          <AssociationSet Name="FK_PP_Doctor" Association="HISModel.FK_PP_Doctor">
-            <End Role="User" EntitySet="Users" />
-            <End Role="PatientPrescription" EntitySet="PatientPrescriptions" />
-          </AssociationSet>
           <EntitySet Name="BedTypes" EntityType="HISModel.BedType" />
           <EntitySet Name="RoomTypes" EntityType="HISModel.RoomType" />
           <EntitySet Name="Rooms" EntityType="HISModel.Room" />
@@ -1154,6 +1176,30 @@
             <End Role="PatientTest" EntitySet="PatientTests" />
           </AssociationSet>
           <EntitySet Name="Permissions" EntityType="HISModel.Permission" />
+          <EntitySet Name="PatientPrescriptions" EntityType="HISModel.PatientPrescription" />
+          <EntitySet Name="PrescriptionMasters" EntityType="HISModel.PrescriptionMaster" />
+          <AssociationSet Name="FK_PP_FrequencyID" Association="HISModel.FK_PP_FrequencyID">
+            <End Role="IntakeFrequency" EntitySet="IntakeFrequencies" />
+            <End Role="PatientPrescription" EntitySet="PatientPrescriptions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PP_Medicine" Association="HISModel.FK_PP_Medicine">
+            <End Role="MedicineMaster" EntitySet="MedicineMasters" />
+            <End Role="PatientPrescription" EntitySet="PatientPrescriptions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PM_Doctor" Association="HISModel.FK_PM_Doctor">
+            <End Role="User" EntitySet="Users" />
+            <End Role="PrescriptionMaster" EntitySet="PrescriptionMasters" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PP_PMID" Association="HISModel.FK_PP_PMID">
+            <End Role="PrescriptionMaster" EntitySet="PrescriptionMasters" />
+            <End Role="PatientPrescription" EntitySet="PatientPrescriptions" />
+          </AssociationSet>
+          <FunctionImport Name="CreateMasterPrescription">
+            <Parameter Name="ENMRNO" Mode="In" Type="String" />
+            <Parameter Name="DoctorID" Mode="In" Type="Int32" />
+            <Parameter Name="VisitID" Mode="In" Type="Int32" />
+            <Parameter Name="PMID" Mode="InOut" Type="Int32" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="InPatient">
           <Key>
@@ -1325,6 +1371,7 @@
           <Property Name="Purpose" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
           <Property Name="PaymentMode" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="InPatient" Relationship="HISModel.FK_FeeCollection_ENMRNO" FromRole="FeeCollection" ToRole="InPatient" />
+          <Property Name="LastFourDigits" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
         </EntityType>
         <Association Name="FK_FeeCollection_ENMRNO">
           <End Type="HISModel.InPatient" Role="InPatient" Multiplicity="1" />
@@ -1491,63 +1538,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="PatientPrescription">
-          <Key>
-            <PropertyRef Name="PrescriptionID" />
-          </Key>
-          <Property Name="PrescriptionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ENMRNO" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="MedicineID" Type="Int32" Nullable="false" />
-          <Property Name="Quantity" Type="Int32" Nullable="false" />
-          <Property Name="IntakeFrequencyID" Type="Int32" Nullable="false" />
-          <Property Name="Comments" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="PrescribedBy" Type="Int32" Nullable="false" />
-          <Property Name="DatePrescribed" Type="DateTime" Precision="0" />
-          <Property Name="BatchNo" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="LotNo" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="VisitID" Type="Int32" />
-          <NavigationProperty Name="IntakeFrequency" Relationship="HISModel.FK_PP_FrequencyID" FromRole="PatientPrescription" ToRole="IntakeFrequency" />
-          <NavigationProperty Name="MedicineMaster" Relationship="HISModel.FK_PP_Medicine" FromRole="PatientPrescription" ToRole="MedicineMaster" />
-          <NavigationProperty Name="User" Relationship="HISModel.FK_PP_Doctor" FromRole="PatientPrescription" ToRole="User" />
-          <Property Name="IsDelivered" Type="Boolean" />
-          <Property Name="DeliverQty" Type="Int32" />
-        </EntityType>
-        <Association Name="FK_PP_FrequencyID">
-          <End Type="HISModel.IntakeFrequency" Role="IntakeFrequency" Multiplicity="1" />
-          <End Type="HISModel.PatientPrescription" Role="PatientPrescription" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="IntakeFrequency">
-              <PropertyRef Name="FrequencyID" />
-            </Principal>
-            <Dependent Role="PatientPrescription">
-              <PropertyRef Name="IntakeFrequencyID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_PP_Medicine">
-          <End Type="HISModel.MedicineMaster" Role="MedicineMaster" Multiplicity="1" />
-          <End Type="HISModel.PatientPrescription" Role="PatientPrescription" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="MedicineMaster">
-              <PropertyRef Name="MMID" />
-            </Principal>
-            <Dependent Role="PatientPrescription">
-              <PropertyRef Name="MedicineID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_PP_Doctor">
-          <End Type="HISModel.User" Role="User" Multiplicity="1" />
-          <End Type="HISModel.PatientPrescription" Role="PatientPrescription" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="UserID" />
-            </Principal>
-            <Dependent Role="PatientPrescription">
-              <PropertyRef Name="PrescribedBy" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="BedType">
           <Key>
             <PropertyRef Name="BedTypeID" />
@@ -1638,6 +1628,8 @@
           <NavigationProperty Name="TestType" Relationship="HISModel.FK_PatientTests_TestID" FromRole="PatientTest" ToRole="TestType" />
           <NavigationProperty Name="User" Relationship="HISModel.FK_PatientTests_UserID" FromRole="PatientTest" ToRole="User" />
           <Property Name="VisitID" Type="Int32" />
+          <Property Name="Discount" Type="Decimal" Precision="4" Scale="2" />
+          <Property Name="PaidAmunt" Type="Decimal" Precision="19" Scale="4" />
         </EntityType>
         <EntityType Name="TestType">
           <Key>
@@ -1680,6 +1672,86 @@
           <Property Name="PermissionDescription" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="PermissionStatus" Type="Boolean" Nullable="false" />
         </EntityType>
+        <EntityType Name="PatientPrescription">
+          <Key>
+            <PropertyRef Name="PTID" />
+          </Key>
+          <Property Name="MedicineID" Type="Int32" Nullable="false" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <Property Name="IntakeFrequencyID" Type="Int32" Nullable="false" />
+          <Property Name="Comments" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="BatchNo" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="LotNo" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="DeliverQty" Type="Int32" />
+          <NavigationProperty Name="IntakeFrequency" Relationship="HISModel.FK_PP_FrequencyID" FromRole="PatientPrescription" ToRole="IntakeFrequency" />
+          <NavigationProperty Name="MedicineMaster" Relationship="HISModel.FK_PP_Medicine" FromRole="PatientPrescription" ToRole="MedicineMaster" />
+          <Property Name="PTID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PMID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="PrescriptionMaster" Relationship="HISModel.FK_PP_PMID" FromRole="PatientPrescription" ToRole="PrescriptionMaster" />
+        </EntityType>
+        <EntityType Name="PrescriptionMaster">
+          <Key>
+            <PropertyRef Name="PMID" />
+          </Key>
+          <Property Name="PMID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ENMRNO" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="PrescribedBy" Type="Int32" Nullable="false" />
+          <Property Name="DatePrescribed" Type="DateTime" Precision="0" />
+          <Property Name="VisitID" Type="Int32" />
+          <Property Name="IsDelivered" Type="Boolean" />
+          <Property Name="Discount" Type="Decimal" Precision="4" Scale="2" />
+          <Property Name="PaidAmount" Type="Decimal" Precision="19" Scale="4" />
+          <NavigationProperty Name="User" Relationship="HISModel.FK_PM_Doctor" FromRole="PrescriptionMaster" ToRole="User" />
+          <NavigationProperty Name="PatientPrescriptions" Relationship="HISModel.FK_PP_PMID" FromRole="PrescriptionMaster" ToRole="PatientPrescription" />
+        </EntityType>
+        <Association Name="FK_PP_FrequencyID">
+          <End Type="HISModel.IntakeFrequency" Role="IntakeFrequency" Multiplicity="1" />
+          <End Type="HISModel.PatientPrescription" Role="PatientPrescription" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="IntakeFrequency">
+              <PropertyRef Name="FrequencyID" />
+            </Principal>
+            <Dependent Role="PatientPrescription">
+              <PropertyRef Name="IntakeFrequencyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PP_Medicine">
+          <End Type="HISModel.MedicineMaster" Role="MedicineMaster" Multiplicity="1" />
+          <End Type="HISModel.PatientPrescription" Role="PatientPrescription" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MedicineMaster">
+              <PropertyRef Name="MMID" />
+            </Principal>
+            <Dependent Role="PatientPrescription">
+              <PropertyRef Name="MedicineID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PM_Doctor">
+          <End Type="HISModel.User" Role="User" Multiplicity="1" />
+          <End Type="HISModel.PrescriptionMaster" Role="PrescriptionMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="PrescriptionMaster">
+              <PropertyRef Name="PrescribedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PP_PMID">
+          <End Type="HISModel.PrescriptionMaster" Role="PrescriptionMaster" Multiplicity="1" />
+          <End Type="HISModel.PatientPrescription" Role="PatientPrescription" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PrescriptionMaster">
+              <PropertyRef Name="PMID" />
+            </Principal>
+            <Dependent Role="PatientPrescription">
+              <PropertyRef Name="PMID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1881,6 +1953,7 @@
           <EntitySetMapping Name="FeeCollections">
             <EntityTypeMapping TypeName="HISModel.FeeCollection">
               <MappingFragment StoreEntitySet="FeeCollection">
+                <ScalarProperty Name="LastFourDigits" ColumnName="LastFourDigits" />
                 <ScalarProperty Name="PaymentMode" ColumnName="PaymentMode" />
                 <ScalarProperty Name="Purpose" ColumnName="Purpose" />
                 <ScalarProperty Name="PaidOn" ColumnName="PaidOn" />
@@ -1942,25 +2015,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="PatientPrescriptions">
-            <EntityTypeMapping TypeName="HISModel.PatientPrescription">
-              <MappingFragment StoreEntitySet="PatientPrescription">
-                <ScalarProperty Name="DeliverQty" ColumnName="DeliverQty" />
-                <ScalarProperty Name="IsDelivered" ColumnName="IsDelivered" />
-                <ScalarProperty Name="VisitID" ColumnName="VisitID" />
-                <ScalarProperty Name="LotNo" ColumnName="LotNo" />
-                <ScalarProperty Name="BatchNo" ColumnName="BatchNo" />
-                <ScalarProperty Name="DatePrescribed" ColumnName="DatePrescribed" />
-                <ScalarProperty Name="PrescribedBy" ColumnName="PrescribedBy" />
-                <ScalarProperty Name="Comments" ColumnName="Comments" />
-                <ScalarProperty Name="IntakeFrequencyID" ColumnName="IntakeFrequencyID" />
-                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-                <ScalarProperty Name="MedicineID" ColumnName="MedicineID" />
-                <ScalarProperty Name="ENMRNO" ColumnName="ENMRNO" />
-                <ScalarProperty Name="PrescriptionID" ColumnName="PrescriptionID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="BedTypes">
             <EntityTypeMapping TypeName="HISModel.BedType">
               <MappingFragment StoreEntitySet="BedType">
@@ -2017,6 +2071,8 @@
           <EntitySetMapping Name="PatientTests">
             <EntityTypeMapping TypeName="HISModel.PatientTest">
               <MappingFragment StoreEntitySet="PatientTests">
+                <ScalarProperty Name="PaidAmunt" ColumnName="PaidAmunt" />
+                <ScalarProperty Name="Discount" ColumnName="Discount" />
                 <ScalarProperty Name="VisitID" ColumnName="VisitID" />
                 <ScalarProperty Name="ReportPath" ColumnName="ReportPath" />
                 <ScalarProperty Name="TestImpression" ColumnName="TestImpression" />
@@ -2047,6 +2103,36 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="PatientPrescriptions">
+            <EntityTypeMapping TypeName="HISModel.PatientPrescription">
+              <MappingFragment StoreEntitySet="PatientPrescription">
+                <ScalarProperty Name="PMID" ColumnName="PMID" />
+                <ScalarProperty Name="PTID" ColumnName="PTID" />
+                <ScalarProperty Name="DeliverQty" ColumnName="DeliverQty" />
+                <ScalarProperty Name="LotNo" ColumnName="LotNo" />
+                <ScalarProperty Name="BatchNo" ColumnName="BatchNo" />
+                <ScalarProperty Name="Comments" ColumnName="Comments" />
+                <ScalarProperty Name="IntakeFrequencyID" ColumnName="IntakeFrequencyID" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="MedicineID" ColumnName="MedicineID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PrescriptionMasters">
+            <EntityTypeMapping TypeName="HISModel.PrescriptionMaster">
+              <MappingFragment StoreEntitySet="PrescriptionMaster">
+                <ScalarProperty Name="PaidAmount" ColumnName="PaidAmount" />
+                <ScalarProperty Name="Discount" ColumnName="Discount" />
+                <ScalarProperty Name="IsDelivered" ColumnName="IsDelivered" />
+                <ScalarProperty Name="VisitID" ColumnName="VisitID" />
+                <ScalarProperty Name="DatePrescribed" ColumnName="DatePrescribed" />
+                <ScalarProperty Name="PrescribedBy" ColumnName="PrescribedBy" />
+                <ScalarProperty Name="ENMRNO" ColumnName="ENMRNO" />
+                <ScalarProperty Name="PMID" ColumnName="PMID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="CreateMasterPrescription" FunctionName="HISModel.Store.CreateMasterPrescription" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
