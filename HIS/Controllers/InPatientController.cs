@@ -53,44 +53,44 @@ namespace HIS.Controllers
         }
 
         [HttpGet]
-        public ActionResult ViewPatient(int id)
+        public ActionResult ViewPatient(string enmrNo)
         {
-            return View(GetPatientDetails(id));           
+            return View(GetPatientDetails(enmrNo));           
         }
 
-        //Fetch Brands from database
-        public List<BloodGroup> GetBloodGroups()
-        {
-            using (HISDBEntities dc = new HISDBEntities())
-            {
-                var bloodGroups = (from bg in dc.BloodGroups
-                              select new { bg.GroupID, bg.GroupName })
-                              .OrderBy(b => b.GroupName).AsEnumerable()
-                              .Select(x => new BloodGroup { GroupID = x.GroupID, GroupName = x.GroupName }).ToList();
-                return bloodGroups;
-            }
-        }
+        ////Fetch Brands from database
+        //public List<BloodGroup> GetBloodGroups()
+        //{
+        //    using (HISDBEntities dc = new HISDBEntities())
+        //    {
+        //        var bloodGroups = (from bg in dc.BloodGroups
+        //                      select new { bg.GroupID, bg.GroupName })
+        //                      .OrderBy(b => b.GroupName).AsEnumerable()
+        //                      .Select(x => new BloodGroup { GroupID = x.GroupID, GroupName = x.GroupName }).ToList();
+        //        return bloodGroups;
+        //    }
+        //}
 
-        //Fetch Brands from database
-        public List<User> GetUsers()
-        {
-            using (HISDBEntities dc = new HISDBEntities())
-            {
-                var users = (from u in dc.Users
-                                   select new { u })
-                              .OrderBy(b => b.u.UserName).AsEnumerable()
-                              .Select(x => new User { UserID = x.u.UserID, NameDisplay = x.u.GetFullName() }).ToList();
-                return users;
-            }
-        }
+        ////Fetch Brands from database
+        //public List<User> GetUsers()
+        //{
+        //    using (HISDBEntities dc = new HISDBEntities())
+        //    {
+        //        var users = (from u in dc.Users
+        //                           select new { u })
+        //                      .OrderBy(b => b.u.UserName).AsEnumerable()
+        //                      .Select(x => new User { UserID = x.u.UserID, NameDisplay = x.u.GetFullName() }).ToList();
+        //        return users;
+        //    }
+        //}
 
         [HttpGet]
         [Description(" - Inpatient Add/Edit page.")]
-        public ActionResult AddModify(int id = 0)
+        public ActionResult AddModify(string enmrNo = null)
         {
-            List<BloodGroup> BloodGroups = GetBloodGroups();
-            List<User> Users = GetUsers();
-            if (id == 0)
+            List<BloodGroup> BloodGroups = HtmlHelpers.HtmlHelpers.GetBloodGroups();
+            List<User> Users = HtmlHelpers.HtmlHelpers.GetDoctors();
+            if (enmrNo == null)
             {
                 ViewBag.BloodGroupsList = new SelectList(BloodGroups, "GroupID", "GroupName");
                 ViewBag.Users = new SelectList(Users, "UserID", "NameDisplay");
@@ -100,7 +100,7 @@ namespace HIS.Controllers
             }
             else
             {
-                var patient = GetPatientDetails(id);
+                var patient = GetPatientDetails(enmrNo);
                 if (patient != null)
                 {
                     ViewBag.BloodGroupsList = new SelectList(BloodGroups, "GroupID", "GroupName", patient.BloodGroupID);
@@ -134,7 +134,7 @@ namespace HIS.Controllers
             }
         }
 
-        public InPatient GetPatientDetails(int id)
+        public InPatient GetPatientDetails(string enmrNo)
         {
             InPatient inPatient = null;
             using (HISDBEntities dc = new HISDBEntities())
@@ -142,7 +142,7 @@ namespace HIS.Controllers
                 var inpatient = (from ip in dc.InPatients
                          join user in dc.Users on ip.DoctorID equals user.UserID
                          join bg in dc.BloodGroups on ip.BloodGroupID equals bg.GroupID
-                         where ip.SNO.Equals(id)
+                         where ip.ENMRNO.Equals(enmrNo)
                          select new { ip, user, bg.GroupName }).FirstOrDefault();
                 if (inpatient != null)
                 {
@@ -162,11 +162,8 @@ namespace HIS.Controllers
 
         [HttpGet]
         [Description(" -  Inpatient Fee details page.")]
-        public ActionResult Fee(int id = 0)
+        public ActionResult Fee(string enmrNo = null)
         {
-            string enmrNo = string.Empty;
-            enmrNo = HtmlHelpers.HtmlHelpers.Get_IN_ENMR(id);
-            
             FeeCollection fc = new FeeCollection();
             fc.ENMRNO = enmrNo;
             //ViewBag.FeeList = feeList;
@@ -193,24 +190,29 @@ namespace HIS.Controllers
             }
         }
 
-        public ActionResult GetObservationHistory(string enmrNo)
+        public JsonResult GetObservations(string enmrNo)
+        {
+           return Json(new { data = GetObservationHistory(enmrNo) }, JsonRequestBehavior.AllowGet); 
+        }
+
+        public List<InPatientHistory> GetObservationHistory(string enmrNo)
         {
             using (HISDBEntities hs = new HISDBEntities())
             {
-               var ipHistory = (from hist in hs.InPatientHistories
-                             join ip in hs.InPatients on hist.ENMRNO equals ip.ENMRNO
-                             join u in hs.Users on hist.DoctorID equals u.UserID
-                             join ut in hs.UserTypes on u.UserTypeID equals ut.UserTypeID
-                             where ut.UserTypeName.Equals("Doctor") && hist.ENMRNO.Equals(enmrNo)
-                             select new { hist, u }).OrderByDescending(c => c.hist.ObservationDate).AsEnumerable()
-                               .Select(x => new InPatientHistory
-                               {
-                                   DateDisplay = HtmlHelpers.HtmlHelpers.DateFormat(x.hist.ObservationDate),
-                                   Observations = x.hist.Observations,
-                                   DoctorName = HtmlHelpers.HtmlHelpers.GetFullName(x.u.FirstName, x.u.MiddleName, x.u.LastName)
-                               }).ToList();
+                var ipHistory = (from hist in hs.InPatientHistories
+                                 join ip in hs.InPatients on hist.ENMRNO equals ip.ENMRNO
+                                 join u in hs.Users on hist.DoctorID equals u.UserID
+                                 join ut in hs.UserTypes on u.UserTypeID equals ut.UserTypeID
+                                 where ut.UserTypeName.Equals("Doctor") && hist.ENMRNO.Equals(enmrNo)
+                                 select new { hist, u }).OrderByDescending(c => c.hist.ObservationDate).AsEnumerable()
+                                .Select(x => new InPatientHistory
+                                {
+                                    DateDisplay = HtmlHelpers.HtmlHelpers.DateFormat(x.hist.ObservationDate),
+                                    Observations = x.hist.Observations,
+                                    DoctorName = HtmlHelpers.HtmlHelpers.GetFullName(x.u.FirstName, x.u.MiddleName, x.u.LastName)
+                                }).ToList();
 
-                return Json(new { data = ipHistory }, JsonRequestBehavior.AllowGet);
+                return ipHistory;
             }
         }
 
@@ -234,10 +236,8 @@ namespace HIS.Controllers
 
         [HttpGet]
         [Description(" -  Inpatient Observations page.")]
-        public ActionResult Observations(int id = 0)
+        public ActionResult Observations(string enmrNo = null)
         {
-            string enmrNo = string.Empty;
-            enmrNo = HtmlHelpers.HtmlHelpers.Get_IN_ENMR(id);
             List<User> Users = HtmlHelpers.HtmlHelpers.GetDoctors();
             List<InPatientHistory> ipHistory = new List<InPatientHistory>();
             InPatientHistory iph = new InPatientHistory { ENMRNO = enmrNo };
@@ -265,9 +265,9 @@ namespace HIS.Controllers
 
         [HttpGet]
         [Description(" -  Inpatient Bedallocation page.")]
-        public ActionResult BedAllocation(int id)
+        public ActionResult BedAllocation(string enmrNo)
         {
-            return View(GetPatientBedDetails(id));
+            return View(GetPatientBedDetails(enmrNo));
         }
 
         [HttpPost]
@@ -290,14 +290,13 @@ namespace HIS.Controllers
             }
         }
 
-        public PatientRoomAllocation GetPatientBedDetails(int id)
+        public PatientRoomAllocation GetPatientBedDetails(string enmrNo)
         {
             PatientRoomAllocation roomalloc = new PatientRoomAllocation();
             using (HISDBEntities dc = new HISDBEntities())
             {
-                var enmrno = (from e in dc.InPatients where e.SNO == id select e.ENMRNO).FirstOrDefault();
                 var roomallocation = (from pra in dc.PatientRoomAllocations
-                                      where pra.ENMRNO.Equals(enmrno)
+                                      where pra.ENMRNO.Equals(enmrNo)
                                       select new { pra }).FirstOrDefault();
 
                 List<Room> room = (from u in dc.Rooms
@@ -312,7 +311,7 @@ namespace HIS.Controllers
 
                 ViewBag.Rooms = new SelectList(room, "RoomNo", "RoomName");
                 ViewBag.Beds = new SelectList(beds, "BedNo", "BedName");
-                roomalloc.ENMRNO = enmrno;
+                roomalloc.ENMRNO = enmrNo;
                 if (roomallocation != null)
                 {
                     roomalloc.ENMRNO = roomallocation.pra.ENMRNO;
@@ -328,6 +327,24 @@ namespace HIS.Controllers
                 }
                 return roomalloc;
             }
+        }
+
+        public string DischargeSummaryNote(string enmrNo)
+        {
+            using (var db = new HISDBEntities())
+            {
+                return db.InPatients.Where(dp => dp.ENMRNO == enmrNo).FirstOrDefault().DiscSummary;
+            }
+        }
+
+        public JsonResult PatientHistory(string enmrNo)
+        {
+            var history = new PatientHistory {Visits = HtmlHelpers.HtmlHelpers.GetOutPatientVisits(enmrNo),
+            Prescriptions = HtmlHelpers.HtmlHelpers.GetPatientPrescriptions(enmrNo),
+            Tests = HtmlHelpers.HtmlHelpers.GetPatientTests(enmrNo),
+            Observations = GetObservationHistory(enmrNo),
+            DischargeNote = DischargeSummaryNote(enmrNo)};
+            return Json(new { data = history }, JsonRequestBehavior.AllowGet);
         }
     }
 }

@@ -253,5 +253,118 @@ namespace HIS.HtmlHelpers
                 Directory.CreateDirectory(path);
             }
         }
+
+        public static List<PatientVisitHistory> GetOutPatientVisits(string enmrNo)
+        {
+            var patientVisits = new List<PatientVisitHistory>();
+            using (HISDBEntities hs = new HISDBEntities())
+            {
+                if (hs.OutPatients.Where(op => op.ENMRNO == enmrNo).Any())
+                {
+                    patientVisits = (from pv in hs.PatientVisitHistories
+                                         join op in hs.OutPatients on pv.ENMRNO equals op.ENMRNO
+                                         join ct in hs.ConsultationTypes on pv.ConsultTypeID equals ct.ConsultTypeID
+                                         join u in hs.Users on pv.DoctorID equals u.UserID
+                                         join ut in hs.UserTypes on u.UserTypeID equals ut.UserTypeID
+                                         where ut.UserTypeName.Equals("Doctor") && pv.ENMRNO.Equals(enmrNo)
+                                         select new
+                                         {
+                                             pv,
+                                             u,
+                                             ct.ConsultType
+                                         })
+                                      .OrderByDescending(b => b.pv.DateOfVisit)
+                                      .AsEnumerable()
+                                     .Select(x => new PatientVisitHistory
+                                     {
+                                         DOVDisplay = DateFormat(x.pv.DateOfVisit),
+                                         ENMRNO = x.pv.ENMRNO,
+                                         ConsultType = x.ConsultType,
+                                         Fee = x.pv.Fee,
+                                         Discount = x.pv.Discount,
+                                         DoctorName = GetFullName(x.u.FirstName, x.u.MiddleName, x.u.LastName)
+                                     }).ToList();
+                }
+                return patientVisits;
+            }
+        }
+
+        public static List<PatientPrescription> GetPatientPrescriptions(string enmrNo)
+        {
+            using (HISDBEntities hs = new HISDBEntities())
+            {
+
+                var patientPrescriptions = (from pp in hs.PatientPrescriptions
+                                            join pm in hs.PrescriptionMasters on pp.PMID equals pm.PMID
+                                            join op in hs.OutPatients on pm.ENMRNO equals op.ENMRNO
+                                            join mm in hs.MedicineMasters on pp.MedicineID equals mm.MMID
+                                            join ifs in hs.IntakeFrequencies on pp.IntakeFrequencyID equals ifs.FrequencyID
+                                            join u in hs.Users on pm.PrescribedBy equals u.UserID
+                                            join ut in hs.UserTypes on u.UserTypeID equals ut.UserTypeID
+                                            join pv in hs.PatientVisitHistories on pm.VisitID equals pv.SNO
+                                            join ct in hs.ConsultationTypes on pv.ConsultTypeID equals ct.ConsultTypeID
+                                            where ut.UserTypeName.Equals("Doctor") && pm.ENMRNO.Equals(enmrNo)
+                                            select new
+                                            {
+                                                pp,
+                                                pm,
+                                                u,
+                                                mm,
+                                                ifs.Frequency,
+                                                ct.ConsultType
+                                            })
+                                  .OrderByDescending(b => b.pm.DatePrescribed)
+                                  .AsEnumerable()
+                                 .Select(x => new PatientPrescription
+                                 {
+                                     DateDisplay = DateFormat(x.pm.DatePrescribed),
+                                     ENMRNO = x.pm.ENMRNO,
+                                     VisitID = x.pm.VisitID.Value,
+                                     DoctorName = GetFullName(x.u.FirstName, x.u.MiddleName, x.u.LastName),
+                                     Quantity = x.pp.Quantity,
+                                     MedicineWithDose = GetMedicineWithDose(x.mm.MedicineName, x.mm.MedDose),
+                                     IntakeDisplay = x.Frequency,
+                                     MedicineID = x.pp.MedicineID,
+                                     PMID = x.pm.PMID,
+                                     VisitName = x.ConsultType
+                                 }).ToList();
+
+                return patientPrescriptions;
+            }
+        }
+
+        public static List<PatientTest> GetPatientTests(string enmrNo)
+        {
+            using (HISDBEntities hs = new HISDBEntities())
+            {
+
+                var patientTests = (from pt in hs.PatientTests
+                                    join op in hs.OutPatients on pt.ENMRNO equals op.ENMRNO
+                                    join tt in hs.TestTypes on pt.TestID equals tt.TestID
+                                    join u in hs.Users on pt.PrescribedDoctor equals u.UserID
+                                    join ut in hs.UserTypes on u.UserTypeID equals ut.UserTypeID
+                                    where ut.UserTypeName.Equals("Doctor") && pt.ENMRNO == enmrNo 
+                                    select new
+                                    {
+                                        pt,
+                                        u,
+                                        tt
+                                    })
+                                  .OrderByDescending(b => b.pt.SNO)
+                                  .AsEnumerable()
+                                 .Select(x => new PatientTest
+                                 {
+                                     ENMRNO = x.pt.ENMRNO,
+                                     TestName = x.tt.TestName,
+                                     DateDisplay = DateFormat(x.pt.TestDate),
+                                     DoctorName = GetFullName(x.u.FirstName, x.u.MiddleName, x.u.LastName),
+                                     RecordedValues = x.pt.RecordedValues,
+                                     TestImpression = x.pt.TestImpression,
+                                     ReportPath = x.pt.ReportPath
+                                 }).ToList();
+
+                return patientTests;
+            }
+        }
     }
 }

@@ -73,7 +73,7 @@ namespace HIS.Controllers
             {
                 latestVisit = hs.PatientVisitHistories.Where(pvh => pvh.ENMRNO == enmrNo).OrderByDescending(pvh => pvh.SNO).FirstOrDefault();
 
-                prescriptions = GetPatientPrescriptions(enmrNo, latestVisit.SNO);
+                prescriptions = GetPatientVisitPrescriptions(enmrNo, latestVisit.SNO);
                 string visitName = VisitName(latestVisit.ConsultTypeID);
                 if(prescriptions.Count() > 0)
                 {
@@ -156,7 +156,7 @@ namespace HIS.Controllers
                 {
                     System.Data.Entity.Core.Objects.ObjectParameter pmidOut = new System.Data.Entity.Core.Objects.ObjectParameter("PMID", typeof(Int32));
                     
-                    db.CreateMasterPrescription(mdrRequest[0].ENMRNO, 1, 0, pmidOut);
+                    db.CreateMasterPrescription(mdrRequest[0].ENMRNO, Convert.ToInt32(System.Web.HttpContext.Current.Session["UserID"]), 0, pmidOut);
                     int pmid = Convert.ToInt32(pmidOut.Value);
                     foreach (PatientPrescription pp in mdrRequest)
                     {
@@ -297,35 +297,9 @@ namespace HIS.Controllers
             }
         }
 
-        public ActionResult GetPatientVisits(string enmrNo)
+        public JsonResult GetPatientVisits(string enmrNo)
         {
-            using (HISDBEntities hs = new HISDBEntities())
-            {
-                var patientVisits = (from pv in hs.PatientVisitHistories
-                                    join op in hs.OutPatients on pv.ENMRNO equals op.ENMRNO
-                                    join ct in hs.ConsultationTypes on pv.ConsultTypeID equals ct.ConsultTypeID
-                                    join u in hs.Users on pv.DoctorID equals u.UserID
-                                     join ut in hs.UserTypes on u.UserTypeID equals ut.UserTypeID
-                                     where ut.UserTypeName.Equals("Doctor") && pv.ENMRNO.Equals(enmrNo)
-                                    select new
-                                   {
-                                       pv,
-                                       u,
-                                       ct.ConsultType
-                                   })
-                                  .OrderByDescending(b => b.pv.DateOfVisit)
-                                  .AsEnumerable()
-                                 .Select(x => new PatientVisitHistory
-                                 {
-                                     DOVDisplay = HtmlHelpers.HtmlHelpers.DateFormat(x.pv.DateOfVisit),
-                                     ENMRNO = x.pv.ENMRNO,
-                                     ConsultType = x.ConsultType,
-                                     Fee = x.pv.Fee,
-                                     Discount = x.pv.Discount,
-                                     DoctorName = HtmlHelpers.HtmlHelpers.GetFullName(x.u.FirstName, x.u.MiddleName, x.u.LastName)
-                                 }).ToList();   
-                return Json(new { data = patientVisits }, JsonRequestBehavior.AllowGet);
-            }
+            return Json(new { data = HtmlHelpers.HtmlHelpers.GetOutPatientVisits(enmrNo) }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -340,7 +314,7 @@ namespace HIS.Controllers
         }
 
         [HttpPost]
-        public ActionResult GetConsultationFee(int doctorId, int consultTypeId )
+        public JsonResult GetConsultationFee(int doctorId, int consultTypeId )
         {
             List<ConsultationFee> consultationFees = HtmlHelpers.HtmlHelpers.GetConsultationFees();
             if (doctorId > 0 && consultTypeId > 0)
@@ -362,43 +336,8 @@ namespace HIS.Controllers
             pvh.ENMRNO = enmrNo;
             return View(pvh);
         }
-        public ActionResult GetOPPatientPrescriptions(string enmrNo)
-        {
-            using (HISDBEntities hs = new HISDBEntities())
-            {
 
-                var patientPrescriptions = (from pp in hs.PatientPrescriptions
-                                            join op in hs.OutPatients on pp.ENMRNO equals op.ENMRNO
-                                            join mm in hs.MedicineMasters on pp.MedicineID equals mm.MMID
-                                            join pm in hs.PrescriptionMasters on pp.PMID equals pm.PMID
-                                            join ifs in hs.IntakeFrequencies on pp.IntakeFrequencyID equals ifs.FrequencyID
-                                            join u in hs.Users on pm.PrescribedBy equals u.UserID
-                                            join ut in hs.UserTypes on u.UserTypeID equals ut.UserTypeID
-                                            where ut.UserTypeName.Equals("Doctor") && pp.ENMRNO.Equals(enmrNo)
-                                            select new
-                                            {
-                                                pp,
-                                                pm,
-                                                u,
-                                                mm,
-                                                ifs.Frequency
-                                            })
-                                  .OrderByDescending(b => b.pm.DatePrescribed)
-                                  .AsEnumerable()
-                                 .Select(x => new PatientPrescription
-                                 {
-                                     DateDisplay = HtmlHelpers.HtmlHelpers.DateFormat(x.pm.DatePrescribed),
-                                     ENMRNO = x.pp.ENMRNO,
-                                     DoctorName = HtmlHelpers.HtmlHelpers.GetFullName(x.u.FirstName, x.u.MiddleName, x.u.LastName),
-                                     Quantity = x.pp.Quantity,
-                                     MedicineWithDose = HtmlHelpers.HtmlHelpers.GetMedicineWithDose(x.mm.MedicineName, x.mm.MedDose),
-                                     IntakeDisplay = x.Frequency
-                                 }).ToList();
-                return Json(new { data = patientPrescriptions }, JsonRequestBehavior.AllowGet);
-            }
-        }
-
-        public List<PatientPrescription> GetPatientPrescriptions(string enmrNo, int visitID)
+        public List<PatientPrescription> GetPatientVisitPrescriptions(string enmrNo, int visitID)
         {
             using (HISDBEntities hs = new HISDBEntities())
             {
@@ -438,7 +377,7 @@ namespace HIS.Controllers
             }
         }
 
-        public List<PatientTest> GetPatientTests(string enmrNo, int visitID)
+        public List<PatientTest> GetPatientVisitTests(string enmrNo, int visitID)
         {
             using (HISDBEntities hs = new HISDBEntities())
             {
@@ -448,7 +387,7 @@ namespace HIS.Controllers
                                             join tt in hs.TestTypes on pt.TestID equals tt.TestID
                                             join u in hs.Users on pt.PrescribedDoctor equals u.UserID
                                             join ut in hs.UserTypes on u.UserTypeID equals ut.UserTypeID
-                                            where ut.UserTypeName.Equals("Doctor") && pt.ENMRNO == enmrNo && pt.VisitID == visitID //&& pt.RecordedValues == null
+                                            where ut.UserTypeName.Equals("Doctor") && pt.ENMRNO == enmrNo && pt.VisitID == visitID
                                             select new
                                             {
                                                 pt,
@@ -518,8 +457,8 @@ namespace HIS.Controllers
                 {
                     var visitPrescription = new PatientPrescriptionHistory();
                     visitPrescription.VisitName = VisitNameWithDate(pre);
-                    visitPrescription.Prescriptions = GetPatientPrescriptions(pre.ENMRNO, pre.SNO);
-                    visitPrescription.PatientTests = GetPatientTests(pre.ENMRNO, pre.SNO);
+                    visitPrescription.Prescriptions = GetPatientVisitPrescriptions(pre.ENMRNO, pre.SNO);
+                    visitPrescription.PatientTests = GetPatientVisitTests(pre.ENMRNO, pre.SNO);
                     prescriptionsHistory.Add(visitPrescription);
                 }
                 return prescriptionsHistory;
@@ -553,7 +492,7 @@ namespace HIS.Controllers
                 {
                     System.Data.Entity.Core.Objects.ObjectParameter pmidOut = new System.Data.Entity.Core.Objects.ObjectParameter("PMID", typeof(Int32));
 
-                    db.CreateMasterPrescription(prescriptions[0].ENMRNO, 1, 0, pmidOut);
+                    db.CreateMasterPrescription(prescriptions[0].ENMRNO, Convert.ToInt32(System.Web.HttpContext.Current.Session["UserID"]), prescriptions[0].VisitID, pmidOut);
                     int pmid = Convert.ToInt32(pmidOut.Value);
 
                     var suggestedTestsIfAny = prescriptions[0];
@@ -570,7 +509,7 @@ namespace HIS.Controllers
                         {
                             var patientTest = new PatientTest {ENMRNO = suggestedTestsIfAny.ENMRNO,
                                 TestID = Convert.ToInt32(id),
-                                PrescribedDoctor = 1,
+                                PrescribedDoctor = Convert.ToInt32(System.Web.HttpContext.Current.Session["UserID"]),
                                 VisitID = suggestedTestsIfAny.VisitID
                             };
                             db.PatientTests.Add(patientTest);
@@ -626,7 +565,7 @@ namespace HIS.Controllers
             {
                 latestVisit = hs.PatientVisitHistories.Where(pvh => pvh.ENMRNO == enmrNo).OrderByDescending(pvh => pvh.SNO).FirstOrDefault();
 
-                patientTests = GetPatientTests(enmrNo, latestVisit.SNO);
+                patientTests = GetPatientVisitTests(enmrNo, latestVisit.SNO);
                 string visitName = VisitName(latestVisit.ConsultTypeID);
                 if (patientTests.Count() > 0)
                 {

@@ -331,6 +331,13 @@
     <Content Include="light\js\bootstrap.min.js" />
     <Content Include="light\js\functions.js" />
     <Content Include="light\js\html5shiv.min.js" />
+    <EntityDeploy Include="HISDBModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>HISDBModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="HISDBModel.edmx.diagram">
+      <DependentUpon>HISDBModel.edmx</DependentUpon>
+    </Content>
     <None Include="light\js\jquery-1.12.4.intellisense.js" />
     <Content Include="light\js\jquery-1.12.4.js" />
     <Content Include="light\js\jquery-1.12.4.min.js" />
@@ -962,13 +969,6 @@
     <Content Include="Scripts\gridmvc.js" />
     <Content Include="Scripts\gridmvc.lang.ru.js" />
     <Content Include="Scripts\gridmvc.min.js" />
-    <EntityDeploy Include="HISDBModel.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>HISDBModel.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="HISDBModel.edmx.diagram">
-      <DependentUpon>HISDBModel.edmx</DependentUpon>
-    </Content>
     <Content Include="light\js\jquery-1.12.4.min.map" />
     <None Include="Properties\PublishProfiles\HisApp - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
@@ -1126,6 +1126,7 @@
     <Compile Include="Models\MDRModel.cs" />
     <Compile Include="Models\MedicineMaster.cs" />
     <Compile Include="Models\OutPatient.cs" />
+    <Compile Include="Models\PatientHistory.cs" />
     <Compile Include="Models\PatientPrescription.cs" />
     <Compile Include="Models\PatientPrescriptionHistory.cs" />
     <Compile Include="Models\PatientRoomAllocation.cs" />

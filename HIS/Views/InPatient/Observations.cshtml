@@ -79,7 +79,7 @@
     var myJsVariable = @Html.Raw(Json.Encode(Model.ENMRNO));
     $("#obsHisTable").DataTable({
         "ajax": {
-            "url": '/InPatient/GetObservationHistory',
+            "url": '/InPatient/GetObservations',
             "data": { 'enmrNo': myJsVariable },
             "type": "GET",
             "datatype": "json"

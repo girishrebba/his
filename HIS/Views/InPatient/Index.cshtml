@@ -65,19 +65,19 @@
                     { "data": "DoctorName" },
                     { "data": "EnrolledDisplay" },
                     {
-                        "data":"SNO", "render" : function (data) {
-                            return "@if (ViewContext.Controller.HasPermission("InPatient-AddModify")){<a class='btn btn-default btn-sm' title='Edit' onclick=PopupPatient('@Url.Action("AddModify","InPatient")/" + data + "',false)><i class='fa fa-user-edit'></i>"
+                        "data":"ENMRNO", "render" : function (data) {
+                            return "@if (ViewContext.Controller.HasPermission("InPatient-AddModify")){<a class='btn btn-default btn-sm' title='Edit' onclick=PopupPatient('@Url.Action("AddModify","InPatient")/?enmrNo=" + data + "',false)><i class='fa fa-user-edit'></i>"
                                 + "</a>}@if (ViewContext.Controller.HasPermission("InPatient-ViewPatient"))
-                                {<a class='btn btn-info btn-sm' title='View Patient' style='margin-left:5px' onclick=PopupViewPatient('@Url.Action("ViewPatient", "InPatient")/" + data + "')><i class='fa fa-info-circle'></i></a>}"
+                                {<a class='btn btn-info btn-sm' title='View Patient' style='margin-left:5px' onclick=PopupViewPatient('@Url.Action("ViewPatient", "InPatient")/?enmrNo=" + data + "')><i class='fa fa-info-circle'></i></a>}"
                                 + "@if (ViewContext.Controller.HasPermission("InPatient-BedAllocation")){
-                                    <a class='btn btn-primary btn-sm' title='Bed' style='margin-left:5px' onclick=PopupPatientAllocationView('@Url.Action("BedAllocation", "InPatient")/" + data + "')><i class='fa fa-bed'></i></a>}"
-                                    + "@if (ViewContext.Controller.HasPermission("InPatient-Fee")){
-                                        <a class='btn btn-primary btn-sm' title='Fee' style='margin-left:5px' onclick=PopupFee('@Url.Action("Fee", "InPatient")/" + data + "')><i class='fa fa-rupee-sign'></i></a>}"
-                                    + "@if (ViewContext.Controller.HasPermission("InPatient-Observations")){
-                                        <a class='btn btn-primary btn-sm' title='Observation' style='margin-left:5px' onclick=PopupObservations('@Url.Action("Observations", "InPatient")/" + data + "')><i class='fa fa-briefcase-medical'></i></a>}"
-                                    + "@if (ViewContext.Controller.HasPermission("InPatient-Observations")){
-                                        <a class='btn btn-primary btn-sm' title='Observation' style='margin-left:5px' onclick=PopupObservations('@Url.Action("Observations", "InPatient")/" + data + "')><i class='fa fa-flask'></i></a>}"
-                                    + "@if (ViewContext.Controller.HasPermission("InPatient-AddModify")){<a class='btn btn-default btn-sm' title='Discharge' style='margin-left:5px' onclick=PopupPatient('@Url.Action("AddModify","InPatient")/" + data + "',true)><i class='fa fa-sign-out-alt'></i></a>}";
+                                    <a class='btn btn-primary btn-sm' title='Bed' style='margin-left:5px' onclick=PopupPatientAllocationView('@Url.Action("BedAllocation", "InPatient")/?enmrNo=" + data + "')><i class='fa fa-bed'></i></a>}"
+                                + "@if (ViewContext.Controller.HasPermission("InPatient-Fee")){
+                                        <a class='btn btn-primary btn-sm' title='Fee' style='margin-left:5px' onclick=PopupFee('@Url.Action("Fee", "InPatient")/?enmrNo=" + data + "')><i class='fa fa-rupee-sign'></i></a>}"
+                                + "@if (ViewContext.Controller.HasPermission("InPatient-Observations")){
+                                        <a class='btn btn-primary btn-sm' title='Observation' style='margin-left:5px' onclick=PopupObservations('@Url.Action("Observations", "InPatient")/?enmrNo=" + data + "')><i class='fa fa-briefcase-medical'></i></a>}"
+                                + "@if (ViewContext.Controller.HasPermission("InPatient-Observations")){
+                                        <a class='btn btn-primary btn-sm' title='Observation' style='margin-left:5px' onclick=PopupObservations('@Url.Action("Observations", "InPatient")/?enmrNo=" + data + "')><i class='fa fa-flask'></i></a>}"
+                                + "@if (ViewContext.Controller.HasPermission("InPatient-AddModify")){<a class='btn btn-default btn-sm' title='Discharge' style='margin-left:5px' onclick=PopupPatient('@Url.Action("AddModify","InPatient")/?enmrNo=" + data + "',true)><i class='fa fa-sign-out-alt'></i></a>}";
                                     },
                         "orderable": false,
                         "searchable": false
@@ -92,7 +92,6 @@
 
         // Popup Add Edit Patient
         function PopupPatient(url, isDischarge) {
-            alert(isDischarge);
             var formDiv = $('<div/>');
             $.get(url)
                 .done(function (response) {
