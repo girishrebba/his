@@ -316,11 +316,29 @@ namespace HIS.Controllers
                         }
                         db.SaveChanges();
                     }
+                    DeletePurchaseOrderItems(items);
                     return Json(new { success = true, message = string.Format("PO# - {0} adjusted Successfully", items[0].PONumber) }, JsonRequestBehavior.AllowGet);
                 }
                 else
                 {
                     return Json(new { success = false, message = "Error occured" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+        }
+
+        private static void DeletePurchaseOrderItems(List<PurchaseOrder> items)
+        {
+            using (HISDBEntities hs = new HISDBEntities())
+            {
+                string poNumber = items[0].PONumber;
+                var poItems = hs.PurchaseOrders.Where(poi => poi.PONumber == poNumber).ToList();
+
+                var itemsToBeDelete = poItems.Where(p => !items.Any(p2 => p2.OrderID == p.OrderID));
+                // Delete the items from purchase order
+                if (itemsToBeDelete != null && itemsToBeDelete.Count() > 0)
+                {
+                    hs.PurchaseOrders.RemoveRange(itemsToBeDelete);
+                    hs.SaveChanges();
                 }
             }
         }

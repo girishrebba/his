@@ -20,7 +20,7 @@ namespace HIS
         public Nullable<System.DateTime> ObservationDate { get; set; }
         public int DoctorID { get; set; }
     
-        public virtual InPatient InPatient { get; set; }
         public virtual User User { get; set; }
+        public virtual InPatient InPatient { get; set; }
     }
 }

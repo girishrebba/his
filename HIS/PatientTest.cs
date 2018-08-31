@@ -19,10 +19,10 @@ namespace HIS
         public int TestID { get; set; }
         public Nullable<System.DateTime> TestDate { get; set; }
         public int PrescribedDoctor { get; set; }
+        public Nullable<int> VisitID { get; set; }
         public Nullable<decimal> RecordedValues { get; set; }
         public string TestImpression { get; set; }
         public string ReportPath { get; set; }
-        public Nullable<int> VisitID { get; set; }
         public Nullable<decimal> Discount { get; set; }
         public Nullable<decimal> PaidAmunt { get; set; }
     

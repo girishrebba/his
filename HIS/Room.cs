@@ -17,8 +17,8 @@ namespace HIS
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Room()
         {
-            this.PatientRoomAllocations = new HashSet<PatientRoomAllocation>();
             this.Beds = new HashSet<Bed>();
+            this.PatientRoomAllocations = new HashSet<PatientRoomAllocation>();
         }
     
         public int RoomNo { get; set; }
@@ -31,8 +31,8 @@ namespace HIS
         public Nullable<int> RoomBedCapacity { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PatientRoomAllocation> PatientRoomAllocations { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Bed> Beds { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PatientRoomAllocation> PatientRoomAllocations { get; set; }
     }
 }

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Schema Namespace="HISModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+<Schema Namespace="HISDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
   <EntityType Name="Beds">
     <Key>
       <PropertyRef Name="BedNo" />
@@ -272,8 +272,8 @@
     <Property Name="OrderedDate" Type="date" Nullable="false" />
     <Property Name="PricePerItem" Type="decimal" Precision="6" Scale="2" />
     <Property Name="PricePerSheet" Type="decimal" Precision="9" Scale="2" />
-    <Property Name="BatchNo" Type="varchar" MaxLength="30" Nullable="false" />
-    <Property Name="LotNo" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="BatchNo" Type="varchar" MaxLength="30" />
+    <Property Name="LotNo" Type="varchar" MaxLength="30" />
     <Property Name="ExpiryDate" Type="date" />
     <Property Name="ApprovedStatus" Type="bit" />
   </EntityType>
@@ -692,7 +692,7 @@
     <Parameter Name="VisitID" Type="int" Mode="In" />
     <Parameter Name="PMID" Type="int" Mode="InOut" />
   </Function>
-  <EntityContainer Name="HISModelStoreContainer">
+  <EntityContainer Name="HISDBModelStoreContainer">
     <EntitySet Name="Beds" EntityType="Self.Beds" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="BedType" EntityType="Self.BedType" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="BloodGroup" EntityType="Self.BloodGroup" Schema="dbo" store:Type="Tables" />

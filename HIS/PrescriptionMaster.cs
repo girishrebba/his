@@ -29,8 +29,8 @@ namespace HIS
         public Nullable<decimal> Discount { get; set; }
         public Nullable<decimal> PaidAmount { get; set; }
     
-        public virtual User User { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PatientPrescription> PatientPrescriptions { get; set; }
+        public virtual User User { get; set; }
     }
 }

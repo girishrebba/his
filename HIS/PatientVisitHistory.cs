@@ -18,12 +18,11 @@ namespace HIS
         public System.DateTime DateOfVisit { get; set; }
         public int ConsultTypeID { get; set; }
         public string ENMRNO { get; set; }
-        public int DoctorID { get; set; }
-        public Nullable<decimal> Discount { get; set; }
         public decimal Fee { get; set; }
+        public Nullable<decimal> Discount { get; set; }
+        public int DoctorID { get; set; }
     
         public virtual ConsultationType ConsultationType { get; set; }
-        public virtual InPatient InPatient { get; set; }
         public virtual OutPatient OutPatient { get; set; }
         public virtual User User { get; set; }
     }

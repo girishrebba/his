@@ -27,34 +27,34 @@ namespace HIS
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<Bed> Beds { get; set; }
+        public virtual DbSet<BedType> BedTypes { get; set; }
         public virtual DbSet<BloodGroup> BloodGroups { get; set; }
         public virtual DbSet<BrandCategory> BrandCategories { get; set; }
         public virtual DbSet<Brand> Brands { get; set; }
         public virtual DbSet<ConsultationFee> ConsultationFees { get; set; }
         public virtual DbSet<ConsultationType> ConsultationTypes { get; set; }
-        public virtual DbSet<InPatientHistory> InPatientHistories { get; set; }
-        public virtual DbSet<IntakeFrequency> IntakeFrequencies { get; set; }
-        public virtual DbSet<PatientVisitHistory> PatientVisitHistories { get; set; }
-        public virtual DbSet<Specialization> Specializations { get; set; }
-        public virtual DbSet<User> Users { get; set; }
-        public virtual DbSet<UserType> UserTypes { get; set; }
-        public virtual DbSet<InPatient> InPatients { get; set; }
-        public virtual DbSet<OutPatient> OutPatients { get; set; }
         public virtual DbSet<FeeCollection> FeeCollections { get; set; }
+        public virtual DbSet<InPatientHistory> InPatientHistories { get; set; }
+        public virtual DbSet<InPatient> InPatients { get; set; }
+        public virtual DbSet<IntakeFrequency> IntakeFrequencies { get; set; }
         public virtual DbSet<MedicineInventory> MedicineInventories { get; set; }
         public virtual DbSet<MedicineMaster> MedicineMasters { get; set; }
-        public virtual DbSet<PurchaseOrder> PurchaseOrders { get; set; }
-        public virtual DbSet<PatientRoomAllocation> PatientRoomAllocations { get; set; }
-        public virtual DbSet<BedType> BedTypes { get; set; }
-        public virtual DbSet<RoomType> RoomTypes { get; set; }
-        public virtual DbSet<Room> Rooms { get; set; }
-        public virtual DbSet<UserPermission> UserPermissions { get; set; }
-        public virtual DbSet<Bed> Beds { get; set; }
-        public virtual DbSet<PatientTest> PatientTests { get; set; }
-        public virtual DbSet<TestType> TestTypes { get; set; }
+        public virtual DbSet<OutPatient> OutPatients { get; set; }
         public virtual DbSet<PatientPrescription> PatientPrescriptions { get; set; }
-        public virtual DbSet<PrescriptionMaster> PrescriptionMasters { get; set; }
+        public virtual DbSet<PatientRoomAllocation> PatientRoomAllocations { get; set; }
+        public virtual DbSet<PatientTest> PatientTests { get; set; }
+        public virtual DbSet<PatientVisitHistory> PatientVisitHistories { get; set; }
         public virtual DbSet<Permission> Permissions { get; set; }
+        public virtual DbSet<PrescriptionMaster> PrescriptionMasters { get; set; }
+        public virtual DbSet<PurchaseOrder> PurchaseOrders { get; set; }
+        public virtual DbSet<Room> Rooms { get; set; }
+        public virtual DbSet<RoomType> RoomTypes { get; set; }
+        public virtual DbSet<Specialization> Specializations { get; set; }
+        public virtual DbSet<TestType> TestTypes { get; set; }
+        public virtual DbSet<UserPermission> UserPermissions { get; set; }
+        public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<UserType> UserTypes { get; set; }
     
         public virtual int ConvertOutPatientToInPatient(string eNMRNO)
         {
@@ -63,15 +63,6 @@ namespace HIS
                 new ObjectParameter("ENMRNO", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ConvertOutPatientToInPatient", eNMRNOParameter);
-        }
-    
-        public virtual int ConvertOutPatientToInPatient1(string eNMRNO)
-        {
-            var eNMRNOParameter = eNMRNO != null ?
-                new ObjectParameter("ENMRNO", eNMRNO) :
-                new ObjectParameter("ENMRNO", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ConvertOutPatientToInPatient1", eNMRNOParameter);
         }
     
         public virtual int CreateMasterPrescription(string eNMRNO, Nullable<int> doctorID, Nullable<int> visitID, ObjectParameter pMID)

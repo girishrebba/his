@@ -124,10 +124,10 @@
                                     <input type="text" id="PricePerSheet" class="form-control newItem" />
                                 </td>
                                 <td>
-                                    <input type="text" id="BatchNo" class="form-control newItem" />
+                                    <input type="text" id="BatchNo" class="form-control" />
                                 </td>
                                 <td>
-                                    <input type="text" id="LotNo" class="form-control newItem" />
+                                    <input type="text" id="LotNo" class="form-control" />
                                 </td>
                                 <td>
                                     <div id="date-popup" class="input-group date">
@@ -252,8 +252,8 @@
     });
 
     function isValid() {
-        var isValid;
-        $(".mewItem").each(function () {
+        var isValid = true;
+        $(".newItem").each(function () {
             var element = $(this);
             if (element.val() == "") {
                 isValid = false;

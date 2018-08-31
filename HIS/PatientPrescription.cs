@@ -14,6 +14,8 @@ namespace HIS
     
     public partial class PatientPrescription
     {
+        public int PTID { get; set; }
+        public int PMID { get; set; }
         public int MedicineID { get; set; }
         public int Quantity { get; set; }
         public int IntakeFrequencyID { get; set; }
@@ -21,8 +23,6 @@ namespace HIS
         public string BatchNo { get; set; }
         public string LotNo { get; set; }
         public Nullable<int> DeliverQty { get; set; }
-        public int PTID { get; set; }
-        public int PMID { get; set; }
     
         public virtual IntakeFrequency IntakeFrequency { get; set; }
         public virtual MedicineMaster MedicineMaster { get; set; }

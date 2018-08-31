@@ -17,9 +17,8 @@ namespace HIS
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public InPatient()
         {
-            this.InPatientHistories = new HashSet<InPatientHistory>();
-            this.PatientVisitHistories = new HashSet<PatientVisitHistory>();
             this.FeeCollections = new HashSet<FeeCollection>();
+            this.InPatientHistories = new HashSet<InPatientHistory>();
             this.PatientRoomAllocations = new HashSet<PatientRoomAllocation>();
         }
     
@@ -60,12 +59,10 @@ namespace HIS
     
         public virtual BloodGroup BloodGroup { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<FeeCollection> FeeCollections { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<InPatientHistory> InPatientHistories { get; set; }
         public virtual User User { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PatientVisitHistory> PatientVisitHistories { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<FeeCollection> FeeCollections { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PatientRoomAllocation> PatientRoomAllocations { get; set; }
     }

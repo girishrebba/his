@@ -1,8 +1,30 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-  <EntityContainerMapping StorageEntityContainer="HISModelStoreContainer" CdmEntityContainer="HISDBEntities">
+  <EntityContainerMapping StorageEntityContainer="HISDBModelStoreContainer" CdmEntityContainer="HISDBEntities">
+    <EntitySetMapping Name="Beds">
+      <EntityTypeMapping TypeName="HISDBModel.Bed">
+        <MappingFragment StoreEntitySet="Beds">
+          <ScalarProperty Name="BedNo" ColumnName="BedNo" />
+          <ScalarProperty Name="BedName" ColumnName="BedName" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="BedStatus" ColumnName="BedStatus" />
+          <ScalarProperty Name="BedTypeID" ColumnName="BedTypeID" />
+          <ScalarProperty Name="RoomNo" ColumnName="RoomNo" />
+          <ScalarProperty Name="NextAvailbility" ColumnName="NextAvailbility" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="BedTypes">
+      <EntityTypeMapping TypeName="HISDBModel.BedType">
+        <MappingFragment StoreEntitySet="BedType">
+          <ScalarProperty Name="BedTypeID" ColumnName="BedTypeID" />
+          <ScalarProperty Name="BedType1" ColumnName="BedType" />
+          <ScalarProperty Name="BedTypeDescription" ColumnName="BedTypeDescription" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="BloodGroups">
-      <EntityTypeMapping TypeName="HISModel.BloodGroup">
+      <EntityTypeMapping TypeName="HISDBModel.BloodGroup">
         <MappingFragment StoreEntitySet="BloodGroup">
           <ScalarProperty Name="GroupID" ColumnName="GroupID" />
           <ScalarProperty Name="GroupName" ColumnName="GroupName" />
@@ -10,7 +32,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="BrandCategories">
-      <EntityTypeMapping TypeName="HISModel.BrandCategory">
+      <EntityTypeMapping TypeName="HISDBModel.BrandCategory">
         <MappingFragment StoreEntitySet="BrandCategories">
           <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
           <ScalarProperty Name="Category" ColumnName="Category" />
@@ -19,7 +41,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="Brands">
-      <EntityTypeMapping TypeName="HISModel.Brand">
+      <EntityTypeMapping TypeName="HISDBModel.Brand">
         <MappingFragment StoreEntitySet="Brands">
           <ScalarProperty Name="BrandID" ColumnName="BrandID" />
           <ScalarProperty Name="BrandName" ColumnName="BrandName" />
@@ -27,7 +49,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="ConsultationFees">
-      <EntityTypeMapping TypeName="HISModel.ConsultationFee">
+      <EntityTypeMapping TypeName="HISDBModel.ConsultationFee">
         <MappingFragment StoreEntitySet="ConsultationFee">
           <ScalarProperty Name="ConsultationID" ColumnName="ConsultationID" />
           <ScalarProperty Name="DoctorID" ColumnName="DoctorID" />
@@ -37,55 +59,295 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="ConsultationTypes">
-      <EntityTypeMapping TypeName="HISModel.ConsultationType">
+      <EntityTypeMapping TypeName="HISDBModel.ConsultationType">
         <MappingFragment StoreEntitySet="ConsultationType">
           <ScalarProperty Name="ConsultTypeID" ColumnName="ConsultTypeID" />
           <ScalarProperty Name="ConsultType" ColumnName="ConsultType" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="FeeCollections">
+      <EntityTypeMapping TypeName="HISDBModel.FeeCollection">
+        <MappingFragment StoreEntitySet="FeeCollection">
+          <ScalarProperty Name="FeeID" ColumnName="FeeID" />
+          <ScalarProperty Name="ENMRNO" ColumnName="ENMRNO" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="PaidOn" ColumnName="PaidOn" />
+          <ScalarProperty Name="Purpose" ColumnName="Purpose" />
+          <ScalarProperty Name="PaymentMode" ColumnName="PaymentMode" />
+          <ScalarProperty Name="LastFourDigits" ColumnName="LastFourDigits" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="InPatientHistories">
-      <EntityTypeMapping TypeName="HISModel.InPatientHistory">
+      <EntityTypeMapping TypeName="HISDBModel.InPatientHistory">
         <MappingFragment StoreEntitySet="InPatientHistory">
-          <ScalarProperty Name="DoctorID" ColumnName="DoctorID" />
           <ScalarProperty Name="SNO" ColumnName="SNO" />
           <ScalarProperty Name="ENMRNO" ColumnName="ENMRNO" />
           <ScalarProperty Name="Observations" ColumnName="Observations" />
           <ScalarProperty Name="ObservationDate" ColumnName="ObservationDate" />
+          <ScalarProperty Name="DoctorID" ColumnName="DoctorID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="InPatients">
+      <EntityTypeMapping TypeName="HISDBModel.InPatient">
+        <MappingFragment StoreEntitySet="InPatients">
+          <ScalarProperty Name="SNO" ColumnName="SNO" />
+          <ScalarProperty Name="ENMRNO" ColumnName="ENMRNO" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="MiddleName" ColumnName="MiddleName" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="Gender" ColumnName="Gender" />
+          <ScalarProperty Name="DOB" ColumnName="DOB" />
+          <ScalarProperty Name="BirthPlace" ColumnName="BirthPlace" />
+          <ScalarProperty Name="Profession" ColumnName="Profession" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Phone" ColumnName="Phone" />
+          <ScalarProperty Name="BloodGroupID" ColumnName="BloodGroupID" />
+          <ScalarProperty Name="MaritalStatus" ColumnName="MaritalStatus" />
+          <ScalarProperty Name="ReferredBy" ColumnName="ReferredBy" />
+          <ScalarProperty Name="RefPhone" ColumnName="RefPhone" />
+          <ScalarProperty Name="Address1" ColumnName="Address1" />
+          <ScalarProperty Name="Address2" ColumnName="Address2" />
+          <ScalarProperty Name="City" ColumnName="City" />
+          <ScalarProperty Name="State" ColumnName="State" />
+          <ScalarProperty Name="PinCode" ColumnName="PinCode" />
+          <ScalarProperty Name="Enrolled" ColumnName="Enrolled" />
+          <ScalarProperty Name="Purpose" ColumnName="Purpose" />
+          <ScalarProperty Name="DoctorID" ColumnName="DoctorID" />
+          <ScalarProperty Name="Mask" ColumnName="Mask" />
+          <ScalarProperty Name="PatientHistory" ColumnName="PatientHistory" />
+          <ScalarProperty Name="Height" ColumnName="Height" />
+          <ScalarProperty Name="Weight" ColumnName="Weight" />
+          <ScalarProperty Name="BMI" ColumnName="BMI" />
+          <ScalarProperty Name="HeartBeat" ColumnName="HeartBeat" />
+          <ScalarProperty Name="BP" ColumnName="BP" />
+          <ScalarProperty Name="Temperature" ColumnName="Temperature" />
+          <ScalarProperty Name="OthContact" ColumnName="OthContact" />
+          <ScalarProperty Name="PrevENMR" ColumnName="PrevENMR" />
+          <ScalarProperty Name="DiscSummary" ColumnName="DiscSummary" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="IntakeFrequencies">
-      <EntityTypeMapping TypeName="HISModel.IntakeFrequency">
+      <EntityTypeMapping TypeName="HISDBModel.IntakeFrequency">
         <MappingFragment StoreEntitySet="IntakeFrequency">
           <ScalarProperty Name="FrequencyID" ColumnName="FrequencyID" />
           <ScalarProperty Name="Frequency" ColumnName="Frequency" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="PatientVisitHistories">
-      <EntityTypeMapping TypeName="HISModel.PatientVisitHistory">
-        <MappingFragment StoreEntitySet="PatientVisitHistory">
-          <ScalarProperty Name="Fee" ColumnName="Fee" />
-          <ScalarProperty Name="Discount" ColumnName="Discount" />
+    <EntitySetMapping Name="MedicineInventories">
+      <EntityTypeMapping TypeName="HISDBModel.MedicineInventory">
+        <MappingFragment StoreEntitySet="MedicineInventory">
+          <ScalarProperty Name="MedInventoryID" ColumnName="MedInventoryID" />
+          <ScalarProperty Name="MedicineID" ColumnName="MedicineID" />
+          <ScalarProperty Name="AvailableQty" ColumnName="AvailableQty" />
+          <ScalarProperty Name="PricePerItem" ColumnName="PricePerItem" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MedicineMasters">
+      <EntityTypeMapping TypeName="HISDBModel.MedicineMaster">
+        <MappingFragment StoreEntitySet="MedicineMaster">
+          <ScalarProperty Name="MMID" ColumnName="MMID" />
+          <ScalarProperty Name="BrandID" ColumnName="BrandID" />
+          <ScalarProperty Name="BrandCategoryID" ColumnName="BrandCategoryID" />
+          <ScalarProperty Name="MedicineName" ColumnName="MedicineName" />
+          <ScalarProperty Name="MedDose" ColumnName="MedDose" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="OutPatients">
+      <EntityTypeMapping TypeName="HISDBModel.OutPatient">
+        <MappingFragment StoreEntitySet="OutPatients">
+          <ScalarProperty Name="SNO" ColumnName="SNO" />
+          <ScalarProperty Name="ENMRNO" ColumnName="ENMRNO" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="MiddleName" ColumnName="MiddleName" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="Gender" ColumnName="Gender" />
+          <ScalarProperty Name="DOB" ColumnName="DOB" />
+          <ScalarProperty Name="BirthPlace" ColumnName="BirthPlace" />
+          <ScalarProperty Name="Profession" ColumnName="Profession" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Phone" ColumnName="Phone" />
+          <ScalarProperty Name="BloodGroupID" ColumnName="BloodGroupID" />
+          <ScalarProperty Name="MaritalStatus" ColumnName="MaritalStatus" />
+          <ScalarProperty Name="ReferredBy" ColumnName="ReferredBy" />
+          <ScalarProperty Name="RefPhone" ColumnName="RefPhone" />
+          <ScalarProperty Name="Address1" ColumnName="Address1" />
+          <ScalarProperty Name="Address2" ColumnName="Address2" />
+          <ScalarProperty Name="City" ColumnName="City" />
+          <ScalarProperty Name="State" ColumnName="State" />
+          <ScalarProperty Name="PinCode" ColumnName="PinCode" />
+          <ScalarProperty Name="Enrolled" ColumnName="Enrolled" />
+          <ScalarProperty Name="Purpose" ColumnName="Purpose" />
           <ScalarProperty Name="DoctorID" ColumnName="DoctorID" />
+          <ScalarProperty Name="Mask" ColumnName="Mask" />
+          <ScalarProperty Name="PatientHistory" ColumnName="PatientHistory" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Height" ColumnName="Height" />
+          <ScalarProperty Name="Weight" ColumnName="Weight" />
+          <ScalarProperty Name="BMI" ColumnName="BMI" />
+          <ScalarProperty Name="HeartBeat" ColumnName="HeartBeat" />
+          <ScalarProperty Name="BP" ColumnName="BP" />
+          <ScalarProperty Name="Temperature" ColumnName="Temperature" />
+          <ScalarProperty Name="OthContact" ColumnName="OthContact" />
+          <ScalarProperty Name="PrevENMR" ColumnName="PrevENMR" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PatientPrescriptions">
+      <EntityTypeMapping TypeName="HISDBModel.PatientPrescription">
+        <MappingFragment StoreEntitySet="PatientPrescription">
+          <ScalarProperty Name="PTID" ColumnName="PTID" />
+          <ScalarProperty Name="PMID" ColumnName="PMID" />
+          <ScalarProperty Name="MedicineID" ColumnName="MedicineID" />
+          <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+          <ScalarProperty Name="IntakeFrequencyID" ColumnName="IntakeFrequencyID" />
+          <ScalarProperty Name="Comments" ColumnName="Comments" />
+          <ScalarProperty Name="BatchNo" ColumnName="BatchNo" />
+          <ScalarProperty Name="LotNo" ColumnName="LotNo" />
+          <ScalarProperty Name="DeliverQty" ColumnName="DeliverQty" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PatientRoomAllocations">
+      <EntityTypeMapping TypeName="HISDBModel.PatientRoomAllocation">
+        <MappingFragment StoreEntitySet="PatientRoomAllocation">
+          <ScalarProperty Name="AllocationID" ColumnName="AllocationID" />
+          <ScalarProperty Name="ENMRNO" ColumnName="ENMRNO" />
+          <ScalarProperty Name="RoomNo" ColumnName="RoomNo" />
+          <ScalarProperty Name="BedNo" ColumnName="BedNo" />
+          <ScalarProperty Name="FromDate" ColumnName="FromDate" />
+          <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+          <ScalarProperty Name="DischargeSummary" ColumnName="DischargeSummary" />
+          <ScalarProperty Name="AllocationStatus" ColumnName="AllocationStatus" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PatientTests">
+      <EntityTypeMapping TypeName="HISDBModel.PatientTest">
+        <MappingFragment StoreEntitySet="PatientTests">
+          <ScalarProperty Name="SNO" ColumnName="SNO" />
+          <ScalarProperty Name="ENMRNO" ColumnName="ENMRNO" />
+          <ScalarProperty Name="TestID" ColumnName="TestID" />
+          <ScalarProperty Name="TestDate" ColumnName="TestDate" />
+          <ScalarProperty Name="PrescribedDoctor" ColumnName="PrescribedDoctor" />
+          <ScalarProperty Name="VisitID" ColumnName="VisitID" />
+          <ScalarProperty Name="RecordedValues" ColumnName="RecordedValues" />
+          <ScalarProperty Name="TestImpression" ColumnName="TestImpression" />
+          <ScalarProperty Name="ReportPath" ColumnName="ReportPath" />
+          <ScalarProperty Name="Discount" ColumnName="Discount" />
+          <ScalarProperty Name="PaidAmunt" ColumnName="PaidAmunt" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PatientVisitHistories">
+      <EntityTypeMapping TypeName="HISDBModel.PatientVisitHistory">
+        <MappingFragment StoreEntitySet="PatientVisitHistory">
           <ScalarProperty Name="SNO" ColumnName="SNO" />
           <ScalarProperty Name="DateOfVisit" ColumnName="DateOfVisit" />
           <ScalarProperty Name="ConsultTypeID" ColumnName="ConsultTypeID" />
           <ScalarProperty Name="ENMRNO" ColumnName="ENMRNO" />
+          <ScalarProperty Name="Fee" ColumnName="Fee" />
+          <ScalarProperty Name="Discount" ColumnName="Discount" />
+          <ScalarProperty Name="DoctorID" ColumnName="DoctorID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Permissions">
+      <EntityTypeMapping TypeName="HISDBModel.Permission">
+        <MappingFragment StoreEntitySet="Permissions">
+          <ScalarProperty Name="Permission_Id" ColumnName="Permission_Id" />
+          <ScalarProperty Name="PermissionDescription" ColumnName="PermissionDescription" />
+          <ScalarProperty Name="PermissionStatus" ColumnName="PermissionStatus" />
+          <ScalarProperty Name="Toottip" ColumnName="Toottip" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PrescriptionMasters">
+      <EntityTypeMapping TypeName="HISDBModel.PrescriptionMaster">
+        <MappingFragment StoreEntitySet="PrescriptionMaster">
+          <ScalarProperty Name="PMID" ColumnName="PMID" />
+          <ScalarProperty Name="ENMRNO" ColumnName="ENMRNO" />
+          <ScalarProperty Name="PrescribedBy" ColumnName="PrescribedBy" />
+          <ScalarProperty Name="DatePrescribed" ColumnName="DatePrescribed" />
+          <ScalarProperty Name="VisitID" ColumnName="VisitID" />
+          <ScalarProperty Name="IsDelivered" ColumnName="IsDelivered" />
+          <ScalarProperty Name="Discount" ColumnName="Discount" />
+          <ScalarProperty Name="PaidAmount" ColumnName="PaidAmount" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PurchaseOrders">
+      <EntityTypeMapping TypeName="HISDBModel.PurchaseOrder">
+        <MappingFragment StoreEntitySet="PurchaseOrder">
+          <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+          <ScalarProperty Name="PONumber" ColumnName="PONumber" />
+          <ScalarProperty Name="MedicineID" ColumnName="MedicineID" />
+          <ScalarProperty Name="OrderedQty" ColumnName="OrderedQty" />
+          <ScalarProperty Name="OrderedDate" ColumnName="OrderedDate" />
+          <ScalarProperty Name="PricePerItem" ColumnName="PricePerItem" />
+          <ScalarProperty Name="PricePerSheet" ColumnName="PricePerSheet" />
+          <ScalarProperty Name="BatchNo" ColumnName="BatchNo" />
+          <ScalarProperty Name="LotNo" ColumnName="LotNo" />
+          <ScalarProperty Name="ExpiryDate" ColumnName="ExpiryDate" />
+          <ScalarProperty Name="ApprovedStatus" ColumnName="ApprovedStatus" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Rooms">
+      <EntityTypeMapping TypeName="HISDBModel.Room">
+        <MappingFragment StoreEntitySet="Rooms">
+          <ScalarProperty Name="RoomNo" ColumnName="RoomNo" />
+          <ScalarProperty Name="RoomName" ColumnName="RoomName" />
+          <ScalarProperty Name="RoomTypeID" ColumnName="RoomTypeID" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="CostPerDay" ColumnName="CostPerDay" />
+          <ScalarProperty Name="RoomStatus" ColumnName="RoomStatus" />
+          <ScalarProperty Name="NextAvailbility" ColumnName="NextAvailbility" />
+          <ScalarProperty Name="RoomBedCapacity" ColumnName="RoomBedCapacity" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RoomTypes">
+      <EntityTypeMapping TypeName="HISDBModel.RoomType">
+        <MappingFragment StoreEntitySet="RoomType">
+          <ScalarProperty Name="RoomTypeID" ColumnName="RoomTypeID" />
+          <ScalarProperty Name="RoomType1" ColumnName="RoomType" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="Specializations">
-      <EntityTypeMapping TypeName="HISModel.Specialization">
+      <EntityTypeMapping TypeName="HISDBModel.Specialization">
         <MappingFragment StoreEntitySet="Specialization">
           <ScalarProperty Name="SpecializationID" ColumnName="SpecializationID" />
           <ScalarProperty Name="DoctorType" ColumnName="DoctorType" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="TestTypes">
+      <EntityTypeMapping TypeName="HISDBModel.TestType">
+        <MappingFragment StoreEntitySet="TestTypes">
+          <ScalarProperty Name="TestID" ColumnName="TestID" />
+          <ScalarProperty Name="TestName" ColumnName="TestName" />
+          <ScalarProperty Name="TestCost" ColumnName="TestCost" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserPermissions">
+      <EntityTypeMapping TypeName="HISDBModel.UserPermission">
+        <MappingFragment StoreEntitySet="UserPermission">
+          <ScalarProperty Name="UserTypeID" ColumnName="UserTypeID" />
+          <ScalarProperty Name="PermissionID" ColumnName="PermissionID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="Users">
-      <EntityTypeMapping TypeName="HISModel.User">
+      <EntityTypeMapping TypeName="HISDBModel.User">
         <MappingFragment StoreEntitySet="Users">
           <ScalarProperty Name="UserID" ColumnName="UserID" />
           <ScalarProperty Name="FirstName" ColumnName="FirstName" />
@@ -106,276 +368,14 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="UserTypes">
-      <EntityTypeMapping TypeName="HISModel.UserType">
+      <EntityTypeMapping TypeName="HISDBModel.UserType">
         <MappingFragment StoreEntitySet="UserType">
+          <ScalarProperty Name="UserTypeID" ColumnName="UserTypeID" />
           <ScalarProperty Name="UserTypeName" ColumnName="UserTypeName" />
-          <ScalarProperty Name="UserTypeID" ColumnName="UserTypeID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="InPatients">
-      <EntityTypeMapping TypeName="HISModel.InPatient">
-        <MappingFragment StoreEntitySet="InPatients">
-          <ScalarProperty Name="DiscSummary" ColumnName="DiscSummary" />
-          <ScalarProperty Name="PrevENMR" ColumnName="PrevENMR" />
-          <ScalarProperty Name="OthContact" ColumnName="OthContact" />
-          <ScalarProperty Name="Temperature" ColumnName="Temperature" />
-          <ScalarProperty Name="BP" ColumnName="BP" />
-          <ScalarProperty Name="HeartBeat" ColumnName="HeartBeat" />
-          <ScalarProperty Name="BMI" ColumnName="BMI" />
-          <ScalarProperty Name="Weight" ColumnName="Weight" />
-          <ScalarProperty Name="Height" ColumnName="Height" />
-          <ScalarProperty Name="PatientHistory" ColumnName="PatientHistory" />
-          <ScalarProperty Name="Mask" ColumnName="Mask" />
-          <ScalarProperty Name="DoctorID" ColumnName="DoctorID" />
-          <ScalarProperty Name="Purpose" ColumnName="Purpose" />
-          <ScalarProperty Name="Enrolled" ColumnName="Enrolled" />
-          <ScalarProperty Name="PinCode" ColumnName="PinCode" />
-          <ScalarProperty Name="State" ColumnName="State" />
-          <ScalarProperty Name="City" ColumnName="City" />
-          <ScalarProperty Name="Address2" ColumnName="Address2" />
-          <ScalarProperty Name="Address1" ColumnName="Address1" />
-          <ScalarProperty Name="RefPhone" ColumnName="RefPhone" />
-          <ScalarProperty Name="ReferredBy" ColumnName="ReferredBy" />
-          <ScalarProperty Name="MaritalStatus" ColumnName="MaritalStatus" />
-          <ScalarProperty Name="BloodGroupID" ColumnName="BloodGroupID" />
-          <ScalarProperty Name="Phone" ColumnName="Phone" />
-          <ScalarProperty Name="Email" ColumnName="Email" />
-          <ScalarProperty Name="Profession" ColumnName="Profession" />
-          <ScalarProperty Name="BirthPlace" ColumnName="BirthPlace" />
-          <ScalarProperty Name="DOB" ColumnName="DOB" />
-          <ScalarProperty Name="Gender" ColumnName="Gender" />
-          <ScalarProperty Name="LastName" ColumnName="LastName" />
-          <ScalarProperty Name="MiddleName" ColumnName="MiddleName" />
-          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
-          <ScalarProperty Name="ENMRNO" ColumnName="ENMRNO" />
-          <ScalarProperty Name="SNO" ColumnName="SNO" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="OutPatients">
-      <EntityTypeMapping TypeName="HISModel.OutPatient">
-        <MappingFragment StoreEntitySet="OutPatients">
-          <ScalarProperty Name="PrevENMR" ColumnName="PrevENMR" />
-          <ScalarProperty Name="OthContact" ColumnName="OthContact" />
-          <ScalarProperty Name="Temperature" ColumnName="Temperature" />
-          <ScalarProperty Name="BP" ColumnName="BP" />
-          <ScalarProperty Name="HeartBeat" ColumnName="HeartBeat" />
-          <ScalarProperty Name="BMI" ColumnName="BMI" />
-          <ScalarProperty Name="Weight" ColumnName="Weight" />
-          <ScalarProperty Name="Height" ColumnName="Height" />
-          <ScalarProperty Name="Status" ColumnName="Status" />
-          <ScalarProperty Name="PatientHistory" ColumnName="PatientHistory" />
-          <ScalarProperty Name="Mask" ColumnName="Mask" />
-          <ScalarProperty Name="DoctorID" ColumnName="DoctorID" />
-          <ScalarProperty Name="Purpose" ColumnName="Purpose" />
-          <ScalarProperty Name="Enrolled" ColumnName="Enrolled" />
-          <ScalarProperty Name="PinCode" ColumnName="PinCode" />
-          <ScalarProperty Name="State" ColumnName="State" />
-          <ScalarProperty Name="City" ColumnName="City" />
-          <ScalarProperty Name="Address2" ColumnName="Address2" />
-          <ScalarProperty Name="Address1" ColumnName="Address1" />
-          <ScalarProperty Name="RefPhone" ColumnName="RefPhone" />
-          <ScalarProperty Name="ReferredBy" ColumnName="ReferredBy" />
-          <ScalarProperty Name="MaritalStatus" ColumnName="MaritalStatus" />
-          <ScalarProperty Name="BloodGroupID" ColumnName="BloodGroupID" />
-          <ScalarProperty Name="Phone" ColumnName="Phone" />
-          <ScalarProperty Name="Email" ColumnName="Email" />
-          <ScalarProperty Name="Profession" ColumnName="Profession" />
-          <ScalarProperty Name="BirthPlace" ColumnName="BirthPlace" />
-          <ScalarProperty Name="DOB" ColumnName="DOB" />
-          <ScalarProperty Name="Gender" ColumnName="Gender" />
-          <ScalarProperty Name="LastName" ColumnName="LastName" />
-          <ScalarProperty Name="MiddleName" ColumnName="MiddleName" />
-          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
-          <ScalarProperty Name="ENMRNO" ColumnName="ENMRNO" />
-          <ScalarProperty Name="SNO" ColumnName="SNO" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="FeeCollections">
-      <EntityTypeMapping TypeName="HISModel.FeeCollection">
-        <MappingFragment StoreEntitySet="FeeCollection">
-          <ScalarProperty Name="LastFourDigits" ColumnName="LastFourDigits" />
-          <ScalarProperty Name="PaymentMode" ColumnName="PaymentMode" />
-          <ScalarProperty Name="Purpose" ColumnName="Purpose" />
-          <ScalarProperty Name="PaidOn" ColumnName="PaidOn" />
-          <ScalarProperty Name="Amount" ColumnName="Amount" />
-          <ScalarProperty Name="ENMRNO" ColumnName="ENMRNO" />
-          <ScalarProperty Name="FeeID" ColumnName="FeeID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="MedicineInventories">
-      <EntityTypeMapping TypeName="HISModel.MedicineInventory">
-        <MappingFragment StoreEntitySet="MedicineInventory">
-          <ScalarProperty Name="PricePerItem" ColumnName="PricePerItem" />
-          <ScalarProperty Name="AvailableQty" ColumnName="AvailableQty" />
-          <ScalarProperty Name="MedicineID" ColumnName="MedicineID" />
-          <ScalarProperty Name="MedInventoryID" ColumnName="MedInventoryID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="MedicineMasters">
-      <EntityTypeMapping TypeName="HISModel.MedicineMaster">
-        <MappingFragment StoreEntitySet="MedicineMaster">
-          <ScalarProperty Name="MedDose" ColumnName="MedDose" />
-          <ScalarProperty Name="MedicineName" ColumnName="MedicineName" />
-          <ScalarProperty Name="BrandCategoryID" ColumnName="BrandCategoryID" />
-          <ScalarProperty Name="BrandID" ColumnName="BrandID" />
-          <ScalarProperty Name="MMID" ColumnName="MMID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="PurchaseOrders">
-      <EntityTypeMapping TypeName="HISModel.PurchaseOrder">
-        <MappingFragment StoreEntitySet="PurchaseOrder">
-          <ScalarProperty Name="ApprovedStatus" ColumnName="ApprovedStatus" />
-          <ScalarProperty Name="ExpiryDate" ColumnName="ExpiryDate" />
-          <ScalarProperty Name="LotNo" ColumnName="LotNo" />
-          <ScalarProperty Name="BatchNo" ColumnName="BatchNo" />
-          <ScalarProperty Name="PricePerSheet" ColumnName="PricePerSheet" />
-          <ScalarProperty Name="PricePerItem" ColumnName="PricePerItem" />
-          <ScalarProperty Name="OrderedDate" ColumnName="OrderedDate" />
-          <ScalarProperty Name="OrderedQty" ColumnName="OrderedQty" />
-          <ScalarProperty Name="MedicineID" ColumnName="MedicineID" />
-          <ScalarProperty Name="PONumber" ColumnName="PONumber" />
-          <ScalarProperty Name="OrderID" ColumnName="OrderID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="PatientRoomAllocations">
-      <EntityTypeMapping TypeName="HISModel.PatientRoomAllocation">
-        <MappingFragment StoreEntitySet="PatientRoomAllocation">
-          <ScalarProperty Name="AllocationStatus" ColumnName="AllocationStatus" />
-          <ScalarProperty Name="DischargeSummary" ColumnName="DischargeSummary" />
-          <ScalarProperty Name="EndDate" ColumnName="EndDate" />
-          <ScalarProperty Name="FromDate" ColumnName="FromDate" />
-          <ScalarProperty Name="BedNo" ColumnName="BedNo" />
-          <ScalarProperty Name="RoomNo" ColumnName="RoomNo" />
-          <ScalarProperty Name="ENMRNO" ColumnName="ENMRNO" />
-          <ScalarProperty Name="AllocationID" ColumnName="AllocationID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="BedTypes">
-      <EntityTypeMapping TypeName="HISModel.BedType">
-        <MappingFragment StoreEntitySet="BedType">
-          <ScalarProperty Name="BedTypeDescription" ColumnName="BedTypeDescription" />
-          <ScalarProperty Name="BedType1" ColumnName="BedType" />
-          <ScalarProperty Name="BedTypeID" ColumnName="BedTypeID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="RoomTypes">
-      <EntityTypeMapping TypeName="HISModel.RoomType">
-        <MappingFragment StoreEntitySet="RoomType">
-          <ScalarProperty Name="RoomType1" ColumnName="RoomType" />
-          <ScalarProperty Name="RoomTypeID" ColumnName="RoomTypeID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Rooms">
-      <EntityTypeMapping TypeName="HISModel.Room">
-        <MappingFragment StoreEntitySet="Rooms">
-          <ScalarProperty Name="RoomBedCapacity" ColumnName="RoomBedCapacity" />
-          <ScalarProperty Name="NextAvailbility" ColumnName="NextAvailbility" />
-          <ScalarProperty Name="RoomStatus" ColumnName="RoomStatus" />
-          <ScalarProperty Name="CostPerDay" ColumnName="CostPerDay" />
-          <ScalarProperty Name="Description" ColumnName="Description" />
-          <ScalarProperty Name="RoomTypeID" ColumnName="RoomTypeID" />
-          <ScalarProperty Name="RoomName" ColumnName="RoomName" />
-          <ScalarProperty Name="RoomNo" ColumnName="RoomNo" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="UserPermissions">
-      <EntityTypeMapping TypeName="HISModel.UserPermission">
-        <MappingFragment StoreEntitySet="UserPermission">
-          <ScalarProperty Name="PermissionID" ColumnName="PermissionID" />
-          <ScalarProperty Name="UserTypeID" ColumnName="UserTypeID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Beds">
-      <EntityTypeMapping TypeName="HISModel.Bed">
-        <MappingFragment StoreEntitySet="Beds">
-          <ScalarProperty Name="NextAvailbility" ColumnName="NextAvailbility" />
-          <ScalarProperty Name="RoomNo" ColumnName="RoomNo" />
-          <ScalarProperty Name="BedTypeID" ColumnName="BedTypeID" />
-          <ScalarProperty Name="BedStatus" ColumnName="BedStatus" />
-          <ScalarProperty Name="Description" ColumnName="Description" />
-          <ScalarProperty Name="BedName" ColumnName="BedName" />
-          <ScalarProperty Name="BedNo" ColumnName="BedNo" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <FunctionImportMapping FunctionImportName="ConvertOutPatientToInPatient1" FunctionName="HISModel.Store.ConvertOutPatientToInPatient" />
-    <EntitySetMapping Name="PatientTests">
-      <EntityTypeMapping TypeName="HISModel.PatientTest">
-        <MappingFragment StoreEntitySet="PatientTests">
-          <ScalarProperty Name="PaidAmunt" ColumnName="PaidAmunt" />
-          <ScalarProperty Name="Discount" ColumnName="Discount" />
-          <ScalarProperty Name="VisitID" ColumnName="VisitID" />
-          <ScalarProperty Name="ReportPath" ColumnName="ReportPath" />
-          <ScalarProperty Name="TestImpression" ColumnName="TestImpression" />
-          <ScalarProperty Name="RecordedValues" ColumnName="RecordedValues" />
-          <ScalarProperty Name="PrescribedDoctor" ColumnName="PrescribedDoctor" />
-          <ScalarProperty Name="TestDate" ColumnName="TestDate" />
-          <ScalarProperty Name="TestID" ColumnName="TestID" />
-          <ScalarProperty Name="ENMRNO" ColumnName="ENMRNO" />
-          <ScalarProperty Name="SNO" ColumnName="SNO" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="TestTypes">
-      <EntityTypeMapping TypeName="HISModel.TestType">
-        <MappingFragment StoreEntitySet="TestTypes">
-          <ScalarProperty Name="TestCost" ColumnName="TestCost" />
-          <ScalarProperty Name="TestName" ColumnName="TestName" />
-          <ScalarProperty Name="TestID" ColumnName="TestID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="PatientPrescriptions">
-      <EntityTypeMapping TypeName="HISModel.PatientPrescription">
-        <MappingFragment StoreEntitySet="PatientPrescription">
-          <ScalarProperty Name="PMID" ColumnName="PMID" />
-          <ScalarProperty Name="PTID" ColumnName="PTID" />
-          <ScalarProperty Name="DeliverQty" ColumnName="DeliverQty" />
-          <ScalarProperty Name="LotNo" ColumnName="LotNo" />
-          <ScalarProperty Name="BatchNo" ColumnName="BatchNo" />
-          <ScalarProperty Name="Comments" ColumnName="Comments" />
-          <ScalarProperty Name="IntakeFrequencyID" ColumnName="IntakeFrequencyID" />
-          <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-          <ScalarProperty Name="MedicineID" ColumnName="MedicineID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="PrescriptionMasters">
-      <EntityTypeMapping TypeName="HISModel.PrescriptionMaster">
-        <MappingFragment StoreEntitySet="PrescriptionMaster">
-          <ScalarProperty Name="PaidAmount" ColumnName="PaidAmount" />
-          <ScalarProperty Name="Discount" ColumnName="Discount" />
-          <ScalarProperty Name="IsDelivered" ColumnName="IsDelivered" />
-          <ScalarProperty Name="VisitID" ColumnName="VisitID" />
-          <ScalarProperty Name="DatePrescribed" ColumnName="DatePrescribed" />
-          <ScalarProperty Name="PrescribedBy" ColumnName="PrescribedBy" />
-          <ScalarProperty Name="ENMRNO" ColumnName="ENMRNO" />
-          <ScalarProperty Name="PMID" ColumnName="PMID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <FunctionImportMapping FunctionImportName="CreateMasterPrescription" FunctionName="HISModel.Store.CreateMasterPrescription" />
-    <EntitySetMapping Name="Permissions">
-      <EntityTypeMapping TypeName="HISModel.Permission">
-        <MappingFragment StoreEntitySet="Permissions">
-          <ScalarProperty Name="Toottip" ColumnName="Toottip" />
-          <ScalarProperty Name="PermissionStatus" ColumnName="PermissionStatus" />
-          <ScalarProperty Name="PermissionDescription" ColumnName="PermissionDescription" />
-          <ScalarProperty Name="Permission_Id" ColumnName="Permission_Id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="ConvertOutPatientToInPatient" FunctionName="HISDBModel.Store.ConvertOutPatientToInPatient" />
+    <FunctionImportMapping FunctionImportName="CreateMasterPrescription" FunctionName="HISDBModel.Store.CreateMasterPrescription" />
   </EntityContainerMapping>
 </Mapping>
