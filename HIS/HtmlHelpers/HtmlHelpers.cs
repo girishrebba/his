@@ -344,7 +344,7 @@ namespace HIS.HtmlHelpers
                                     join tt in hs.TestTypes on pt.TestID equals tt.TestID
                                     join u in hs.Users on ltm.PrescribedBy equals u.UserID
                                     join ut in hs.UserTypes on u.UserTypeID equals ut.UserTypeID
-                                    where ut.UserTypeName.Equals("Doctor") && pt.ENMRNO == enmrNo 
+                                    where ut.UserTypeName.Equals("Doctor") && ltm.ENMRNO == enmrNo 
                                     select new
                                     {
                                         pt,
@@ -355,7 +355,7 @@ namespace HIS.HtmlHelpers
                                   .AsEnumerable()
                                  .Select(x => new PatientTest
                                  {
-                                     ENMRNO = x.pt.ENMRNO,
+                                     ENMRNO = enmrNo,
                                      TestName = x.tt.TestName,
                                      DateDisplay = DateFormat(x.pt.TestDate),
                                      DoctorName = GetFullName(x.u.FirstName, x.u.MiddleName, x.u.LastName),
