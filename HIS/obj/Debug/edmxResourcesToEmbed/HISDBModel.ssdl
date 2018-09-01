@@ -118,6 +118,7 @@
     <Property Name="OthContact" Type="varchar" MaxLength="10" />
     <Property Name="PrevENMR" Type="varchar" MaxLength="30" />
     <Property Name="DiscSummary" Type="varchar(max)" />
+    <Property Name="IsDischarged" Type="bit" />
   </EntityType>
   <EntityType Name="IntakeFrequency">
     <Key>
@@ -223,7 +224,6 @@
     <Property Name="BedNo" Type="int" Nullable="false" />
     <Property Name="FromDate" Type="datetime" Nullable="false" />
     <Property Name="EndDate" Type="datetime" />
-    <Property Name="DischargeSummary" Type="varchar(max)" />
     <Property Name="AllocationStatus" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="PatientTests">
@@ -272,6 +272,7 @@
     <Property Name="IsDelivered" Type="bit" />
     <Property Name="Discount" Type="decimal" Precision="4" Scale="2" />
     <Property Name="PaidAmount" Type="money" />
+    <Property Name="TotalAmount" Type="money" />
   </EntityType>
   <EntityType Name="PurchaseOrder">
     <Key>

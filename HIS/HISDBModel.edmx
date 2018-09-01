@@ -123,6 +123,7 @@
           <Property Name="OthContact" Type="varchar" MaxLength="10" />
           <Property Name="PrevENMR" Type="varchar" MaxLength="30" />
           <Property Name="DiscSummary" Type="varchar(max)" />
+          <Property Name="IsDischarged" Type="bit" />
         </EntityType>
         <EntityType Name="IntakeFrequency">
           <Key>
@@ -228,7 +229,6 @@
           <Property Name="BedNo" Type="int" Nullable="false" />
           <Property Name="FromDate" Type="datetime" Nullable="false" />
           <Property Name="EndDate" Type="datetime" />
-          <Property Name="DischargeSummary" Type="varchar(max)" />
           <Property Name="AllocationStatus" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="PatientTests">
@@ -277,6 +277,7 @@
           <Property Name="IsDelivered" Type="bit" />
           <Property Name="Discount" Type="decimal" Precision="4" Scale="2" />
           <Property Name="PaidAmount" Type="money" />
+          <Property Name="TotalAmount" Type="money" />
         </EntityType>
         <EntityType Name="PurchaseOrder">
           <Key>
@@ -1015,6 +1016,7 @@
           <NavigationProperty Name="InPatientHistories" Relationship="Self.FK_IPH_InPatients_ENMRNO" FromRole="InPatients" ToRole="InPatientHistory" />
           <NavigationProperty Name="User" Relationship="Self.FK_InPatients_Doctor" FromRole="InPatients" ToRole="Users" />
           <NavigationProperty Name="PatientRoomAllocations" Relationship="Self.FK_PRA_InPatients_ENMRNO" FromRole="InPatients" ToRole="PatientRoomAllocation" />
+          <Property Name="IsDischarged" Type="Boolean" />
         </EntityType>
         <EntityType Name="IntakeFrequency">
           <Key>
@@ -1118,7 +1120,6 @@
           <Property Name="BedNo" Type="Int32" Nullable="false" />
           <Property Name="FromDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="EndDate" Type="DateTime" Precision="3" />
-          <Property Name="DischargeSummary" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="AllocationStatus" Type="Int32" Nullable="false" />
           <NavigationProperty Name="InPatient" Relationship="Self.FK_PRA_InPatients_ENMRNO" FromRole="PatientRoomAllocation" ToRole="InPatients" />
           <NavigationProperty Name="Room" Relationship="Self.FK_PRA_RoomNo" FromRole="PatientRoomAllocation" ToRole="Rooms" />
@@ -1161,6 +1162,7 @@
           <Property Name="PaidAmount" Type="Decimal" Precision="19" Scale="4" />
           <NavigationProperty Name="PatientPrescriptions" Relationship="Self.FK_PP_PMID" FromRole="PrescriptionMaster" ToRole="PatientPrescription" />
           <NavigationProperty Name="User" Relationship="Self.FK_PM_Doctor" FromRole="PrescriptionMaster" ToRole="Users" />
+          <Property Name="TotalAmount" Type="Decimal" Precision="19" Scale="4" />
         </EntityType>
         <EntityType Name="PurchaseOrder">
           <Key>
@@ -1903,6 +1905,7 @@
           <EntitySetMapping Name="InPatients">
             <EntityTypeMapping TypeName="HISDBModel.InPatient">
               <MappingFragment StoreEntitySet="InPatients">
+                <ScalarProperty Name="IsDischarged" ColumnName="IsDischarged" />
                 <ScalarProperty Name="SNO" ColumnName="SNO" />
                 <ScalarProperty Name="ENMRNO" ColumnName="ENMRNO" />
                 <ScalarProperty Name="FirstName" ColumnName="FirstName" />
@@ -2033,7 +2036,6 @@
                 <ScalarProperty Name="BedNo" ColumnName="BedNo" />
                 <ScalarProperty Name="FromDate" ColumnName="FromDate" />
                 <ScalarProperty Name="EndDate" ColumnName="EndDate" />
-                <ScalarProperty Name="DischargeSummary" ColumnName="DischargeSummary" />
                 <ScalarProperty Name="AllocationStatus" ColumnName="AllocationStatus" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -2064,6 +2066,7 @@
           <EntitySetMapping Name="PrescriptionMasters">
             <EntityTypeMapping TypeName="HISDBModel.PrescriptionMaster">
               <MappingFragment StoreEntitySet="PrescriptionMaster">
+                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
                 <ScalarProperty Name="PMID" ColumnName="PMID" />
                 <ScalarProperty Name="ENMRNO" ColumnName="ENMRNO" />
                 <ScalarProperty Name="PrescribedBy" ColumnName="PrescribedBy" />

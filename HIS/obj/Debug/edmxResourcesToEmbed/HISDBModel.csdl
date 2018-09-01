@@ -137,6 +137,7 @@
     <NavigationProperty Name="InPatientHistories" Relationship="Self.FK_IPH_InPatients_ENMRNO" FromRole="InPatients" ToRole="InPatientHistory" />
     <NavigationProperty Name="User" Relationship="Self.FK_InPatients_Doctor" FromRole="InPatients" ToRole="Users" />
     <NavigationProperty Name="PatientRoomAllocations" Relationship="Self.FK_PRA_InPatients_ENMRNO" FromRole="InPatients" ToRole="PatientRoomAllocation" />
+    <Property Name="IsDischarged" Type="Boolean" />
   </EntityType>
   <EntityType Name="IntakeFrequency">
     <Key>
@@ -240,7 +241,6 @@
     <Property Name="BedNo" Type="Int32" Nullable="false" />
     <Property Name="FromDate" Type="DateTime" Nullable="false" Precision="3" />
     <Property Name="EndDate" Type="DateTime" Precision="3" />
-    <Property Name="DischargeSummary" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
     <Property Name="AllocationStatus" Type="Int32" Nullable="false" />
     <NavigationProperty Name="InPatient" Relationship="Self.FK_PRA_InPatients_ENMRNO" FromRole="PatientRoomAllocation" ToRole="InPatients" />
     <NavigationProperty Name="Room" Relationship="Self.FK_PRA_RoomNo" FromRole="PatientRoomAllocation" ToRole="Rooms" />
@@ -283,6 +283,7 @@
     <Property Name="PaidAmount" Type="Decimal" Precision="19" Scale="4" />
     <NavigationProperty Name="PatientPrescriptions" Relationship="Self.FK_PP_PMID" FromRole="PrescriptionMaster" ToRole="PatientPrescription" />
     <NavigationProperty Name="User" Relationship="Self.FK_PM_Doctor" FromRole="PrescriptionMaster" ToRole="Users" />
+    <Property Name="TotalAmount" Type="Decimal" Precision="19" Scale="4" />
   </EntityType>
   <EntityType Name="PurchaseOrder">
     <Key>

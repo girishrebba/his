@@ -93,6 +93,7 @@
     <EntitySetMapping Name="InPatients">
       <EntityTypeMapping TypeName="HISDBModel.InPatient">
         <MappingFragment StoreEntitySet="InPatients">
+          <ScalarProperty Name="IsDischarged" ColumnName="IsDischarged" />
           <ScalarProperty Name="SNO" ColumnName="SNO" />
           <ScalarProperty Name="ENMRNO" ColumnName="ENMRNO" />
           <ScalarProperty Name="FirstName" ColumnName="FirstName" />
@@ -223,7 +224,6 @@
           <ScalarProperty Name="BedNo" ColumnName="BedNo" />
           <ScalarProperty Name="FromDate" ColumnName="FromDate" />
           <ScalarProperty Name="EndDate" ColumnName="EndDate" />
-          <ScalarProperty Name="DischargeSummary" ColumnName="DischargeSummary" />
           <ScalarProperty Name="AllocationStatus" ColumnName="AllocationStatus" />
         </MappingFragment>
       </EntityTypeMapping>
@@ -254,6 +254,7 @@
     <EntitySetMapping Name="PrescriptionMasters">
       <EntityTypeMapping TypeName="HISDBModel.PrescriptionMaster">
         <MappingFragment StoreEntitySet="PrescriptionMaster">
+          <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
           <ScalarProperty Name="PMID" ColumnName="PMID" />
           <ScalarProperty Name="ENMRNO" ColumnName="ENMRNO" />
           <ScalarProperty Name="PrescribedBy" ColumnName="PrescribedBy" />

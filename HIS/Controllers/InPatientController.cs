@@ -318,7 +318,6 @@ namespace HIS.Controllers
                     roomalloc.AllocationID = roomallocation.pra.AllocationID;
                     roomalloc.AllocationStatus = roomallocation.pra.AllocationStatus;
                     roomalloc.BedNo = roomallocation.pra.BedNo;
-                    roomalloc.DischargeSummary = roomallocation.pra.DischargeSummary;
                     roomalloc.FromDate = roomallocation.pra.FromDate;
                     roomalloc.EndDate = roomallocation.pra.EndDate;
                     roomalloc.RoomNo = roomallocation.pra.RoomNo;
