@@ -14,6 +14,7 @@ namespace HIS
         public string DoctorName { get; set; }
         public string VisitName { get; set; }
         public string ENMRNO { get; set; }
+        public int PrescribedBy { get; set; }
     }
 
     public class PatientTestMetaData
@@ -25,11 +26,6 @@ namespace HIS
         //[Required(ErrorMessage = "Test Date is required", AllowEmptyStrings = false)]
         //[Display(Name = "Test Date")]
         public string TestDate { get; set; }
-
-        [Required(ErrorMessage = "Prescribed Doctor is required", AllowEmptyStrings = false)]
-        [Display(Name = "Prescribed Doctor")]
-        public string PrescribedDoctor { get; set; }
-        public int SNO { get; set; }
 
         [RegularExpression(@"([a-zA-Z0-9\s_\\.\-:])+(.pdf|.docx|.doc)$", ErrorMessage = "Only pdf/doc/docx files allowed.")]
         public HttpPostedFileBase ReportPath { get; set; }

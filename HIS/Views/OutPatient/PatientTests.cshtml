@@ -19,12 +19,13 @@
     }
 </style>
 @using HIS.HtmlHelpers
-@using (Html.BeginForm("PatientTests", "OutPatient", FormMethod.Post, new { id = "ptForm", onsubmit = "return SubmitPatientTestForm(this)" }))
+@using (Html.BeginForm("PatientTests", "OutPatient", FormMethod.Post, new { id = "ptForm", onsubmit = "return SubmitLabTestForm(this)" }))
 {
     <div class="form-horizontal">
         @if (Model != null && Model.Count > 0)
         {
         @Html.HiddenFor(model => model[0].ENMRNO, new { @id = "ENMRNO" })
+            @Html.HiddenFor(model => model[0].LTMID, new { @id = "LTMID" })
         <div class="col-lg-8">
             <div class="form-group">
                 @Html.LabelFor(model => model[0].ENMRNO, "ENMRNO:", new { @class = "control-label col-md-2" })
@@ -50,8 +51,8 @@
                         <thead>
                             <tr>
                                 <th style="width:25%">Test</th>
-                                <th style="width:15%">Date</th>
                                 <th style="width:10%">Values</th>
+                                <th style="width:15%">Date</th>
                                 <th style="width:40%">Impression</th>
                                 <th style="width:10%">Upload File</th>
                             </tr>
@@ -59,19 +60,19 @@
                         <tbody>
                             @foreach (var p in Model)
                             {
-                                <tr>
-                                    <td style="display:none">@p.TestID</td>
-                                    <td>@p.TestName</td>
-                                    <td>
-                                        <div id="date-popup" class="input-group date">
-                                            @Html.EditorFor(model => p.TestDate, new { htmlAttributes = new { Value = Html.DateFormat(p.TestDate), @class = "datepicker form-control", @placeholder = "" } })
-                                            <span class="btndatepicker input-group-addon"><i class="fa fa-calendar"></i></span>
-                                        </div>
-                                    </td>
-                                    <td>@Html.EditorFor(model => p.RecordedValues, new { htmlAttributes = new { @class = "form-control deliverQty" } })</td>
-                                    <td>@Html.EditorFor(model => p.TestImpression, new { htmlAttributes = new { @class = "form-control" } })</td>
-                                    <td> <input id="imgpath" type="file" /></td>
-                                </tr>
+                            <tr>
+                                <td style="display:none">@p.TestID</td>
+                                <td>@p.TestName</td>
+                                <td>@Html.EditorFor(model => p.RecordedValues, new { htmlAttributes = new { @class = "form-control recordValue" } })</td>
+                                <td>
+                                    <div id="date-popup" class="input-group date">
+                                        @Html.EditorFor(model => p.TestDate, new { htmlAttributes = new { Value = Html.DateFormat(p.TestDate), @class = "datepicker form-control", @placeholder = "" } })
+                                        <span class="btndatepicker input-group-addon"><i class="fa fa-calendar"></i></span>
+                                    </div>
+                                </td>
+                                <td>@Html.EditorFor(model => p.TestImpression, new { htmlAttributes = new { @class = "form-control testImpression" } })</td>
+                                <td> <input id="imgpath" type="file" /></td>
+                            </tr>
                             }
                         </tbody>
                     </table>
@@ -88,7 +89,7 @@
         }
         else
         {
-            <span style="color:red; font-weight:bold;">No Pending Tests Found for this Patient. Please contact with you physician!!</span>
+            <span style="color:red; font-weight:bold;">No Pending Tests found for this Patient. Please contact your physician!!</span>
         }
     </div>
 }

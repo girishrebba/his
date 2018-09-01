@@ -307,18 +307,20 @@
             $('#IntakeFrequencyID').rules('remove', 'required');
             var enmrNo = $('#ENMRNO').val();
             var visitID = $('#VisitID').val();
-            $('#ppTable > tbody tr').not(':first').each(function (index, elem) {
-                var tbl = {};
-                tbl.ENMRNO = enmrNo;
-                tbl.VisitID = visitID;
-                tbl.MedicineID = $($(this).find('td:eq(0)')).html();
-                tbl.MedicineWithDose = $($(this).find('td:eq(1)')).html();
-                tbl.Quantity = $($(this).find('td:eq(2)')).html();
-                tbl.IntakeFrequencyID = $($(this).find('td:eq(3)')).html();
-                tbl.Comments = $($(this).find('td:eq(5)')).html();
-                tbl.TestIds = $('#TestIds').val();
-                ppItems.push(tbl);
-            });
+            var rowCount = 0;
+                $('#ppTable > tbody tr').not(':first').each(function (index, elem) {
+                    rowCount++;
+                    var tbl = {};
+                    tbl.ENMRNO = enmrNo;
+                    tbl.VisitID = visitID;
+                    tbl.MedicineID = $($(this).find('td:eq(0)')).html();
+                    tbl.MedicineWithDose = $($(this).find('td:eq(1)')).html();
+                    tbl.Quantity = $($(this).find('td:eq(2)')).html();
+                    tbl.IntakeFrequencyID = $($(this).find('td:eq(3)')).html();
+                    tbl.Comments = $($(this).find('td:eq(5)')).html();
+                    tbl.TestIds = $('#TestIds').val();
+                    ppItems.push(tbl);
+                });
             $.ajax({
                 type: "POST",
                 contentType: "application/json",
@@ -442,8 +444,40 @@
             return false;
         }
 
-        function SubmitLabTestForm(url) {
-
+        function SubmitLabTestForm(form) {
+            var patientTests = [];
+            $.validator.setDefaults({
+                ignore: []
+            });
+            var enmrNo = $('#ENMRNO').val();
+            var ltmID = $('#LTMID').val();
+            $(form).find('#ptTable > tbody tr').each(function (index, elem) {
+                var tbl = {};
+                tbl.ENMRNO = enmrNo;
+                tbl.LTMID = ltmID,
+                tbl.TestID = $($(this).find('td:eq(0)')).html();
+                tbl.RecordedValues = $($(this).find('td:eq(2)').find('.recordValue')).val();
+                tbl.TestDate = $($(this).find('td:eq(3)').find('.datepicker')).val(); _
+                tbl.TestImpression = $($(this).find('td:eq(4)').find('.testImpression')).val(); _
+                patientTests.push(tbl);
+            });
+            $.ajax({
+                type: "POST",
+                contentType: "application/json",
+                url: form.action,
+                data: JSON.stringify(patientTests),
+                success: function (data) {
+                    if (data.success) {
+                        newPT.dialog('close');
+                        dataTable.ajax.reload();
+                        $.notify(data.message, {
+                            globalPosition: "top center",
+                            className: "success"
+                        })
+                    }
+                }
+            });
+            return false;
         }
     </script>
 }

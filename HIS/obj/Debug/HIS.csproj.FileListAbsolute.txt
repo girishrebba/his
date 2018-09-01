@@ -408,3 +408,4 @@ D:\HIS\his.git\trunk\HIS\obj\Debug\HIS.csproj.CoreCompileInputs.cache
 D:\HIS\his.git\trunk\HIS\obj\Debug\HIS.csproj.CopyComplete
 D:\HIS\his.git\trunk\HIS\obj\Debug\HIS.dll
 D:\HIS\his.git\trunk\HIS\obj\Debug\HIS.pdb
+D:\HIS\his.git\trunk\HIS\obj\Debug\HIS.csprojResolveAssemblyReference.cache

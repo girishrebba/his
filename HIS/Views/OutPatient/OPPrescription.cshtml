@@ -189,14 +189,10 @@
     });
 
     $('#btnSubmit').click(function () {
-        alert($('table#ppTable tr').length);
-    alert($('#TestIds').val());
         if (($('table#ppTable tr').length < 3) && $('#TestIds').val() === null) {
             alert("Please suggest some prescrition or Test");
             return false;
         }
-        else { return true;}
-
     });
     
     var myJsVariable = @Html.Raw(Json.Encode(Model.ENMRNO));

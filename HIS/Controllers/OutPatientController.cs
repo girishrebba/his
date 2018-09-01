@@ -405,7 +405,9 @@ namespace HIS.Controllers
                                      DoctorName = HtmlHelpers.HtmlHelpers.GetFullName(x.u.FirstName, x.u.MiddleName, x.u.LastName),
                                      RecordedValues = x.pt.RecordedValues,
                                      TestImpression = x.pt.TestImpression,
-                                     ReportPath = x.pt.ReportPath
+                                     ReportPath = x.pt.ReportPath,
+                                     LTMID = x.pt.LTMID,
+                                     TestID = x.pt.TestID
                                  }).ToList();
 
                 return patientTests;
@@ -502,9 +504,9 @@ namespace HIS.Controllers
                         pp.PMID = pmid;
                         db.PatientPrescriptions.Add(pp);
                     }
-
+                    db.SaveChanges();
                     //Save Tests
-                    if(suggestedTestsIfAny.TestIds != null)
+                    if (suggestedTestsIfAny.TestIds != null)
                     {
                         System.Data.Entity.Core.Objects.ObjectParameter ltmidOut = new System.Data.Entity.Core.Objects.ObjectParameter("LTMID", typeof(Int32));
                         db.CreateMasterLabTest(prescriptions[0].ENMRNO, Convert.ToInt32(System.Web.HttpContext.Current.Session["UserID"]), prescriptions[0].VisitID, ltmidOut);
@@ -573,6 +575,7 @@ namespace HIS.Controllers
                 string visitName = VisitName(latestVisit.ConsultTypeID);
                 if (patientTests.Count() > 0)
                 {
+                    patientTests[0].ENMRNO = enmrNo;
                     patientTests[0].VisitName = VisitName(latestVisit.ConsultTypeID);
                     
                 }
@@ -580,28 +583,34 @@ namespace HIS.Controllers
             return View(patientTests);
         }
 
-        //[HttpPost]
-        //public ActionResult PatientTests(List<PatientTest> ptItems)
-        //{
-        //    using (HISDBEntities db = new HISDBEntities())
-        //    {
-        //        if (ptItems != null && ptItems.Count() > 0)
-        //        {
-        //            foreach (PatientTest pt in ptItems)
-        //            {
-        //                pt.PrescribedDoctor = 1;
-        //                db.PatientTests.Add(pt);
-        //                db.SaveChanges();
-        //            }
-                    
-        //            return Json(new { success = true, message = string.Format("Prescription for ENMRNO - {0} created Successfully", ptItems[0].ENMRNO) }, JsonRequestBehavior.AllowGet);
-        //        }
-        //        else
-        //        {
-        //            return Json(new { success = false, message = "Error occured" }, JsonRequestBehavior.AllowGet);
-        //        }
-        //    }
-        //}
+        [HttpPost]
+        public ActionResult PatientTests(List<PatientTest> ptItems)
+        {
+            using (HISDBEntities db = new HISDBEntities())
+            {
+                if (ptItems != null && ptItems.Count() > 0)
+                {
+                    foreach (PatientTest pt in ptItems)
+                    {
+                        var test = db.PatientTests.Where(p => p.LTMID == pt.LTMID && p.TestID == pt.TestID).FirstOrDefault();
+                        if (test != null)
+                        {
+                            test.RecordedValues = pt.RecordedValues;
+                            test.TestDate = pt.TestDate;
+                            test.TestImpression = pt.TestImpression;
+                            db.Entry(test).State = EntityState.Modified;
+                        }
+                        db.SaveChanges();
+                    }
+
+                    return Json(new { success = true, message = string.Format("Lab Tests for ENMRNO - {0} updated Successfully", ptItems[0].ENMRNO) }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Error occured" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+        }
 
         [HttpPost]
         public JsonResult GetTestName(string Prefix)
