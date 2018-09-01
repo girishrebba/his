@@ -43,7 +43,6 @@ namespace HIS
         public virtual DbSet<OutPatient> OutPatients { get; set; }
         public virtual DbSet<PatientPrescription> PatientPrescriptions { get; set; }
         public virtual DbSet<PatientRoomAllocation> PatientRoomAllocations { get; set; }
-        public virtual DbSet<PatientTest> PatientTests { get; set; }
         public virtual DbSet<PatientVisitHistory> PatientVisitHistories { get; set; }
         public virtual DbSet<Permission> Permissions { get; set; }
         public virtual DbSet<PrescriptionMaster> PrescriptionMasters { get; set; }
@@ -55,6 +54,8 @@ namespace HIS
         public virtual DbSet<UserPermission> UserPermissions { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserType> UserTypes { get; set; }
+        public virtual DbSet<LabTestMaster> LabTestMasters { get; set; }
+        public virtual DbSet<PatientTest> PatientTests { get; set; }
     
         public virtual int ConvertOutPatientToInPatient(string eNMRNO)
         {
@@ -80,6 +81,23 @@ namespace HIS
                 new ObjectParameter("VisitID", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("CreateMasterPrescription", eNMRNOParameter, doctorIDParameter, visitIDParameter, pMID);
+        }
+    
+        public virtual int CreateMasterLabTest(string eNMRNO, Nullable<int> doctorID, Nullable<int> visitID, ObjectParameter lTMID)
+        {
+            var eNMRNOParameter = eNMRNO != null ?
+                new ObjectParameter("ENMRNO", eNMRNO) :
+                new ObjectParameter("ENMRNO", typeof(string));
+    
+            var doctorIDParameter = doctorID.HasValue ?
+                new ObjectParameter("DoctorID", doctorID) :
+                new ObjectParameter("DoctorID", typeof(int));
+    
+            var visitIDParameter = visitID.HasValue ?
+                new ObjectParameter("VisitID", visitID) :
+                new ObjectParameter("VisitID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("CreateMasterLabTest", eNMRNOParameter, doctorIDParameter, visitIDParameter, lTMID);
         }
     }
 }

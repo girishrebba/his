@@ -21,7 +21,6 @@
         <EntityTypeShape EntityType="HISDBModel.OutPatient" Width="1.5" PointX="5.25" PointY="20.25" IsExpanded="true" />
         <EntityTypeShape EntityType="HISDBModel.PatientPrescription" Width="1.5" PointX="7.5" PointY="45.125" IsExpanded="true" />
         <EntityTypeShape EntityType="HISDBModel.PatientRoomAllocation" Width="1.5" PointX="13.5" PointY="16.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="HISDBModel.PatientTest" Width="1.5" PointX="11.25" PointY="16.5" IsExpanded="true" />
         <EntityTypeShape EntityType="HISDBModel.PatientVisitHistory" Width="1.5" PointX="7.5" PointY="23.5" IsExpanded="true" />
         <EntityTypeShape EntityType="HISDBModel.Permission" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="HISDBModel.PrescriptionMaster" Width="1.5" PointX="5.25" PointY="45.25" IsExpanded="true" />
@@ -55,13 +54,16 @@
         <AssociationConnector Association="HISDBModel.FK_PVH_OutPatient_ENMRNO" ManuallyRouted="false" />
         <AssociationConnector Association="HISDBModel.FK_PP_PMID" ManuallyRouted="false" />
         <AssociationConnector Association="HISDBModel.FK_PRA_RoomNo" ManuallyRouted="false" />
-        <AssociationConnector Association="HISDBModel.FK_PatientTests_TestID" ManuallyRouted="false" />
-        <AssociationConnector Association="HISDBModel.FK_PatientTests_UserID" ManuallyRouted="false" />
         <AssociationConnector Association="HISDBModel.FK_PatientVisitHistory_Doctor" ManuallyRouted="false" />
         <AssociationConnector Association="HISDBModel.FK_PM_Doctor" ManuallyRouted="false" />
         <AssociationConnector Association="HISDBModel.FK_User_Specialization" ManuallyRouted="false" />
         <AssociationConnector Association="HISDBModel.FK_User_Type" ManuallyRouted="false" />
-      </Diagram>
+        <EntityTypeShape EntityType="HISDBModel.LabTestMaster" Width="1.5" PointX="5.25" PointY="6.625" />
+        <AssociationConnector Association="HISDBModel.FK_LTM_Doctor" />
+        <EntityTypeShape EntityType="HISDBModel.PatientTest" Width="1.5" PointX="11.25" PointY="8.375" />
+        <AssociationConnector Association="HISDBModel.FK_PatientTests_LTMID" />
+        <AssociationConnector Association="HISDBModel.FK_PatientTests_TestID" />
+        </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>

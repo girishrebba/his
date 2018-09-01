@@ -339,9 +339,10 @@ namespace HIS.HtmlHelpers
             {
 
                 var patientTests = (from pt in hs.PatientTests
-                                    join op in hs.OutPatients on pt.ENMRNO equals op.ENMRNO
+                                    join ltm in hs.LabTestMasters on pt.LTMID equals ltm.LTMID
+                                    join op in hs.OutPatients on ltm.ENMRNO equals op.ENMRNO
                                     join tt in hs.TestTypes on pt.TestID equals tt.TestID
-                                    join u in hs.Users on pt.PrescribedDoctor equals u.UserID
+                                    join u in hs.Users on ltm.PrescribedBy equals u.UserID
                                     join ut in hs.UserTypes on u.UserTypeID equals ut.UserTypeID
                                     where ut.UserTypeName.Equals("Doctor") && pt.ENMRNO == enmrNo 
                                     select new
@@ -350,7 +351,7 @@ namespace HIS.HtmlHelpers
                                         u,
                                         tt
                                     })
-                                  .OrderByDescending(b => b.pt.SNO)
+                                  .OrderByDescending(b => b.pt.PTID)
                                   .AsEnumerable()
                                  .Select(x => new PatientTest
                                  {

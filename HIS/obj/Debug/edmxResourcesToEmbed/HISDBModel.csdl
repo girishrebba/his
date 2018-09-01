@@ -245,24 +245,6 @@
     <NavigationProperty Name="InPatient" Relationship="Self.FK_PRA_InPatients_ENMRNO" FromRole="PatientRoomAllocation" ToRole="InPatients" />
     <NavigationProperty Name="Room" Relationship="Self.FK_PRA_RoomNo" FromRole="PatientRoomAllocation" ToRole="Rooms" />
   </EntityType>
-  <EntityType Name="PatientTest">
-    <Key>
-      <PropertyRef Name="SNO" />
-    </Key>
-    <Property Name="SNO" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="ENMRNO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-    <Property Name="TestID" Type="Int32" Nullable="false" />
-    <Property Name="TestDate" Type="DateTime" Precision="3" />
-    <Property Name="PrescribedDoctor" Type="Int32" Nullable="false" />
-    <Property Name="VisitID" Type="Int32" />
-    <Property Name="RecordedValues" Type="Decimal" Precision="18" Scale="0" />
-    <Property Name="TestImpression" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="ReportPath" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-    <Property Name="Discount" Type="Decimal" Precision="4" Scale="2" />
-    <Property Name="PaidAmunt" Type="Decimal" Precision="19" Scale="4" />
-    <NavigationProperty Name="TestType" Relationship="Self.FK_PatientTests_TestID" FromRole="PatientTests" ToRole="TestTypes" />
-    <NavigationProperty Name="User" Relationship="Self.FK_PatientTests_UserID" FromRole="PatientTests" ToRole="Users" />
-  </EntityType>
   <EntityType Name="PatientVisitHistory">
     <Key>
       <PropertyRef Name="SNO" />
@@ -356,7 +338,7 @@
     <Property Name="TestID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="TestName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
     <Property Name="TestCost" Type="Decimal" Precision="19" Scale="4" />
-    <NavigationProperty Name="PatientTests" Relationship="Self.FK_PatientTests_TestID" FromRole="TestTypes" ToRole="PatientTests" />
+    <NavigationProperty Name="PatientTests" Relationship="HISDBModel.FK_PatientTests_TestID" FromRole="TestType" ToRole="PatientTest" />
   </EntityType>
   <EntityType Name="UserPermission">
     <Key>
@@ -389,11 +371,11 @@
     <NavigationProperty Name="InPatientHistories" Relationship="Self.FK_InPatientHistory_Doctor" FromRole="Users" ToRole="InPatientHistory" />
     <NavigationProperty Name="InPatients" Relationship="Self.FK_InPatients_Doctor" FromRole="Users" ToRole="InPatients" />
     <NavigationProperty Name="OutPatients" Relationship="Self.FK_OutPatients_Doctor" FromRole="Users" ToRole="OutPatients" />
-    <NavigationProperty Name="PatientTests" Relationship="Self.FK_PatientTests_UserID" FromRole="Users" ToRole="PatientTests" />
     <NavigationProperty Name="PatientVisitHistories" Relationship="Self.FK_PatientVisitHistory_Doctor" FromRole="Users" ToRole="PatientVisitHistory" />
     <NavigationProperty Name="PrescriptionMasters" Relationship="Self.FK_PM_Doctor" FromRole="Users" ToRole="PrescriptionMaster" />
     <NavigationProperty Name="Specialization" Relationship="Self.FK_User_Specialization" FromRole="Users" ToRole="Specialization" />
     <NavigationProperty Name="UserType" Relationship="Self.FK_User_Type" FromRole="Users" ToRole="UserType" />
+    <NavigationProperty Name="LabTestMasters" Relationship="HISDBModel.FK_LTM_Doctor" FromRole="User" ToRole="LabTestMaster" />
   </EntityType>
   <EntityType Name="UserType">
     <Key>
@@ -667,30 +649,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_PatientTests_TestID">
-    <End Role="TestTypes" Type="Self.TestType" Multiplicity="1" />
-    <End Role="PatientTests" Type="Self.PatientTest" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="TestTypes">
-        <PropertyRef Name="TestID" />
-      </Principal>
-      <Dependent Role="PatientTests">
-        <PropertyRef Name="TestID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_PatientTests_UserID">
-    <End Role="Users" Type="Self.User" Multiplicity="1" />
-    <End Role="PatientTests" Type="Self.PatientTest" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Users">
-        <PropertyRef Name="UserID" />
-      </Principal>
-      <Dependent Role="PatientTests">
-        <PropertyRef Name="PrescribedDoctor" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_PatientVisitHistory_Doctor">
     <End Role="Users" Type="Self.User" Multiplicity="1" />
     <End Role="PatientVisitHistory" Type="Self.PatientVisitHistory" Multiplicity="*" />
@@ -756,7 +714,6 @@
     <EntitySet Name="OutPatients" EntityType="Self.OutPatient" />
     <EntitySet Name="PatientPrescriptions" EntityType="Self.PatientPrescription" />
     <EntitySet Name="PatientRoomAllocations" EntityType="Self.PatientRoomAllocation" />
-    <EntitySet Name="PatientTests" EntityType="Self.PatientTest" />
     <EntitySet Name="PatientVisitHistories" EntityType="Self.PatientVisitHistory" />
     <EntitySet Name="Permissions" EntityType="Self.Permission" />
     <EntitySet Name="PrescriptionMasters" EntityType="Self.PrescriptionMaster" />
@@ -856,14 +813,6 @@
       <End Role="Rooms" EntitySet="Rooms" />
       <End Role="PatientRoomAllocation" EntitySet="PatientRoomAllocations" />
     </AssociationSet>
-    <AssociationSet Name="FK_PatientTests_TestID" Association="Self.FK_PatientTests_TestID">
-      <End Role="TestTypes" EntitySet="TestTypes" />
-      <End Role="PatientTests" EntitySet="PatientTests" />
-    </AssociationSet>
-    <AssociationSet Name="FK_PatientTests_UserID" Association="Self.FK_PatientTests_UserID">
-      <End Role="Users" EntitySet="Users" />
-      <End Role="PatientTests" EntitySet="PatientTests" />
-    </AssociationSet>
     <AssociationSet Name="FK_PatientVisitHistory_Doctor" Association="Self.FK_PatientVisitHistory_Doctor">
       <End Role="Users" EntitySet="Users" />
       <End Role="PatientVisitHistory" EntitySet="PatientVisitHistories" />
@@ -889,5 +838,93 @@
       <Parameter Name="VisitID" Mode="In" Type="Int32" />
       <Parameter Name="PMID" Mode="InOut" Type="Int32" />
     </FunctionImport>
+    <EntitySet Name="LabTestMasters" EntityType="HISDBModel.LabTestMaster" />
+    <AssociationSet Name="FK_LTM_Doctor" Association="HISDBModel.FK_LTM_Doctor">
+      <End Role="User" EntitySet="Users" />
+      <End Role="LabTestMaster" EntitySet="LabTestMasters" />
+    </AssociationSet>
+    <FunctionImport Name="CreateMasterLabTest">
+      <Parameter Name="ENMRNO" Mode="In" Type="String" />
+      <Parameter Name="DoctorID" Mode="In" Type="Int32" />
+      <Parameter Name="VisitID" Mode="In" Type="Int32" />
+      <Parameter Name="LTMID" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <EntitySet Name="PatientTests" EntityType="HISDBModel.PatientTest" />
+    <AssociationSet Name="FK_PatientTests_LTMID" Association="HISDBModel.FK_PatientTests_LTMID">
+      <End Role="LabTestMaster" EntitySet="LabTestMasters" />
+      <End Role="PatientTest" EntitySet="PatientTests" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PatientTests_TestID" Association="HISDBModel.FK_PatientTests_TestID">
+      <End Role="TestType" EntitySet="TestTypes" />
+      <End Role="PatientTest" EntitySet="PatientTests" />
+    </AssociationSet>
   </EntityContainer>
+  <EntityType Name="LabTestMaster">
+    <Key>
+      <PropertyRef Name="LTMID" />
+    </Key>
+    <Property Name="LTMID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ENMRNO" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="PrescribedBy" Type="Int32" Nullable="false" />
+    <Property Name="DatePrescribed" Type="DateTime" Precision="0" />
+    <Property Name="VisitID" Type="Int32" />
+    <Property Name="IsBillPaid" Type="Int32" />
+    <Property Name="IsDelivered" Type="Boolean" />
+    <Property Name="Discount" Type="Decimal" Precision="4" Scale="2" />
+    <Property Name="PaidAmount" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="TotalAmount" Type="Decimal" Precision="19" Scale="4" />
+    <NavigationProperty Name="User" Relationship="HISDBModel.FK_LTM_Doctor" FromRole="LabTestMaster" ToRole="User" />
+    <NavigationProperty Name="PatientTests" Relationship="HISDBModel.FK_PatientTests_LTMID" FromRole="LabTestMaster" ToRole="PatientTest" />
+  </EntityType>
+  <Association Name="FK_LTM_Doctor">
+    <End Type="HISDBModel.User" Role="User" Multiplicity="1" />
+    <End Type="HISDBModel.LabTestMaster" Role="LabTestMaster" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="LabTestMaster">
+        <PropertyRef Name="PrescribedBy" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="PatientTest">
+    <Key>
+      <PropertyRef Name="PTID" />
+    </Key>
+    <Property Name="PTID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="LTMID" Type="Int32" Nullable="false" />
+    <Property Name="TestID" Type="Int32" Nullable="false" />
+    <Property Name="TestDate" Type="DateTime" Precision="3" />
+    <Property Name="RecordedValues" Type="Decimal" Precision="18" Scale="0" />
+    <Property Name="TestImpression" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="ReportPath" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="IsSampleCollected" Type="Boolean" />
+    <NavigationProperty Name="LabTestMaster" Relationship="HISDBModel.FK_PatientTests_LTMID" FromRole="PatientTest" ToRole="LabTestMaster" />
+    <NavigationProperty Name="TestType" Relationship="HISDBModel.FK_PatientTests_TestID" FromRole="PatientTest" ToRole="TestType" />
+  </EntityType>
+  <Association Name="FK_PatientTests_LTMID">
+    <End Type="HISDBModel.LabTestMaster" Role="LabTestMaster" Multiplicity="1" />
+    <End Type="HISDBModel.PatientTest" Role="PatientTest" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="LabTestMaster">
+        <PropertyRef Name="LTMID" />
+      </Principal>
+      <Dependent Role="PatientTest">
+        <PropertyRef Name="LTMID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PatientTests_TestID">
+    <End Type="HISDBModel.TestType" Role="TestType" Multiplicity="1" />
+    <End Type="HISDBModel.PatientTest" Role="PatientTest" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TestType">
+        <PropertyRef Name="TestID" />
+      </Principal>
+      <Dependent Role="PatientTest">
+        <PropertyRef Name="TestID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
 </Schema>

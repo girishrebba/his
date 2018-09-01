@@ -126,6 +126,21 @@
     <Property Name="FrequencyID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Frequency" Type="varchar" MaxLength="100" Nullable="false" />
   </EntityType>
+  <EntityType Name="LabTestMaster">
+    <Key>
+      <PropertyRef Name="LTMID" />
+    </Key>
+    <Property Name="LTMID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ENMRNO" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="PrescribedBy" Type="int" Nullable="false" />
+    <Property Name="DatePrescribed" Type="date" />
+    <Property Name="VisitID" Type="int" />
+    <Property Name="IsBillPaid" Type="int" />
+    <Property Name="IsDelivered" Type="bit" />
+    <Property Name="Discount" Type="decimal" Precision="4" Scale="2" />
+    <Property Name="PaidAmount" Type="money" />
+    <Property Name="TotalAmount" Type="money" />
+  </EntityType>
   <EntityType Name="MedicineInventory">
     <Key>
       <PropertyRef Name="MedInventoryID" />
@@ -213,19 +228,16 @@
   </EntityType>
   <EntityType Name="PatientTests">
     <Key>
-      <PropertyRef Name="SNO" />
+      <PropertyRef Name="PTID" />
     </Key>
-    <Property Name="SNO" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="ENMRNO" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="PTID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="LTMID" Type="int" Nullable="false" />
     <Property Name="TestID" Type="int" Nullable="false" />
     <Property Name="TestDate" Type="datetime" />
-    <Property Name="PrescribedDoctor" Type="int" Nullable="false" />
-    <Property Name="VisitID" Type="int" />
     <Property Name="RecordedValues" Type="decimal" Precision="18" Scale="0" />
     <Property Name="TestImpression" Type="nvarchar(max)" />
     <Property Name="ReportPath" Type="nvarchar" MaxLength="200" />
-    <Property Name="Discount" Type="decimal" Precision="4" Scale="2" />
-    <Property Name="PaidAmunt" Type="money" />
+    <Property Name="IsSampleCollected" Type="bit" />
   </EntityType>
   <EntityType Name="PatientVisitHistory">
     <Key>
@@ -455,6 +467,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_LTM_Doctor">
+    <End Role="Users" Type="Self.Users" Multiplicity="1" />
+    <End Role="LabTestMaster" Type="Self.LabTestMaster" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="LabTestMaster">
+        <PropertyRef Name="PrescribedBy" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_MI_MedicineID">
     <End Role="MedicineMaster" Type="Self.MedicineMaster" Multiplicity="1" />
     <End Role="MedicineInventory" Type="Self.MedicineInventory" Multiplicity="*" />
@@ -515,6 +539,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_PatientTests_LTMID">
+    <End Role="LabTestMaster" Type="Self.LabTestMaster" Multiplicity="1" />
+    <End Role="PatientTests" Type="Self.PatientTests" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="LabTestMaster">
+        <PropertyRef Name="LTMID" />
+      </Principal>
+      <Dependent Role="PatientTests">
+        <PropertyRef Name="LTMID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_PatientTests_TestID">
     <End Role="TestTypes" Type="Self.TestTypes" Multiplicity="1" />
     <End Role="PatientTests" Type="Self.PatientTests" Multiplicity="*" />
@@ -524,18 +560,6 @@
       </Principal>
       <Dependent Role="PatientTests">
         <PropertyRef Name="TestID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_PatientTests_UserID">
-    <End Role="Users" Type="Self.Users" Multiplicity="1" />
-    <End Role="PatientTests" Type="Self.PatientTests" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Users">
-        <PropertyRef Name="UserID" />
-      </Principal>
-      <Dependent Role="PatientTests">
-        <PropertyRef Name="PrescribedDoctor" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -686,6 +710,12 @@
   <Function Name="ConvertOutPatientToInPatient" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="ENMRNO" Type="varchar" Mode="In" />
   </Function>
+  <Function Name="CreateMasterLabTest" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="ENMRNO" Type="varchar" Mode="In" />
+    <Parameter Name="DoctorID" Type="int" Mode="In" />
+    <Parameter Name="VisitID" Type="int" Mode="In" />
+    <Parameter Name="LTMID" Type="int" Mode="InOut" />
+  </Function>
   <Function Name="CreateMasterPrescription" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="ENMRNO" Type="varchar" Mode="In" />
     <Parameter Name="DoctorID" Type="int" Mode="In" />
@@ -704,6 +734,7 @@
     <EntitySet Name="InPatientHistory" EntityType="Self.InPatientHistory" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="InPatients" EntityType="Self.InPatients" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="IntakeFrequency" EntityType="Self.IntakeFrequency" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="LabTestMaster" EntityType="Self.LabTestMaster" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="MedicineInventory" EntityType="Self.MedicineInventory" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="MedicineMaster" EntityType="Self.MedicineMaster" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="OutPatients" EntityType="Self.OutPatients" Schema="dbo" store:Type="Tables" />
@@ -757,6 +788,10 @@
       <End Role="InPatients" EntitySet="InPatients" />
       <End Role="InPatientHistory" EntitySet="InPatientHistory" />
     </AssociationSet>
+    <AssociationSet Name="FK_LTM_Doctor" Association="Self.FK_LTM_Doctor">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="LabTestMaster" EntitySet="LabTestMaster" />
+    </AssociationSet>
     <AssociationSet Name="FK_MI_MedicineID" Association="Self.FK_MI_MedicineID">
       <End Role="MedicineMaster" EntitySet="MedicineMaster" />
       <End Role="MedicineInventory" EntitySet="MedicineInventory" />
@@ -777,12 +812,12 @@
       <End Role="Users" EntitySet="Users" />
       <End Role="OutPatients" EntitySet="OutPatients" />
     </AssociationSet>
-    <AssociationSet Name="FK_PatientTests_TestID" Association="Self.FK_PatientTests_TestID">
-      <End Role="TestTypes" EntitySet="TestTypes" />
+    <AssociationSet Name="FK_PatientTests_LTMID" Association="Self.FK_PatientTests_LTMID">
+      <End Role="LabTestMaster" EntitySet="LabTestMaster" />
       <End Role="PatientTests" EntitySet="PatientTests" />
     </AssociationSet>
-    <AssociationSet Name="FK_PatientTests_UserID" Association="Self.FK_PatientTests_UserID">
-      <End Role="Users" EntitySet="Users" />
+    <AssociationSet Name="FK_PatientTests_TestID" Association="Self.FK_PatientTests_TestID">
+      <End Role="TestTypes" EntitySet="TestTypes" />
       <End Role="PatientTests" EntitySet="PatientTests" />
     </AssociationSet>
     <AssociationSet Name="FK_PatientVisitHistory_Doctor" Association="Self.FK_PatientVisitHistory_Doctor">

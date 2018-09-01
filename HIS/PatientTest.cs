@@ -14,19 +14,16 @@ namespace HIS
     
     public partial class PatientTest
     {
-        public int SNO { get; set; }
-        public string ENMRNO { get; set; }
+        public int PTID { get; set; }
+        public int LTMID { get; set; }
         public int TestID { get; set; }
         public Nullable<System.DateTime> TestDate { get; set; }
-        public int PrescribedDoctor { get; set; }
-        public Nullable<int> VisitID { get; set; }
         public Nullable<decimal> RecordedValues { get; set; }
         public string TestImpression { get; set; }
         public string ReportPath { get; set; }
-        public Nullable<decimal> Discount { get; set; }
-        public Nullable<decimal> PaidAmunt { get; set; }
+        public Nullable<bool> IsSampleCollected { get; set; }
     
+        public virtual LabTestMaster LabTestMaster { get; set; }
         public virtual TestType TestType { get; set; }
-        public virtual User User { get; set; }
     }
 }

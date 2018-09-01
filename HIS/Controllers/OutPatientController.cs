@@ -383,18 +383,19 @@ namespace HIS.Controllers
             {
 
                 var patientTests = (from pt in hs.PatientTests
-                                            join op in hs.OutPatients on pt.ENMRNO equals op.ENMRNO
+                                    join ltm in hs.LabTestMasters on pt.LTMID equals ltm.LTMID
+                                    join op in hs.OutPatients on ltm.ENMRNO equals op.ENMRNO
                                             join tt in hs.TestTypes on pt.TestID equals tt.TestID
-                                            join u in hs.Users on pt.PrescribedDoctor equals u.UserID
+                                            join u in hs.Users on ltm.PrescribedBy equals u.UserID
                                             join ut in hs.UserTypes on u.UserTypeID equals ut.UserTypeID
-                                            where ut.UserTypeName.Equals("Doctor") && pt.ENMRNO == enmrNo && pt.VisitID == visitID
+                                            where ut.UserTypeName.Equals("Doctor") && ltm.ENMRNO == enmrNo && ltm.VisitID == visitID
                                             select new
                                             {
                                                 pt,
                                                 u,
                                                 tt
                                             })
-                                  .OrderByDescending(b => b.pt.SNO)
+                                  .OrderByDescending(b => b.pt.PTID)
                                   .AsEnumerable()
                                  .Select(x => new PatientTest
                                  {
@@ -505,12 +506,15 @@ namespace HIS.Controllers
                     //Save Tests
                     if(suggestedTestsIfAny.TestIds != null)
                     {
-                        foreach(var id in suggestedTestsIfAny.TestIds)
+                        System.Data.Entity.Core.Objects.ObjectParameter ltmidOut = new System.Data.Entity.Core.Objects.ObjectParameter("LTMID", typeof(Int32));
+                        db.CreateMasterLabTest(prescriptions[0].ENMRNO, Convert.ToInt32(System.Web.HttpContext.Current.Session["UserID"]), prescriptions[0].VisitID, ltmidOut);
+                        int ltmid = Convert.ToInt32(ltmidOut.Value);
+
+                        foreach (var id in suggestedTestsIfAny.TestIds)
                         {
-                            var patientTest = new PatientTest {ENMRNO = suggestedTestsIfAny.ENMRNO,
+                            var patientTest = new PatientTest {
                                 TestID = Convert.ToInt32(id),
-                                PrescribedDoctor = Convert.ToInt32(System.Web.HttpContext.Current.Session["UserID"]),
-                                VisitID = suggestedTestsIfAny.VisitID
+                                LTMID = ltmid
                             };
                             db.PatientTests.Add(patientTest);
                         }
@@ -576,28 +580,28 @@ namespace HIS.Controllers
             return View(patientTests);
         }
 
-        [HttpPost]
-        public ActionResult PatientTests(List<PatientTest> ptItems)
-        {
-            using (HISDBEntities db = new HISDBEntities())
-            {
-                if (ptItems != null && ptItems.Count() > 0)
-                {
-                    foreach (PatientTest pt in ptItems)
-                    {
-                        pt.PrescribedDoctor = 1;
-                        db.PatientTests.Add(pt);
-                        db.SaveChanges();
-                    }
+        //[HttpPost]
+        //public ActionResult PatientTests(List<PatientTest> ptItems)
+        //{
+        //    using (HISDBEntities db = new HISDBEntities())
+        //    {
+        //        if (ptItems != null && ptItems.Count() > 0)
+        //        {
+        //            foreach (PatientTest pt in ptItems)
+        //            {
+        //                pt.PrescribedDoctor = 1;
+        //                db.PatientTests.Add(pt);
+        //                db.SaveChanges();
+        //            }
                     
-                    return Json(new { success = true, message = string.Format("Prescription for ENMRNO - {0} created Successfully", ptItems[0].ENMRNO) }, JsonRequestBehavior.AllowGet);
-                }
-                else
-                {
-                    return Json(new { success = false, message = "Error occured" }, JsonRequestBehavior.AllowGet);
-                }
-            }
-        }
+        //            return Json(new { success = true, message = string.Format("Prescription for ENMRNO - {0} created Successfully", ptItems[0].ENMRNO) }, JsonRequestBehavior.AllowGet);
+        //        }
+        //        else
+        //        {
+        //            return Json(new { success = false, message = "Error occured" }, JsonRequestBehavior.AllowGet);
+        //        }
+        //    }
+        //}
 
         [HttpPost]
         public JsonResult GetTestName(string Prefix)

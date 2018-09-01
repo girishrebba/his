@@ -13,6 +13,7 @@ namespace HIS
         public string DateDisplay { get; set; }
         public string DoctorName { get; set; }
         public string VisitName { get; set; }
+        public string ENMRNO { get; set; }
     }
 
     public class PatientTestMetaData

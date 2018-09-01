@@ -1104,6 +1104,9 @@
     <Compile Include="IntakeFrequency.cs">
       <DependentUpon>HISDBModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="LabTestMaster.cs">
+      <DependentUpon>HISDBModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="MedicineInventory.cs">
       <DependentUpon>HISDBModel.tt</DependentUpon>
     </Compile>

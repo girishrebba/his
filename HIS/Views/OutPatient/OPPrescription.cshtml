@@ -172,7 +172,7 @@
                     <div class="row">
                         <div class="form-group">
                             <div class="col-md-3 col-md-offset-5">
-                                <input type="submit" value="Submit" id="btnSubmit" class="btn btn-primary disabled" />
+                                <input type="submit" value="Submit" id="btnSubmit" class="btn btn-primary" />
                             </div>
                         </div>
                     </div>
@@ -185,7 +185,17 @@
         $('#TestIds').trigger('chosen:updated');
         $('#TestIds').chosen();
         $('#TestIds_chosen').css({ "width": "350px" });
-        $(".accordion").accordion();
+
+    });
+
+    $('#btnSubmit').click(function () {
+        alert($('table#ppTable tr').length);
+    alert($('#TestIds').val());
+        if (($('table#ppTable tr').length < 3) && $('#TestIds').val() === null) {
+            alert("Please suggest some prescrition or Test");
+            return false;
+        }
+        else { return true;}
 
     });
     
@@ -261,8 +271,8 @@
 
         function remove(e) {
             $(e).closest('tr').remove();
-            if ($('#ppForm tr').length < 3)
-                $('#btnSubmit').addClass('disabled');
+            //if ($('#ppForm tr').length < 3)
+                //$('#btnSubmit').addClass('disabled');
         }
 
         function clearInputs() {

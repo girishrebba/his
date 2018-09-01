@@ -22,6 +22,8 @@
 @using (Html.BeginForm("PatientTests", "OutPatient", FormMethod.Post, new { id = "ptForm", onsubmit = "return SubmitPatientTestForm(this)" }))
 {
     <div class="form-horizontal">
+        @if (Model != null && Model.Count > 0)
+        {
         @Html.HiddenFor(model => model[0].ENMRNO, new { @id = "ENMRNO" })
         <div class="col-lg-8">
             <div class="form-group">
@@ -83,6 +85,11 @@
                 </div>
             </div>
         </div>
+        }
+        else
+        {
+            <span style="color:red; font-weight:bold;">No Pending Tests Found for this Patient. Please contact with you physician!!</span>
+        }
     </div>
 }
 
