@@ -76,8 +76,10 @@
                                 + "@if (ViewContext.Controller.HasPermission("InPatient-Observations")){
                                         <a class='btn btn-primary btn-sm' title='Observation' style='margin-left:5px' onclick=PopupObservations('@Url.Action("Observations", "InPatient")/?enmrNo=" + data + "')><i class='fa fa-briefcase-medical'></i></a>}"
                                 + "@if (ViewContext.Controller.HasPermission("InPatient-AddModify")){
-                                    <a class='btn btn-default btn-sm' title='Discharge' style='margin-left:5px' onclick=PopupPatient('@Url.Action("AddModify","InPatient")/?enmrNo=" + data + "',true)><i class='fa fa-sign-out-alt'></i></a>}";
-                                    },
+                                    <a class='btn btn-default btn-sm' title='Discharge' style='margin-left:5px' onclick=PopupPatient('@Url.Action("AddModify","InPatient")/?enmrNo=" + data + "',true)><i class='fa fa-sign-out-alt'></i></a>}"
+                                + "@if (ViewContext.Controller.HasPermission("InPatient-PrintHistory")){
+                                        <a class='btn btn-primary btn-sm' title='View & Print' style='margin-left:5px' onclick=PopupPrint('@Url.Action("PrintHistory", "InPatient")/?enmrNo=" + data + "')><i class='fa fa-print'></i></a>}";
+                                 },
                         "orderable": false,
                         "searchable": false
                     }
@@ -303,6 +305,33 @@
             }
             return false;
         }
+
+
+        // Submit Print button      
+        function PopupPrint(url) {
+            var formDiv = $('<div/>');
+            $.get(url)
+                .done(function (response) {
+                    formDiv.html(response);
+
+                    printdiv = formDiv.dialog({
+                        autoOpen: true,
+                        resizable: false,
+                        modal: true,
+                        title: 'Print Details',
+                        width: 850,
+                        top: 147,
+                        close: function () {
+                            printdiv.dialog('destroy').remove();
+                        },
+                        open: function (event, ui) {
+                            $('.ui-dialog-content').css('overflow', 'hidden');
+                        }
+                    });
+                });
+        }
+
+
 </script>
 }
 

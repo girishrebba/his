@@ -17,14 +17,15 @@
 
             @Html.LabelFor(model => model.RoomNo, "Room No:", htmlAttributes: new { @class = "control-label col-sm-2" })
             <div class="col-sm-4">
-                @Html.DropDownListFor(model => model.RoomNo, ViewBag.Rooms as SelectList, "--Select--", new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.RoomNo, ViewBag.Rooms as SelectList, "--Select--", new { @class = "form-control", @onchange = "FillBeds()" })
                 @Html.ValidationMessageFor(model => model.RoomNo)
             </div>
         </div>
         <div class="form-group">
             @Html.LabelFor(model => model.BedNo, "Bed No:", htmlAttributes: new { @class = "control-label col-sm-2" })
             <div class="col-sm-4">
-                @Html.DropDownListFor(model => model.BedNo, ViewBag.Beds as SelectList, "--Select--", new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.BedNo, new SelectList(Enumerable.Empty<SelectListItem>(), "BedNo", "BedName"), "--Select--", new { @class = "form-control" })
+
                 @Html.ValidationMessageFor(model => model.BedNo)
             </div>
 
@@ -60,31 +61,71 @@
         </div>
     </div>
 }
+@section Scripts {
 
-<script type="text/javascript">
-    $(document).ready(function () {
-        $('#FromDate').datepicker({
-            keyboardNavigation: false,
-            forceParse: false,
-            todayHighlight: true,
-            todayBtn: false,
-            format: "mm/dd/yyyy"
-        });
+    @*<script>
+        function FillBeds() {          
+            var roomid = $('#RoomNo').val();
+            $.ajax({
+                url: '/InPatient/FillBeds',
+                type: "GET",
+                dataType: "JSON",
+                data: { Room: roomid },
+                success: function (data) {
+                    $("#BedNo").html(""); // clear before appending new list
+                    $.each(data, function (i, city) {
+                        $("#BedNo").append(
+                            $('<option></option>').val(data[i].BedNo).html(data[i].BedName));
+                    });
+                }
+            });
+        }
+        </script>*@
+}
+       
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('#FromDate').datepicker({
+                    keyboardNavigation: false,
+                    forceParse: false,
+                    todayHighlight: true,
+                    todayBtn: false,
+                    format: "mm/dd/yyyy"
+                });
 
-        $('#EndDate').datepicker({
-            keyboardNavigation: false,
-            forceParse: false,
-            todayHighlight: true,
-            todayBtn: false,
-            format: "mm/dd/yyyy"
-        });
+            $('#EndDate').datepicker({
+                keyboardNavigation: false,
+                forceParse: false,
+                todayHighlight: true,
+                todayBtn: false,
+                format: "mm/dd/yyyy"
+            });
 
-        $('.btnFromPicker').click(function () {
-            $('#FromDate').datepicker('show');
-        });
+            $('.btnFromPicker').click(function () {
+                $('#FromDate').datepicker('show');
+            });
 
-        $('.btnEndPicker').click(function () {
-            $('#EndDate').datepicker('show');
+            $('.btnEndPicker').click(function () {
+                $('#EndDate').datepicker('show');
+            });
+
         });
-    });
-</script>
+        function FillBeds() {
+            
+            var roomid = $('#RoomNo').val();
+            $.ajax({
+                url: '/InPatient/FillBeds',
+                type: "GET",
+                dataType: "JSON",
+                data: {Room: roomid },
+                success: function (data) {
+                $("#BedNo").html(""); // clear before appending new list
+            $.each(data, function (i, city) {
+                $("#BedNo").append(
+                    $('<option></option>').val(data[i].BedNo).html(data[i].BedName));
+            });
+                }
+            });
+        }
+
+    </script>

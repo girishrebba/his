@@ -54,27 +54,27 @@
                     <ul class="nav">
                         @if (ViewContext.Controller.HasPermission("InPatient-index"))
                         {
-                        <li><a href="@Url.Action("Index", "InPatient")"><span class="title">I/P Profile</span></a></li>
+                            <li><a href="@Url.Action("Index", "InPatient")"><span class="title">I/P Profile</span></a></li>
                         }
                         @if (ViewContext.Controller.HasPermission("OutPatient-index"))
                         {
-                        <li><a href="@Url.Action("Index", "OutPatient")"><span class="title">O/P Profile</span></a></li>
+                            <li><a href="@Url.Action("Index", "OutPatient")"><span class="title">O/P Profile</span></a></li>
                         }
                     </ul>
                 </li>
                 @*<li class="has-sub">
-                    <a href="@Url.Action("Index", "Rooms")"><i class="fa fa-bed" style="padding-left:5px"></i><span class="title">Room Managment</span></a>
-                    <ul class="nav">
-                        <li><a href="@Url.Action("Index", "Rooms")"><span class="title">Rooms</span></a></li>
-                        <li><a href="@Url.Action("Index", "Beds")"><span class="title">Bed Management</span></a></li>
-                    </ul>
-                </li>*@
+                        <a href="@Url.Action("Index", "Rooms")"><i class="fa fa-bed" style="padding-left:5px"></i><span class="title">Room Managment</span></a>
+                        <ul class="nav">
+                            <li><a href="@Url.Action("Index", "Rooms")"><span class="title">Rooms</span></a></li>
+                            <li><a href="@Url.Action("Index", "Beds")"><span class="title">Bed Management</span></a></li>
+                        </ul>
+                    </li>*@
                 <li class="has-sub">
                     <a href="@Url.Action("Index", "MedInventory")"><i class="fa fa-medkit" style="padding-left:5px"></i><span class="title">Pharmacy</span></a>
                     <ul class="nav">
                         @if (ViewContext.Controller.HasPermission("PurchaseOrder-index"))
                         {
-                        <li><a href="@Url.Action("Index", "PurchaseOrder")"><span class="title">Purchase Orders</span></a></li>
+                            <li><a href="@Url.Action("Index", "PurchaseOrder")"><span class="title">Purchase Orders</span></a></li>
                         }
                     </ul>
                 </li>
@@ -156,8 +156,8 @@
                         @if (ViewContext.Controller.HasPermission("Lab-index"))
                         {
                             <li><a href="@Url.Action("Index", "Lab")"><span class="title">Lab Tests</span></a></li>
-                        } 
-                        </ul>
+                        }
+                    </ul>
                 </li>
             </ul>
             <!-- /main navigation -->
@@ -250,6 +250,7 @@
     <script src="~/Scripts/moment.js"></script>
     <script src="~/light/js/plugins/datepicker/bootstrap-datepicker.js"></script>
     <script src="~/Scripts/chosen.jquery.min.js"></script>
+    <script src="~/light/js/printThis.js"></script>
     <script>
         $(document).ready(function () {
             $('#tabs a').click(function () {

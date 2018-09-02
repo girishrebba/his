@@ -19,7 +19,7 @@
     }
 </style>
 @using HIS.HtmlHelpers
-@using (Html.BeginForm("PatientTests", "OutPatient", FormMethod.Post, new { id = "ptForm", onsubmit = "return SubmitLabTestForm(this)" }))
+@using (Html.BeginForm("PatientTests", "OutPatient", FormMethod.Post, new { enctype = "multipart/form-data"  }))
 {
     <div class="form-horizontal">
         @if (Model != null && Model.Count > 0)
@@ -54,7 +54,8 @@
                                 <th style="width:10%">Values</th>
                                 <th style="width:15%">Date</th>
                                 <th style="width:40%">Impression</th>
-                                <th style="width:10%">Upload File</th>
+                                <th style="width:10%">Report</th>
+                                <th style="width:10%">Upload Report</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -71,7 +72,14 @@
                                     </div>
                                 </td>
                                 <td>@Html.EditorFor(model => p.TestImpression, new { htmlAttributes = new { @class = "form-control testImpression" } })</td>
-                                <td> <input id="imgpath" type="file" /></td>
+                                <td>
+                                    <a href='@p.ReportPath' target="_blank" class='btn btn-info btn-sm' title='ReportView'><i class="fa fa-file"></i></a>                                  
+                                </td>
+                                <td>
+                                    @*@Html.LabelFor(model => p.ImageFile, htmlAttributes: new { @class = "control-label col-md-2" })*@
+                                    <input type="file" id="file" onchange="upload(@p.TestID);" />
+                                </td>
+
                             </tr>
                             }
                         </tbody>
@@ -94,7 +102,7 @@
     </div>
 }
 
-<script type="text/javascript">
+    <script type="text/javascript">
     $('.datepicker').datepicker({
         keyboardNavigation: false,
         forceParse: false,
@@ -108,4 +116,34 @@
         $(id).datepicker('show');
     });
 
-</script>
+  
+    function upload(name) {
+       
+        var fileUpload = $("#file").get(0);
+        var files = fileUpload.files;
+        // Create FormData object
+        var fileData = new FormData();
+        // Looping over all files and add it to FormData object
+        for (var i = 0; i < files.length; i++) {
+            fileData.append(files[i].name, files[i]);
+        }
+        fileData.append(@Html.Raw(Json.Encode(Model[0].ENMRNO)), 'emrno');
+        fileData.append(name,'test');
+        $.ajax({
+            url: '/OutPatient/UploadFiles',
+            type: "POST",
+            contentType: false, // Not to set any content header
+            processData: false, // Not to process data
+            data: fileData,
+            async: false,
+            success: function (result) {
+
+            },
+            error: function (err) {
+                alert(err.statusText);
+            }
+        });
+
+    };
+
+    </script>

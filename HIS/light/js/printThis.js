@@ -179,7 +179,7 @@
             });
 
             // add title of the page
-            if (opt.pageTitle) $head.append("<title>" + opt.pageTitle + "</title>");
+            if (opt.pageTitle) $head.append("<title></title>");
 
             // import additional stylesheet(s)
             if (opt.loadCSS) {
