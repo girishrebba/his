@@ -20,6 +20,7 @@ namespace HIS
         public int PrescribedBy { get; set; }
         public decimal Discount { get; set; }
         public int PMID { get; set; }
+        public int IntakeFrequencyID { get; set; }
     }
 
     public class MDRMetaData

@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using System.Data.Entity;
 using System.IO;
 using HIS.Action_Filters;
+using System.ComponentModel;
 
 namespace HIS.Controllers
 {
@@ -119,6 +120,7 @@ namespace HIS.Controllers
                     var master = db.PrescriptionMasters.Where(p => p.PMID == PMID).FirstOrDefault();
                     master.Discount = prescriptions[0].Discount;
                     master.PaidAmount = prescriptions[0].PaidAmount;
+                    master.TotalAmount = prescriptions[0].TotalAmount;
                     master.IsDelivered = true;
                     db.Entry(master).State = EntityState.Modified;
                     db.SaveChanges();
@@ -136,6 +138,7 @@ namespace HIS.Controllers
         public ActionResult ManualDrugRequest(string enmrNo)
         {
             ViewBag.Users = new SelectList(HtmlHelpers.HtmlHelpers.GetDoctors(), "UserID", "NameDisplay");
+            ViewBag.Intakes = new SelectList(HtmlHelpers.HtmlHelpers.GetIntakes(), "FrequencyID", "Frequency");
             return View(new MDRModel
             {
                 ENMRNO = enmrNo,
@@ -143,7 +146,8 @@ namespace HIS.Controllers
                 Quantity = 0,
                 TotalCost = 0,
                 BatchNo = string.Empty,
-                LotNo = string.Empty
+                LotNo = string.Empty,
+                IntakeFrequencyID = 0
             });
         }
 
@@ -161,7 +165,7 @@ namespace HIS.Controllers
                     foreach (PatientPrescription pp in mdrRequest)
                     {
                         pp.PMID = pmid;
-                        pp.IntakeFrequencyID = 1;
+                        pp.IntakeFrequencyID = pp.IntakeFrequencyID;
                         db.PatientPrescriptions.Add(pp);
                         var medInv = db.MedicineInventories.Where(miv => miv.MedicineID == pp.MedicineID).First();
                         medInv.AvailableQty = medInv.AvailableQty - pp.DeliverQty;
@@ -172,6 +176,7 @@ namespace HIS.Controllers
                     var master = db.PrescriptionMasters.Where(p => p.PMID == pmid).FirstOrDefault();
                     master.Discount = mdrRequest[0].Discount;
                     master.PaidAmount = mdrRequest[0].PaidAmount;
+                    master.TotalAmount = mdrRequest[0].TotalAmount;
                     master.IsDelivered = true;
                     db.Entry(master).State = EntityState.Modified;
                     db.SaveChanges();
@@ -414,6 +419,45 @@ namespace HIS.Controllers
             }
         }
 
+        public List<PatientTest> GetPatientVisitTestsBillPay(string enmrNo, int visitID)
+        {
+            using (HISDBEntities hs = new HISDBEntities())
+            {
+
+                var patientTests = (from pt in hs.PatientTests
+                                    join ltm in hs.LabTestMasters on pt.LTMID equals ltm.LTMID
+                                    join op in hs.OutPatients on ltm.ENMRNO equals op.ENMRNO
+                                    join tt in hs.TestTypes on pt.TestID equals tt.TestID
+                                    join u in hs.Users on ltm.PrescribedBy equals u.UserID
+                                    join ut in hs.UserTypes on u.UserTypeID equals ut.UserTypeID
+                                    where ut.UserTypeName.Equals("Doctor") && ltm.ENMRNO == enmrNo && ltm.VisitID == visitID && ltm.IsBillPaid == true
+                                    select new
+                                    {
+                                        pt,
+                                        u,
+                                        tt,
+                                        ltm
+                                    })
+                                  .OrderByDescending(b => b.pt.PTID)
+                                  .AsEnumerable()
+                                 .Select(x => new PatientTest
+                                 {
+                                     ENMRNO = x.pt.ENMRNO,
+                                     TestName = x.tt.TestName,
+                                     DateDisplay = HtmlHelpers.HtmlHelpers.DateFormat(x.ltm.DatePrescribed),
+                                     DoctorName = HtmlHelpers.HtmlHelpers.GetFullName(x.u.FirstName, x.u.MiddleName, x.u.LastName),
+                                     RecordedValues = x.pt.RecordedValues,
+                                     TestImpression = x.pt.TestImpression,
+                                     ReportPath = x.pt.ReportPath,
+                                     LTMID = x.pt.LTMID,
+                                     TestID = x.pt.TestID,
+                                     TestCost = x.tt.TestCost.HasValue? x.tt.TestCost.Value : 0
+                                 }).ToList();
+
+                return patientTests;
+            }
+        }
+
         [HttpGet]
         public ActionResult OPPrescription(string enmrNo)
         {
@@ -590,6 +634,10 @@ namespace HIS.Controllers
             {
                 if (ptItems != null && ptItems.Count() > 0)
                 {
+                    int ltmid = ptItems[0].LTMID;
+                    var masterTest = db.LabTestMasters.Where(ltm => ltm.LTMID == ltmid).FirstOrDefault();
+                    masterTest.IsDelivered = true;
+                    db.Entry(masterTest).State = EntityState.Modified;
                     foreach (PatientTest pt in ptItems)
                     {
                         var test = db.PatientTests.Where(p => p.LTMID == pt.LTMID && p.TestID == pt.TestID).FirstOrDefault();
@@ -600,15 +648,61 @@ namespace HIS.Controllers
                             test.TestImpression = pt.TestImpression;
                             db.Entry(test).State = EntityState.Modified;
                         }
-                        db.SaveChanges();
                     }
-
+                    db.SaveChanges();
                     return Json(new { success = true, message = string.Format("Lab Tests for ENMRNO - {0} updated Successfully", ptItems[0].ENMRNO) }, JsonRequestBehavior.AllowGet);
                 }
                 else
                 {
                     return Json(new { success = false, message = "Error occured" }, JsonRequestBehavior.AllowGet);
                 }
+            }
+        }
+
+        [HttpGet]
+        [Description(" - OutPatient Lab Test Bill Payment Form.")]
+        public ActionResult LabTestBillPay(string enmrNo)
+        {
+            var latestVisit = new PatientVisitHistory();
+            var patientTests = new List<PatientTest>();
+            using (var hs = new HISDBEntities())
+            {
+                latestVisit = hs.PatientVisitHistories.Where(pvh => pvh.ENMRNO == enmrNo).OrderByDescending(pvh => pvh.SNO).FirstOrDefault();
+
+                patientTests = GetPatientVisitTestsBillPay(enmrNo, latestVisit.SNO);
+                string visitName = VisitName(latestVisit.ConsultTypeID);
+                if (patientTests.Count() > 0)
+                {
+                    patientTests[0].ENMRNO = enmrNo;
+                    patientTests[0].VisitName = VisitName(latestVisit.ConsultTypeID);
+
+                }
+            }
+            return View(patientTests);
+        }
+
+        [HttpPost]
+        [Description(" - OutPatient Lab Test Bill Payment Form.")]
+        public ActionResult LabTestBillPay(MasterBillPayModel masterLab)
+        {
+            using (HISDBEntities db = new HISDBEntities())
+            {
+                if (masterLab != null)
+                {
+
+                    var testMaster = db.LabTestMasters.Where(p => p.LTMID == masterLab.ID).FirstOrDefault(); ;
+                    if (testMaster != null)
+                    {
+                        testMaster.Discount = masterLab.Discount;
+                        testMaster.PaidAmount = masterLab.PaidAmount;
+                        testMaster.TotalAmount = masterLab.TotalAmount;
+                        testMaster.IsBillPaid = true;
+                        db.Entry(testMaster).State = EntityState.Modified;
+                    }
+                    db.SaveChanges();
+                }
+
+                return Json(new { success = true, message = string.Format("Lab Tests for ENMRNO - {0} paid Successfully", masterLab.ENMRNO) }, JsonRequestBehavior.AllowGet);
             }
         }
 

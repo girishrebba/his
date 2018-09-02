@@ -75,14 +75,9 @@
                                         <a class='btn btn-primary btn-sm' title='Fee' style='margin-left:5px' onclick=PopupFee('@Url.Action("Fee", "InPatient")/?enmrNo=" + data + "')><i class='fa fa-rupee-sign'></i></a>}"
                                 + "@if (ViewContext.Controller.HasPermission("InPatient-Observations")){
                                         <a class='btn btn-primary btn-sm' title='Observation' style='margin-left:5px' onclick=PopupObservations('@Url.Action("Observations", "InPatient")/?enmrNo=" + data + "')><i class='fa fa-briefcase-medical'></i></a>}"
-                                + "@if (ViewContext.Controller.HasPermission("InPatient-Observations")){
-                                        <a class='btn btn-primary btn-sm' title='Observation' style='margin-left:5px' onclick=PopupObservations('@Url.Action("Observations", "InPatient")/?enmrNo=" + data + "')><i class='fa fa-flask'></i></a>}"
-                                + "@if (ViewContext.Controller.HasPermission("InPatient-AddModify")){<a class='btn btn-default btn-sm' title='Discharge' style='margin-left:5px' onclick=PopupPatient('@Url.Action("AddModify","InPatient")/?enmrNo=" + data + "',true)><i class='fa fa-sign-out-alt'></i></a>}"
-
-                                + "@if (ViewContext.Controller.HasPermission("InPatient-PrintHistory")){
-                                        <a class='btn btn-primary btn-sm' title='View & Print' style='margin-left:5px' onclick=PopupPrint('@Url.Action("PrintHistory", "InPatient")/?enmrNo=" + data + "')><i class='fa fa-print'></i></a>}";
-
-                                   },
+                                + "@if (ViewContext.Controller.HasPermission("InPatient-AddModify")){
+                                    <a class='btn btn-default btn-sm' title='Discharge' style='margin-left:5px' onclick=PopupPatient('@Url.Action("AddModify","InPatient")/?enmrNo=" + data + "',true)><i class='fa fa-sign-out-alt'></i></a>}";
+                                    },
                         "orderable": false,
                         "searchable": false
                     }
@@ -119,7 +114,6 @@
                         }
                     });
                 });
-            //Popup.activeDischargeTab();
         }
         // Popup View Patient
         function PopupViewPatient(url) {
@@ -127,7 +121,6 @@
             $.get(url)
                 .done(function (response) {
                     formDiv.html(response);
-
                     viewPatient = formDiv.dialog({
                         autoOpen: true,
                         resizable: false,
@@ -143,14 +136,14 @@
                         }
                     });
                 });
-        }
+    }
+
         // Popup Fee
         function PopupFee(url) {
             var formDiv = $('<div/>');
             $.get(url)
                 .done(function (response) {
                     formDiv.html(response);
-
                     fee = formDiv.dialog({
                         autoOpen: true,
                         resizable: false,
@@ -237,8 +230,31 @@
                 });
             }
            return false;
+    }
 
+    function SubmitBedAllocationForm(form) {
+        $.validator.unobtrusive.parse(form);
+        if ($(form).valid()) {
+            $.ajax({
+                type: "POST",
+                url: form.action,
+                data: $(form).serialize(),
+                success: function (data) {
+                    if (data.success) {
+                        bedPopUp.dialog('close');
+                        dataTable.ajax.reload();
+
+                        $.notify(data.message, {
+                            globalPosition: "top center",
+                            className: "success"
+                        })
+                    }
+                }
+            });
         }
+        return false;
+
+    }
         // Submit Patient Fee
         function SubmitFeeForm(form) {
             $.validator.unobtrusive.parse(form);
@@ -287,31 +303,6 @@
             }
             return false;
         }
-
-
-        // Submit Print button      
-            function PopupPrint(url) {
-                var formDiv = $('<div/>');
-                $.get(url)
-                    .done(function (response) {
-                        formDiv.html(response);
-
-                        printdiv = formDiv.dialog({
-                            autoOpen: true,
-                            resizable: false,
-                            modal: true,
-                            title: 'Print Details',
-                            width: 850,
-                            top: 147,
-                            close: function () {
-                                printdiv.dialog('destroy').remove();
-                            },
-                            open: function (event, ui) {
-                                $('.ui-dialog-content').css('overflow', 'hidden');
-                            }
-                        });
-                    });          
-            }
 </script>
 }
 

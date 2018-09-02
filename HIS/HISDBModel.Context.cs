@@ -34,7 +34,6 @@ namespace HIS
         public virtual DbSet<Brand> Brands { get; set; }
         public virtual DbSet<ConsultationFee> ConsultationFees { get; set; }
         public virtual DbSet<ConsultationType> ConsultationTypes { get; set; }
-        public virtual DbSet<FeeCollection> FeeCollections { get; set; }
         public virtual DbSet<InPatientHistory> InPatientHistories { get; set; }
         public virtual DbSet<InPatient> InPatients { get; set; }
         public virtual DbSet<IntakeFrequency> IntakeFrequencies { get; set; }
@@ -42,7 +41,6 @@ namespace HIS
         public virtual DbSet<MedicineMaster> MedicineMasters { get; set; }
         public virtual DbSet<OutPatient> OutPatients { get; set; }
         public virtual DbSet<PatientPrescription> PatientPrescriptions { get; set; }
-        public virtual DbSet<PatientRoomAllocation> PatientRoomAllocations { get; set; }
         public virtual DbSet<PatientVisitHistory> PatientVisitHistories { get; set; }
         public virtual DbSet<Permission> Permissions { get; set; }
         public virtual DbSet<PrescriptionMaster> PrescriptionMasters { get; set; }
@@ -56,6 +54,9 @@ namespace HIS
         public virtual DbSet<UserType> UserTypes { get; set; }
         public virtual DbSet<LabTestMaster> LabTestMasters { get; set; }
         public virtual DbSet<PatientTest> PatientTests { get; set; }
+        public virtual DbSet<PatientRoomAllocation> PatientRoomAllocations { get; set; }
+        public virtual DbSet<PaymentMode> PaymentModes { get; set; }
+        public virtual DbSet<FeeCollection> FeeCollections { get; set; }
     
         public virtual int ConvertOutPatientToInPatient(string eNMRNO)
         {

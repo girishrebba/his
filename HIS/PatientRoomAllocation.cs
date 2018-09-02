@@ -20,7 +20,7 @@ namespace HIS
         public int BedNo { get; set; }
         public System.DateTime FromDate { get; set; }
         public Nullable<System.DateTime> EndDate { get; set; }
-        public int AllocationStatus { get; set; }
+        public Nullable<bool> AllocationStatus { get; set; }
     
         public virtual InPatient InPatient { get; set; }
         public virtual Room Room { get; set; }

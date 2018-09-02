@@ -67,7 +67,7 @@
     <Property Name="Amount" Type="money" Nullable="false" />
     <Property Name="PaidOn" Type="datetime" Nullable="false" />
     <Property Name="Purpose" Type="varchar" MaxLength="300" />
-    <Property Name="PaymentMode" Type="varchar" MaxLength="300" />
+    <Property Name="PaymentMode" Type="int" Nullable="false" />
     <Property Name="LastFourDigits" Type="varchar" MaxLength="10" />
   </EntityType>
   <EntityType Name="InPatientHistory">
@@ -136,7 +136,7 @@
     <Property Name="PrescribedBy" Type="int" Nullable="false" />
     <Property Name="DatePrescribed" Type="date" />
     <Property Name="VisitID" Type="int" />
-    <Property Name="IsBillPaid" Type="int" />
+    <Property Name="IsBillPaid" Type="bit" />
     <Property Name="IsDelivered" Type="bit" />
     <Property Name="Discount" Type="decimal" Precision="4" Scale="2" />
     <Property Name="PaidAmount" Type="money" />
@@ -224,7 +224,7 @@
     <Property Name="BedNo" Type="int" Nullable="false" />
     <Property Name="FromDate" Type="datetime" Nullable="false" />
     <Property Name="EndDate" Type="datetime" />
-    <Property Name="AllocationStatus" Type="int" Nullable="false" />
+    <Property Name="AllocationStatus" Type="bit" />
   </EntityType>
   <EntityType Name="PatientTests">
     <Key>
@@ -234,7 +234,7 @@
     <Property Name="LTMID" Type="int" Nullable="false" />
     <Property Name="TestID" Type="int" Nullable="false" />
     <Property Name="TestDate" Type="datetime" />
-    <Property Name="RecordedValues" Type="decimal" Precision="18" Scale="0" />
+    <Property Name="RecordedValues" Type="decimal" Precision="4" Scale="2" />
     <Property Name="TestImpression" Type="nvarchar(max)" />
     <Property Name="ReportPath" Type="nvarchar" MaxLength="200" />
     <Property Name="IsSampleCollected" Type="bit" />
@@ -250,6 +250,13 @@
     <Property Name="Fee" Type="money" Nullable="false" />
     <Property Name="Discount" Type="money" />
     <Property Name="DoctorID" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="PaymentModes">
+    <Key>
+      <PropertyRef Name="ModeID" />
+    </Key>
+    <Property Name="ModeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Mode" Type="nvarchar" MaxLength="30" />
   </EntityType>
   <EntityType Name="Permissions">
     <Key>
@@ -743,6 +750,7 @@
     <EntitySet Name="PatientRoomAllocation" EntityType="Self.PatientRoomAllocation" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PatientTests" EntityType="Self.PatientTests" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PatientVisitHistory" EntityType="Self.PatientVisitHistory" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PaymentModes" EntityType="Self.PaymentModes" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Permissions" EntityType="Self.Permissions" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PrescriptionMaster" EntityType="Self.PrescriptionMaster" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PurchaseOrder" EntityType="Self.PurchaseOrder" Schema="dbo" store:Type="Tables" />

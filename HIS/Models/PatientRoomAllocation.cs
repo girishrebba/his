@@ -7,7 +7,7 @@ namespace HIS
     public partial class PatientRoomAllocation
     {
         public PatientRoomAllocation() {
-            this.AllocationStatus = 1;
+            this.AllocationStatus = true;
         }
         //public string FromDtFormat()
         //{
@@ -32,8 +32,7 @@ namespace HIS
        // [Required(ErrorMessage = "End is Required", AllowEmptyStrings = false)]
         public Nullable<System.DateTime> EndDate { get; set; }
       //  [Required(ErrorMessage = "Blood Group is Required", AllowEmptyStrings = false)]
-        public int DischargeSummary { get; set; }
-        [Required(ErrorMessage = "Allocation Status is Required", AllowEmptyStrings = false)]
+        //[Required(ErrorMessage = "Allocation Status is Required", AllowEmptyStrings = false)]
         public int AllocationStatus { get; set; }
     }
  }

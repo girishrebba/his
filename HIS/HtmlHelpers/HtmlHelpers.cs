@@ -193,6 +193,17 @@ namespace HIS.HtmlHelpers
             }
         }
 
+        public static List<PaymentMode> GetPaymentModes()
+        {
+            using (HISDBEntities dc = new HISDBEntities())
+            {
+                var payModes = (from pt in dc.PaymentModes
+                                 select new { pt.ModeID, pt.Mode }).AsEnumerable()
+                             .Select(x => new PaymentMode { ModeID = x.ModeID, Mode = x.Mode }).ToList();
+                return payModes;
+            }
+        }
+
         public static List<IntakeFrequency> GetIntakes()
         {
             using (HISDBEntities dc = new HISDBEntities())

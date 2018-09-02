@@ -89,8 +89,11 @@
                                 + "@if (ViewContext.Controller.HasPermission("OutPatient-ManualDrugRequest")){
                                     <a class='btn btn-primary btn-sm' title='Manual Drug Request' style='margin-left:5px' onclick=PopupMDRForm('@Url.Action("ManualDrugRequest", "OutPatient")/?enmrNo=" + data + "')><i class='fa fa-capsules'></i></a>}"
                                 + "@if (ViewContext.Controller.HasPermission("OutPatient-PatientTests")){
-                                    <a class='btn btn-primary btn-sm' title='Lab' style='margin-left:5px' onclick=PopupPatientTests('@Url.Action("PatientTests", "OutPatient")/?enmrNo=" + data + "')><i class='fa fa-flask'></i></a>}";
-                                },
+                                    <a class='btn btn-primary btn-sm' title='Lab' style='margin-left:5px' onclick=PopupPatientTests('@Url.Action("PatientTests", "OutPatient")/?enmrNo=" + data + "')><i class='fa fa-flask'></i></a>}"
+                                + "@if (ViewContext.Controller.HasPermission("OutPatient-LabTestBillPay")){
+                                    <a class='btn btn-primary btn-sm' title='Lab' style='margin-left:5px' onclick=PopupLabTestBillPayForm('@Url.Action("LabTestBillPay", "OutPatient")/?enmrNo=" + data + "')><i class='fa fa-credit-card'></i></a>}";
+
+                        },
                         "orderable": false,
                         "searchable": false
 
@@ -252,6 +255,27 @@
                     });
                 });
         }
+
+        function PopupLabTestBillPayForm(url) {
+            var billPay = $('<div/>');
+            $.get(url)
+                .done(function (response) {
+                    billPay.html(response);
+                    billPayPopUp = billPay.dialog({
+                        autoOpen: true,
+                        resizable: false,
+                        modal: true,
+                        title: 'Lab Test Bill Payment',
+                        width: '70%',
+                        close: function () {
+                            billPayPopUp.dialog('destroy').remove();
+                        },
+                        open: function (event, ui) {
+                            $('.ui-dialog-content').css('overflow', 'hidden');
+                        }
+                    });
+                });
+        }
         function SubmitForm(form) {
             $.validator.setDefaults({
                 ignore: []
@@ -347,6 +371,7 @@
             var visitID = $('#VisitID').val();
             var discount = $('#Discount').val();
             var amountToBePaid = $('#paidAmount').html();
+            var totalAmount = $('#grandTotal').html();
             var PmID = $('#PMID').val();
             $(form).find('#ppTable > tbody tr').each(function (index, elem) {
                 var tbl = {};
@@ -358,6 +383,7 @@
                 tbl.LotNo = $($(this).find('td:eq(9)')).find('.lotNo').val();
                 tbl.Discount = discount;
                 tbl.PaidAmount = amountToBePaid;
+                tbl.TotalAmount = totalAmount;
                 tbl.PMID = PmID;
                 prescriptions.push(tbl);
             });
@@ -410,6 +436,7 @@
             var doctorID = $('#DoctorID').val();
             var discount = $('#Discount').val();
             var amountPaid = $('#paidAmount').html();
+            var totalAmount = $('#grandTotal').html();
             $(form).find('#mdrTable > tbody tr').not(':first').each(function (index, elem) {
                 var tbl = {};
                 tbl.ENMRNO = enmrNo;
@@ -417,12 +444,14 @@
                 tbl.IsDelivered = true,
                 tbl.VisitID = 0;
                 tbl.MedicineID = $($(this).find('td:eq(0)')).html();
+                tbl.IntakeFrequencyID = $($(this).find('td:eq(3)')).html();
                 tbl.DeliverQty = $($(this).find('td:eq(2)')).html();
                 tbl.Quantity = $($(this).find('td:eq(2)')).html();
-                tbl.BatchNo = $($(this).find('td:eq(4)')).html();
-                tbl.LotNo = $($(this).find('td:eq(5)')).html();
+                tbl.BatchNo = $($(this).find('td:eq(5)')).html();
+                tbl.LotNo = $($(this).find('td:eq(6)')).html();
                 tbl.Discount = discount;
                 tbl.PaidAmount = amountPaid;
+                tbl.TotalAmount = totalAmount;
                 mdrRequest.push(tbl);
             });
             $.ajax({
@@ -469,6 +498,37 @@
                 success: function (data) {
                     if (data.success) {
                         newPT.dialog('close');
+                        dataTable.ajax.reload();
+                        $.notify(data.message, {
+                            globalPosition: "top center",
+                            className: "success"
+                        })
+                    }
+                }
+            });
+            return false;
+        }
+
+        function SubmitLabTestBillPayForm(form) {
+            var enmrNo = $(form).find('#ENMRNO').val();
+            var ltmID = $(form).find('#LTMID').val();
+            var discount = $(form).find('#Discount').val();
+            var amountPaid = $(form).find('#paidAmount').html();
+            var totalAmount = $(form).find('#grandTotal').html();
+            var billPayModel = {};
+            billPayModel.ID = ltmID;
+            billPayModel.ENMRNO = enmrNo;
+            billPayModel.TotalAmount = totalAmount;
+            billPayModel.Discount = discount;
+            billPayModel.PaidAmount = amountPaid;
+            $.ajax({
+                type: "POST",
+                contentType: "application/json",
+                url: form.action,
+                data: JSON.stringify(billPayModel),
+                success: function (data) {
+                    if (data.success) {
+                        billPayPopUp.dialog('close');
                         dataTable.ajax.reload();
                         $.notify(data.message, {
                             globalPosition: "top center",

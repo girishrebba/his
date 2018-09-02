@@ -57,33 +57,7 @@ namespace HIS.Controllers
         {
             return View(GetPatientDetails(enmrNo));           
         }
-
-        ////Fetch Brands from database
-        //public List<BloodGroup> GetBloodGroups()
-        //{
-        //    using (HISDBEntities dc = new HISDBEntities())
-        //    {
-        //        var bloodGroups = (from bg in dc.BloodGroups
-        //                      select new { bg.GroupID, bg.GroupName })
-        //                      .OrderBy(b => b.GroupName).AsEnumerable()
-        //                      .Select(x => new BloodGroup { GroupID = x.GroupID, GroupName = x.GroupName }).ToList();
-        //        return bloodGroups;
-        //    }
-        //}
-
-        ////Fetch Brands from database
-        //public List<User> GetUsers()
-        //{
-        //    using (HISDBEntities dc = new HISDBEntities())
-        //    {
-        //        var users = (from u in dc.Users
-        //                           select new { u })
-        //                      .OrderBy(b => b.u.UserName).AsEnumerable()
-        //                      .Select(x => new User { UserID = x.u.UserID, NameDisplay = x.u.GetFullName() }).ToList();
-        //        return users;
-        //    }
-        //}
-
+        
         [HttpGet]
         [Description(" - Inpatient Add/Edit page.")]
         public ActionResult AddModify(string enmrNo = null)
@@ -117,19 +91,30 @@ namespace HIS.Controllers
         [HttpPost]
         public ActionResult AddModify(InPatient ip)
         {
+            string message = string.Empty;
             using (HISDBEntities db = new HISDBEntities())
             {
                 if (ip.SNO == 0)
                 {
                     db.InPatients.Add(ip);
                     db.SaveChanges();
-                    return Json(new { success = true, message = "Saved Successfully" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { success = true, message = string.Format("ENMRNO - {0} profile created Successfully", ip.ENMRNO)}, JsonRequestBehavior.AllowGet);
                 }
                 else
                 {
+                    message = "profile updated";
+                    if (!string.IsNullOrEmpty(ip.DiscSummary) && (ip.IsDischarged == null || ip.IsDischarged == false))
+                    {
+                        ip.IsDischarged = true;
+                        var patientBedRecord = db.PatientRoomAllocations.Where(pr => pr.ENMRNO == ip.ENMRNO).OrderByDescending(pr => pr.AllocationID).FirstOrDefault();
+                        patientBedRecord.AllocationStatus = false;
+                        patientBedRecord.EndDate = DateTime.Today;
+                        db.Entry(patientBedRecord).State = EntityState.Modified;
+                        message = "Discarged";
+                    }
                     db.Entry(ip).State = EntityState.Modified;
                     db.SaveChanges();
-                    return Json(new { success = true, message = "Updated Successfully" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { success = true, message = string.Format("ENMRNO - {0} {1} Successfully", ip.ENMRNO, message) }, JsonRequestBehavior.AllowGet);
                 }
             }
         }
@@ -166,7 +151,7 @@ namespace HIS.Controllers
         {
             FeeCollection fc = new FeeCollection();
             fc.ENMRNO = enmrNo;
-            //ViewBag.FeeList = feeList;
+            ViewBag.PayModes = new SelectList(HtmlHelpers.HtmlHelpers.GetPaymentModes(), "ModeID", "Mode"); 
             return View(fc);
         }
 
@@ -254,7 +239,7 @@ namespace HIS.Controllers
                 {
                     hs.InPatientHistories.Add(iph);
                     hs.SaveChanges();
-                    return Json(new { success = true, message = "Observation recorded Successfully" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { success = true, message = string.Format("Observation for ENMRNO - {0} recorded Successfully", iph.ENMRNO)}, JsonRequestBehavior.AllowGet);
                 }
             }
             else
@@ -279,13 +264,13 @@ namespace HIS.Controllers
                 {
                     db.PatientRoomAllocations.Add(ip);
                     db.SaveChanges();
-                    return Json(new { success = true, message = "Saved Successfully" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { success = true, message =string.Format("Room Allocated for the ENMRNO - {0} Successfully", ip.ENMRNO)}, JsonRequestBehavior.AllowGet);
                 }
                 else
                 {
                     db.Entry(ip).State = EntityState.Modified;
                     db.SaveChanges();
-                    return Json(new { success = true, message = "Updated Successfully" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { success = true, message = string.Format("Room Allocation for the ENMRNO - {0} updated Successfully", ip.ENMRNO) }, JsonRequestBehavior.AllowGet);
                 }
             }
         }
@@ -312,6 +297,7 @@ namespace HIS.Controllers
                 ViewBag.Rooms = new SelectList(room, "RoomNo", "RoomName");
                 ViewBag.Beds = new SelectList(beds, "BedNo", "BedName");
                 roomalloc.ENMRNO = enmrNo;
+                roomalloc.FromDate = DateTime.Now.Date;
                 if (roomallocation != null)
                 {
                     roomalloc.ENMRNO = roomallocation.pra.ENMRNO;

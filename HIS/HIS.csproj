@@ -940,7 +940,6 @@
     <Content Include="light\js\plugins\summernote\summernote.min.js" />
     <Content Include="light\js\plugins\wizard\jquery.bootstrap.wizard.min.js" />
     <Content Include="light\js\plugins\wizard\MIT-LICENSE.txt" />
-    <Content Include="light\js\printThis.js" />
     <Content Include="light\js\respond.min.js" />
     <Content Include="light\lockscreen.html" />
     <Content Include="light\login.html" />
@@ -1127,6 +1126,7 @@
     <Compile Include="Models\InPatient.cs" />
     <Compile Include="Models\InPatientHistory.cs" />
     <Compile Include="Models\IntakeFrequency.cs" />
+    <Compile Include="Models\MasterBillPayModel.cs" />
     <Compile Include="Models\MDRModel.cs" />
     <Compile Include="Models\MedicineMaster.cs" />
     <Compile Include="Models\OutPatient.cs" />
@@ -1135,7 +1135,6 @@
     <Compile Include="Models\PatientPrescriptionHistory.cs" />
     <Compile Include="Models\PatientRoomAllocation.cs" />
     <Compile Include="Models\PatientTest.cs" />
-    <Compile Include="Models\PatientTestFile.cs" />
     <Compile Include="Models\PatientVisitHistory.cs" />
     <Compile Include="Models\Permissions.cs" />
     <Compile Include="Models\PurchaseOrder.cs" />
@@ -1158,6 +1157,9 @@
       <DependentUpon>HISDBModel.tt</DependentUpon>
     </Compile>
     <Compile Include="PatientVisitHistory.cs">
+      <DependentUpon>HISDBModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PaymentMode.cs">
       <DependentUpon>HISDBModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Permission.cs">
@@ -1380,7 +1382,7 @@
     <Content Include="Views\Lab\Index.cshtml" />
     <Content Include="Views\OutPatient\ManualDrugRequest.cshtml" />
     <Content Include="Views\OutPatient\PatientTests.cshtml" />
-    <Content Include="Views\InPatient\PrintHistory.cshtml" />
+    <Content Include="Views\OutPatient\LabTestBillPay.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

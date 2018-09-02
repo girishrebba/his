@@ -15,6 +15,8 @@ namespace HIS
         public string VisitName { get; set; }
         public string ENMRNO { get; set; }
         public int PrescribedBy { get; set; }
+        public decimal TestCost { get; set; }
+        public decimal Discount { get; set; }
     }
 
     public class PatientTestMetaData

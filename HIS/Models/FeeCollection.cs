@@ -14,5 +14,7 @@ namespace HIS
         [Required(ErrorMessage = "Please enter Amount", AllowEmptyStrings = false)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:#.#}")]
         public decimal Amount { get; set; }
+        [Required(ErrorMessage = "Please choose Pay Mode", AllowEmptyStrings = false)]
+        public int PaymentMode { get; set; }
     }
 }

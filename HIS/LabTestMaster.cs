@@ -25,7 +25,7 @@ namespace HIS
         public int PrescribedBy { get; set; }
         public Nullable<System.DateTime> DatePrescribed { get; set; }
         public Nullable<int> VisitID { get; set; }
-        public Nullable<int> IsBillPaid { get; set; }
+        public Nullable<bool> IsBillPaid { get; set; }
         public Nullable<bool> IsDelivered { get; set; }
         public Nullable<decimal> Discount { get; set; }
         public Nullable<decimal> PaidAmount { get; set; }

@@ -12,16 +12,9 @@ namespace HIS
     using System;
     using System.Collections.Generic;
     
-    public partial class FeeCollection
+    public partial class PaymentMode
     {
-        public int FeeID { get; set; }
-        public string ENMRNO { get; set; }
-        public decimal Amount { get; set; }
-        public System.DateTime PaidOn { get; set; }
-        public string Purpose { get; set; }
-        public int PaymentMode { get; set; }
-        public string LastFourDigits { get; set; }
-    
-        public virtual InPatient InPatient { get; set; }
+        public int ModeID { get; set; }
+        public string Mode { get; set; }
     }
 }

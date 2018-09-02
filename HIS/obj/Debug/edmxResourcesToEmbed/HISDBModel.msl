@@ -66,19 +66,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="FeeCollections">
-      <EntityTypeMapping TypeName="HISDBModel.FeeCollection">
-        <MappingFragment StoreEntitySet="FeeCollection">
-          <ScalarProperty Name="FeeID" ColumnName="FeeID" />
-          <ScalarProperty Name="ENMRNO" ColumnName="ENMRNO" />
-          <ScalarProperty Name="Amount" ColumnName="Amount" />
-          <ScalarProperty Name="PaidOn" ColumnName="PaidOn" />
-          <ScalarProperty Name="Purpose" ColumnName="Purpose" />
-          <ScalarProperty Name="PaymentMode" ColumnName="PaymentMode" />
-          <ScalarProperty Name="LastFourDigits" ColumnName="LastFourDigits" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="InPatientHistories">
       <EntityTypeMapping TypeName="HISDBModel.InPatientHistory">
         <MappingFragment StoreEntitySet="InPatientHistory">
@@ -215,19 +202,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="PatientRoomAllocations">
-      <EntityTypeMapping TypeName="HISDBModel.PatientRoomAllocation">
-        <MappingFragment StoreEntitySet="PatientRoomAllocation">
-          <ScalarProperty Name="AllocationID" ColumnName="AllocationID" />
-          <ScalarProperty Name="ENMRNO" ColumnName="ENMRNO" />
-          <ScalarProperty Name="RoomNo" ColumnName="RoomNo" />
-          <ScalarProperty Name="BedNo" ColumnName="BedNo" />
-          <ScalarProperty Name="FromDate" ColumnName="FromDate" />
-          <ScalarProperty Name="EndDate" ColumnName="EndDate" />
-          <ScalarProperty Name="AllocationStatus" ColumnName="AllocationStatus" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="PatientVisitHistories">
       <EntityTypeMapping TypeName="HISDBModel.PatientVisitHistory">
         <MappingFragment StoreEntitySet="PatientVisitHistory">
@@ -361,6 +335,7 @@
     </EntitySetMapping>
     <FunctionImportMapping FunctionImportName="ConvertOutPatientToInPatient" FunctionName="HISDBModel.Store.ConvertOutPatientToInPatient" />
     <FunctionImportMapping FunctionImportName="CreateMasterPrescription" FunctionName="HISDBModel.Store.CreateMasterPrescription" />
+    <FunctionImportMapping FunctionImportName="CreateMasterLabTest" FunctionName="HISDBModel.Store.CreateMasterLabTest" />
     <EntitySetMapping Name="LabTestMasters">
       <EntityTypeMapping TypeName="HISDBModel.LabTestMaster">
         <MappingFragment StoreEntitySet="LabTestMaster">
@@ -377,7 +352,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <FunctionImportMapping FunctionImportName="CreateMasterLabTest" FunctionName="HISDBModel.Store.CreateMasterLabTest" />
     <EntitySetMapping Name="PatientTests">
       <EntityTypeMapping TypeName="HISDBModel.PatientTest">
         <MappingFragment StoreEntitySet="PatientTests">
@@ -389,6 +363,40 @@
           <ScalarProperty Name="TestID" ColumnName="TestID" />
           <ScalarProperty Name="LTMID" ColumnName="LTMID" />
           <ScalarProperty Name="PTID" ColumnName="PTID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PatientRoomAllocations">
+      <EntityTypeMapping TypeName="HISDBModel.PatientRoomAllocation">
+        <MappingFragment StoreEntitySet="PatientRoomAllocation">
+          <ScalarProperty Name="AllocationStatus" ColumnName="AllocationStatus" />
+          <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+          <ScalarProperty Name="FromDate" ColumnName="FromDate" />
+          <ScalarProperty Name="BedNo" ColumnName="BedNo" />
+          <ScalarProperty Name="RoomNo" ColumnName="RoomNo" />
+          <ScalarProperty Name="ENMRNO" ColumnName="ENMRNO" />
+          <ScalarProperty Name="AllocationID" ColumnName="AllocationID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PaymentModes">
+      <EntityTypeMapping TypeName="HISDBModel.PaymentMode">
+        <MappingFragment StoreEntitySet="PaymentModes">
+          <ScalarProperty Name="Mode" ColumnName="Mode" />
+          <ScalarProperty Name="ModeID" ColumnName="ModeID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="FeeCollections">
+      <EntityTypeMapping TypeName="HISDBModel.FeeCollection">
+        <MappingFragment StoreEntitySet="FeeCollection">
+          <ScalarProperty Name="LastFourDigits" ColumnName="LastFourDigits" />
+          <ScalarProperty Name="PaymentMode" ColumnName="PaymentMode" />
+          <ScalarProperty Name="Purpose" ColumnName="Purpose" />
+          <ScalarProperty Name="PaidOn" ColumnName="PaidOn" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="ENMRNO" ColumnName="ENMRNO" />
+          <ScalarProperty Name="FeeID" ColumnName="FeeID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
