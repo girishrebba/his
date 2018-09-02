@@ -1,0 +1,171 @@
+﻿@model HIS.InPatient
+@{
+    Layout = null;
+}
+<title></title>
+<div id="ParentDiv" class="row">
+    <div id="PrintDiv">
+
+
+        @using (Html.BeginForm("ViewPatient", "InPatient", FormMethod.Get))
+    {
+        @Html.HiddenFor(model => model.ENMRNO)
+        <div class="form-horizontal">
+            <table class="table table-striped">
+                <tr>
+                    <td>  ENMRNO:  </td>
+                    <td>   @Html.DisplayFor(model => model.ENMRNO, new { htmlAttributes = new { @class = "form-control" } })  </td>
+                    <td>    </td>
+                    <td>    </td>
+                </tr>
+                <tr>
+                    <td> PatientName:   </td>
+                    <td> @Html.DisplayFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })  </td>
+                    <td>  Enrolled On:  </td>
+                    <td>  @Html.DisplayFor(model => model.EnrolledDisplay, new { htmlAttributes = new { @class = "form-control" } })  </td>
+                </tr>
+                <tr>
+                    <td> DOB   </td>
+                    <td> @Html.DisplayFor(model => model.DOBDisplay, new { htmlAttributes = new { @class = "form-control" } })   </td>
+                    <td>   Gender </td>
+                    <td>   @Html.DisplayFor(model => model.GenderDisplay, new { htmlAttributes = new { @class = "form-control" } })  </td>
+                </tr>
+                <tr>
+                    <td>  Address  </td>
+                    <td>  @Html.DisplayFor(model => model.Address, new { htmlAttributes = new { @class = "form-control" } })   </td>
+                    <td>   Phone </td>
+                    <td>  @Html.DisplayFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control" } })  </td>
+                </tr>
+                <tr>
+                    <td>  Height  </td>
+                    <td>   @Html.DisplayFor(model => model.Height, new { htmlAttributes = new { @class = "form-control" } })   </td>
+                    <td>  Weight  </td>
+                    <td>   @Html.DisplayFor(model => model.Weight, new { htmlAttributes = new { @class = "form-control" } })  </td>
+                </tr>
+                <tr>
+                    <td>  History  </td>
+                    <td>  @Html.DisplayFor(model => model.PatientHistory, new { htmlAttributes = new { @class = "form-control" } })   </td>
+                    <td>  Purpose  </td>
+                    <td>  @Html.DisplayFor(model => model.Purpose, new { htmlAttributes = new { @class = "form-control" } })  </td>
+                </tr>
+                <tr>
+                    <td>  Doctor  </td>
+                    <td>  @Html.DisplayFor(model => model.DoctorName, new { htmlAttributes = new { @class = "form-control" } })  </td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
+
+        </div>
+}
+
+        <h4> Observations</h4>
+
+        <table id="obsHisTable" class="table table-striped table-bordered" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Doctor</th>
+                    <th>Observation</th>
+                </tr>
+            </thead>
+        </table>
+
+        <br />
+
+        <h4>Payment History</h4>
+
+        <table id="feeHistoryTable" class="table table-striped table-bordered" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Amount</th>
+                    <th>Purpose</th>
+                    <th>Payment Mode</th>
+                </tr>
+            </thead>
+        </table>
+        <br />
+        <h4> Discharge Summary</h4>
+        <table style="width:100%">
+          
+            <tr>
+                <td>
+                    @Html.TextAreaFor(model => model.DiscSummary, new { @class = "form-control rounded-0", @rows = 10 })
+                </td>
+            </tr>
+        </table>
+
+    </div>
+    <input type="button" value="Print" id="printrpt" class="btn btn-primary" />
+</div>
+
+<script type="text/javascript">
+
+
+        $(document).ready(function () {
+
+     var myJsVariable = @Html.Raw(Json.Encode(Model.ENMRNO));
+
+
+            $("#obsHisTable").DataTable({
+                "ajax": {
+                    "url": '/InPatient/GetObservations',
+                    "data": { 'enmrNo': myJsVariable },
+                    "type": "GET",
+                    "datatype": "json"
+                },
+                "columns": [
+                    { "data": "DateDisplay" },
+                    { "data": "DoctorName" },
+                    { "data": "Observations" }
+                ],
+                "language": {
+                    "emptyTable": "No Observations"
+                },
+                "scrollY": "100px",
+                "scrollCollapse": true,
+                "paging": false,
+                "info": false,
+                "searching": false,
+                "order": [[0, "desc"]],
+            });
+
+
+
+            $("#feeHistoryTable").DataTable({
+                "ajax": {
+                    "url": '/InPatient/GetFeeHistory',
+                    "data": { 'enmrNo': myJsVariable },
+                    "type": "GET",
+                    "datatype": "json"
+                },
+                "columns": [
+                    { "data": "PaidDateDisplay" },
+                    { "data": "Amount" },
+                    { "data": "Purpose" },
+                    { "data": "PaymentMode" }
+                ],
+                "language": {
+                    "emptyTable": "No Payment done yet"
+                },
+                "scrollY": "100px",
+                "scrollCollapse": true,
+                "paging": false,
+                "info": false,
+                "searching": false,
+                "order": [[0, "desc"]],
+            });
+
+
+
+              $("#printrpt").click(function () {
+                  $("#PrintDiv").printThis({                    
+                      header: '<img src="http://localhost:50415/light/images/hms-logo_login.png" style="width:420px;" alt="Mouldifi" title="Sravanthi Hospitals">',
+                      footer: false,
+                      pageTitle: "", 
+                  });
+              });
+
+        });
+</script>
