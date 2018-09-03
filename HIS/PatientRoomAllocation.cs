@@ -22,7 +22,7 @@ namespace HIS
         public Nullable<System.DateTime> EndDate { get; set; }
         public Nullable<bool> AllocationStatus { get; set; }
     
-        public virtual InPatient InPatient { get; set; }
         public virtual Room Room { get; set; }
+        public virtual InPatient InPatient { get; set; }
     }
 }

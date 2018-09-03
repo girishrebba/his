@@ -13,7 +13,6 @@
         <EntityTypeShape EntityType="HISDBModel.ConsultationFee" Width="1.5" PointX="5.25" PointY="17.25" IsExpanded="true" />
         <EntityTypeShape EntityType="HISDBModel.ConsultationType" Width="1.5" PointX="3" PointY="12.375" IsExpanded="true" />
         <EntityTypeShape EntityType="HISDBModel.InPatientHistory" Width="1.5" PointX="5.25" PointY="14.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="HISDBModel.InPatient" Width="1.5" PointX="8.25" PointY="14" IsExpanded="true" />
         <EntityTypeShape EntityType="HISDBModel.IntakeFrequency" Width="1.5" PointX="5.25" PointY="42.125" IsExpanded="true" />
         <EntityTypeShape EntityType="HISDBModel.MedicineInventory" Width="1.5" PointX="7.5" PointY="49.875" IsExpanded="true" />
         <EntityTypeShape EntityType="HISDBModel.MedicineMaster" Width="1.5" PointX="5.25" PointY="49.5" IsExpanded="true" />
@@ -31,7 +30,6 @@
         <EntityTypeShape EntityType="HISDBModel.User" Width="1.5" PointX="3" PointY="15.5" IsExpanded="true" />
         <EntityTypeShape EntityType="HISDBModel.UserType" Width="1.5" PointX="0.75" PointY="14.5" IsExpanded="true" />
         <AssociationConnector Association="HISDBModel.FK_Beds_RoomNo" ManuallyRouted="false" />
-        <AssociationConnector Association="HISDBModel.FK_InPatients_BloodGroup" ManuallyRouted="false" />
         <AssociationConnector Association="HISDBModel.FK_OutPatients_BloodGroup" ManuallyRouted="false" />
         <AssociationConnector Association="HISDBModel.FK_BrandCategories_BrandID" ManuallyRouted="false" />
         <AssociationConnector Association="HISDBModel.FK_MM_CategoryID" ManuallyRouted="false" />
@@ -40,8 +38,6 @@
         <AssociationConnector Association="HISDBModel.FK_Consultation_Type" ManuallyRouted="false" />
         <AssociationConnector Association="HISDBModel.FK_PVH_Consultation_Type" ManuallyRouted="false" />
         <AssociationConnector Association="HISDBModel.FK_InPatientHistory_Doctor" ManuallyRouted="false" />
-        <AssociationConnector Association="HISDBModel.FK_IPH_InPatients_ENMRNO" ManuallyRouted="false" />
-        <AssociationConnector Association="HISDBModel.FK_InPatients_Doctor" ManuallyRouted="false" />
         <AssociationConnector Association="HISDBModel.FK_PP_FrequencyID" ManuallyRouted="false" />
         <AssociationConnector Association="HISDBModel.FK_MI_MedicineID" ManuallyRouted="false" />
         <AssociationConnector Association="HISDBModel.FK_PO_MedicineID" ManuallyRouted="false" />
@@ -59,11 +55,15 @@
         <AssociationConnector Association="HISDBModel.FK_PatientTests_LTMID" />
         <AssociationConnector Association="HISDBModel.FK_PatientTests_TestID" />
         <EntityTypeShape EntityType="HISDBModel.PatientRoomAllocation" Width="1.5" PointX="13.5" PointY="16.375" />
-        <AssociationConnector Association="HISDBModel.FK_PRA_InPatients_ENMRNO" />
         <AssociationConnector Association="HISDBModel.FK_PRA_RoomNo" />
         <EntityTypeShape EntityType="HISDBModel.PaymentMode" Width="1.5" PointX="5.375" PointY="0.75" />
         <EntityTypeShape EntityType="HISDBModel.FeeCollection" Width="1.5" PointX="10.5" PointY="17.125" />
+        <EntityTypeShape EntityType="HISDBModel.InPatient" Width="1.5" PointX="16.25" PointY="11.625" />
+        <AssociationConnector Association="HISDBModel.FK_InPatients_BloodGroup" />
         <AssociationConnector Association="HISDBModel.FK_FeeCollection_ENMRNO" />
+        <AssociationConnector Association="HISDBModel.FK_IPH_InPatients_ENMRNO" />
+        <AssociationConnector Association="HISDBModel.FK_InPatients_Doctor" />
+        <AssociationConnector Association="HISDBModel.FK_PRA_InPatients_ENMRNO" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
