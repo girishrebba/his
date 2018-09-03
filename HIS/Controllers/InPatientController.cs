@@ -46,7 +46,11 @@ namespace HIS.Controllers
                                      Phone = x.ip.Phone,
                                      DoctorName = x.user.GetFullName(),
                                      Purpose = x.ip.Purpose,
-                                     EnrolledDisplay = x.ip.GetEnrolledFormat()
+                                     EnrolledDisplay = x.ip.GetEnrolledFormat(),
+                                     IsDischarged = x.ip.IsDischarged.HasValue ? x.ip.IsDischarged : false,
+                                     DischargeDateDisplay = HtmlHelpers.HtmlHelpers.DateFormat(x.ip.DischargedOn)
+                                     
+                                     
                                  }).ToList();
 
                 return Json(new { data = inPatients }, JsonRequestBehavior.AllowGet);
@@ -104,13 +108,17 @@ namespace HIS.Controllers
                 else
                 {
                     message = "profile updated";
-                    if (!string.IsNullOrEmpty(ip.DiscSummary) && (ip.IsDischarged == null || ip.IsDischarged == false))
+                    if (!string.IsNullOrEmpty(ip.DiscSummary) && ((ip.IsDischarged == null || ip.IsDischarged == false)&& ip.DischargedOn == null))
                     {
                         ip.IsDischarged = true;
+                        ip.DischargedOn = DateTime.Today;
                         var patientBedRecord = db.PatientRoomAllocations.Where(pr => pr.ENMRNO == ip.ENMRNO).OrderByDescending(pr => pr.AllocationID).FirstOrDefault();
-                        patientBedRecord.AllocationStatus = false;
-                        patientBedRecord.EndDate = DateTime.Today;
-                        db.Entry(patientBedRecord).State = EntityState.Modified;
+                        if (patientBedRecord != null)
+                        {
+                            patientBedRecord.AllocationStatus = false;
+                            patientBedRecord.EndDate = DateTime.Today;
+                            db.Entry(patientBedRecord).State = EntityState.Modified;
+                        }
                         message = "Discarged";
                     }
                     db.Entry(ip).State = EntityState.Modified;
@@ -141,6 +149,7 @@ namespace HIS.Controllers
                     inPatient.MaritalStatusDisplay = inpatient.ip.GetMaritalStatus();
                     inPatient.DOBDisplay = inpatient.ip.GetDOBFormat();
                     inPatient.EnrolledDisplay = inpatient.ip.GetEnrolledFormat();
+                    inPatient.DischargeDateDisplay = HtmlHelpers.HtmlHelpers.DateFormat(inpatient.ip.DischargedOn);
                 }
                 return inPatient;
             }

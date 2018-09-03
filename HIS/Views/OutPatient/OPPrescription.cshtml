@@ -93,16 +93,16 @@
                                             </thead>
                                             <tbody>
                                                 @foreach (var test in p.PatientTests)
-            {
+                                                {
                                                 <tr>
                                                     <td>@test.TestName</td>
                                                     <td>@test.DoctorName</td>
                                                     <td>@test.DateDisplay</td>
                                                     <td>@test.RecordedValues</td>
                                                     <td>@test.TestImpression</td>
-                                                    <td><span class="btn btn-success fa fa-file-download" style="padding: 0px 3px" id="btnDownload"></span></td>
+                                                    <td><a href='@test.ReportPath' target="_blank" class='btn btn-info btn-sm' title='ReportView'><i class="fa fa-file-download"></i></a></td>        
                                                 </tr>
-}
+                                                }
                                             </tbody>
                                         </table>
                                     </div> 

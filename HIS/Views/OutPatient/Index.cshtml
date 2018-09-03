@@ -75,7 +75,7 @@
                     {
                         "data": "ENMRNO", "render": function (data) {
                             return "@if (ViewContext.Controller.HasPermission("OutPatient-AddModify"))
-                            {<a class='btn btn-default btn-sm' title='Edit' onclick=PopupForm('@Url.Action("AddModify","OutPatient")/?enmrNo=" + data + "')><i class='fa fa-pencil-alt'></i></a>}"
+                            {<a class='btn btn-default btn-sm' title='Edit' onclick=PopupForm('@Url.Action("AddModify","OutPatient")/?enmrNo=" + data + "')><i class='fa fa-user-edit'></i></a>}"
                                 + "@if (ViewContext.Controller.HasPermission("OutPatient-ViewPatient")){
                                     <a class='btn btn-info btn-sm' title = 'View Patient' style = 'margin-left:5px' onclick = PopupViewPatient('@Url.Action("ViewPatient", "OutPatient")/?enmrNo=" + data + "')><i class='fa fa-info-circle'></i></a>}"
                                 + "@if (ViewContext.Controller.HasPermission("OutPatient-NewVisit")){
@@ -91,7 +91,7 @@
                                 + "@if (ViewContext.Controller.HasPermission("OutPatient-PatientTests")){
                                     <a class='btn btn-primary btn-sm' title='Lab' style='margin-left:5px' onclick=PopupPatientTests('@Url.Action("PatientTests", "OutPatient")/?enmrNo=" + data + "')><i class='fa fa-flask'></i></a>}"
                                 + "@if (ViewContext.Controller.HasPermission("OutPatient-LabTestBillPay")){
-                                    <a class='btn btn-primary btn-sm' title='Lab' style='margin-left:5px' onclick=PopupLabTestBillPayForm('@Url.Action("LabTestBillPay", "OutPatient")/?enmrNo=" + data + "')><i class='fa fa-credit-card'></i></a>}";
+                                    <a class='btn btn-primary btn-sm' title='Lab Test Bill Payment' style='margin-left:5px' onclick=PopupLabTestBillPayForm('@Url.Action("LabTestBillPay", "OutPatient")/?enmrNo=" + data + "')><i class='fa fa-credit-card'></i></a>}";
 
                         },
                         "orderable": false,

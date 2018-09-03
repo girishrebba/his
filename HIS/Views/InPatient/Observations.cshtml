@@ -24,50 +24,54 @@
                     ENMRNO: <span class="lableDisplay">@Model.ENMRNO </span>
                 </div>
                 <div class="panel-body ">
-                     <div class="table-responsive">
-                            <table id="obsHisTable" class="table table-striped table-bordered" style="width:100%">
-                                <thead>
-                                    <tr>
-                                        <th>Date</th>
-                                        <th>Doctor</th>
-                                        <th>Observation</th>
-                                    </tr>
-                                </thead>
-                            </table>
-                        </div>
-                    <div class="panel-heading clearfix">
-                        <a id="addNew" class="btn btn-success" style="margin-bottom:10px"><i class="fa fa-plus"></i> Add New</a>
+                    <div class="table-responsive">
+                        <table id="obsHisTable" class="table table-striped table-bordered" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Doctor</th>
+                                    <th>Observation</th>
+                                </tr>
+                            </thead>
+                        </table>
                     </div>
-                    <div id="obsForm" class="form-horizontal hidden">
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.DoctorID, "Doctor:", htmlAttributes: new { @class = "control-label col-sm-2" })
-                            <div class="col-sm-4">
-                                @Html.DropDownListFor(model => model.DoctorID, ViewBag.Users as SelectList, "--Select--", new { @class = "form-control" })
-                                @Html.ValidationMessageFor(model => model.DoctorID)
-                            </div>
-                            @Html.LabelFor(model => model.ObservationDate, "Date:", htmlAttributes: new { @class = "control-label col-md-2" })
-                            <div class="col-sm-4">
-                                <div id="date-popup" class="input-group date">
-                                    @Html.EditorFor(model => model.ObservationDate, new { htmlAttributes = new { Value = Html.DateFormat(Model.ObservationDate), @class = "datepicker form-control", @placeholder = "" } })
-                                    <span class="btnpicker input-group-addon"><i class="fa fa-calendar"></i></span>
-                                </div>
-                                @Html.ValidationMessageFor(model => model.ObservationDate, "", new { @class = "text-danger" })
-                            </div>
+                    @if (!HtmlHelpers.ISPatientDischrged(Model.ENMRNO))
+    {
+                <div class="panel-heading clearfix">
+                    <a id="addNew" class="btn btn-success" style="margin-bottom:10px"><i class="fa fa-plus"></i> Add New</a>
+                </div>
+
+                <div id="obsForm" class="form-horizontal hidden">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DoctorID, "Doctor:", htmlAttributes: new { @class = "control-label col-sm-2" })
+                        <div class="col-sm-4">
+                            @Html.DropDownListFor(model => model.DoctorID, ViewBag.Users as SelectList, "--Select--", new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.DoctorID)
                         </div>
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.Observations, "Observation:", htmlAttributes: new { @class = "control-label col-md-2" })
-                            <div class="col-sm-10">
-                                @Html.TextAreaFor(model => model.Observations, new { @class = "form-control rounded-0", @rows = 2 })
-                                @Html.ValidationMessageFor(model => model.Observations, "", new { @class = "text-danger" })
+                        @Html.LabelFor(model => model.ObservationDate, "Date:", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-sm-4">
+                            <div id="date-popup" class="input-group date">
+                                @Html.EditorFor(model => model.ObservationDate, new { htmlAttributes = new { Value = Html.DateFormat(Model.ObservationDate), @class = "datepicker form-control", @placeholder = "" } })
+                                <span class="btnpicker input-group-addon"><i class="fa fa-calendar"></i></span>
                             </div>
-                            </div>
-                        <div class="form-group">
-                            <div class="col-md-3 col-md-offset-3">
-                                <input type="submit" value="Submit" class="btn btn-primary" />
-                                <input type="reset" value="Reset" class="btn" />
-                            </div>
+                            @Html.ValidationMessageFor(model => model.ObservationDate, "", new { @class = "text-danger" })
                         </div>
                     </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Observations, "Observation:", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-sm-10">
+                            @Html.TextAreaFor(model => model.Observations, new { @class = "form-control rounded-0", @rows = 2 })
+                            @Html.ValidationMessageFor(model => model.Observations, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3 col-md-offset-3">
+                            <input type="submit" value="Submit" class="btn btn-primary" />
+                            <input type="reset" value="Reset" class="btn" />
+                        </div>
+                    </div>
+                </div>
+}
                 </div>
             </div>
         </div>

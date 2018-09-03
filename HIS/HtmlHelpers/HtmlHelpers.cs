@@ -378,5 +378,14 @@ namespace HIS.HtmlHelpers
                 return patientTests;
             }
         }
+
+        public static bool ISPatientDischrged(string enmrNo)
+        {
+            using (var db = new HISDBEntities())
+            {
+                var flag = db.InPatients.Where(ip => ip.ENMRNO == enmrNo).FirstOrDefault().IsDischarged;
+                return flag.HasValue ? flag.Value : false;
+            }
+        }
     }
 }

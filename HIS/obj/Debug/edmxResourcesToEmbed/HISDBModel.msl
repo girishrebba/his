@@ -80,6 +80,9 @@
     <EntitySetMapping Name="InPatients">
       <EntityTypeMapping TypeName="HISDBModel.InPatient">
         <MappingFragment StoreEntitySet="InPatients">
+          <ScalarProperty Name="AdvAmount" ColumnName="AdvAmount" />
+          <ScalarProperty Name="EstAmoount" ColumnName="EstAmoount" />
+          <ScalarProperty Name="DischargedOn" ColumnName="DischargedOn" />
           <ScalarProperty Name="IsDischarged" ColumnName="IsDischarged" />
           <ScalarProperty Name="SNO" ColumnName="SNO" />
           <ScalarProperty Name="ENMRNO" ColumnName="ENMRNO" />

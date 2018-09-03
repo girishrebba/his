@@ -57,6 +57,9 @@ namespace HIS
         public string PrevENMR { get; set; }
         public string DiscSummary { get; set; }
         public Nullable<bool> IsDischarged { get; set; }
+        public Nullable<System.DateTime> DischargedOn { get; set; }
+        public Nullable<decimal> EstAmoount { get; set; }
+        public Nullable<decimal> AdvAmount { get; set; }
     
         public virtual BloodGroup BloodGroup { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

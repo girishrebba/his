@@ -124,6 +124,9 @@
           <Property Name="PrevENMR" Type="varchar" MaxLength="30" />
           <Property Name="DiscSummary" Type="varchar(max)" />
           <Property Name="IsDischarged" Type="bit" />
+          <Property Name="DischargedOn" Type="datetime" />
+          <Property Name="EstAmoount" Type="money" />
+          <Property Name="AdvAmount" Type="money" />
         </EntityType>
         <EntityType Name="IntakeFrequency">
           <Key>
@@ -1012,6 +1015,9 @@
           <Property Name="IsDischarged" Type="Boolean" />
           <NavigationProperty Name="PatientRoomAllocations" Relationship="HISDBModel.FK_PRA_InPatients_ENMRNO" FromRole="InPatient" ToRole="PatientRoomAllocation" />
           <NavigationProperty Name="FeeCollections" Relationship="HISDBModel.FK_FeeCollection_ENMRNO" FromRole="InPatient" ToRole="FeeCollection" />
+          <Property Name="DischargedOn" Type="DateTime" Precision="3" />
+          <Property Name="EstAmoount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="AdvAmount" Type="Decimal" Precision="19" Scale="4" />
         </EntityType>
         <EntityType Name="IntakeFrequency">
           <Key>
@@ -1908,6 +1914,9 @@
           <EntitySetMapping Name="InPatients">
             <EntityTypeMapping TypeName="HISDBModel.InPatient">
               <MappingFragment StoreEntitySet="InPatients">
+                <ScalarProperty Name="AdvAmount" ColumnName="AdvAmount" />
+                <ScalarProperty Name="EstAmoount" ColumnName="EstAmoount" />
+                <ScalarProperty Name="DischargedOn" ColumnName="DischargedOn" />
                 <ScalarProperty Name="IsDischarged" ColumnName="IsDischarged" />
                 <ScalarProperty Name="SNO" ColumnName="SNO" />
                 <ScalarProperty Name="ENMRNO" ColumnName="ENMRNO" />

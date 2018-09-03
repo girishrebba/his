@@ -119,6 +119,9 @@
     <Property Name="PrevENMR" Type="varchar" MaxLength="30" />
     <Property Name="DiscSummary" Type="varchar(max)" />
     <Property Name="IsDischarged" Type="bit" />
+    <Property Name="DischargedOn" Type="datetime" />
+    <Property Name="EstAmoount" Type="money" />
+    <Property Name="AdvAmount" Type="money" />
   </EntityType>
   <EntityType Name="IntakeFrequency">
     <Key>

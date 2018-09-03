@@ -29,7 +29,7 @@ namespace HIS
         //[Display(Name = "Test Date")]
         public string TestDate { get; set; }
 
-        [RegularExpression(@"([a-zA-Z0-9\s_\\.\-:])+(.pdf|.docx|.doc)$", ErrorMessage = "Only pdf/doc/docx files allowed.")]
-        public HttpPostedFileBase ReportPath { get; set; }
+        //[RegularExpression(@"([a-zA-Z0-9\s_\\.\-:])+(.pdf|.docx|.doc)$", ErrorMessage = "Only pdf/doc/docx files allowed.")]
+        public string ReportPath { get; set; }
     }
 }

@@ -1135,6 +1135,7 @@
     <Compile Include="Models\PatientPrescriptionHistory.cs" />
     <Compile Include="Models\PatientRoomAllocation.cs" />
     <Compile Include="Models\PatientTest.cs" />
+    <Compile Include="Models\PatientTestFile.cs" />
     <Compile Include="Models\PatientVisitHistory.cs" />
     <Compile Include="Models\Permissions.cs" />
     <Compile Include="Models\PurchaseOrder.cs" />
@@ -1383,6 +1384,7 @@
     <Content Include="Views\OutPatient\ManualDrugRequest.cshtml" />
     <Content Include="Views\OutPatient\PatientTests.cshtml" />
     <Content Include="Views\OutPatient\LabTestBillPay.cshtml" />
+    <Content Include="Views\InPatient\PrintHistory.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

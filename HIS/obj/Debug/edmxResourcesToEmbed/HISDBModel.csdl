@@ -125,6 +125,9 @@
     <Property Name="IsDischarged" Type="Boolean" />
     <NavigationProperty Name="PatientRoomAllocations" Relationship="HISDBModel.FK_PRA_InPatients_ENMRNO" FromRole="InPatient" ToRole="PatientRoomAllocation" />
     <NavigationProperty Name="FeeCollections" Relationship="HISDBModel.FK_FeeCollection_ENMRNO" FromRole="InPatient" ToRole="FeeCollection" />
+    <Property Name="DischargedOn" Type="DateTime" Precision="3" />
+    <Property Name="EstAmoount" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="AdvAmount" Type="Decimal" Precision="19" Scale="4" />
   </EntityType>
   <EntityType Name="IntakeFrequency">
     <Key>

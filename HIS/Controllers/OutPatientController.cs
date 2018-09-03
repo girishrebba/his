@@ -74,7 +74,7 @@ namespace HIS.Controllers
             {
                 latestVisit = hs.PatientVisitHistories.Where(pvh => pvh.ENMRNO == enmrNo).OrderByDescending(pvh => pvh.SNO).FirstOrDefault();
 
-                prescriptions = GetPatientVisitPrescriptions(enmrNo, latestVisit.SNO);
+                prescriptions = GetPatientNotDeliverPrescriptions(enmrNo, latestVisit.SNO);
                 string visitName = VisitName(latestVisit.ConsultTypeID);
                 if(prescriptions.Count() > 0)
                 {
@@ -344,6 +344,16 @@ namespace HIS.Controllers
 
         public List<PatientPrescription> GetPatientVisitPrescriptions(string enmrNo, int visitID)
         {
+            return PatientVisitPrescriptions(enmrNo, visitID);
+        }
+
+        public List<PatientPrescription> GetPatientNotDeliverPrescriptions(string enmrNo, int visitID)
+        {
+            return PatientVisitNotDeliverPrescriptions(enmrNo, visitID);
+        }
+
+        private static List<PatientPrescription> PatientVisitPrescriptions(string enmrNo, int visitID)
+        {
             using (HISDBEntities hs = new HISDBEntities())
             {
 
@@ -382,7 +392,57 @@ namespace HIS.Controllers
             }
         }
 
+        private static List<PatientPrescription> PatientVisitNotDeliverPrescriptions(string enmrNo, int visitID)
+        {
+            using (HISDBEntities hs = new HISDBEntities())
+            {
+
+                var patientPrescriptions = (from pp in hs.PatientPrescriptions
+                                            join pm in hs.PrescriptionMasters on pp.PMID equals pm.PMID
+                                            join op in hs.OutPatients on pm.ENMRNO equals op.ENMRNO
+                                            join mm in hs.MedicineMasters on pp.MedicineID equals mm.MMID
+                                            join ifs in hs.IntakeFrequencies on pp.IntakeFrequencyID equals ifs.FrequencyID
+                                            join u in hs.Users on pm.PrescribedBy equals u.UserID
+                                            join ut in hs.UserTypes on u.UserTypeID equals ut.UserTypeID
+                                            where ut.UserTypeName.Equals("Doctor") && pm.ENMRNO.Equals(enmrNo) && pm.VisitID == visitID && pm.IsDelivered == false 
+                                            select new
+                                            {
+                                                pp,
+                                                pm,
+                                                u,
+                                                mm,
+                                                ifs.Frequency
+                                            })
+                                  .OrderByDescending(b => b.pm.DatePrescribed)
+                                  .AsEnumerable()
+                                 .Select(x => new PatientPrescription
+                                 {
+                                     DateDisplay = HtmlHelpers.HtmlHelpers.DateFormat(x.pm.DatePrescribed),
+                                     ENMRNO = x.pm.ENMRNO,
+                                     VisitID = x.pm.VisitID.Value,
+                                     DoctorName = HtmlHelpers.HtmlHelpers.GetFullName(x.u.FirstName, x.u.MiddleName, x.u.LastName),
+                                     Quantity = x.pp.Quantity,
+                                     MedicineWithDose = HtmlHelpers.HtmlHelpers.GetMedicineWithDose(x.mm.MedicineName, x.mm.MedDose),
+                                     IntakeDisplay = x.Frequency,
+                                     MedicineID = x.pp.MedicineID,
+                                     PMID = x.pm.PMID
+                                 }).ToList();
+
+                return patientPrescriptions;
+            }
+        }
+
         public List<PatientTest> GetPatientVisitTests(string enmrNo, int visitID)
+        {
+            return PatientVisitTests(enmrNo, visitID);
+        }
+
+        public List<PatientTest> GetPatientNotDeliverVisitTests(string enmrNo, int visitID)
+        {
+            return PatientNotDeliverVisitTests(enmrNo, visitID);
+        }
+
+        private static List<PatientTest> PatientVisitTests(string enmrNo, int visitID)
         {
             using (HISDBEntities hs = new HISDBEntities())
             {
@@ -390,16 +450,53 @@ namespace HIS.Controllers
                 var patientTests = (from pt in hs.PatientTests
                                     join ltm in hs.LabTestMasters on pt.LTMID equals ltm.LTMID
                                     join op in hs.OutPatients on ltm.ENMRNO equals op.ENMRNO
-                                            join tt in hs.TestTypes on pt.TestID equals tt.TestID
-                                            join u in hs.Users on ltm.PrescribedBy equals u.UserID
-                                            join ut in hs.UserTypes on u.UserTypeID equals ut.UserTypeID
-                                            where ut.UserTypeName.Equals("Doctor") && ltm.ENMRNO == enmrNo && ltm.VisitID == visitID
-                                            select new
-                                            {
-                                                pt,
-                                                u,
-                                                tt
-                                            })
+                                    join tt in hs.TestTypes on pt.TestID equals tt.TestID
+                                    join u in hs.Users on ltm.PrescribedBy equals u.UserID
+                                    join ut in hs.UserTypes on u.UserTypeID equals ut.UserTypeID
+                                    where ut.UserTypeName.Equals("Doctor") && ltm.ENMRNO == enmrNo && ltm.VisitID == visitID
+                                    select new
+                                    {
+                                        pt,
+                                        u,
+                                        tt
+                                    })
+                                  .OrderByDescending(b => b.pt.PTID)
+                                  .AsEnumerable()
+                                 .Select(x => new PatientTest
+                                 {
+                                     ENMRNO = x.pt.ENMRNO,
+                                     TestName = x.tt.TestName,
+                                     DateDisplay = HtmlHelpers.HtmlHelpers.DateFormat(x.pt.TestDate),
+                                     DoctorName = HtmlHelpers.HtmlHelpers.GetFullName(x.u.FirstName, x.u.MiddleName, x.u.LastName),
+                                     RecordedValues = x.pt.RecordedValues,
+                                     TestImpression = x.pt.TestImpression,
+                                     ReportPath = x.pt.ReportPath,
+                                     LTMID = x.pt.LTMID,
+                                     TestID = x.pt.TestID
+                                 }).ToList();
+
+                return patientTests;
+            }
+        }
+
+        private static List<PatientTest> PatientNotDeliverVisitTests(string enmrNo, int visitID)
+        {
+            using (HISDBEntities hs = new HISDBEntities())
+            {
+
+                var patientTests = (from pt in hs.PatientTests
+                                    join ltm in hs.LabTestMasters on pt.LTMID equals ltm.LTMID
+                                    join op in hs.OutPatients on ltm.ENMRNO equals op.ENMRNO
+                                    join tt in hs.TestTypes on pt.TestID equals tt.TestID
+                                    join u in hs.Users on ltm.PrescribedBy equals u.UserID
+                                    join ut in hs.UserTypes on u.UserTypeID equals ut.UserTypeID
+                                    where ut.UserTypeName.Equals("Doctor") && ltm.ENMRNO == enmrNo && ltm.VisitID == visitID && ltm.IsDelivered == false
+                                    select new
+                                    {
+                                        pt,
+                                        u,
+                                        tt
+                                    })
                                   .OrderByDescending(b => b.pt.PTID)
                                   .AsEnumerable()
                                  .Select(x => new PatientTest
@@ -430,7 +527,7 @@ namespace HIS.Controllers
                                     join tt in hs.TestTypes on pt.TestID equals tt.TestID
                                     join u in hs.Users on ltm.PrescribedBy equals u.UserID
                                     join ut in hs.UserTypes on u.UserTypeID equals ut.UserTypeID
-                                    where ut.UserTypeName.Equals("Doctor") && ltm.ENMRNO == enmrNo && ltm.VisitID == visitID && ltm.IsBillPaid == true
+                                    where ut.UserTypeName.Equals("Doctor") && ltm.ENMRNO == enmrNo && ltm.VisitID == visitID && ltm.IsBillPaid == false
                                     select new
                                     {
                                         pt,
@@ -609,13 +706,14 @@ namespace HIS.Controllers
         [HttpGet]
         public ActionResult PatientTests(string enmrNo)
         {
+            ViewBag.ENMRNO = enmrNo;
             var latestVisit = new PatientVisitHistory();
             var patientTests = new List<PatientTest>();
             using (var hs = new HISDBEntities())
             {
                 latestVisit = hs.PatientVisitHistories.Where(pvh => pvh.ENMRNO == enmrNo).OrderByDescending(pvh => pvh.SNO).FirstOrDefault();
 
-                patientTests = GetPatientVisitTests(enmrNo, latestVisit.SNO);
+                patientTests = GetPatientNotDeliverVisitTests(enmrNo, latestVisit.SNO);
                 string visitName = VisitName(latestVisit.ConsultTypeID);
                 if (patientTests.Count() > 0)
                 {
@@ -753,15 +851,16 @@ namespace HIS.Controllers
             if (!exists)
                 System.IO.Directory.CreateDirectory(Server.MapPath(subPath));
 
-            // Get the complete folder path and store the file inside it.    
+            // Get the complete folder path and store the file inside it.
+            string dbfname = Path.Combine(subPath.Replace("~", ".."), fname);
             fname = Path.Combine(Server.MapPath(subPath), fname);            
             file.SaveAs(fname);
-            fname = fname.Replace("~", "..");
+            
             using (HISDBEntities db = new HISDBEntities())
             {
-                int emr = db.OutPatients.Where(a => a.ENMRNO == emrno).Select(b => b.SNO).FirstOrDefault();
+                int emr = db.LabTestMasters.Where(a => a.ENMRNO == emrno).OrderByDescending(a=>a.LTMID).Select(b => b.LTMID).FirstOrDefault();
 
-                db.Database.ExecuteSqlCommand("update PatientTests set ReportPath='" + fname + "' where PTID = '" + emr + "' and TestID=" + test);
+                db.Database.ExecuteSqlCommand("update PatientTests set ReportPath='" + dbfname + "' where LTMID = '" + emr + "' and TestID=" + test);
                 db.SaveChanges();
             }
             return Json(FileName, JsonRequestBehavior.AllowGet);
