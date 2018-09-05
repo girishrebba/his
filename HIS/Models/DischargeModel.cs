@@ -13,6 +13,7 @@ namespace HIS
         public RoomBilling RoomChargeTable { get; set; }
         public List<FeeCollection> FeeCollectionTable { get; set; }
         public string DischargeSummary { get; set; }
+        public bool CanBeDischarge { get; set; }
     }
 
     public class DischargeModelMetaData

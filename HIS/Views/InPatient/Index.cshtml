@@ -68,19 +68,21 @@
                     { "data": "DischargeDateDisplay"},
                     {
                         "data": null, "render": function (data) {
-                                return "@if (ViewContext.Controller.HasPermission("InPatient-AddModify")){<a class='btn btn-default btn-sm' title='Edit' onclick=PopupPatient('@Url.Action("AddModify","InPatient")/?enmrNo=" + data.ENMRNO + "',false)><i class='fa fa-user-edit'></i>"
+                            var disabled = 'disabled btn-success';
+                            if (!data.IsDischarged) { disabled = '' }
+                            return "@if (ViewContext.Controller.HasPermission("InPatient-AddModify")){<a class='btn btn-default btn-sm "+disabled+"' title='Edit' onclick=PopupPatient('@Url.Action("AddModify","InPatient")/?enmrNo=" + data.ENMRNO + "',false)><i class='fa fa-user-edit'></i>"
                                     + "</a>}@if (ViewContext.Controller.HasPermission("InPatient-ViewPatient"))
                                 {<a class='btn btn-info btn-sm' title='View Patient' style='margin-left:5px' onclick=PopupViewPatient('@Url.Action("ViewPatient", "InPatient")/?enmrNo=" + data.ENMRNO + "')><i class='fa fa-info-circle'></i></a>}"
-                                    + "@if (ViewContext.Controller.HasPermission("InPatient-BedAllocation")){
-                                    <a class='btn btn-primary btn-sm' title='Bed' style='margin-left:5px' onclick=PopupPatientAllocationView('@Url.Action("BedAllocation", "InPatient")/?enmrNo=" + data.ENMRNO + "')><i class='fa fa-bed'></i></a>}"
+                                + "@if (ViewContext.Controller.HasPermission("InPatient-BedAllocation")){
+                                    <a class='btn btn-primary btn-sm " + disabled +"' title='Bed' style='margin-left:5px' onclick=PopupPatientAllocationView('@Url.Action("BedAllocation", "InPatient")/?enmrNo=" + data.ENMRNO + "')><i class='fa fa-bed'></i></a>}"
                                     + "@if (ViewContext.Controller.HasPermission("InPatient-Fee")){
                                         <a class='btn btn-primary btn-sm' title='Fee' style='margin-left:5px' onclick=PopupFee('@Url.Action("Fee", "InPatient")/?enmrNo=" + data.ENMRNO + "')><i class='fa fa-rupee-sign'></i></a>}"
                                     + "@if (ViewContext.Controller.HasPermission("InPatient-Observations")){
                                         <a class='btn btn-primary btn-sm' title='Observation' style='margin-left:5px' onclick=PopupObservations('@Url.Action("Observations", "InPatient")/?enmrNo=" + data.ENMRNO + "')><i class='fa fa-briefcase-medical'></i></a>}"
                                     + "@if (ViewContext.Controller.HasPermission("InPatient-PrintHistory")){
                                         <a class='btn btn-primary btn-sm' title='View & Print' style='margin-left:5px' onclick=PopupPrint('@Url.Action("PrintHistory", "InPatient")/?enmrNo=" + data.ENMRNO + "')><i class='fa fa-print'></i></a>}"
-                                    + "@if (ViewContext.Controller.HasPermission("InPatient-AddModify")){
-                                    <a class='btn btn-default btn-sm' title='Discharge' style='margin-left:5px' onclick=PopupDischargeForm('@Url.Action("Discharge","InPatient")/?enmrNo=" + data.ENMRNO + "'," + JSON.stringify(data.ENMRNO)+")><i class='fa fa-sign-out-alt'></i></a>}";
+                                + "@if (ViewContext.Controller.HasPermission("InPatient-AddModify")){
+                                    <a class='btn btn-default btn-sm " + disabled +"' title='Discharge' style='margin-left:5px' onclick=PopupDischargeForm('@Url.Action("Discharge","InPatient")/?enmrNo=" + data.ENMRNO + "'," + JSON.stringify(data.ENMRNO)+")><i class='fa fa-sign-out-alt'></i></a>}";
                             },
                         "orderable": false,
                         "searchable": false
@@ -331,31 +333,51 @@
         }
 
 
-        // Submit Print button      
-        function PopupPrint(url) {
-            var formDiv = $('<div/>');
-            $.get(url)
-                .done(function (response) {
-                    formDiv.html(response);
+    // Submit Print button      
+    function PopupPrint(url) {
+        var formDiv = $('<div/>');
+        $.get(url)
+            .done(function (response) {
+                formDiv.html(response);
 
-                    printdiv = formDiv.dialog({
-                        autoOpen: true,
-                        resizable: false,
-                        modal: true,
-                        title: 'Print Details',
-                        width: 850,
-                        top: 147,
-                        close: function () {
-                            printdiv.dialog('destroy').remove();
-                        },
-                        open: function (event, ui) {
-                            $('.ui-dialog-content').css('overflow', 'hidden');
-                        }
-                    });
+                printdiv = formDiv.dialog({
+                    autoOpen: true,
+                    resizable: false,
+                    modal: true,
+                    title: 'Print Details',
+                    width: 850,
+                    top: 147,
+                    close: function () {
+                        printdiv.dialog('destroy').remove();
+                    },
+                    open: function (event, ui) {
+                        $('.ui-dialog-content').css('overflow', 'hidden');
+                    }
                 });
+            });
+    }
+
+    function SubmitDischargeForm(form) {
+        $.validator.unobtrusive.parse(form);
+        if ($(form).valid()) {
+            $.ajax({
+                type: "POST",
+                url: form.action,
+                data: $(form).serialize(),
+                success: function (data) {
+                    if (data.success) {
+                        dischargePopUp.dialog('close');
+                        dataTable.ajax.reload();
+                        $.notify(data.message, {
+                            globalPosition: "top center",
+                            className: "success"
+                        })
+                    }
+                }
+            });
         }
-
-
+        return false;
+    }
 </script>
 }
 

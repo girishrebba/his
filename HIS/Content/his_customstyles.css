@@ -57,3 +57,47 @@ div.required label:after {
     content: " *";
     color: red;
 }
+
+.btn-grey {
+    color: #ff0000;
+    background-color: #ffffff;
+    border-color: #cccccc;
+}
+
+    .btn-grey:hover,
+    .btn-grey:focus,
+    .btn-grey:active,
+    .btn-grey.active,
+    .open .dropdown-toggle.btn-grey {
+        color: #ff0000;
+        background-color: #ebebeb;
+        border-color: #adadad;
+    }
+
+    .btn-grey:active,
+    .btn-grey.active,
+    .open .dropdown-toggle.btn-grey {
+        background-image: none;
+    }
+
+    .btn-grey.disabled,
+    .btn-grey[disabled],
+    fieldset[disabled] .btn-grey,
+    .btn-grey.disabled:hover,
+    .btn-grey[disabled]:hover,
+    fieldset[disabled] .btn-grey:hover,
+    .btn-grey.disabled:focus,
+    .btn-grey[disabled]:focus,
+    fieldset[disabled] .btn-grey:focus,
+    .btn-grey.disabled:active,
+    .btn-grey[disabled]:active,
+    fieldset[disabled] .btn-grey:active,
+    .btn-grey.disabled.active,
+    .btn-grey[disabled].active,
+    fieldset[disabled] .btn-grey.active {
+        background-color: #ffffff;
+        border-color: #cccccc;
+    }
+
+
+

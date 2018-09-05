@@ -107,20 +107,6 @@ namespace HIS.Controllers
                 }
                 else
                 {
-                    message = "profile updated";
-                    if (!string.IsNullOrEmpty(ip.DiscSummary) && ((ip.IsDischarged == null || ip.IsDischarged == false)&& ip.DischargedOn == null))
-                    {
-                        ip.IsDischarged = true;
-                        ip.DischargedOn = DateTime.Today;
-                        var patientBedRecord = db.PatientRoomAllocations.Where(pr => pr.ENMRNO == ip.ENMRNO).OrderByDescending(pr => pr.AllocationID).FirstOrDefault();
-                        if (patientBedRecord != null)
-                        {
-                            patientBedRecord.AllocationStatus = false;
-                            patientBedRecord.EndDate = DateTime.Today;
-                            db.Entry(patientBedRecord).State = EntityState.Modified;
-                        }
-                        message = "Discarged";
-                    }
                     db.Entry(ip).State = EntityState.Modified;
                     db.SaveChanges();
                     return Json(new { success = true, message = string.Format("ENMRNO - {0} {1} Successfully", ip.ENMRNO, message) }, JsonRequestBehavior.AllowGet);
@@ -371,12 +357,14 @@ namespace HIS.Controllers
             return View(GetPatientDetails(enmrNo));
         }
 
+        [HttpGet]
         public ActionResult Discharge(string enmrNo)
         {
             var dischargeModel = new DischargeModel();
             dischargeModel.ENMRNO = enmrNo;
             dischargeModel.RoomChargeTable = HtmlHelpers.HtmlHelpers.GetRoomBilling(enmrNo);
             dischargeModel.FeeCollectionTable = GetPaymentHistory(enmrNo);
+            dischargeModel.CanBeDischarge = false;
             ViewBag.TotalFee = dischargeModel.FeeCollectionTable.Sum(i => i.Amount);
             ViewBag.RoomFee = (dischargeModel.RoomChargeTable.OccupiedDays * dischargeModel.RoomChargeTable.CostPerDay);
             if(ViewBag.TotalFee < ViewBag.RoomFee)
@@ -387,7 +375,43 @@ namespace HIS.Controllers
             else { ViewBag.PayAmount = 0;
                 ViewBag.Refund = ViewBag.TotalFee - ViewBag.RoomFee;
             }
+
+            if (ViewBag.TotalFee == ViewBag.RoomFee)
+            {
+                dischargeModel.CanBeDischarge = true;
+                ViewBag.PayAmount = 0;
+                ViewBag.Refund = 0;
+            }
             return View(dischargeModel);
+        }
+
+        [HttpPost]
+        public ActionResult Discharge(DischargeModel model)
+        {
+            if(model != null)
+            {
+                using (var db = new HISDBEntities())
+                {
+                    var patient = db.InPatients.Where(p => p.ENMRNO == model.ENMRNO).FirstOrDefault();
+                    if (patient != null) {
+                        patient.IsDischarged = true;
+                        patient.DischargedOn = DateTime.Today;
+                        patient.DiscSummary = model.DischargeSummary;
+                        db.Entry(patient).State = EntityState.Modified;
+                    }
+
+                    var patientBed = db.PatientRoomAllocations.Where(pr => pr.ENMRNO == model.ENMRNO).OrderByDescending(pr => pr.AllocationID).FirstOrDefault();
+                    if (patientBed != null)
+                    {
+                        patientBed.AllocationStatus = false;
+                        patientBed.EndDate = DateTime.Today;
+                        db.Entry(patientBed).State = EntityState.Modified;
+                    }
+                    db.SaveChanges();
+                }
+                return Json(new { success = true, message = string.Format("ENMRNO - {0} discharged Successfully", model.ENMRNO) }, JsonRequestBehavior.AllowGet);
+            }
+            return Json(new { success = false, message = string.Format("Error occured while discharging the ENMRNO - {0}. Please try again!!", model.ENMRNO) }, JsonRequestBehavior.AllowGet);
         }
     }
 }
