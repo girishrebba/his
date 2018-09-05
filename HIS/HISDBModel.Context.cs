@@ -58,13 +58,21 @@ namespace HIS
         public virtual DbSet<FeeCollection> FeeCollections { get; set; }
         public virtual DbSet<InPatient> InPatients { get; set; }
     
-        public virtual int ConvertOutPatientToInPatient(string eNMRNO)
+        public virtual int ConvertOutPatientToInPatient(string eNMRNO, Nullable<decimal> estAmount, Nullable<decimal> advAmount)
         {
             var eNMRNOParameter = eNMRNO != null ?
                 new ObjectParameter("ENMRNO", eNMRNO) :
                 new ObjectParameter("ENMRNO", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ConvertOutPatientToInPatient", eNMRNOParameter);
+            var estAmountParameter = estAmount.HasValue ?
+                new ObjectParameter("EstAmount", estAmount) :
+                new ObjectParameter("EstAmount", typeof(decimal));
+    
+            var advAmountParameter = advAmount.HasValue ?
+                new ObjectParameter("AdvAmount", advAmount) :
+                new ObjectParameter("AdvAmount", typeof(decimal));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ConvertOutPatientToInPatient", eNMRNOParameter, estAmountParameter, advAmountParameter);
         }
     
         public virtual int CreateMasterPrescription(string eNMRNO, Nullable<int> doctorID, Nullable<int> visitID, ObjectParameter pMID)

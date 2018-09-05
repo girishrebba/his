@@ -68,7 +68,6 @@
                     { "data": "DischargeDateDisplay"},
                     {
                         "data": null, "render": function (data) {
-                            if (!data.IsDischarged) {
                                 return "@if (ViewContext.Controller.HasPermission("InPatient-AddModify")){<a class='btn btn-default btn-sm' title='Edit' onclick=PopupPatient('@Url.Action("AddModify","InPatient")/?enmrNo=" + data.ENMRNO + "',false)><i class='fa fa-user-edit'></i>"
                                     + "</a>}@if (ViewContext.Controller.HasPermission("InPatient-ViewPatient"))
                                 {<a class='btn btn-info btn-sm' title='View Patient' style='margin-left:5px' onclick=PopupViewPatient('@Url.Action("ViewPatient", "InPatient")/?enmrNo=" + data.ENMRNO + "')><i class='fa fa-info-circle'></i></a>}"
@@ -78,19 +77,10 @@
                                         <a class='btn btn-primary btn-sm' title='Fee' style='margin-left:5px' onclick=PopupFee('@Url.Action("Fee", "InPatient")/?enmrNo=" + data.ENMRNO + "')><i class='fa fa-rupee-sign'></i></a>}"
                                     + "@if (ViewContext.Controller.HasPermission("InPatient-Observations")){
                                         <a class='btn btn-primary btn-sm' title='Observation' style='margin-left:5px' onclick=PopupObservations('@Url.Action("Observations", "InPatient")/?enmrNo=" + data.ENMRNO + "')><i class='fa fa-briefcase-medical'></i></a>}"
-                                    + "@if (ViewContext.Controller.HasPermission("InPatient-AddModify")){
-                                    <a class='btn btn-default btn-sm' title='Discharge' style='margin-left:5px' onclick=PopupPatient('@Url.Action("AddModify","InPatient")/?enmrNo=" + data.ENMRNO + "',true)><i class='fa fa-sign-out-alt'></i></a>}";
-                            }
-                            else {
-                                return "@if (ViewContext.Controller.HasPermission("InPatient-ViewPatient"))
-                                    {<a class='btn btn-info btn-sm' title='View Patient' style='margin-left:5px' onclick=PopupViewPatient('@Url.Action("ViewPatient", "InPatient")/?enmrNo=" + data.ENMRNO + "')><i class='fa fa-info-circle'></i></a>}"
-                                    + "@if (ViewContext.Controller.HasPermission("InPatient-Fee")){
-                                        <a class='btn btn-primary btn-sm' title='Fee' style='margin-left:5px' onclick=PopupFee('@Url.Action("Fee", "InPatient")/?enmrNo=" + data.ENMRNO + "')><i class='fa fa-rupee-sign'></i></a>}"
-                                    + "@if (ViewContext.Controller.HasPermission("InPatient-Observations")){
-                                        <a class='btn btn-primary btn-sm' title='Observation' style='margin-left:5px' onclick=PopupObservations('@Url.Action("Observations", "InPatient")/?enmrNo=" + data.ENMRNO + "')><i class='fa fa-briefcase-medical'></i></a>}"
                                     + "@if (ViewContext.Controller.HasPermission("InPatient-PrintHistory")){
-                                        <a class='btn btn-primary btn-sm' title='View & Print' style='margin-left:5px' onclick=PopupPrint('@Url.Action("PrintHistory", "InPatient")/?enmrNo=" + data.ENMRNO + "')><i class='fa fa-print'></i></a>}";
-                            }
+                                        <a class='btn btn-primary btn-sm' title='View & Print' style='margin-left:5px' onclick=PopupPrint('@Url.Action("PrintHistory", "InPatient")/?enmrNo=" + data.ENMRNO + "')><i class='fa fa-print'></i></a>}"
+                                    + "@if (ViewContext.Controller.HasPermission("InPatient-AddModify")){
+                                    <a class='btn btn-default btn-sm' title='Discharge' style='margin-left:5px' onclick=PopupDischargeForm('@Url.Action("Discharge","InPatient")/?enmrNo=" + data.ENMRNO + "'," + JSON.stringify(data.ENMRNO)+")><i class='fa fa-sign-out-alt'></i></a>}";
                             },
                         "orderable": false,
                         "searchable": false
@@ -218,7 +208,29 @@
                         }
                     });
                 });
-        }
+    }
+
+    function PopupDischargeForm(url, enmrNo) {
+        var dischargeDiv = $('<div/>');
+        $.get(url)
+            .done(function (response) {
+                dischargeDiv.html(response);
+                dischargePopUp = dischargeDiv.dialog({
+                    autoOpen: true,
+                    resizable: true,
+                    modal: true,
+                    title: 'Discharge ENMR:' + enmrNo,
+                    width: '55%',
+                    top: 161,
+                    close: function () {
+                        dischargePopUp.dialog('destroy').remove();
+                    },
+                    open: function (event, ui) {
+                        $('.ui-dialog-content').css('overflow', 'hidden');
+                    }
+                });
+            });
+    }
         // Submit Patient
         function SubmitForm(form) {
             $.validator.setDefaults({

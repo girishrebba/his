@@ -725,6 +725,8 @@
         </Association>
         <Function Name="ConvertOutPatientToInPatient" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ENMRNO" Type="varchar" Mode="In" />
+          <Parameter Name="EstAmount" Type="money" Mode="In" />
+          <Parameter Name="AdvAmount" Type="money" Mode="In" />
         </Function>
         <Function Name="CreateMasterLabTest" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ENMRNO" Type="varchar" Mode="In" />
@@ -1551,6 +1553,8 @@
           </AssociationSet>
           <FunctionImport Name="ConvertOutPatientToInPatient">
           <Parameter Name="ENMRNO" Mode="In" Type="String" />
+            <Parameter Name="EstAmount" Mode="In" Type="Decimal" />
+            <Parameter Name="AdvAmount" Mode="In" Type="Decimal" />
           </FunctionImport>
           <FunctionImport Name="CreateMasterPrescription">
             <Parameter Name="ENMRNO" Mode="In" Type="String" />

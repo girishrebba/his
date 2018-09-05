@@ -169,19 +169,28 @@ namespace HIS.Controllers
         {
             using (HISDBEntities hs = new HISDBEntities())
             {
-                var feeList = (from f in hs.FeeCollections
-                               join ip in hs.InPatients on f.ENMRNO equals ip.ENMRNO
-                               where f.ENMRNO.Equals(enmrNo)
-                               select new { f }).OrderByDescending(c => c.f.PaidOn).AsEnumerable()
-                               .Select(x => new FeeCollection
-                               {
-                                   PaidDateDisplay = HtmlHelpers.HtmlHelpers.DateFormat(x.f.PaidOn),
-                                   Amount = x.f.Amount,
-                                   Purpose = x.f.Purpose,
-                                   PaymentMode = x.f.PaymentMode
-                               }).ToList();
+                List<FeeCollection> feeList = GetPaymentHistory(enmrNo);
 
                 return Json(new { data = feeList }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        private static List<FeeCollection> GetPaymentHistory(string enmrNo)
+        {
+            using (var hs = new HISDBEntities())
+            {
+                return (from f in hs.FeeCollections
+                        join ip in hs.InPatients on f.ENMRNO equals ip.ENMRNO
+                        join pm in hs.PaymentModes on f.PaymentMode equals pm.ModeID
+                        where f.ENMRNO.Equals(enmrNo)
+                        select new { f, pm.Mode }).OrderByDescending(c => c.f.PaidOn).AsEnumerable()
+                                               .Select(x => new FeeCollection
+                                               {
+                                                   PaidDateDisplay = HtmlHelpers.HtmlHelpers.DateFormat(x.f.PaidOn),
+                                                   Amount = x.f.Amount,
+                                                   Purpose = x.f.Purpose,
+                                                   PayModeDisplay = x.Mode
+                                               }).ToList();
             }
         }
 
@@ -360,6 +369,25 @@ namespace HIS.Controllers
         public ActionResult PrintHistory(string enmrNo)
         {
             return View(GetPatientDetails(enmrNo));
+        }
+
+        public ActionResult Discharge(string enmrNo)
+        {
+            var dischargeModel = new DischargeModel();
+            dischargeModel.ENMRNO = enmrNo;
+            dischargeModel.RoomChargeTable = HtmlHelpers.HtmlHelpers.GetRoomBilling(enmrNo);
+            dischargeModel.FeeCollectionTable = GetPaymentHistory(enmrNo);
+            ViewBag.TotalFee = dischargeModel.FeeCollectionTable.Sum(i => i.Amount);
+            ViewBag.RoomFee = (dischargeModel.RoomChargeTable.OccupiedDays * dischargeModel.RoomChargeTable.CostPerDay);
+            if(ViewBag.TotalFee < ViewBag.RoomFee)
+            {
+                ViewBag.PayAmount = ViewBag.RoomFee - ViewBag.TotalFee;
+                ViewBag.Refund = 0;
+                    }
+            else { ViewBag.PayAmount = 0;
+                ViewBag.Refund = ViewBag.TotalFee - ViewBag.RoomFee;
+            }
+            return View(dischargeModel);
         }
     }
 }

@@ -12,8 +12,13 @@
 
     .ui-dialog {
         top: 60px !important;
-    } 
+    }
 
+    .required:before {
+        content: "*";
+        font-weight: bold;
+        color: red;
+    }
 
     /*.his-consultation-calendar {
         background-color: #BA55D3;
@@ -84,8 +89,8 @@
                                     <a class='btn btn-primary btn-sm' title='Prescription' style='margin-left:5px' onclick=PopupPrescription('@Url.Action("OPPrescription", "OutPatient")/?enmrNo=" + data + "')><i class='fa fa-prescription'></i></a>}"
                                 + "@if (ViewContext.Controller.HasPermission("OutPatient-DeliverPrescription")){
                                     <a class='btn btn-primary btn-sm' title='Deliver Prescription' style='margin-left:5px' onclick=PopupDeliverPrescription('@Url.Action("DeliverPrescription", "OutPatient")/?enmrNo=" + data + "')><i class='fa fa-prescription-bottle-alt'></i></a>}"
-                                + "@if (ViewContext.Controller.HasPermission("OutPatient-ConvertOpToIp")){
-                                    <a class='btn btn-primary btn-sm' title='Admit as IP' style='margin-left:5px' onclick=ConvertOpToIp(" + JSON.stringify(data) + ")><i class='fa fa-hospital'></i></a>}"
+                                + "@if (ViewContext.Controller.HasPermission("OutPatient-Admission")){
+                                    <a class='btn btn-primary btn-sm' title='Admit as IP' style='margin-left:5px' onclick=PopupAdmissionForm('@Url.Action("Admission", "OutPatient")/?enmrNo=" + data + "')><i class='fa fa-hospital'></i></a>}"
                                 + "@if (ViewContext.Controller.HasPermission("OutPatient-ManualDrugRequest")){
                                     <a class='btn btn-primary btn-sm' title='Manual Drug Request' style='margin-left:5px' onclick=PopupMDRForm('@Url.Action("ManualDrugRequest", "OutPatient")/?enmrNo=" + data + "')><i class='fa fa-capsules'></i></a>}"
                                 + "@if (ViewContext.Controller.HasPermission("OutPatient-PatientTests")){
@@ -234,7 +239,7 @@
                     });
                 });
         }
-        //PopupDeliverPrescription
+
         function PopupDeliverPrescription(url) {
             var deliverPrescription = $('<div/>');
             $.get(url)
@@ -276,6 +281,30 @@
                     });
                 });
         }
+
+        function PopupAdmissionForm(url) {
+            if (confirm('Are You Sure to take Admission?')) {
+                var admission = $('<div/>');
+                $.get(url)
+                    .done(function (response) {
+                        admission.html(response);
+                        admissionPP = admission.dialog({
+                            autoOpen: true,
+                            resizable: true,
+                            modal: true,
+                            title: 'Admission',
+                            width: '30%',
+                            close: function () {
+                                admissionPP.dialog('destroy').remove();
+                            },
+                            open: function (event, ui) {
+                                $('.ui-dialog-content').css('overflow', 'hidden');
+                            }
+                        });
+                    });
+            }
+        }
+
         function SubmitForm(form) {
             $.validator.setDefaults({
                 ignore: []
@@ -537,6 +566,29 @@
                     }
                 }
             });
+            return false;
+        }
+
+        function SubmitAdmissionForm(form) {
+            $.validator.unobtrusive.parse(form);
+            if ($(form).valid()) {
+                $.ajax({
+                    type: "POST",
+                    url: form.action,
+                    data: $(form).serialize(),
+                    success: function (data) {
+                        if (data.success) {
+                            admissionPP.dialog('close');
+                            dataTable.ajax.reload();
+                            $.notify(data.message, {
+                                globalPosition: "top center",
+                                className: "success"
+                            })
+                            window.location.href = '@Url.Action("Index", "InPatient")';
+                        }
+                    }
+                });
+            }
             return false;
         }
     </script>

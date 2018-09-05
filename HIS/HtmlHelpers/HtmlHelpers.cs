@@ -387,5 +387,26 @@ namespace HIS.HtmlHelpers
                 return flag.HasValue ? flag.Value : false;
             }
         }
+
+        public static RoomBilling GetRoomBilling(string enmrNo)
+        {
+            using (var db = new HISDBEntities())
+            {
+                var roomBilling = (from pra in db.PatientRoomAllocations
+                                      join r in db.Rooms on pra.RoomNo equals r.RoomNo
+                                      join b in db.Beds on pra.BedNo equals b.BedNo
+                                      join rt in db.RoomTypes on r.RoomTypeID equals rt.RoomTypeID
+                                      where pra.ENMRNO.Equals(enmrNo)
+                                      select new { pra, r, rt, b }).AsEnumerable()
+                                      .Select(x => new RoomBilling {
+                                          ENMRNO = x.pra.ENMRNO,
+                                          RoomName = string.Format("{0}-{1}", x.pra.RoomNo, x.rt.RoomType1),
+                                          BedName = x.b.BedName,
+                                          CostPerDay = x.r.CostPerDay,
+                                          OccupiedDays = DateTime.Today.Subtract(x.pra.FromDate).Days,
+                                      }).FirstOrDefault();
+                return roomBilling;
+            }
+        }
     }
 }

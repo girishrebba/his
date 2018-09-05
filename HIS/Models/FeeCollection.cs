@@ -7,6 +7,7 @@ namespace HIS
     public partial class FeeCollection
     {
         public string PaidDateDisplay { get; set; }
+        public string PayModeDisplay { get; set; }
     }
 
     public class FeeCollectionMetaData

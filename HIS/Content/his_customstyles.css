@@ -52,3 +52,8 @@ ul.main-menu .nav > li > a:hover, ul.main-menu .nav > li > a:focus, ul.main-menu
     padding: 30px 0px 0px !important;
     text-align: center;
 }
+
+div.required label:after {
+    content: " *";
+    color: red;
+}

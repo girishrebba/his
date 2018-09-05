@@ -1,0 +1,24 @@
+﻿@model HIS.AdmissionModel
+@{
+    Layout = null;
+}
+@using (Html.BeginForm("Admission", "OutPatient", FormMethod.Post, new { onsubmit = "return SubmitAdmissionForm(this)" }))
+{
+    @Html.HiddenFor(model => model.ENMRNO)
+    <div class="form-group">
+        @Html.LabelFor(model => model.EstAmount, "Estimation Amount:", new { @class = "control-label required" })
+        @Html.EditorFor(model => model.EstAmount, new { htmlAttributes = new { Value = Model.EstAmount > 0 ? Model.EstAmount.ToString() : string.Empty, @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.EstAmount)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.AdvAmount, "Advance Amount:", new { @class = "control-label required" })
+        @Html.EditorFor(model => model.AdvAmount, new { htmlAttributes = new { Value = Model.AdvAmount > 0 ? Model.AdvAmount.ToString() : string.Empty, @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.AdvAmount)
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-3">
+            <input type="submit" value="Submit" class="btn btn-primary" />
+            <input type="reset" value="Reset" class="btn" />
+        </div>
+    </div>
+}

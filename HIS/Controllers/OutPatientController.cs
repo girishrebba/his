@@ -673,16 +673,16 @@ namespace HIS.Controllers
 
         }
 
-        [HttpPost]
-        public ActionResult ConvertOpToIp(string enmrNo)
-        {
-            using (HISDBEntities db = new HISDBEntities())
-            {
-                db.ConvertOutPatientToInPatient(enmrNo);
+        //[HttpPost]
+        //public ActionResult ConvertOpToIp(string enmrNo)
+        //{
+        //    using (HISDBEntities db = new HISDBEntities())
+        //    {
+        //        db.ConvertOutPatientToInPatient(enmrNo);
 
-                return Json(new { success = true, message = string.Format("Patient ENMRNO: {0} converted to In Patient", enmrNo) }, JsonRequestBehavior.AllowGet);
-            }
-        }
+        //        return Json(new { success = true, message = string.Format("Patient ENMRNO: {0} converted to In Patient", enmrNo) }, JsonRequestBehavior.AllowGet);
+        //    }
+        //}
 
         [HttpPost]
         public JsonResult GetMedicinesWithQuantity(string Prefix)
@@ -818,6 +818,32 @@ namespace HIS.Controllers
                                      TestName = t.tt.TestName
                                  }).ToList();
                 return Json(medicines, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpGet]
+        [Description(" - Admission.")]
+        public ActionResult Admission(string enmrNo)
+        {
+            return View(new AdmissionModel() { ENMRNO = enmrNo });
+        }
+
+        [HttpPost]
+        [Description(" - Admission.")]
+        public ActionResult Admission(AdmissionModel model)
+        {
+            if(model != null)
+            {
+                using (HISDBEntities db = new HISDBEntities())
+                {
+                    db.ConvertOutPatientToInPatient(model.ENMRNO, model.EstAmount, model.AdvAmount);
+
+                    return Json(new { success = true, message = string.Format("Patient ENMRNO: {0} admitted Successfully", model.ENMRNO) }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            else
+            {
+                return Json(new { success = true, message = string.Format("Error Occured while admitting the NMRNO: {0} admitted Successfully", model.ENMRNO) }, JsonRequestBehavior.AllowGet);
             }
         }
 
