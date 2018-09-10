@@ -416,6 +416,10 @@
                 tbl.PMID = PmID;
                 prescriptions.push(tbl);
             });
+
+            $(form).find('#headerDivdp').append("</br><table><tr><td>ENMRNO: " + $('#ENMRNO').val() + "</td></tr><tr><td>Doctor: " + $('#DoctorName').val() + "</td></tr><tr><td>Visit: " + $('#VisitName').val() + "</td></tr><tr><td colspan='2'>Suggested Date: " + $('#DateDisplay').val() + "</td></tr></table>");
+            $(form).find('#headerDivdp').append($(form).find('#ppTable'));
+
             $.ajax({
                 type: "POST",
                 contentType: "application/json",
@@ -423,6 +427,11 @@
                 data: JSON.stringify(prescriptions),
                 success: function (data) {
                     if (data.success) {
+                        $('#headerDivdp').printThis({
+                            header: '<img src="http://localhost:50415/light/images/hms-logo_login.png" style="width:420px;" alt="Mouldifi" title="Sravanthi Hospitals">',
+                            footer: false,
+                            pageTitle: ""
+                        });
                         deliverPopUp.dialog('close');
                         dataTable.ajax.reload();
                         $.notify(data.message, {
@@ -483,6 +492,16 @@
                 tbl.TotalAmount = totalAmount;
                 mdrRequest.push(tbl);
             });
+            $(form).find('#headerDiv').append("</br><table><tr><td>ENMRNO: " + $('#ENMRNO').val() + "</td></tr><tr><td>Doctor: " + $("#PrescribedByID option:selected").text() + "</td></tr></table>");
+            $(form).find('#headerDiv').append($(form).find('#mdrTable'));
+            $('#fstRow').closest('tr').remove();
+            $('#thd').find('th:last').remove();
+            $('#tbd').find('td:last').remove();
+            $("#ftr tr").each(function () {
+                $(this).find("td").attr('colspan', 3);
+            });
+           
+
             $.ajax({
                 type: "POST",
                 contentType: "application/json",
@@ -490,12 +509,17 @@
                 data: JSON.stringify(mdrRequest),
                 success: function (data) {
                     if (data.success) {
+                        $('#headerDiv').printThis({
+                            header: '<img src="http://localhost:50415/light/images/hms-logo_login.png" style="width:420px;" alt="Mouldifi" title="Sravanthi Hospitals">',
+                            footer: false,
+                            pageTitle: ""
+                        }); 
                         MDRpopup.dialog('close');
                         dataTable.ajax.reload();
                         $.notify(data.message, {
                             globalPosition: "top center",
                             className: "success"
-                        })
+                        })                       
                     }
                 }
             });
@@ -525,7 +549,7 @@
                 url: form.action,
                 data: JSON.stringify(patientTests),
                 success: function (data) {
-                    if (data.success) {
+                    if (data.success) {                       
                         newPT.dialog('close');
                         dataTable.ajax.reload();
                         $.notify(data.message, {
@@ -550,6 +574,10 @@
             billPayModel.TotalAmount = totalAmount;
             billPayModel.Discount = discount;
             billPayModel.PaidAmount = amountPaid;
+            
+            $(form).find('#headerDivbill').append("</br><table><tr><td>ENMRNO: " + $('#ENMRNO').val() + "</td></tr><tr><td >Doctor: " + $('#DoctorName').val() + "</td></tr><tr><td>Visit: " + $('#VisitName').val() + "</td></tr><tr><td>Suggested Date: " + $('#DateDisplay').val() + "</td></tr></table>");
+            $(form).find('#headerDivbill').append($(form).find('#ptTable'));
+
             $.ajax({
                 type: "POST",
                 contentType: "application/json",
@@ -557,6 +585,11 @@
                 data: JSON.stringify(billPayModel),
                 success: function (data) {
                     if (data.success) {
+                        $('#headerDivbill').printThis({
+                            header: '<img src="http://localhost:50415/light/images/hms-logo_login.png" style="width:420px;" alt="Mouldifi" title="Sravanthi Hospitals">',
+                            footer: false,
+                            pageTitle: ""
+                        });
                         billPayPopUp.dialog('close');
                         dataTable.ajax.reload();
                         $.notify(data.message, {

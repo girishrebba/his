@@ -22,18 +22,21 @@
 @using HIS.HtmlHelpers
 @using (Html.BeginForm("LabTestBillPay", "OutPatient", FormMethod.Post, new { id = "billPayForm", onsubmit = "return SubmitLabTestBillPayForm(this)" }))
 {
-    <div class="form-horizontal">
-        @if (Model != null && Model.Count > 0)
-        {
-            @Html.HiddenFor(model => model[0].ENMRNO, new { @id = "ENMRNO" })
-            @Html.HiddenFor(model => model[0].LTMID, new { @id = "LTMID" })
+<div class="form-horizontal">
+    @if (Model != null && Model.Count > 0)
+    {
+        @Html.HiddenFor(model => model[0].ENMRNO, new { @id = "ENMRNO" })
+        @Html.HiddenFor(model => model[0].LTMID, new { @id = "LTMID" })
+        @Html.HiddenFor(model => model[0].VisitName, new { @id = "VisitName" })
+        @Html.HiddenFor(model => model[0].DoctorName, new { @id = "DoctorName" })
+        @Html.HiddenFor(model => model[0].DateDisplay, new { @id = "DateDisplay" })
         <div class="col-lg-10">
             <div class="form-group">
                 @Html.LabelFor(model => model[0].ENMRNO, "ENMRNO:", new { @class = "control-label col-md-2" })
                 <div class="col-sm-4 lableDisplay">
                     @Html.DisplayFor(model => model[0].ENMRNO, new { htmlAttributes = new { @class = "form-control" } })
                 </div>
-                @Html.LabelFor(model => model[0].VisitName, "Visit:", new { @class = "control-label col-md-2" })
+                @Html.LabelFor(model => model[0].VisitName, "Visit:", new { @id = "VisitNameid", @class = "control-label col-md-2" })
                 <div class="col-sm-4 lableDisplay">
                     @Html.DisplayFor(model => model[0].VisitName, new { htmlAttributes = new { @class = "form-control" } })
                 </div>
@@ -41,9 +44,9 @@
             <div class="form-group">
                 @Html.LabelFor(model => model[0].DoctorName, "Doctor:", new { @class = "control-label col-md-2" })
                 <div class="col-sm-4 lableDisplay">
-                    @Html.DisplayFor(model => model[0].DoctorName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.DisplayFor(model => model[0].DoctorName, new { htmlAttributes = new { @id = "DoctorNameid", @class = "form-control" } })
                 </div>
-                @Html.LabelFor(model => model[0].DateDisplay, "Suggested Date:", new { @class = "control-label col-md-2" })
+                @Html.LabelFor(model => model[0].DateDisplay, "Suggested Date:", new { @id = "DateDisplayid", @class = "control-label col-md-2" })
                 <div class="col-sm-4 lableDisplay">
                     @Html.DisplayFor(model => model[0].DateDisplay, new { htmlAttributes = new { @class = "form-control" } })
                 </div>
@@ -56,27 +59,28 @@
                 </div>
             </div>
         </div>
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="table-responsive">
-                        <table class="table table-striped table-bordered" id="ptTable">
-                            <thead>
+        <div class="row">
+            <div class="col-lg-12">
+                <div id="headerDivbill"></div>
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered" id="ptTable">
+                        <thead>
+                            <tr>
+                                <th style="width:50%">Test</th>
+                                <th style="width:50%">Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var p in Model)
+                            {
                                 <tr>
-                                    <th style="width:50%">Test</th>
-                                    <th style="width:50%">Price</th>
+                                    <td style="display:none">@p.TestID</td>
+                                    <td>@p.TestName</td>
+                                    <td class="price">@p.TestCost.ToString("0.##")</td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var p in Model)
-                                {
-                                    <tr>
-                                        <td style="display:none">@p.TestID</td>
-                                        <td>@p.TestName</td>
-                                        <td class="price">@p.TestCost.ToString("0.##")</td>
-                                    </tr>
-                                }
-                            </tbody>
-                            <tfoot>
+                            }
+                        </tbody>
+                        <tfoot>
                             <tr>
                                 <td align="right">Total:</td>
                                 <td align="left" id="grandTotal">@Model.Sum(i => i.TestCost).ToString("0.##")</td>
@@ -90,23 +94,23 @@
                                 <td align="left" id="paidAmount">@Model.Sum(i => i.TestCost).ToString("0.##")</td>
                             </tr>
                         </tfoot>
-                        </table>
-                    </div>
+                    </table>
                 </div>
-                <div class="row">
-                    <div class="form-group">
-                        <div class="col-md-3 col-md-offset-5">
-                            <input type="submit" value="Submit" id="btnSubmit" class="btn btn-primary" />
-                        </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-md-3 col-md-offset-5">
+                        <input type="submit" value="Submit" id="btnSubmit" class="btn btn-primary" />
                     </div>
                 </div>
             </div>
-        }
-        else
-        {
-            <span style="color:red; font-weight:bold;">No Pending Tests found for the bill payment of this Patient. Please contact your physician!!</span>
-        }
-    </div>
+        </div>
+    }
+    else
+    {
+        <span style="color:red; font-weight:bold;">No Pending Tests found for the bill payment of this Patient. Please contact your physician!!</span>
+    }
+</div>
 }
 
 <script type="text/javascript">

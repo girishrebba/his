@@ -58,6 +58,7 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                
                                 @foreach (var p in Model)
                                 {
                                     <tr>
@@ -76,9 +77,8 @@
                                         </td>*@
                                         <td>
                                             @*@Html.LabelFor(model => p.ImageFile, htmlAttributes: new { @class = "control-label col-md-2" })*@
-                                            <input type="file" id="file" onchange="upload(@p.TestID);" />
+                                            <input type="file" id="file_@Model.IndexOf(p)" onchange="upload(@p.TestID,@Model.IndexOf(p));" />
                                         </td>
-
                                     </tr>
                                 }
                             </tbody>
@@ -116,18 +116,22 @@
     });
 
 
-    function upload(name) {
-
-        var fileUpload = $("#file").get(0);
+    function upload(testname,index) {
+        debugger;
+        var fileUpload = $("#file_"+ index).get(0);
         var files = fileUpload.files;
         // Create FormData object
         var fileData = new FormData();
         // Looping over all files and add it to FormData object
-        for (var i = 0; i < files.length; i++) {
-            fileData.append(files[i].name, files[i]);
-        }
+        //for (var i = 0; i < files.length; i++) {
+        //    //if (index == i){
+        //    //    fileData.append(files[i].name, files[i]);
+        //    //}
+        //    fileData.append(files[i].name, files[i]);
+        //}
+        fileData.append(files[0].name, files[0]);
         fileData.append(@Html.Raw(Json.Encode(ViewBag.ENMRNO)), 'emrno');
-        fileData.append(name,'test');
+        fileData.append(testname,'test');
         $.ajax({
             url: '/OutPatient/UploadFiles',
             type: "POST",

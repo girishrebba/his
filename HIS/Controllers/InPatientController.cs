@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Data.Entity;
 using HIS.Action_Filters;
-
+using HIS.Controllers;
 using System.ComponentModel;
 
 
@@ -354,6 +354,9 @@ namespace HIS.Controllers
 
         public ActionResult PrintHistory(string enmrNo)
         {
+           // List<PatientPrescriptionHistory> patientVisitHistory = new OutPatientController.PatientPrescriptionHistory(enmrNo);
+            ViewBag.Prescriptions = HtmlHelpers.HtmlHelpers.GetPatientPrescriptions(enmrNo);
+            ViewBag.Tests = HtmlHelpers.HtmlHelpers.GetPatientTests(enmrNo);
             return View(GetPatientDetails(enmrNo));
         }
 
