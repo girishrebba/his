@@ -502,7 +502,7 @@
 
     function SubmitDeliverPrescriptionForm(form) {
         $('body').loadingModal({ text: 'Processing...' });
-        $('#MedicineWithDose').rules('remove', 'required');
+        //$('#MedicineWithDose').rules('remove', 'required');
         var prescriptions = [];
         var enmrNo = $('#ENMRNO').val();
         var visitID = $('#VisitID').val();
@@ -511,6 +511,7 @@
         var totalAmount = $('#grandTotal').html();
         var PmID = $('#PMID').val();
         $(form).find('#ppTable > tbody tr').each(function (index, elem) {
+            alert(1);
             var tbl = {};
             tbl.ENMRNO = enmrNo;
             tbl.VisitID = visitID;
@@ -522,9 +523,10 @@
             tbl.PaidAmount = amountToBePaid;
             tbl.TotalAmount = totalAmount;
             tbl.PMID = PmID;
-            tbl.MedicineWithDose = 'demo';
+            //tbl.MedicineWithDose = $($(this).find('td:eq(2)')).html();
             prescriptions.push(tbl);
         });
+        alert(prescriptions);
         $.ajax({
             type: "POST",
             contentType: "application/json",

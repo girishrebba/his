@@ -65,42 +65,42 @@
                                     <th style="width:27%">Medicine</th>
                                     <th style="width:6%">Quantity</th>
                                     <th style="width:6%">Delivered</th>
-                                    <th style="width:5%">Price</th>
                                     <th style="width:17%">Intake</th>
                                     <th style="width:25%">Comments</th>
                                     <th style="width:7%">Batch</th>
                                     <th style="width:7%">Lot</th>
+                                    <th style="width:5%">Price</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach (var p in Model)
                                 {
-                                    <tr>
-                                        <td style="display:none">@p.ItemCost</td>
-                                        <td style="display:none">@p.MedicineID</td>
-                                        <td>@p.MedicineWithDose</td>
-                                        <td>@p.Quantity</td>
-                                        <td>@Html.EditorFor(model => p.DeliverQty, new { htmlAttributes = new { @class = "form-control deliverQty" } })</td>
-                                        <td class="price">@p.TotalCost</td>
-                                        <td>@p.IntakeDisplay</td>
-                                        <td>@p.Comments</td>
-                                        <td>@Html.EditorFor(model => p.BatchNo, new { htmlAttributes = new { @class = "form-control batchNo" } })</td>
-                                        <td>@Html.EditorFor(model => p.LotNo, new { htmlAttributes = new { @class = "form-control lotNo" } })</td>
-                                    </tr>
+                                <tr>
+                                    <td style="display:none">@p.ItemCost</td>
+                                    <td style="display:none">@p.MedicineID</td>
+                                    <td>@p.MedicineWithDose</td>
+                                    <td>@p.Quantity</td>
+                                    <td>@Html.EditorFor(model => p.DeliverQty, new { htmlAttributes = new { @class = "form-control deliverQty" } })</td>
+                                    <td>@p.IntakeDisplay</td>
+                                    <td>@p.Comments</td>
+                                    <td>@Html.EditorFor(model => p.BatchNo, new { htmlAttributes = new { @class = "form-control batchNo" } })</td>
+                                    <td>@Html.EditorFor(model => p.LotNo, new { htmlAttributes = new { @class = "form-control lotNo" } })</td>
+                                    <td class="price">@p.TotalCost</td>
+                                </tr>
                                 }
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <td colspan="3" align="right">Total:</td>
-                                    <td colspan="5" align="left" id="grandTotal">@Model.Sum(i => i.TotalCost)</td>
+                                    <td colspan="7" align="right">Total:</td>
+                                    <td colspan="1" align="left" id="grandTotal">@Model.Sum(i => i.TotalCost)</td>
                                 </tr>
                                 <tr>
-                                    <td colspan="3" align="right">Discount(-):</td>
-                                    <td colspan="5" align="left" id="discountAmount">0.00</td>
+                                    <td colspan="7" align="right">Discount(-):</td>
+                                    <td colspan="1" align="left" id="discountAmount">0.00</td>
                                 </tr>
                                 <tr>
-                                    <td colspan="3" align="right">Amount To be Paid:</td>
-                                    <td colspan="5" align="left" id="paidAmount">@Model.Sum(i => i.TotalCost)</td>
+                                    <td colspan="7" align="right">Amount To be Paid:</td>
+                                    <td colspan="1" align="left" id="paidAmount">@Model.Sum(i => i.TotalCost)</td>
                                 </tr>
                             </tfoot>
                         </table>

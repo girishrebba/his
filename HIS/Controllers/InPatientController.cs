@@ -626,7 +626,7 @@ namespace HIS.Controllers
                         var prescription = db.PatientPrescriptions.Where(p => p.PMID == pp.PMID && p.MedicineID == pp.MedicineID).FirstOrDefault();
                         if (prescription != null)
                         {
-                            //prescription.IsDelivered = true;
+                            prescription.MedicineWithDose = "text";
                             prescription.DeliverQty = pp.DeliverQty;
                             db.Entry(prescription).State = EntityState.Modified;
                         }

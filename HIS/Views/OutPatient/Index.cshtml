@@ -424,7 +424,6 @@
         }
 
         function SubmitDeliverPrescriptionForm(form) {
-            $('#MedicineWithDose').rules('remove', 'required');
             $('body').loadingModal({ text: 'Processing...' });
             var prescriptions = [];
             var enmrNo = $('#ENMRNO').val();
