@@ -404,8 +404,8 @@ D:\HIS\his.git\trunk\HIS\bin\System.Web.Webpages.Razor.xml
 D:\HIS\his.git\trunk\HIS\bin\System.Web.Helpers.xml
 D:\HIS\his.git\trunk\HIS\bin\System.Web.Mvc.xml
 D:\HIS\his.git\trunk\HIS\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+D:\HIS\his.git\trunk\HIS\obj\Debug\HIS.csprojResolveAssemblyReference.cache
 D:\HIS\his.git\trunk\HIS\obj\Debug\HIS.csproj.CoreCompileInputs.cache
 D:\HIS\his.git\trunk\HIS\obj\Debug\HIS.csproj.CopyComplete
 D:\HIS\his.git\trunk\HIS\obj\Debug\HIS.dll
 D:\HIS\his.git\trunk\HIS\obj\Debug\HIS.pdb
-D:\HIS\his.git\trunk\HIS\obj\Debug\HIS.csprojResolveAssemblyReference.cache

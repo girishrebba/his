@@ -14,12 +14,6 @@
         top: 60px !important;
     }
 
-    .required:before {
-        content: "*";
-        font-weight: bold;
-        color: red;
-    }
-
     /*.his-consultation-calendar {
         background-color: #BA55D3;
         border-color: #BA55D3;
@@ -112,6 +106,7 @@
         });
 
         function PopupForm(url) {
+            $('body').loadingModal({ text: 'Loading...' });
             var formDiv = $('<div/>');
             $.get(url)
             .done(function (response) {
@@ -119,7 +114,7 @@
 
                 Popup = formDiv.dialog({
                     autoOpen: true,
-                    resizable: false,
+                    resizable: true,
                     modal:true,
                     title: 'Add Modify Out Patient',
                     width: 850,
@@ -129,12 +124,14 @@
                     },
                     open: function (event, ui) {
                         $('.ui-dialog-content').css('overflow', 'hidden');
+                        $('body').loadingModal('destroy');
                     }
                 });
             });
         }
 
         function PopupViewPatient(url) {
+            $('body').loadingModal({ text: 'Loading...' });
             var formDiv = $('<div/>');
             $.get(url)
                 .done(function (response) {
@@ -142,7 +139,7 @@
 
                     viewPatient = formDiv.dialog({
                         autoOpen: true,
-                        resizable: false,
+                        resizable: true,
                         modal: true,
                         title: 'View Patient',
                         width: 850,
@@ -152,18 +149,20 @@
                         },
                         open: function (event, ui) {
                             $('.ui-dialog-content').css('overflow', 'hidden');
+                            $('body').loadingModal('destroy');
                         }
                     });
                 });
         }
         function PopupNewVisit(url) {
+            $('body').loadingModal({ text: 'Loading...' });
             var newVisitDiv = $('<div/>');
             $.get(url)
                 .done(function (response) {
                     newVisitDiv.html(response);
                     newVisit = newVisitDiv.dialog({
                         autoOpen: true,
-                        resizable: false,
+                        resizable: true,
                         modal: true,
                         title: 'New Consultation',
                         width: '75%',
@@ -172,19 +171,21 @@
                         },
                         open: function (event, ui) {
                             $('.ui-dialog-content').css('overflow', 'hidden');
+                            $('body').loadingModal('destroy');
                         }
                     });
                 });
         }
 
         function PopupPrescription(url) {
+            $('body').loadingModal({ text: 'Loading...' });
             var newPrescription = $('<div/>');
             $.get(url)
                 .done(function (response) {
                     newPrescription.html(response);
                     newPP = newPrescription.dialog({
                         autoOpen: true,
-                        resizable: false,
+                        resizable: true,
                         modal: true,
                         title: 'New Prescription',
                         width: 850,
@@ -193,19 +194,21 @@
                         },
                         open: function (event, ui) {
                             $('.ui-dialog-content').css('overflow', 'hidden');
+                            $('body').loadingModal('destroy');
                         }
                     });
                 });
         }
 
         function PopupPatientTests(url) {
+            $('body').loadingModal({ text: 'Loading...' });
             var newPTDiv = $('<div/>');
             $.get(url)
                 .done(function (response) {
                     newPTDiv.html(response);
                     newPT = newPTDiv.dialog({
                         autoOpen: true,
-                        resizable: false,
+                        resizable: true,
                         modal: true,
                         title: 'Lab Tests',
                         width: '75%',
@@ -214,19 +217,21 @@
                         },
                         open: function (event, ui) {
                             $('.ui-dialog-content').css('overflow', 'hidden');
+                            $('body').loadingModal('destroy');
                         }
                     });
                 });
         }
 
         function PopupMDRForm(url) {
+            $('body').loadingModal({ text: 'Loading...' });
             var newMDR = $('<div/>');
             $.get(url)
                 .done(function (response) {
                     newMDR.html(response);
                     MDRpopup = newMDR.dialog({
                         autoOpen: true,
-                        resizable: false,
+                        resizable: true,
                         modal: true,
                         title: 'Manual Drug Request',
                         width: '65%',
@@ -235,19 +240,21 @@
                         },
                         open: function (event, ui) {
                             $('.ui-dialog-content').css('overflow', 'hidden');
+                            $('body').loadingModal('destroy');
                         }
                     });
                 });
         }
 
         function PopupDeliverPrescription(url) {
+            $('body').loadingModal({ text: 'Loading...' });
             var deliverPrescription = $('<div/>');
             $.get(url)
                 .done(function (response) {
                     deliverPrescription.html(response);
                     deliverPopUp = deliverPrescription.dialog({
                         autoOpen: true,
-                        resizable: false,
+                        resizable: true,
                         modal: true,
                         title: 'Deliver Prescription',
                         width: '80%',
@@ -256,19 +263,21 @@
                         },
                         open: function (event, ui) {
                             $('.ui-dialog-content').css('overflow', 'hidden');
+                            $('body').loadingModal('destroy');
                         }
                     });
                 });
         }
 
         function PopupLabTestBillPayForm(url) {
+            $('body').loadingModal({ text: 'Loading...' });
             var billPay = $('<div/>');
             $.get(url)
                 .done(function (response) {
                     billPay.html(response);
                     billPayPopUp = billPay.dialog({
                         autoOpen: true,
-                        resizable: false,
+                        resizable: true,
                         modal: true,
                         title: 'Lab Test Bill Payment',
                         width: '70%',
@@ -277,6 +286,7 @@
                         },
                         open: function (event, ui) {
                             $('.ui-dialog-content').css('overflow', 'hidden');
+                            $('body').loadingModal('destroy');
                         }
                     });
                 });
@@ -284,6 +294,7 @@
 
         function PopupAdmissionForm(url) {
             if (confirm('Are You Sure to take Admission?')) {
+                $('body').loadingModal({ text: 'Loading...' });
                 var admission = $('<div/>');
                 $.get(url)
                     .done(function (response) {
@@ -299,6 +310,7 @@
                             },
                             open: function (event, ui) {
                                 $('.ui-dialog-content').css('overflow', 'hidden');
+                                $('body').loadingModal('destroy');
                             }
                         });
                     });
@@ -311,6 +323,7 @@
             });
             $.validator.unobtrusive.parse(form);
             if ($(form).valid()) {
+                $('body').loadingModal({ text: 'Processing...' });
                 $.ajax({
                     type: "POST",
                     url: form.action,
@@ -325,6 +338,7 @@
                                 className: "success"
                             })
                         }
+                        $('body').loadingModal('destroy');
                     }
                 });
             }
@@ -334,6 +348,7 @@
         function SubmitConsultationForm(form) {
             $.validator.unobtrusive.parse(form);
             if ($(form).valid()) {
+                $('body').loadingModal({ text: 'Processing...' });
                 $.ajax({
                     type: "POST",
                     url: form.action,
@@ -347,6 +362,7 @@
                                 className: "success"
                             })
                         }
+                        $('body').loadingModal('destroy');
                     }
                 });
             }
@@ -354,15 +370,15 @@
         }
 
         function SubmitPrescriptionForm(form) {
+            $('body').loadingModal({ text: 'Processing...' });
             var ppItems = [];
-            $('#MedicineWithDose').rules('remove', 'required');
-            $('#Quantity').rules('remove', 'required');
-            $('#IntakeFrequencyID').rules('remove', 'required');
             var enmrNo = $('#ENMRNO').val();
             var visitID = $('#VisitID').val();
-            var rowCount = 0;
+            if ($(form).find('table#ppTable tr').length >= 3) {
+                $('#MedicineWithDose').rules('remove', 'required');
+                $('#Quantity').rules('remove', 'required');
+                $('#IntakeFrequencyID').rules('remove', 'required');
                 $('#ppTable > tbody tr').not(':first').each(function (index, elem) {
-                    rowCount++;
                     var tbl = {};
                     tbl.ENMRNO = enmrNo;
                     tbl.VisitID = visitID;
@@ -372,8 +388,21 @@
                     tbl.IntakeFrequencyID = $($(this).find('td:eq(3)')).html();
                     tbl.Comments = $($(this).find('td:eq(5)')).html();
                     tbl.TestIds = $('#TestIds').val();
+                    tbl.HasPrescription = true;
                     ppItems.push(tbl);
                 });
+            }
+            else {
+                $.validator.setDefaults({
+                    ignore: []
+                });
+                var tbl = {};
+                tbl.ENMRNO = enmrNo;
+                tbl.VisitID = visitID;
+                tbl.TestIds = $('#TestIds').val();
+                tbl.HasPrescription = false;
+                ppItems.push(tbl);
+            }
             $.ajax({
                 type: "POST",
                 contentType: "application/json",
@@ -387,14 +416,15 @@
                             globalPosition: "top center",
                             className: "success"
                         })
-
                     }
+                    $('body').loadingModal('destroy');
                 }
             });
             return false;
         }
 
         function SubmitDeliverPrescriptionForm(form) {
+            $('body').loadingModal({ text: 'Processing...' });
             var prescriptions = [];
             var enmrNo = $('#ENMRNO').val();
             var visitID = $('#VisitID').val();
@@ -439,33 +469,14 @@
                             className: "success"
                         })
                     }
+                    $('body').loadingModal('destroy');
                 }
             });
             return false;
         }
 
-        function ConvertOpToIp(enmr) {
-            if(confirm('Are You Sure to Convert as In Patient?'))
-            {
-                $.ajax({
-                    type: "POST",
-                    url: '@Url.Action("ConvertOpToIp", "OutPatient")/?enmrNo=' + enmr,
-                    success: function (data) {
-                        if (data.success)
-                        {
-                            $.notify(data.message, {
-                                globalPosition: "top center",
-                                className: "success"
-                            })
-                            window.location.href = '@Url.Action("Index", "InPatient")';
-                        }
-                    }
-
-                });
-            }
-        }
-
         function SubmitMDRForm(form) {
+            $('body').loadingModal({ text: 'Processing...' });
             var mdrRequest = [];
             $.validator.setDefaults({
                 ignore: []
@@ -521,12 +532,14 @@
                             className: "success"
                         })                       
                     }
+                    $('body').loadingModal('destroy');
                 }
             });
             return false;
         }
 
         function SubmitLabTestForm(form) {
+            $('body').loadingModal({ text: 'Processing...' });
             var patientTests = [];
             $.validator.setDefaults({
                 ignore: []
@@ -557,12 +570,14 @@
                             className: "success"
                         })
                     }
+                    $('body').loadingModal('destroy');
                 }
             });
             return false;
         }
 
         function SubmitLabTestBillPayForm(form) {
+            $('body').loadingModal({ text: 'Processing...' });
             var enmrNo = $(form).find('#ENMRNO').val();
             var ltmID = $(form).find('#LTMID').val();
             var discount = $(form).find('#Discount').val();
@@ -597,6 +612,7 @@
                             className: "success"
                         })
                     }
+                    $('body').loadingModal('destroy');
                 }
             });
             return false;
@@ -605,6 +621,7 @@
         function SubmitAdmissionForm(form) {
             $.validator.unobtrusive.parse(form);
             if ($(form).valid()) {
+                $('body').loadingModal({ text: 'Processing...' });
                 $.ajax({
                     type: "POST",
                     url: form.action,
@@ -618,6 +635,7 @@
                                 className: "success"
                             })
                             window.location.href = '@Url.Action("Index", "InPatient")';
+                            $('body').loadingModal('destroy');
                         }
                     }
                 });

@@ -65,6 +65,7 @@
 
 
         function PopupForm(url) {
+            $('body').loadingModal({ text: 'Loading...' });
             var formDiv = $('<div/>');
             $.get(url)
             .done(function (response) {
@@ -72,16 +73,17 @@
 
                 Popup = formDiv.dialog({
                     autoOpen: true,
-                    resizable: false,
+                    resizable: true,
                     modal:true,
                     title: 'Add Modify Medicine',
-                    width: 800,
-                    top:111,
+                    width: '80%',
+                    top:'30%',
                     close: function () {
                         Popup.dialog('destroy').remove();
                     },
                     open: function (event, ui) {
                         $('.ui-dialog-content').css('overflow', 'hidden');
+                        $('body').loadingModal('destroy');
                     }
                 });
             });
@@ -89,7 +91,8 @@
 
         function SubmitForm(form) {
             $.validator.unobtrusive.parse(form);
-            if($(form).valid()){
+            if ($(form).valid()) {
+                $('body').loadingModal({ text: 'Processing...' });
                 $.ajax({
                     type : "POST",
                     url : form.action,
@@ -106,6 +109,7 @@
                             })
 
                         }
+                        $('body').loadingModal('destroy');
                     }
                 });
             }

@@ -176,6 +176,8 @@
     <Content Include="Content\images\ui-icons_ffffff_256x240.png" />
     <Content Include="Content\jquery-ui.css" />
     <Content Include="Content\jquery-ui.min.css" />
+    <Content Include="Content\jquery.loadingModal.css" />
+    <Content Include="Content\jquery.loadingModal.min.css" />
     <Content Include="Content\regular.css" />
     <Content Include="Content\Site.css" />
     <Content Include="Content\solid.css" />
@@ -984,6 +986,8 @@
     <Content Include="Scripts\jquery-1.4.1.min.js" />
     <Content Include="Scripts\jquery-ui-1.12.1.js" />
     <Content Include="Scripts\jquery-ui-1.12.1.min.js" />
+    <Content Include="Scripts\jquery.loadingModal.js" />
+    <Content Include="Scripts\jquery.loadingModal.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -1390,6 +1394,10 @@
     <Content Include="Views\InPatient\PrintHistory.cshtml" />
     <Content Include="Views\OutPatient\Admission.cshtml" />
     <Content Include="Views\InPatient\Discharge.cshtml" />
+    <Content Include="Views\InPatient\Prescription.cshtml" />
+    <Content Include="Views\InPatient\PatientTests.cshtml" />
+    <Content Include="Views\InPatient\LabTestBillPay.cshtml" />
+    <Content Include="Views\InPatient\DeliverPrescription.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

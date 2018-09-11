@@ -85,6 +85,7 @@
 
 
                 function PopupForm(url) {
+                    $('body').loadingModal({ text: 'Loading...' });
                     var formDiv = $('<div />');
                     $.get(url)
                         .done(function (response) {
@@ -92,7 +93,7 @@
 
                             Popup = formDiv.dialog({
                                 autoOpen: true,
-                                resizable: false,
+                                resizable: true,
                                 modal: true,
                                 title: 'Purchase Order Creation',
                                 width: '85%',
@@ -101,12 +102,14 @@
                                 },
                                 open: function (event, ui) {
                                     $('.ui-dialog-content').css('overflow', 'hidden');
+                                    $('body').loadingModal('destroy');
                                 }
                             });
                         });
                 }
 
                 function PopupApprovalForm(url) {
+                    $('body').loadingModal({ text: 'Loading...' });
                     var approvalDiv = $('<div />');
                     $.get(url)
                         .done(function (response) {
@@ -114,7 +117,7 @@
 
                             approvalPop = approvalDiv.dialog({
                                 autoOpen: true,
-                                resizable: false,
+                                resizable: true,
                                 modal: true,
                                 title: 'Approval Form',
                                 width: '85%',
@@ -123,19 +126,21 @@
                                 },
                                 open: function (event, ui) {
                                     $('.ui-dialog-content').css('overflow', 'hidden');
+                                    $('body').loadingModal('destroy');
                                 }
                             });
                         });
                 }
 
                 function PopupViewForm(url) {
+                    $('body').loadingModal({ text: 'Loading...' });
                     var viewDiv = $('<div />');
                     $.get(url)
                         .done(function (response) {
                             viewDiv.html(response);
                             ViewPop = viewDiv.dialog({
                                 autoOpen: true,
-                                resizable: false,
+                                resizable: true,
                                 modal: true,
                                 title: 'View Purchase Order',
                                 width: '85%',
@@ -144,19 +149,21 @@
                                 },
                                 open: function (event, ui) {
                                     $('.ui-dialog-content').css('overflow', 'hidden');
+                                    $('body').loadingModal('destroy');
                                 }
                             });
                         });
                 }
 
                 function PopupDeleteForm(url) {
+                    $('body').loadingModal({ text: 'Loading...' });
                     var deleteDiv = $('<div />');
                     $.get(url)
                         .done(function (response) {
                             deleteDiv.html(response);
                             DelPop = deleteDiv.dialog({
                                 autoOpen: true,
-                                resizable: false,
+                                resizable: true,
                                 modal: true,
                                 title: 'Delete Form',
                                 width: '85%',
@@ -165,19 +172,21 @@
                                 },
                                 open: function (event, ui) {
                                     $('.ui-dialog-content').css('overflow', 'hidden');
+                                    $('body').loadingModal('destroy');
                                 }
                             });
                         });
                 } 
 
                 function PopupAdjustForm(url) {
+                    $('body').loadingModal({ text: 'Loading...' });
                     var adjustDiv = $('<div />');
                     $.get(url)
                         .done(function (response) {
                             adjustDiv.html(response);
                             AdjPop = adjustDiv.dialog({
                                 autoOpen: true,
-                                resizable: false,
+                                resizable: true,
                                 modal: true,
                                 title: 'Adjust Purchase order',
                                 width: '85%',
@@ -186,12 +195,14 @@
                                 },
                                 open: function (event, ui) {
                                     $('.ui-dialog-content').css('overflow', 'hidden');
+                                    $('body').loadingModal('destroy');
                                 }
                             });
                         });
                 } 
 
                 function SubmitForm(form) {
+                    $('body').loadingModal({ text: 'Processing...' });
                     var poItems = [];
                     $('#MedicineWithDose').rules('remove', 'required');
                     $('#OrderedQty').rules('remove', 'required');
@@ -228,14 +239,15 @@
                                     globalPosition: "top center",
                                     className: "success"
                                 })
-
                             }
+                            $('body').loadingModal('destroy');
                         }
                     });
                     return false;
                 }
 
                 function SubmitApprovalForm(form) {
+                    $('body').loadingModal({ text: 'Processing...' });
                     $.ajax({
                         type: "POST",
                         dataType: "json",
@@ -250,12 +262,14 @@
                                         className: "success"
                                     })
                                 }
+                                $('body').loadingModal('destroy');
                             }
                         });
                     return false;
                 }
                 
                 function SubmitDeleteForm(form) {
+                    $('body').loadingModal({ text: 'Processing...' });
                     $.ajax({
                         type: "POST",
                         url: form.action,
@@ -269,6 +283,7 @@
                                     className: "success"
                                 })
                             }
+                            $('body').loadingModal('destroy');
                         }
                     });
                     return false;
@@ -277,6 +292,7 @@
                 function SubmitAdjustPoForm(form) {
                     $.validator.unobtrusive.parse(form);
                     if ($(form).valid()) {
+                        $('body').loadingModal({ text: 'Processing...' });
                         var items = [];
                         var poNumber = $('#PONumber').val();
                         var orderDate = $('#OrderedDate').val();
@@ -309,6 +325,7 @@
                                         className: "success"
                                     })
                                 }
+                                $('body').loadingModal('destroy');
                             }
                         });
                     }

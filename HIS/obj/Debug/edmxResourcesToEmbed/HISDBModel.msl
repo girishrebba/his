@@ -187,6 +187,7 @@
     <EntitySetMapping Name="PrescriptionMasters">
       <EntityTypeMapping TypeName="HISDBModel.PrescriptionMaster">
         <MappingFragment StoreEntitySet="PrescriptionMaster">
+          <ScalarProperty Name="ISIP" ColumnName="ISIP" />
           <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
           <ScalarProperty Name="PMID" ColumnName="PMID" />
           <ScalarProperty Name="ENMRNO" ColumnName="ENMRNO" />
@@ -298,6 +299,7 @@
     <EntitySetMapping Name="LabTestMasters">
       <EntityTypeMapping TypeName="HISDBModel.LabTestMaster">
         <MappingFragment StoreEntitySet="LabTestMaster">
+          <ScalarProperty Name="ISIP" ColumnName="ISIP" />
           <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
           <ScalarProperty Name="PaidAmount" ColumnName="PaidAmount" />
           <ScalarProperty Name="Discount" ColumnName="Discount" />

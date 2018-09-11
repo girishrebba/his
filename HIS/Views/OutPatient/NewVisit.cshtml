@@ -36,7 +36,8 @@
                         <a id="addNew" class="btn btn-success" style="margin-bottom:10px"><i class="fa fa-plus"></i> Add New</a>
                     </div>
                     <div id="consultForm" class="form-horizontal hidden">
-                         <div class="form-group">
+                        <div class="astriskNote"><span></span></div>
+                        <div class="form-group required">
                             @Html.LabelFor(model => model.DoctorID, "Doctor:", htmlAttributes: new { @class = "control-label col-sm-2" })
                             <div class="col-sm-4">
                                 @Html.DropDownListFor(model => model.DoctorID, ViewBag.Users as SelectList, "--Select--", new { @class = "form-control" })
@@ -49,7 +50,7 @@
                                 @Html.ValidationMessageFor(model => model.ConsultTypeID)
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group required">
                             @Html.LabelFor(model => model.DateOfVisit, "Date:", htmlAttributes: new { @class = "control-label col-md-2" })
                             <div class="col-sm-4">
                                 <div id="date-popup" class="input-group date">

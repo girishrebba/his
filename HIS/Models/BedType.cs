@@ -6,7 +6,7 @@ using System.Web.Mvc;
 using System.Data.Entity;
 using System.ComponentModel.DataAnnotations;
 
-namespace HIS.Models
+namespace HIS
 {
     [MetadataType(typeof(BedTypeMetaData))]
     public partial class BedType
@@ -19,9 +19,9 @@ namespace HIS.Models
     {
       
         [Required(ErrorMessage = "Bed Type is Required", AllowEmptyStrings = false)]
-        public string BedType { get; set; }
+        public string BedType1 { get; set; }
         [Required(ErrorMessage = "Description is Required", AllowEmptyStrings = false)]
-        public string Description { get; set; }
+        public string BedTypeDescription { get; set; }
 
     }
 }

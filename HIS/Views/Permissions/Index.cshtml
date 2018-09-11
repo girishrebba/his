@@ -152,7 +152,7 @@
 
 
                 $('#btnSubmit').click(function () {
-
+                    $('body').loadingModal({ text: 'Processing...' });
                     var selected = [];
                     $('#dynamicTable input:checked').each(function () {
                         selected.push($(this).attr('id'));
@@ -165,14 +165,18 @@
                         dataType: "json",
                         data: { chkboxes: selected },
                         success: function (data) {
-                            alert("Record added successfully.");
+                            //alert("Record added successfully.");
+                            $.notify("Permission created successfully", {
+                                globalPosition: "top center",
+                                className: "success"
+                            })
                         },
                         error: function (error) {
                             jsonValue = jQuery.parseJSON(error.responseText);
                             alert("Error : " + jsonValue);
-                        }
+                        }   
                     });
-
+                    $('body').loadingModal('destroy');
                 });
 
             });

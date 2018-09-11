@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace HIS
 {
+    [MetadataType(typeof(PPMetaData))]
     public partial class PatientPrescription
     {
         public string ENMRNO { get; set; }
@@ -22,6 +23,7 @@ namespace HIS
         public decimal Discount { get; set; }
         public decimal PaidAmount { get; set; }
         public decimal TotalAmount { get; set; }
+        public bool HasPrescription { get; set; }
     }
 
     public class PPMetaData

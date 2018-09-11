@@ -212,6 +212,7 @@
     <NavigationProperty Name="PatientPrescriptions" Relationship="Self.FK_PP_PMID" FromRole="PrescriptionMaster" ToRole="PatientPrescription" />
     <NavigationProperty Name="User" Relationship="Self.FK_PM_Doctor" FromRole="PrescriptionMaster" ToRole="Users" />
     <Property Name="TotalAmount" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="ISIP" Type="Boolean" />
   </EntityType>
   <EntityType Name="PurchaseOrder">
     <Key>
@@ -668,12 +669,14 @@
       <Parameter Name="ENMRNO" Mode="In" Type="String" />
       <Parameter Name="DoctorID" Mode="In" Type="Int32" />
       <Parameter Name="VisitID" Mode="In" Type="Int32" />
+      <Parameter Name="ISIP" Mode="In" Type="Boolean" />
       <Parameter Name="PMID" Mode="InOut" Type="Int32" />
     </FunctionImport>
     <FunctionImport Name="CreateMasterLabTest">
       <Parameter Name="ENMRNO" Mode="In" Type="String" />
       <Parameter Name="DoctorID" Mode="In" Type="Int32" />
       <Parameter Name="VisitID" Mode="In" Type="Int32" />
+      <Parameter Name="ISIP" Mode="In" Type="Boolean" />
       <Parameter Name="LTMID" Mode="InOut" Type="Int32" />
     </FunctionImport>
     <EntitySet Name="LabTestMasters" EntityType="HISDBModel.LabTestMaster" />
@@ -735,6 +738,7 @@
     <Property Name="TotalAmount" Type="Decimal" Precision="19" Scale="4" />
     <NavigationProperty Name="User" Relationship="HISDBModel.FK_LTM_Doctor" FromRole="LabTestMaster" ToRole="User" />
     <NavigationProperty Name="PatientTests" Relationship="HISDBModel.FK_PatientTests_LTMID" FromRole="LabTestMaster" ToRole="PatientTest" />
+    <Property Name="ISIP" Type="Boolean" />
   </EntityType>
   <EntityType Name="PatientTest">
     <Key>

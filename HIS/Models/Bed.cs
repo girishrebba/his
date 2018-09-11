@@ -61,10 +61,10 @@ namespace HIS
 
     public class BedMetaData
     {
-        [Required(ErrorMessage = "Bed Number is Required", AllowEmptyStrings = false)]
-        public string BedNo { get; set; }
-        //[Required(ErrorMessage = "Bed Type is Required", AllowEmptyStrings = false)]
-        //public string BedType { get; set; }
+        [Required(ErrorMessage = "Bed Name is Required", AllowEmptyStrings = false)]
+        public string BedName { get; set; }
+        [Required(ErrorMessage = "Bed Type is Required", AllowEmptyStrings = false)]
+        public int BedTypeID { get; set; }
         [Required(ErrorMessage = "Description is Required", AllowEmptyStrings = false)]
         public string Description { get; set; }
         

@@ -44,12 +44,12 @@
 
                 <div id="feeForm" class="form-horizontal hidden">
                     <div class="form-group">
-                        @Html.LabelFor(model => model.Amount, "Amount:", new { @class = "control-label col-md-2" })
+                        @Html.LabelFor(model => model.Amount, "Amount:", new { @class = "control-label col-md-2 required" })
                         <div class="col-sm-4">
                             @Html.EditorFor(model => model.Amount, new { htmlAttributes = new { Value = Model.Amount > 0 ? Model.Amount.ToString() : string.Empty, @class = "form-control" } })
                             @Html.ValidationMessageFor(model => model.Amount)
                         </div>
-                        @Html.LabelFor(model => model.PaidOn, "Date:", htmlAttributes: new { @class = "control-label col-md-2" })
+                        @Html.LabelFor(model => model.PaidOn, "Date:", htmlAttributes: new { @class = "control-label col-md-2 required" })
                         <div class="col-sm-4">
                             <div id="date-popup" class="input-group date">
                                 @Html.EditorFor(model => model.PaidOn, new { htmlAttributes = new { Value = Html.DateFormat(Model.PaidOn), @class = "datepicker form-control", @placeholder = "" } })

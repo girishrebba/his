@@ -9,6 +9,7 @@
     <link href="~/Content/chosen.css" rel="stylesheet" />
     @Scripts.Render("~/bundles/modernizr")
     <link href="~/Content/his_customstyles.css" rel="stylesheet" />
+    <link href="~/Content/jquery.loadingModal.min.css" rel="stylesheet" />
     <style type="text/css">
         .his-site-header {
             padding: 12.5px !important;
@@ -23,6 +24,22 @@
         .his-icon-side-menu {
             color: #212529 !important
         }
+
+        .required.control-label:after {
+            content: "*";
+            color: red;
+        }
+        .astriskNote
+        {
+            text-align:right;
+        }
+            .astriskNote::after {
+                text-align: right;
+                content: "(*) marked fields are mandatory";
+                color: red;
+                font-size: x-small;
+            }
+
     </style>
 </head>
 <body>
@@ -251,6 +268,7 @@
     <script src="~/light/js/plugins/datepicker/bootstrap-datepicker.js"></script>
     <script src="~/Scripts/chosen.jquery.min.js"></script>
     <script src="~/light/js/printThis.js"></script>
+    <script src="~/Scripts/jquery.loadingModal.min.js"></script>
     <script>
         $(document).ready(function () {
             $('#tabs a').click(function () {
@@ -259,6 +277,8 @@
                 //Adds it to the current element
                 $(this).parent('li').addClass('active');
             });
+
+            $("input[data-val-required]").parent("label").addClass("required");
         });
     </script>
     @RenderSection("scripts", required: false)

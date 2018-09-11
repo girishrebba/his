@@ -34,6 +34,7 @@
 {
     @Html.HiddenFor(model => model.SNO)
     @Html.HiddenFor(model => model.ENMRNO)
+    <div class="astriskNote"><span></span></div>
     <div id="tabs">
         <ul class="nav nav-tabs">
             <li class="active"><a data-toggle="tab" href="#profileTab">Basic Info</a></li>
@@ -41,7 +42,7 @@
             <li><a data-toggle="tab" href="#historyTab">Patient History</a></li>
             <li><a data-toggle="tab" href="#metricsTab">Metrics</a></li>
             <li><a data-toggle="tab" href="#referralTab">Referral Info</a></li>
-            <li><a data-toggle="tab" href="#dischargeTab">Discharge Summary</a></li>
+            @*<li><a data-toggle="tab" href="#dischargeTab">Discharge Summary</a></li>*@
         </ul>
         <div class="tab-content" id="tabContent">
             <div id="profileTab" class="tab-pane fade in active" role="tabpanel">
@@ -53,7 +54,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        @Html.LabelFor(model => model.FirstName, "First Name:", new { @class = "control-label col-sm-2" })
+                        @Html.LabelFor(model => model.FirstName, "First Name:", new { @class = "control-label col-sm-2 required" })
                         <div class="col-sm-4">
                             @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control" } })
                             @Html.ValidationMessageFor(model => model.FirstName)
@@ -64,7 +65,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        @Html.LabelFor(model => model.LastName, "Last Name:", new { @class = "control-label col-sm-2" })
+                        @Html.LabelFor(model => model.LastName, "Last Name:", new { @class = "control-label col-sm-2 required" })
                         <div class="col-sm-4">
                             @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
                             @Html.ValidationMessageFor(model => model.LastName)
@@ -81,22 +82,22 @@
                         @Html.LabelFor(model => model.Gender, "Gender:", new { @class = "control-label col-sm-2" })
                         <div class="col-sm-4">
                             @Html.DropDownList("Gender", new List<SelectListItem>(){
-                                   new SelectListItem { Text = "--Select--", Value = "" },
-                                   new SelectListItem { Text = "Male", Value = "0"  },
-                                   new SelectListItem { Text = "Female", Value =  "1"},
-                                   new SelectListItem { Text = "Others", Value =  "2"}
-                                   },
-                         htmlAttributes: new { @class = "form-control" })
+                                               new SelectListItem { Text = "--Select--", Value = "" },
+                                               new SelectListItem { Text = "Male", Value = "0"  },
+                                               new SelectListItem { Text = "Female", Value =  "1"},
+                                               new SelectListItem { Text = "Others", Value =  "2"}
+                                               },
+                              htmlAttributes: new { @class = "form-control" })
                         </div>
                         @Html.LabelFor(model => model.MaritalStatus, "Marital Status:", htmlAttributes: new { @class = "control-label col-sm-2" })
                         <div class="col-sm-4">
                             @Html.DropDownList("MaritalStatus", new List<SelectListItem>(){
-                                   new SelectListItem { Text = "--Select--", Value = "" },
-                                   new SelectListItem { Text = "Single", Value = "0"  },
-                                   new SelectListItem { Text = "Married", Value =  "1"},
-                                   new SelectListItem { Text = "Others", Value =  "2"}
-                                   },
-                         htmlAttributes: new { @class = "form-control" })
+                                               new SelectListItem { Text = "--Select--", Value = "" },
+                                               new SelectListItem { Text = "Single", Value = "0"  },
+                                               new SelectListItem { Text = "Married", Value =  "1"},
+                                               new SelectListItem { Text = "Others", Value =  "2"}
+                                               },
+                              htmlAttributes: new { @class = "form-control" })
                         </div>
                     </div>
                     <div class="form-group">
@@ -104,19 +105,19 @@
                         <div class="col-sm-4">
                             @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
                         </div>
-                        @Html.LabelFor(model => model.Phone, "Phone:", new { @class = "control-label col-sm-2" })
+                        @Html.LabelFor(model => model.Phone, "Phone:", new { @class = "control-label col-sm-2 required" })
                         <div class="col-sm-4">
                             @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control" } })
                             @Html.ValidationMessageFor(model => model.Phone)
                         </div>
                     </div>
                     <div class="form-group">
-                        @Html.LabelFor(model => model.DoctorID, "Doctor:", htmlAttributes: new { @class = "control-label col-sm-2" })
+                        @Html.LabelFor(model => model.DoctorID, "Doctor:", htmlAttributes: new { @class = "control-label col-sm-2 required" })
                         <div class="col-sm-4">
                             @Html.DropDownListFor(model => model.DoctorID, ViewBag.Users as SelectList, "--Select--", new { @class = "form-control" })
                             @Html.ValidationMessageFor(model => model.DoctorID)
                         </div>
-                        @Html.LabelFor(model => model.Enrolled, "Enroll Date:", htmlAttributes: new { @class = "control-label col-sm-2" })
+                        @Html.LabelFor(model => model.Enrolled, "Enroll Date:", htmlAttributes: new { @class = "control-label col-sm-2 required" })
                         <div class="col-sm-4">
                             <div id="date-popup" class="input-group date">
                                 @Html.EditorFor(model => model.Enrolled, new { htmlAttributes = new { Value = Html.DateFormat(Model.Enrolled), @class = "datepicker form-control", @placeholder = "" } })
@@ -126,7 +127,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        @Html.LabelFor(model => model.BloodGroupID, "Blood Group", htmlAttributes: new { @class = "control-label col-sm-2" })
+                        @Html.LabelFor(model => model.BloodGroupID, "Blood Group", htmlAttributes: new { @class = "control-label col-sm-2 required" })
                         <div class="col-sm-4">
                             @Html.DropDownListFor(model => model.BloodGroupID, ViewBag.BloodGroupsList as SelectList, "--Select--", new { @class = "form-control" })
                             @Html.ValidationMessageFor(model => model.BloodGroupID)
@@ -148,7 +149,7 @@
             <div id="addressTab" class="tab-pane fade in" role="tabpanel">
                 <div class="form-horizontal">
                     <div class="form-group">
-                        @Html.LabelFor(model => model.Address1, "Address:", new { @class = "control-label col-sm-2" })
+                        @Html.LabelFor(model => model.Address1, "Address:", new { @class = "control-label col-sm-2 required" })
                         <div class="col-sm-10">
                             @Html.EditorFor(model => model.Address1, new { htmlAttributes = new { @class = "form-control" } })
                             @Html.ValidationMessageFor(model => model.Address1)
@@ -185,15 +186,15 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <div class="col-sm-8 col-sm-offset-4">
-                            <input type="button" value="Previous" class="btn btn-primary previoustab" />
-                            <input type="button" value="Next" class="btn btn-primary nexttab" />
-                        </div>
-                    </div>
-                    <div class="form-group">
                         @Html.LabelFor(model => model.OthContact, "Other Contact:", new { @class = "control-label col-sm-2" })
                         <div class="col-sm-4">
                             @Html.EditorFor(model => model.OthContact, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-8 col-sm-offset-4">
+                            <input type="button" value="Previous" class="btn btn-primary previoustab" />
+                            <input type="button" value="Next" class="btn btn-primary nexttab" />
                         </div>
                     </div>
                 </div>
@@ -206,7 +207,7 @@
                 <div class="form-group">
                     <div class="col-sm-8 col-sm-offset-4">
                         @*<a class="btn btn-primary back previoustab">Previous</a>
-                    <a class="btn btn-primary continue nexttab">Next</a>*@
+                            <a class="btn btn-primary continue nexttab">Next</a>*@
                         <input type="button" value="Previous" class="btn btn-primary previoustab" />
                         <input type="button" value="Next" class="btn btn-primary nexttab" />
                     </div>
@@ -274,24 +275,12 @@
                     <div class="form-group">
                         <div class="col-sm-8 col-sm-offset-4">
                             <input type="button" value="Previous" class="btn btn-primary previoustab" />
-                            <input type="button" value="Next" class="btn btn-primary nexttab" />
+                            <input type="submit" value="Submit" class="btn btn-primary" />
                         </div>
                     </div>
                 </div>
                 <div class="form-horizontal" id="errorDiv">
                     @Html.ValidationSummary(false, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div id="dischargeTab" class="tab-pane fade in" role="tabpanel">
-                <div class="form-group">
-                    @Html.LabelFor(model => model.DiscSummary, "Discharge Summary:")
-                    @Html.TextAreaFor(model => model.DiscSummary, new { @class = "form-control rounded-0", @rows = 10, @autofocus = "true" })
-                </div>
-                <div class="form-group">
-                    <div class="col-sm-8 col-sm-offset-4">
-                        <input type="button" value="Previous" class="btn btn-primary previoustab" />
-                        <input type="submit" value="Submit" class="btn btn-primary" />
-                    </div>
                 </div>
             </div>
         </div>

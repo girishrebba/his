@@ -90,7 +90,7 @@
                 </tbody>
             </table>
         </div>
-        <div class="form-group">
+        <div class="form-group required">
             @Html.LabelFor(model => model.DischargeSummary, "Discharge Summary:")
             @Html.TextAreaFor(model => model.DischargeSummary, new { @class = "form-control rounded-0", @rows = 5, @autofocus = "true" })
             @Html.ValidationMessageFor(model => model.DischargeSummary)

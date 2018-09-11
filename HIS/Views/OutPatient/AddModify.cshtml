@@ -34,6 +34,7 @@
 {
     @Html.HiddenFor(model => model.SNO)
     @Html.HiddenFor(model => model.ENMRNO)
+    <div class="astriskNote"><span></span></div>
     <div id="tabs">
         <ul class="nav nav-tabs">
             <li class="active"><a data-toggle="tab" href="#profileTab">Basic Info</a></li>
@@ -52,7 +53,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        @Html.LabelFor(model => model.FirstName, "First Name:", new { @class = "control-label col-sm-2" })
+                        @Html.LabelFor(model => model.FirstName, "First Name:", new { @class = "control-label col-sm-2 required" })
                         <div class="col-sm-4">
                             @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control" } })
                             @Html.ValidationMessageFor(model => model.FirstName)
@@ -63,7 +64,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        @Html.LabelFor(model => model.LastName, "Last Name:", new { @class = "control-label col-sm-2" })
+                        @Html.LabelFor(model => model.LastName, "Last Name:", new { @class = "control-label col-sm-2 required" })
                         <div class="col-sm-4">
                             @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
                             @Html.ValidationMessageFor(model => model.LastName)
@@ -80,22 +81,22 @@
                         @Html.LabelFor(model => model.Gender, "Gender:", new { @class = "control-label col-sm-2" })
                         <div class="col-sm-4">
                             @Html.DropDownList("Gender", new List<SelectListItem>(){
-                                   new SelectListItem { Text = "--Select--", Value = "" },
-                                   new SelectListItem { Text = "Male", Value = "0"  },
-                                   new SelectListItem { Text = "Female", Value =  "1"},
-                                   new SelectListItem { Text = "Others", Value =  "2"}
-                                   },
-                         htmlAttributes: new { @class = "form-control" })
+                                               new SelectListItem { Text = "--Select--", Value = "" },
+                                               new SelectListItem { Text = "Male", Value = "0"  },
+                                               new SelectListItem { Text = "Female", Value =  "1"},
+                                               new SelectListItem { Text = "Others", Value =  "2"}
+                                               },
+                              htmlAttributes: new { @class = "form-control" })
                         </div>
                         @Html.LabelFor(model => model.MaritalStatus, "Marital Status:", htmlAttributes: new { @class = "control-label col-sm-2" })
                         <div class="col-sm-4">
                             @Html.DropDownList("MaritalStatus", new List<SelectListItem>(){
-                                   new SelectListItem { Text = "--Select--", Value = "" },
-                                   new SelectListItem { Text = "Single", Value = "0"  },
-                                   new SelectListItem { Text = "Married", Value =  "1"},
-                                   new SelectListItem { Text = "Others", Value =  "2"}
-                                   },
-                         htmlAttributes: new { @class = "form-control" })
+                                               new SelectListItem { Text = "--Select--", Value = "" },
+                                               new SelectListItem { Text = "Single", Value = "0"  },
+                                               new SelectListItem { Text = "Married", Value =  "1"},
+                                               new SelectListItem { Text = "Others", Value =  "2"}
+                                               },
+                              htmlAttributes: new { @class = "form-control" })
                         </div>
                     </div>
                     <div class="form-group">
@@ -103,19 +104,19 @@
                         <div class="col-sm-4">
                             @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
                         </div>
-                        @Html.LabelFor(model => model.Phone, "Phone:", new { @class = "control-label col-sm-2" })
+                        @Html.LabelFor(model => model.Phone, "Phone:", new { @class = "control-label col-sm-2 required" })
                         <div class="col-sm-4">
                             @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control" } })
                             @Html.ValidationMessageFor(model => model.Phone)
                         </div>
                     </div>
                     <div class="form-group">
-                        @Html.LabelFor(model => model.DoctorID, "Doctor:", htmlAttributes: new { @class = "control-label col-sm-2" })
+                        @Html.LabelFor(model => model.DoctorID, "Doctor:", htmlAttributes: new { @class = "control-label col-sm-2 required" })
                         <div class="col-sm-4">
                             @Html.DropDownListFor(model => model.DoctorID, ViewBag.Users as SelectList, "--Select--", new { @class = "form-control" })
                             @Html.ValidationMessageFor(model => model.DoctorID)
                         </div>
-                        @Html.LabelFor(model => model.Enrolled, "Enroll Date:", htmlAttributes: new { @class = "control-label col-sm-2" })
+                        @Html.LabelFor(model => model.Enrolled, "Enroll Date:", htmlAttributes: new { @class = "control-label col-sm-2 required" })
                         <div class="col-sm-4">
                             <div id="date-popup" class="input-group date">
                                 @Html.EditorFor(model => model.Enrolled, new { htmlAttributes = new { Value = Html.DateFormat(Model.Enrolled), @class = "datepicker form-control", @placeholder = "" } })
@@ -125,7 +126,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        @Html.LabelFor(model => model.BloodGroupID, "Blood Group", htmlAttributes: new { @class = "control-label col-sm-2" })
+                        @Html.LabelFor(model => model.BloodGroupID, "Blood Group", htmlAttributes: new { @class = "control-label col-sm-2 required" })
                         <div class="col-sm-4">
                             @Html.DropDownListFor(model => model.BloodGroupID, ViewBag.BloodGroups as SelectList, "--Select--", new { @class = "form-control" })
                             @Html.ValidationMessageFor(model => model.BloodGroupID)
@@ -147,7 +148,7 @@
             <div id="addressTab" class="tab-pane fade in" role="tabpanel">
                 <div class="form-horizontal">
                     <div class="form-group">
-                        @Html.LabelFor(model => model.Address1, "Address:", new { @class = "control-label col-sm-2" })
+                        @Html.LabelFor(model => model.Address1, "Address:", new { @class = "control-label col-sm-2 required" })
                         <div class="col-sm-10">
                             @Html.EditorFor(model => model.Address1, new { htmlAttributes = new { @class = "form-control" } })
                             @Html.ValidationMessageFor(model => model.Address1)

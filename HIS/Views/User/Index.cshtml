@@ -78,6 +78,7 @@
 
 
         function PopupForm(url) {
+            $('body').loadingModal({ text: 'Loading...' });
             var formDiv = $('<div/>');
             $.get(url)
             .done(function (response) {
@@ -85,17 +86,17 @@
 
                 Popup = formDiv.dialog({
                     autoOpen: true,
-                    resizable: false,
+                    resizable: true,
                     modal:true,
                     title: 'Add Modify User',
-                    height: 500,
-                    width: 850,
-                    top:161,
+                    width: '85%',
+                    top:'30%',
                     close: function () {
                         Popup.dialog('destroy').remove();
                     },
                     open: function (event, ui) {
                         $('.ui-dialog-content').css('overflow', 'hidden');
+                        $('body').loadingModal('destroy');
                     }
 
                 });
@@ -104,7 +105,8 @@
 
         function SubmitForm(form) {
             $.validator.unobtrusive.parse(form);
-            if($(form).valid()){
+            if ($(form).valid()) {
+                $('body').loadingModal({ text: 'Processing...' });
                 $.ajax({
                     type : "POST",
                     url : form.action,
@@ -121,6 +123,7 @@
                             })
 
                         }
+                        $('body').loadingModal('destroy');
                     }
                 });
             }
@@ -130,6 +133,7 @@
         function Delete(id) {
             if(confirm('Are You Sure to Delete this User?'))
             {
+                $('body').loadingModal({ text: 'Processing...' });
                 $.ajax({
                     type: "POST",
                     url: '@Url.Action("Delete","User")/' + id,
@@ -144,6 +148,7 @@
                             })
 
                         }
+                        $('body').loadingModal('destroy');
                     }
 
                 });

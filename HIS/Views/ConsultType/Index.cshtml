@@ -58,6 +58,7 @@
         });
 
         function PopupForm(url) {
+            $('body').loadingModal({ text: 'Loadiing...' });
             var formDiv = $('<div/>');
             $.get(url)
             .done(function (response) {
@@ -65,13 +66,15 @@
 
                 Popup = formDiv.dialog({
                     autoOpen: true,
-                    resizable: false,
+                    resizable: true,
                     modal:true,
                     title: 'Add Modify Consultation',
-                    height: 200,
-                    width: 300,
+                    width: '35%',
                     close: function () {
                         Popup.dialog('destroy').remove();
+                    },
+                    open: function () {
+                        $('body').loadingModal('destroy');
                     }
 
                 });
@@ -80,7 +83,8 @@
 
         function SubmitForm(form) {
             $.validator.unobtrusive.parse(form);
-            if($(form).valid()){
+            if ($(form).valid()) {
+                $('body').loadingModal({ text: 'Processing...' });
                 $.ajax({
                     type : "POST",
                     url : form.action,
@@ -97,6 +101,7 @@
                             })
 
                         }
+                        $('body').loadingModal('destroy');
                     }
                 });
             }
@@ -106,6 +111,7 @@
         function Delete(id) {
             if(confirm('Are You Sure to Delete this Consultation?'))
             {
+                $('body').loadingModal({ text: 'Processing...' });
                 $.ajax({
                     type: "POST",
                     url: '@Url.Action("Delete","ConsultType")/' + id,
@@ -120,6 +126,7 @@
                             })
 
                         }
+                        $('body').loadingModal('destroy');
                     }
                 });
             }

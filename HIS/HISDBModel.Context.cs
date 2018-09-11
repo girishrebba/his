@@ -75,7 +75,7 @@ namespace HIS
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ConvertOutPatientToInPatient", eNMRNOParameter, estAmountParameter, advAmountParameter);
         }
     
-        public virtual int CreateMasterPrescription(string eNMRNO, Nullable<int> doctorID, Nullable<int> visitID, ObjectParameter pMID)
+        public virtual int CreateMasterPrescription(string eNMRNO, Nullable<int> doctorID, Nullable<int> visitID, Nullable<bool> iSIP, ObjectParameter pMID)
         {
             var eNMRNOParameter = eNMRNO != null ?
                 new ObjectParameter("ENMRNO", eNMRNO) :
@@ -89,10 +89,14 @@ namespace HIS
                 new ObjectParameter("VisitID", visitID) :
                 new ObjectParameter("VisitID", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("CreateMasterPrescription", eNMRNOParameter, doctorIDParameter, visitIDParameter, pMID);
+            var iSIPParameter = iSIP.HasValue ?
+                new ObjectParameter("ISIP", iSIP) :
+                new ObjectParameter("ISIP", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("CreateMasterPrescription", eNMRNOParameter, doctorIDParameter, visitIDParameter, iSIPParameter, pMID);
         }
     
-        public virtual int CreateMasterLabTest(string eNMRNO, Nullable<int> doctorID, Nullable<int> visitID, ObjectParameter lTMID)
+        public virtual int CreateMasterLabTest(string eNMRNO, Nullable<int> doctorID, Nullable<int> visitID, Nullable<bool> iSIP, ObjectParameter lTMID)
         {
             var eNMRNOParameter = eNMRNO != null ?
                 new ObjectParameter("ENMRNO", eNMRNO) :
@@ -106,7 +110,11 @@ namespace HIS
                 new ObjectParameter("VisitID", visitID) :
                 new ObjectParameter("VisitID", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("CreateMasterLabTest", eNMRNOParameter, doctorIDParameter, visitIDParameter, lTMID);
+            var iSIPParameter = iSIP.HasValue ?
+                new ObjectParameter("ISIP", iSIP) :
+                new ObjectParameter("ISIP", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("CreateMasterLabTest", eNMRNOParameter, doctorIDParameter, visitIDParameter, iSIPParameter, lTMID);
         }
     }
 }

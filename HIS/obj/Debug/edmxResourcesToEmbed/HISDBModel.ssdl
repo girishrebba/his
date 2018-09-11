@@ -144,6 +144,7 @@
     <Property Name="Discount" Type="decimal" Precision="4" Scale="2" />
     <Property Name="PaidAmount" Type="money" />
     <Property Name="TotalAmount" Type="money" />
+    <Property Name="ISIP" Type="bit" />
   </EntityType>
   <EntityType Name="MedicineInventory">
     <Key>
@@ -283,6 +284,7 @@
     <Property Name="Discount" Type="decimal" Precision="4" Scale="2" />
     <Property Name="PaidAmount" Type="money" />
     <Property Name="TotalAmount" Type="money" />
+    <Property Name="ISIP" Type="bit" />
   </EntityType>
   <EntityType Name="PurchaseOrder">
     <Key>
@@ -727,12 +729,14 @@
     <Parameter Name="ENMRNO" Type="varchar" Mode="In" />
     <Parameter Name="DoctorID" Type="int" Mode="In" />
     <Parameter Name="VisitID" Type="int" Mode="In" />
+    <Parameter Name="ISIP" Type="bit" Mode="In" />
     <Parameter Name="LTMID" Type="int" Mode="InOut" />
   </Function>
   <Function Name="CreateMasterPrescription" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="ENMRNO" Type="varchar" Mode="In" />
     <Parameter Name="DoctorID" Type="int" Mode="In" />
     <Parameter Name="VisitID" Type="int" Mode="In" />
+    <Parameter Name="ISIP" Type="bit" Mode="In" />
     <Parameter Name="PMID" Type="int" Mode="InOut" />
   </Function>
   <EntityContainer Name="HISDBModelStoreContainer">

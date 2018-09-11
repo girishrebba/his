@@ -7,8 +7,9 @@
 @using (Html.BeginForm("SavePatinetRoomAllocation", "InPatient", FormMethod.Post, new { onsubmit = "return SubmitBedAllocationForm(this)" }))
 {
     @Html.HiddenFor(model => model.AllocationID)
+    <div class="astriskNote"><span></span></div>
     <div class="form-horizontal">
-        <div class="form-group">
+        <div class="form-group required">
             @Html.LabelFor(model => model.ENMRNO, new { @class = "control-label col-md-2" })
             <div class="col-sm-4">
                 @Html.EditorFor(model => model.ENMRNO, new { htmlAttributes = new { @class = "form-control" } })
@@ -21,21 +22,16 @@
                 @Html.ValidationMessageFor(model => model.RoomNo)
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group required">
             @Html.LabelFor(model => model.BedNo, "Bed No:", htmlAttributes: new { @class = "control-label col-sm-2" })
             <div class="col-sm-4">
                 @Html.DropDownListFor(model => model.BedNo, new SelectList(Enumerable.Empty<SelectListItem>(), "BedNo", "BedName"), "--Select--", new { @class = "form-control" })
 
                 @Html.ValidationMessageFor(model => model.BedNo)
             </div>
-
-
         </div>
-
-
         <div class="form-group">
-
-            @Html.LabelFor(model => model.FromDate, "FromDate", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.FromDate, "FromDate", htmlAttributes: new { @class = "control-label col-md-2 required" })
             <div class="col-sm-4">
                 <div id="date-popup" class="input-group date">
                     @Html.EditorFor(model => model.FromDate, new { htmlAttributes = new { Value = Html.DateFormat(Model.FromDate), @class = "form-control" } })
@@ -64,7 +60,7 @@
 @section Scripts {
 
     @*<script>
-        function FillBeds() {          
+        function FillBeds() {
             var roomid = $('#RoomNo').val();
             $.ajax({
                 url: '/InPatient/FillBeds',
@@ -82,50 +78,50 @@
         }
         </script>*@
 }
-       
-        <script type="text/javascript">
-            $(document).ready(function () {
-                $('#FromDate').datepicker({
-                    keyboardNavigation: false,
-                    forceParse: false,
-                    todayHighlight: true,
-                    todayBtn: false,
-                    format: "mm/dd/yyyy"
-                });
 
-            $('#EndDate').datepicker({
-                keyboardNavigation: false,
-                forceParse: false,
-                todayHighlight: true,
-                todayBtn: false,
-                format: "mm/dd/yyyy"
-            });
-
-            $('.btnFromPicker').click(function () {
-                $('#FromDate').datepicker('show');
-            });
-
-            $('.btnEndPicker').click(function () {
-                $('#EndDate').datepicker('show');
-            });
-
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#FromDate').datepicker({
+            keyboardNavigation: false,
+            forceParse: false,
+            todayHighlight: true,
+            todayBtn: false,
+            format: "mm/dd/yyyy"
         });
-        function FillBeds() {
-            
-            var roomid = $('#RoomNo').val();
-            $.ajax({
-                url: '/InPatient/FillBeds',
-                type: "GET",
-                dataType: "JSON",
-                data: {Room: roomid },
-                success: function (data) {
-                $("#BedNo").html(""); // clear before appending new list
-            $.each(data, function (i, city) {
-                $("#BedNo").append(
-                    $('<option></option>').val(data[i].BedNo).html(data[i].BedName));
-            });
-                }
-            });
-        }
 
-    </script>
+        $('#EndDate').datepicker({
+            keyboardNavigation: false,
+            forceParse: false,
+            todayHighlight: true,
+            todayBtn: false,
+            format: "mm/dd/yyyy"
+        });
+
+        $('.btnFromPicker').click(function () {
+            $('#FromDate').datepicker('show');
+        });
+
+        $('.btnEndPicker').click(function () {
+            $('#EndDate').datepicker('show');
+        });
+
+    });
+    function FillBeds() {
+
+        var roomid = $('#RoomNo').val();
+        $.ajax({
+            url: '/InPatient/FillBeds',
+            type: "GET",
+            dataType: "JSON",
+            data: { Room: roomid },
+            success: function (data) {
+                $("#BedNo").html(""); // clear before appending new list
+                $.each(data, function (i, city) {
+                    $("#BedNo").append(
+                        $('<option></option>').val(data[i].BedNo).html(data[i].BedName));
+                });
+            }
+        });
+    }
+
+</script>

@@ -58,29 +58,31 @@
         });
 
         function PopupForm(url) {
+            $('body').loadingModal({ text: 'Loading...' });
             var formDiv = $('<div/>');
             $.get(url)
             .done(function (response) {
                 formDiv.html(response);
-
                 Popup = formDiv.dialog({
                     autoOpen: true,
-                    resizable: false,
+                    resizable: true,
                     modal:true,
                     title: 'Add Modify Room Type',
-                    height: 200,
-                    width: 300,
+                    width: '35%',
                     close: function () {
                         Popup.dialog('destroy').remove();
+                    },
+                    open: function () {
+                        $('body').loadingModal('destroy');
                     }
-
                 });
             });
         }
 
         function SubmitForm(form) {
             $.validator.unobtrusive.parse(form);
-            if($(form).valid()){
+            if ($(form).valid()) {
+                $('body').loadingModal({ text: 'Processing...' });
                 $.ajax({
                     type : "POST",
                     url : form.action,
@@ -95,8 +97,8 @@
                                 globalPosition :"top center",
                                 className : "success"
                             })
-
                         }
+                        $('body').loadingModal('destroy');
                     }
                 });
             }
@@ -106,6 +108,7 @@
         function Delete(id) {
             if(confirm('Are You Sure to Delete this RoomType?'))
             {
+                $('body').loadingModal({ text: 'Processing...' });
                 $.ajax({
                     type: "POST",
                     url: '@Url.Action("Delete","RoomType")/' + id,
@@ -119,6 +122,7 @@
                             })
 
                         }
+                        $('body').loadingModal('destroy');
                     }
 
                 });

@@ -149,6 +149,7 @@
           <Property Name="Discount" Type="decimal" Precision="4" Scale="2" />
           <Property Name="PaidAmount" Type="money" />
           <Property Name="TotalAmount" Type="money" />
+          <Property Name="ISIP" Type="bit" />
         </EntityType>
         <EntityType Name="MedicineInventory">
           <Key>
@@ -288,6 +289,7 @@
           <Property Name="Discount" Type="decimal" Precision="4" Scale="2" />
           <Property Name="PaidAmount" Type="money" />
           <Property Name="TotalAmount" Type="money" />
+          <Property Name="ISIP" Type="bit" />
         </EntityType>
         <EntityType Name="PurchaseOrder">
           <Key>
@@ -732,12 +734,14 @@
           <Parameter Name="ENMRNO" Type="varchar" Mode="In" />
           <Parameter Name="DoctorID" Type="int" Mode="In" />
           <Parameter Name="VisitID" Type="int" Mode="In" />
+          <Parameter Name="ISIP" Type="bit" Mode="In" />
           <Parameter Name="LTMID" Type="int" Mode="InOut" />
         </Function>
         <Function Name="CreateMasterPrescription" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ENMRNO" Type="varchar" Mode="In" />
           <Parameter Name="DoctorID" Type="int" Mode="In" />
           <Parameter Name="VisitID" Type="int" Mode="In" />
+          <Parameter Name="ISIP" Type="bit" Mode="In" />
           <Parameter Name="PMID" Type="int" Mode="InOut" />
         </Function>
         <EntityContainer Name="HISDBModelStoreContainer">
@@ -1104,6 +1108,7 @@
           <NavigationProperty Name="PatientPrescriptions" Relationship="Self.FK_PP_PMID" FromRole="PrescriptionMaster" ToRole="PatientPrescription" />
           <NavigationProperty Name="User" Relationship="Self.FK_PM_Doctor" FromRole="PrescriptionMaster" ToRole="Users" />
           <Property Name="TotalAmount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="ISIP" Type="Boolean" />
         </EntityType>
         <EntityType Name="PurchaseOrder">
           <Key>
@@ -1552,7 +1557,7 @@
             <End Role="Users" EntitySet="Users" />
           </AssociationSet>
           <FunctionImport Name="ConvertOutPatientToInPatient">
-          <Parameter Name="ENMRNO" Mode="In" Type="String" />
+            <Parameter Name="ENMRNO" Mode="In" Type="String" />
             <Parameter Name="EstAmount" Mode="In" Type="Decimal" />
             <Parameter Name="AdvAmount" Mode="In" Type="Decimal" />
           </FunctionImport>
@@ -1560,12 +1565,14 @@
             <Parameter Name="ENMRNO" Mode="In" Type="String" />
             <Parameter Name="DoctorID" Mode="In" Type="Int32" />
             <Parameter Name="VisitID" Mode="In" Type="Int32" />
+            <Parameter Name="ISIP" Mode="In" Type="Boolean" />
             <Parameter Name="PMID" Mode="InOut" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="CreateMasterLabTest">
             <Parameter Name="ENMRNO" Mode="In" Type="String" />
             <Parameter Name="DoctorID" Mode="In" Type="Int32" />
             <Parameter Name="VisitID" Mode="In" Type="Int32" />
+            <Parameter Name="ISIP" Mode="In" Type="Boolean" />
             <Parameter Name="LTMID" Mode="InOut" Type="Int32" />
           </FunctionImport>
           <EntitySet Name="LabTestMasters" EntityType="HISDBModel.LabTestMaster" />
@@ -1627,6 +1634,7 @@
           <Property Name="TotalAmount" Type="Decimal" Precision="19" Scale="4" />
           <NavigationProperty Name="User" Relationship="HISDBModel.FK_LTM_Doctor" FromRole="LabTestMaster" ToRole="User" />
           <NavigationProperty Name="PatientTests" Relationship="HISDBModel.FK_PatientTests_LTMID" FromRole="LabTestMaster" ToRole="PatientTest" />
+          <Property Name="ISIP" Type="Boolean" />
         </EntityType>
         <EntityType Name="PatientTest">
           <Key>
@@ -2025,6 +2033,7 @@
           <EntitySetMapping Name="PrescriptionMasters">
             <EntityTypeMapping TypeName="HISDBModel.PrescriptionMaster">
               <MappingFragment StoreEntitySet="PrescriptionMaster">
+                <ScalarProperty Name="ISIP" ColumnName="ISIP" />
                 <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
                 <ScalarProperty Name="PMID" ColumnName="PMID" />
                 <ScalarProperty Name="ENMRNO" ColumnName="ENMRNO" />
@@ -2136,6 +2145,7 @@
           <EntitySetMapping Name="LabTestMasters">
             <EntityTypeMapping TypeName="HISDBModel.LabTestMaster">
               <MappingFragment StoreEntitySet="LabTestMaster">
+                <ScalarProperty Name="ISIP" ColumnName="ISIP" />
                 <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
                 <ScalarProperty Name="PaidAmount" ColumnName="PaidAmount" />
                 <ScalarProperty Name="Discount" ColumnName="Discount" />

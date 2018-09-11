@@ -160,7 +160,7 @@ namespace HIS.Controllers
                 {
                     System.Data.Entity.Core.Objects.ObjectParameter pmidOut = new System.Data.Entity.Core.Objects.ObjectParameter("PMID", typeof(Int32));
                     
-                    db.CreateMasterPrescription(mdrRequest[0].ENMRNO, Convert.ToInt32(System.Web.HttpContext.Current.Session["UserID"]), 0, pmidOut);
+                    db.CreateMasterPrescription(mdrRequest[0].ENMRNO, Convert.ToInt32(System.Web.HttpContext.Current.Session["UserID"]),0,false, pmidOut);
                     int pmid = Convert.ToInt32(pmidOut.Value);
                     foreach (PatientPrescription pp in mdrRequest)
                     {
@@ -555,38 +555,6 @@ namespace HIS.Controllers
             }
         }
 
-        [HttpGet]
-        public ActionResult OPPrescription(string enmrNo)
-        {
-            string currentVisit = string.Empty;
-            bool isLatestVisitPrescribed = false;
-            int visitID = 1;
-            using (HISDBEntities hs = new HISDBEntities())
-            {
-                var latestVisit = hs.PatientVisitHistories.Where(pvh => pvh.ENMRNO == enmrNo).OrderByDescending(pvh => pvh.SNO).FirstOrDefault();
-                if (latestVisit != null)
-                {
-                    visitID = latestVisit.SNO;
-                    currentVisit = VisitNameWithDate(latestVisit);
-                    isLatestVisitPrescribed = hs.PrescriptionMasters.Where(p => p.VisitID == visitID).Any();
-                }
-            }
-            List<PatientPrescriptionHistory> patientVisitHistory = PatientPrescriptionHistory(enmrNo);
-            List<User> Users = HtmlHelpers.HtmlHelpers.GetDoctors();
-            List<IntakeFrequency> Intakes = HtmlHelpers.HtmlHelpers.GetIntakes();
-            ViewBag.Intakes = new SelectList(Intakes, "FrequencyID", "Frequency");
-            ViewBag.Users = new SelectList(Users, "UserID", "NameDisplay");
-            ViewBag.History = patientVisitHistory;
-            ViewBag.IsNewVisit = patientVisitHistory.Count() <= 0 ? true : false;
-            ViewBag.IsLastVisitPrescribed = isLatestVisitPrescribed;
-            PatientPrescription pp = new PatientPrescription();
-            pp.ENMRNO = enmrNo;
-            pp.VisitID = visitID;
-            pp.VisitName = currentVisit;
-            pp.TestTypes = HtmlHelpers.HtmlHelpers.GetTestTypes();
-            return View(pp);
-        }
-
         private List<PatientPrescriptionHistory> PatientPrescriptionHistory(string enmrNo)
         {
             var prescriptionsHistory = new List<PatientPrescriptionHistory>();
@@ -627,6 +595,39 @@ namespace HIS.Controllers
                 return consultName;
             }
         }
+
+        [HttpGet]
+        public ActionResult OPPrescription(string enmrNo)
+        {
+            string currentVisit = string.Empty;
+            bool isLatestVisitPrescribed = false;
+            int visitID = 1;
+            using (HISDBEntities hs = new HISDBEntities())
+            {
+                var latestVisit = hs.PatientVisitHistories.Where(pvh => pvh.ENMRNO == enmrNo).OrderByDescending(pvh => pvh.SNO).FirstOrDefault();
+                if (latestVisit != null)
+                {
+                    visitID = latestVisit.SNO;
+                    currentVisit = VisitNameWithDate(latestVisit);
+                    isLatestVisitPrescribed = hs.PrescriptionMasters.Where(p => p.VisitID == visitID).Any();
+                }
+            }
+            List<PatientPrescriptionHistory> patientVisitHistory = PatientPrescriptionHistory(enmrNo);
+            List<User> Users = HtmlHelpers.HtmlHelpers.GetDoctors();
+            List<IntakeFrequency> Intakes = HtmlHelpers.HtmlHelpers.GetIntakes();
+            ViewBag.Intakes = new SelectList(Intakes, "FrequencyID", "Frequency");
+            ViewBag.Users = new SelectList(Users, "UserID", "NameDisplay");
+            ViewBag.History = patientVisitHistory;
+            ViewBag.IsNewVisit = patientVisitHistory.Count() <= 0 ? true : false;
+            ViewBag.IsLastVisitPrescribed = isLatestVisitPrescribed;
+            PatientPrescription pp = new PatientPrescription();
+            pp.ENMRNO = enmrNo;
+            pp.VisitID = visitID;
+            pp.VisitName = currentVisit;
+            pp.TestTypes = HtmlHelpers.HtmlHelpers.GetTestTypes();
+            return View(pp);
+        }
+
         [HttpPost]
         public ActionResult OPPrescription(IList<PatientPrescription> prescriptions)
         {
@@ -634,23 +635,27 @@ namespace HIS.Controllers
             {
                 if (prescriptions != null && prescriptions.Count() > 0)
                 {
-                    System.Data.Entity.Core.Objects.ObjectParameter pmidOut = new System.Data.Entity.Core.Objects.ObjectParameter("PMID", typeof(Int32));
-
-                    db.CreateMasterPrescription(prescriptions[0].ENMRNO, Convert.ToInt32(System.Web.HttpContext.Current.Session["UserID"]), prescriptions[0].VisitID, pmidOut);
-                    int pmid = Convert.ToInt32(pmidOut.Value);
-
                     var suggestedTestsIfAny = prescriptions[0];
-                    foreach (PatientPrescription pp in prescriptions)
+                    if (prescriptions[0].HasPrescription)
                     {
-                        pp.PMID = pmid;
-                        db.PatientPrescriptions.Add(pp);
+                        System.Data.Entity.Core.Objects.ObjectParameter pmidOut = new System.Data.Entity.Core.Objects.ObjectParameter("PMID", typeof(Int32));
+
+                        db.CreateMasterPrescription(prescriptions[0].ENMRNO, Convert.ToInt32(System.Web.HttpContext.Current.Session["UserID"]), prescriptions[0].VisitID, false,pmidOut);
+                        int pmid = Convert.ToInt32(pmidOut.Value);
+
+
+                        foreach (PatientPrescription pp in prescriptions)
+                        {
+                            pp.PMID = pmid;
+                            db.PatientPrescriptions.Add(pp);
+                        }
+                        db.SaveChanges();
                     }
-                    db.SaveChanges();
                     //Save Tests
                     if (suggestedTestsIfAny.TestIds != null)
                     {
                         System.Data.Entity.Core.Objects.ObjectParameter ltmidOut = new System.Data.Entity.Core.Objects.ObjectParameter("LTMID", typeof(Int32));
-                        db.CreateMasterLabTest(prescriptions[0].ENMRNO, Convert.ToInt32(System.Web.HttpContext.Current.Session["UserID"]), prescriptions[0].VisitID, ltmidOut);
+                        db.CreateMasterLabTest(prescriptions[0].ENMRNO, Convert.ToInt32(System.Web.HttpContext.Current.Session["UserID"]), prescriptions[0].VisitID, false,ltmidOut);
                         int ltmid = Convert.ToInt32(ltmidOut.Value);
 
                         foreach (var id in suggestedTestsIfAny.TestIds)
@@ -672,17 +677,6 @@ namespace HIS.Controllers
             }
 
         }
-
-        //[HttpPost]
-        //public ActionResult ConvertOpToIp(string enmrNo)
-        //{
-        //    using (HISDBEntities db = new HISDBEntities())
-        //    {
-        //        db.ConvertOutPatientToInPatient(enmrNo);
-
-        //        return Json(new { success = true, message = string.Format("Patient ENMRNO: {0} converted to In Patient", enmrNo) }, JsonRequestBehavior.AllowGet);
-        //    }
-        //}
 
         [HttpPost]
         public JsonResult GetMedicinesWithQuantity(string Prefix)
