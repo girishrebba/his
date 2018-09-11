@@ -502,6 +502,7 @@
 
     function SubmitDeliverPrescriptionForm(form) {
         $('body').loadingModal({ text: 'Processing...' });
+        $('#MedicineWithDose').rules('remove', 'required');
         var prescriptions = [];
         var enmrNo = $('#ENMRNO').val();
         var visitID = $('#VisitID').val();
@@ -521,6 +522,7 @@
             tbl.PaidAmount = amountToBePaid;
             tbl.TotalAmount = totalAmount;
             tbl.PMID = PmID;
+            tbl.MedicineWithDose = 'demo';
             prescriptions.push(tbl);
         });
         $.ajax({

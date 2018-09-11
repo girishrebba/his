@@ -424,6 +424,7 @@
         }
 
         function SubmitDeliverPrescriptionForm(form) {
+            $('#MedicineWithDose').rules('remove', 'required');
             $('body').loadingModal({ text: 'Processing...' });
             var prescriptions = [];
             var enmrNo = $('#ENMRNO').val();
@@ -444,9 +445,10 @@
                 tbl.PaidAmount = amountToBePaid;
                 tbl.TotalAmount = totalAmount;
                 tbl.PMID = PmID;
+                tbl.MedicineWithDose = 'demo';
                 prescriptions.push(tbl);
             });
-
+            alert(prescriptions);
             $(form).find('#headerDivdp').append("</br><table><tr><td>ENMRNO: " + $('#ENMRNO').val() + "</td></tr><tr><td>Doctor: " + $('#DoctorName').val() + "</td></tr><tr><td>Visit: " + $('#VisitName').val() + "</td></tr><tr><td colspan='2'>Suggested Date: " + $('#DateDisplay').val() + "</td></tr></table>");
             $(form).find('#headerDivdp').append($(form).find('#ppTable'));
 

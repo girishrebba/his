@@ -364,7 +364,7 @@ namespace HIS.Controllers
                                             join ifs in hs.IntakeFrequencies on pp.IntakeFrequencyID equals ifs.FrequencyID
                                             join u in hs.Users on pm.PrescribedBy equals u.UserID
                                             join ut in hs.UserTypes on u.UserTypeID equals ut.UserTypeID
-                                            where ut.UserTypeName.Equals("Doctor") && pm.ENMRNO.Equals(enmrNo) && pm.VisitID == visitID
+                                            where ut.UserTypeName.Equals("Doctor") && pm.ENMRNO.Equals(enmrNo)&& pm.VisitID == visitID
                                             select new
                                             {
                                                 pp,
@@ -567,9 +567,10 @@ namespace HIS.Controllers
                                         where pv.ENMRNO == enmrNo select pv).ToList();
                 foreach (var pre in prescribedVisits)
                 {
+                    List<PatientPrescription> prescriptions = GetPatientVisitPrescriptions(pre.ENMRNO, pre.SNO);
                     var visitPrescription = new PatientPrescriptionHistory();
                     visitPrescription.VisitName = VisitNameWithDate(pre);
-                    visitPrescription.Prescriptions = GetPatientVisitPrescriptions(pre.ENMRNO, pre.SNO);
+                    visitPrescription.Prescriptions = prescriptions;
                     visitPrescription.PatientTests = GetPatientVisitTests(pre.ENMRNO, pre.SNO);
                     prescriptionsHistory.Add(visitPrescription);
                 }
@@ -618,6 +619,7 @@ namespace HIS.Controllers
             ViewBag.Intakes = new SelectList(Intakes, "FrequencyID", "Frequency");
             ViewBag.Users = new SelectList(Users, "UserID", "NameDisplay");
             ViewBag.History = patientVisitHistory;
+            ViewBag.MDR = GetPatientVisitPrescriptions(enmrNo, 0).Where(v => v.VisitID == 0).ToList();
             ViewBag.IsNewVisit = patientVisitHistory.Count() <= 0 ? true : false;
             ViewBag.IsLastVisitPrescribed = isLatestVisitPrescribed;
             PatientPrescription pp = new PatientPrescription();

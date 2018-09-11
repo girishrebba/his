@@ -15,6 +15,7 @@ namespace HIS
     public partial class PatientPrescription
     {
         public int PTID { get; set; }
+        public bool ISIP { get; set; }
         public int PMID { get; set; }
         public int MedicineID { get; set; }
         public int Quantity { get; set; }

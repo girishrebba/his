@@ -11,5 +11,8 @@ namespace HIS
         public string VisitName { get; set; }
         public IList<PatientPrescription> Prescriptions { get; set; }
         public IList<PatientTest> PatientTests { get; set; }
+        public IList<PatientPrescription> MDRPrescriptions { get; set; }
+        public IList<PatientPrescription> InPrescriptions { get; set; }
+        public IList<PatientTest> InPatientTests { get; set; }
     }
 }

@@ -433,6 +433,7 @@ namespace HIS.Controllers
             ViewBag.Intakes = new SelectList(Intakes, "FrequencyID", "Frequency");
             ViewBag.Users = new SelectList(Users, "UserID", "NameDisplay");
             ViewBag.History = patientVisitHistory;
+            ViewBag.MDR = GetPatientVisitPrescriptions(enmrNo, 0).Where(v => v.VisitID == 0).ToList();
             ViewBag.IsNewVisit = patientVisitHistory.Count() <= 0 ? true : false;
             ViewBag.IsLastVisitPrescribed = isLatestVisitPrescribed;
             PatientPrescription pp = new PatientPrescription();
@@ -720,7 +721,8 @@ namespace HIS.Controllers
                                      MedicineWithDose = HtmlHelpers.HtmlHelpers.GetMedicineWithDose(x.mm.MedicineName, x.mm.MedDose),
                                      IntakeDisplay = x.Frequency,
                                      MedicineID = x.pp.MedicineID,
-                                     PMID = x.pm.PMID
+                                     PMID = x.pm.PMID,
+                                     ISIP = x.pm.ISIP.HasValue ? x.pm.ISIP.Value : false
                                  }).ToList();
 
                 return patientPrescriptions;

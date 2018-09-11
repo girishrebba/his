@@ -43,78 +43,121 @@
                 {
                 <div class="historyGrid">
                     @foreach (var p in ViewBag.History)
-                    {
+    {
+                <div class="panel-body">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" style="padding-left:1px;">
+                            <span class="lableDisplay">@p.VisitName </span>
+                        </div>
                         <div class="panel-body">
-                            <div class="panel panel-default">
-                                <div class="panel-heading" style="padding-left:1px;">
-                                    <span class="lableDisplay">@p.VisitName </span>
-                                </div>
-                                <div class="panel-body">
-                                    <div class="table-responsive">
-                                        <table class="table table-striped table-bordered" style="width:100%">
-                                            <thead>
-                                                <tr>
-                                                    <th>Medicine</th>
-                                                    <th>Quantity</th>
-                                                    <th>Intake</th>
-                                                    <th>Doctor</th>
-                                                    <th>Date</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach (var his in p.Prescriptions)
-                                                {
-                                                    <tr>
-                                                        <td>@his.MedicineWithDose</td>
-                                                        <td>@his.Quantity</td>
-                                                        <td>@his.IntakeDisplay</td>
-                                                        <td>@his.DoctorName</td>
-                                                        <td>@his.DateDisplay</td>
-                                                    </tr>
-                                                }
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                                <div class="panel-body">
-                                    @if (p.PatientTests != null && p.PatientTests.Count > 0)
-                                    {
-                                    <div class="table-responsive">
-                                        <table class="table table-striped table-bordered" style="width:100%">
-                                            <thead>
-                                                <tr>
-                                                    <th>Test</th>
-                                                    <th>Doctor</th>
-                                                    <th>Date</th>
-                                                    <th>Recorded</th>
-                                                    <th>Impression</th>
-                                                    <th>Path</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach (var test in p.PatientTests)
-                                                {
-                                                <tr>
-                                                    <td>@test.TestName</td>
-                                                    <td>@test.DoctorName</td>
-                                                    <td>@test.DateDisplay</td>
-                                                    <td>@test.RecordedValues</td>
-                                                    <td>@test.TestImpression</td>
-                                                    <td><a href='@test.ReportPath' target="_blank" class='btn btn-info btn-sm' title='ReportView'><i class="fa fa-file-download"></i></a></td>        
-                                                </tr>
-                                                }
-                                            </tbody>
-                                        </table>
-                                    </div> 
-                                    }
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th>Medicine</th>
+                                            <th>Quantity</th>
+                                            <th>Intake</th>
+                                            <th>Doctor</th>
+                                            <th>Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var his in p.Prescriptions)
+                        {
+                            <tr>
+                                <td>@his.MedicineWithDose</td>
+                                <td>@his.Quantity</td>
+                                <td>@his.IntakeDisplay</td>
+                                <td>@his.DoctorName</td>
+                                <td>@his.DateDisplay</td>
+                            </tr>
+        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            @if (p.PatientTests != null && p.PatientTests.Count > 0)
+            {
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Test</th>
+                                <th>Doctor</th>
+                                <th>Date</th>
+                                <th>Recorded</th>
+                                <th>Impression</th>
+                                <th>Path</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var test in p.PatientTests)
+            {
+                <tr>
+                    <td>@test.TestName</td>
+                    <td>@test.DoctorName</td>
+                    <td>@test.DateDisplay</td>
+                    <td>@test.RecordedValues</td>
+                    <td>@test.TestImpression</td>
+                    <td><a href='@test.ReportPath' target="_blank" class='btn btn-info btn-sm' title='ReportView'><i class="fa fa-file-download"></i></a></td>
+                </tr>
+}
+                        </tbody>
+                    </table>
+                </div>
+}
+                        </div>
+                    </div>
+                </div>
+               
+}
+                </div>
+                }
+                @if(!ViewBag.IsNewVisit)
+                {
+                <div class="historyGrid">
+                    @if (ViewBag.MDR != null && ViewBag.MDR.Count > 0)
+    {
+                    <div class="panel-body">
+                        <div class="panel panel-default">
+                            <div class="panel-heading" style="padding-left:1px;">
+                                <span class="lableDisplay">MDR Prescription</span>
+                            </div>
+                            <div class="panel-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-bordered" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th>Medicine</th>
+                                                <th>Quantity</th>
+                                                <th>Intake</th>
+                                                <th>Doctor</th>
+                                                <th>Date</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var his in ViewBag.MDR)
+                    {
+                        <tr>
+                            <td>@his.MedicineWithDose</td>
+                            <td>@his.Quantity</td>
+                            <td>@his.IntakeDisplay</td>
+                            <td>@his.DoctorName</td>
+                            <td>@his.DateDisplay</td>
+                        </tr>
+}
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
-                    }
-                </div>
-                }
+                        </div>
+                        }
+                    </div>
+}
 
-            </div>
+                </div>
         </div>
     </div>
     <div class="row @(@ViewBag.IsLastVisitPrescribed == true ? "hidden" : "")" style="border: 1px;">
