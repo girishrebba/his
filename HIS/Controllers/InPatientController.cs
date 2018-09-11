@@ -296,7 +296,7 @@ namespace HIS.Controllers
                 List<Bed> beds = (from u in dc.Beds
                                   select new { u })
                              .OrderBy(b => b.u.BedNo).AsEnumerable()
-                             .Select(x => new Bed { BedNo = x.u.BedNo, BedName = x.u.BedName }).ToList();
+                             .Select(x => new Bed { BedNo = x.u.BedNo, BedName = x.u.BedName + " - " + x.u.Description }).ToList();
 
                 ViewBag.Rooms = new SelectList(room, "RoomNo", "RoomName");
                 ViewBag.Beds = new SelectList(beds, "BedNo", "BedName");
@@ -325,7 +325,7 @@ namespace HIS.Controllers
                 var beds = (from u in db.Beds.Where(a => a.RoomNo == Room)
                                   select new { u })
                             .OrderBy(b => b.u.BedNo).AsEnumerable()
-                            .Select(x => new Bed { BedNo = x.u.BedNo, BedName = x.u.BedName }).ToList();
+                            .Select(x => new Bed { BedNo = x.u.BedNo, BedName = x.u.BedName + " - " + x.u.Description }).ToList();
                 return Json(beds, JsonRequestBehavior.AllowGet);
             }
         }
