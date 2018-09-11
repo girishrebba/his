@@ -165,6 +165,7 @@ namespace HIS.Controllers
                     foreach (PatientPrescription pp in mdrRequest)
                     {
                         pp.PMID = pmid;
+                        pp.MedicineWithDose = "text";
                         pp.IntakeFrequencyID = pp.IntakeFrequencyID;
                         db.PatientPrescriptions.Add(pp);
                         var medInv = db.MedicineInventories.Where(miv => miv.MedicineID == pp.MedicineID).First();
@@ -230,13 +231,13 @@ namespace HIS.Controllers
                     db.SaveChanges();
                     CreateVisit(op);
                     HtmlHelpers.HtmlHelpers.CreatePatientDirectory("OutPatient", op.ENMRNO);
-                    return Json(new { success = true, message = "Saved Successfully" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { success = true, message = string.Format("ENMR - {0} created Successfully", op.ENMRNO) }, JsonRequestBehavior.AllowGet);
                 }
                 else
                 {
                     db.Entry(op).State = EntityState.Modified;
                     db.SaveChanges();
-                    return Json(new { success = true, message = "Updated Successfully" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { success = true, message = string.Format("ENMR - {0} updated Successfully", op.ENMRNO) }, JsonRequestBehavior.AllowGet);
                 }
             }
         }

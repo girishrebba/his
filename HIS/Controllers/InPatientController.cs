@@ -214,7 +214,7 @@ namespace HIS.Controllers
                 {
                     hs.FeeCollections.Add(fc);
                     hs.SaveChanges();
-                    return Json(new { success = true, message = "Fee added Successfully" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { success = true, message = string.Format("Fee paid Successfully for the ENMR:{0}", fc.ENMRNO) }, JsonRequestBehavior.AllowGet);
                 }
             }
             else
@@ -433,7 +433,8 @@ namespace HIS.Controllers
             ViewBag.Intakes = new SelectList(Intakes, "FrequencyID", "Frequency");
             ViewBag.Users = new SelectList(Users, "UserID", "NameDisplay");
             ViewBag.History = patientVisitHistory;
-            ViewBag.MDR = GetPatientVisitPrescriptions(enmrNo, 0).Where(v => v.VisitID == 0).ToList();
+            ViewBag.MDR = GetPatientVisitPrescriptions(enmrNo, 0).Where(v => v.ISIP== false).ToList();
+            ViewBag.InPrescriptions = GetPatientVisitPrescriptions(enmrNo, 0).Where(v => v.ISIP == true).ToList();
             ViewBag.IsNewVisit = patientVisitHistory.Count() <= 0 ? true : false;
             ViewBag.IsLastVisitPrescribed = isLatestVisitPrescribed;
             PatientPrescription pp = new PatientPrescription();
@@ -734,13 +735,14 @@ namespace HIS.Controllers
             using (HISDBEntities hs = new HISDBEntities())
             {
 
+                var latestPMID = hs.PrescriptionMasters.Where(pms => pms.ENMRNO == enmrNo).OrderByDescending(pms => pms.PMID).FirstOrDefault().PMID;
                 var patientPrescriptions = (from pp in hs.PatientPrescriptions
                                             join pm in hs.PrescriptionMasters on pp.PMID equals pm.PMID
                                             join mm in hs.MedicineMasters on pp.MedicineID equals mm.MMID
                                             join ifs in hs.IntakeFrequencies on pp.IntakeFrequencyID equals ifs.FrequencyID
                                             join u in hs.Users on pm.PrescribedBy equals u.UserID
                                             join ut in hs.UserTypes on u.UserTypeID equals ut.UserTypeID
-                                            where ut.UserTypeName.Equals("Doctor") && pm.ENMRNO.Equals(enmrNo) && pm.VisitID == visitID && pm.IsDelivered == false
+                                            where ut.UserTypeName.Equals("Doctor") && pm.ENMRNO.Equals(enmrNo) && pm.VisitID == visitID && pm.IsDelivered == false && pm.ISIP == true && pm.PMID == latestPMID
                                             select new
                                             {
                                                 pp,

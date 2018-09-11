@@ -29,7 +29,7 @@
     <div class="col-lg-12">
         <div class="panel panel-default">
             <div class="panel-heading clearfix">
-                <a class="btn btn-success" style="margin-bottom:10px" onclick="PopupForm('@Url.Action("AddModify","OutPatient")')"><i class="fa fa-plus"></i> Out Patient</a>
+                <a class="btn btn-success" style="margin-bottom:10px" onclick="PopupForm('@Url.Action("AddModify","OutPatient")',0)"><i class="fa fa-plus"></i> Out Patient</a>
             </div>
             <div class="panel-body">
                 <div class="table-responsive">
@@ -74,7 +74,7 @@
                     {
                         "data": "ENMRNO", "render": function (data) {
                             return "@if (ViewContext.Controller.HasPermission("OutPatient-AddModify"))
-                            {<a class='btn btn-default btn-sm' title='Edit' onclick=PopupForm('@Url.Action("AddModify","OutPatient")/?enmrNo=" + data + "')><i class='fa fa-user-edit'></i></a>}"
+                            {<a class='btn btn-default btn-sm' title='Edit' onclick=PopupForm('@Url.Action("AddModify","OutPatient")/?enmrNo=" + data + "',1)><i class='fa fa-user-edit'></i></a>}"
                                 + "@if (ViewContext.Controller.HasPermission("OutPatient-ViewPatient")){
                                     <a class='btn btn-info btn-sm' title = 'View Patient' style = 'margin-left:5px' onclick = PopupViewPatient('@Url.Action("ViewPatient", "OutPatient")/?enmrNo=" + data + "')><i class='fa fa-info-circle'></i></a>}"
                                 + "@if (ViewContext.Controller.HasPermission("OutPatient-NewVisit")){
@@ -105,7 +105,7 @@
             });
         });
 
-        function PopupForm(url) {
+        function PopupForm(url, id) {
             $('body').loadingModal({ text: 'Loading...' });
             var formDiv = $('<div/>');
             $.get(url)
@@ -116,7 +116,7 @@
                     autoOpen: true,
                     resizable: true,
                     modal:true,
-                    title: 'Add Modify Out Patient',
+                    title: id == 0? 'Create Out Patient' : 'Edit Out Patient',
                     width: 850,
                     top: 147,
                     close: function () {
@@ -447,7 +447,6 @@
                 tbl.MedicineWithDose = 'demo';
                 prescriptions.push(tbl);
             });
-            alert(prescriptions);
             $(form).find('#headerDivdp').append("</br><table><tr><td>ENMRNO: " + $('#ENMRNO').val() + "</td></tr><tr><td>Doctor: " + $('#DoctorName').val() + "</td></tr><tr><td>Visit: " + $('#VisitName').val() + "</td></tr><tr><td colspan='2'>Suggested Date: " + $('#DateDisplay').val() + "</td></tr></table>");
             $(form).find('#headerDivdp').append($(form).find('#ppTable'));
 
