@@ -7,6 +7,7 @@
 @using (Html.BeginForm("SavePatinetRoomAllocation", "InPatient", FormMethod.Post, new { onsubmit = "return SubmitBedAllocationForm(this)" }))
 {
     @Html.HiddenFor(model => model.AllocationID)
+    @*@Html.HiddenFor(ViewBag.Allocatedbed)*@
     <div class="astriskNote"><span></span></div>
     <div class="form-horizontal">
         <div class="form-group required">
@@ -79,7 +80,7 @@
         </script>*@
 }
 
-<script type="text/javascript">
+    <script type="text/javascript">
     $(document).ready(function () {
         $('#FromDate').datepicker({
             keyboardNavigation: false,
@@ -105,10 +106,12 @@
             $('#EndDate').datepicker('show');
         });
 
+        FillBeds()
     });
     function FillBeds() {
 
         var roomid = $('#RoomNo').val();
+        var bedid = @ViewBag.Allocatedbed;
         $.ajax({
             url: '/InPatient/FillBeds',
             type: "GET",
@@ -116,12 +119,19 @@
             data: { Room: roomid },
             success: function (data) {
                 $("#BedNo").html(""); // clear before appending new list
+                $("#BedNo").append(
+                    $('<option></option>').val(0).html("--Select--"));
                 $.each(data, function (i, city) {
-                    $("#BedNo").append(
-                        $('<option></option>').val(data[i].BedNo).html(data[i].BedName));
+                    if (bedid == data[i].BedNo) {
+                        $("#BedNo").append(
+                            $('<option selected></option>').val(data[i].BedNo).html(data[i].BedName));                        
+                    } else {
+                        $("#BedNo").append(
+                            $('<option></option>').val(data[i].BedNo).html(data[i].BedName));
+                    }
                 });
             }
         });
     }
 
-</script>
+    </script>

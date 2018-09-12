@@ -300,6 +300,8 @@ namespace HIS.Controllers
 
                 ViewBag.Rooms = new SelectList(HtmlHelpers.HtmlHelpers.GetAvailableRooms(), "RoomNo", "RoomName");
                 ViewBag.Beds = new SelectList(beds, "BedNo", "BedName");
+                ViewBag.Allocatedbed = roomallocation.pra.BedNo;
+
                 roomalloc.ENMRNO = enmrNo;
                 roomalloc.FromDate = DateTime.Now.Date;
                 if (roomallocation != null)

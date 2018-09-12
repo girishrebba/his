@@ -20,106 +20,110 @@
 @using HIS.HtmlHelpers
 @using (Html.BeginForm("DeliverPrescription", "InPatient", FormMethod.Post, new { id = "dpForm", onsubmit = "return SubmitDeliverPrescriptionForm(this)" }))
 {
-    <div class="form-horizontal">
-        @if (Model != null && Model.Count > 0)
-        {
-            @Html.HiddenFor(model => model[0].ENMRNO, new { @id = "ENMRNO" })
-            @Html.HiddenFor(model => model[0].VisitID, new { @id = "VisitID" })
-            @Html.HiddenFor(model => model[0].PMID, new { @id = "PMID" })
-            <div class="col-lg-10">
-                <div class="form-group">
-                    @Html.LabelFor(model => model[0].ENMRNO, "ENMRNO:", new { @class = "control-label col-md-2" })
-                    <div class="col-sm-4 lableDisplay">
-                        @Html.DisplayFor(model => model[0].ENMRNO, new { htmlAttributes = new { @class = "form-control" } })
-                    </div>
-                    @Html.LabelFor(model => model[0].VisitName, "Visit:", new { @class = "control-label col-md-2" })
-                    <div class="col-sm-4 lableDisplay">
-                        @Html.DisplayFor(model => model[0].VisitName, new { htmlAttributes = new { @class = "form-control" } })
-                    </div>
+<div class="form-horizontal">
+    @if (Model != null && Model.Count > 0)
+    {
+        @Html.HiddenFor(model => model[0].ENMRNO, new { @id = "ENMRNO" })
+        @Html.HiddenFor(model => model[0].VisitID, new { @id = "VisitID" })
+        @Html.HiddenFor(model => model[0].PMID, new { @id = "PMID" })
+        @Html.HiddenFor(model => model[0].VisitName, new { @id = "VisitName" })
+        @Html.HiddenFor(model => model[0].DoctorName, new { @id = "DoctorName" })
+        @Html.HiddenFor(model => model[0].DateDisplay, new { @id = "DateDisplay" })
+        <div class="col-lg-10">
+            <div class="form-group">
+                @Html.LabelFor(model => model[0].ENMRNO, "ENMRNO:", new { @class = "control-label col-md-2" })
+                <div class="col-sm-4 lableDisplay">
+                    @Html.DisplayFor(model => model[0].ENMRNO, new { htmlAttributes = new { @class = "form-control" } })
                 </div>
-                <div class="form-group">
-                    @Html.LabelFor(model => model[0].DoctorName, "Doctor:", new { @class = "control-label col-md-2" })
-                    <div class="col-sm-4 lableDisplay">
-                        @Html.DisplayFor(model => model[0].DoctorName, new { htmlAttributes = new { @class = "form-control" } })
-                    </div>
-                    @Html.LabelFor(model => model[0].DateDisplay, "Date:", new { @class = "control-label col-md-2" })
-                    <div class="col-sm-4 lableDisplay">
-                        @Html.DisplayFor(model => model[0].DateDisplay, new { htmlAttributes = new { @class = "form-control" } })
-                    </div>
+                @Html.LabelFor(model => model[0].VisitName, "Visit:", new { @class = "control-label col-md-2" })
+                <div class="col-sm-4 lableDisplay">
+                    @Html.DisplayFor(model => model[0].VisitName, new { htmlAttributes = new { @class = "form-control" } })
                 </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model[0].DoctorName, "Doctor:", new { @class = "control-label col-md-2" })
+                <div class="col-sm-4 lableDisplay">
+                    @Html.DisplayFor(model => model[0].DoctorName, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+                @Html.LabelFor(model => model[0].DateDisplay, "Date:", new { @class = "control-label col-md-2" })
+                <div class="col-sm-4 lableDisplay">
+                    @Html.DisplayFor(model => model[0].DateDisplay, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+            </div>
 
-                <div class="form-group">
-                    @Html.LabelFor(model => model[0].Discount, "Discount:", new { @class = "control-label col-md-2" })
-                    <div class="input-group col-sm-2">
-                        @Html.EditorFor(model => model[0].Discount, new { htmlAttributes = new { Value = Model[0].Discount > 0 ? Model[0].Discount.ToString() : string.Empty, @class = "form-control width30", @id = "Discount" } })
-                        <span class="input-group-btn"><a class="btn btn-success" id="discBtn"><i class=""></i>Apply</a></span>
-                    </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model[0].Discount, "Discount:", new { @class = "control-label col-md-2" })
+                <div class="input-group col-sm-2">
+                    @Html.EditorFor(model => model[0].Discount, new { htmlAttributes = new { Value = Model[0].Discount > 0 ? Model[0].Discount.ToString() : string.Empty, @class = "form-control width30", @id = "Discount" } })
+                    <span class="input-group-btn"><a class="btn btn-success" id="discBtn"><i class=""></i>Apply</a></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div id="headerDivbill"></div>
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered" id="ppTable">
+                        <thead>
+                            <tr>
+                                <th style="width:27%">Medicine</th>
+                                <th style="width:6%">Quantity</th>
+                                <th style="width:6%">Delivered</th>
+                                <th style="width:17%">Intake</th>
+                                <th style="width:25%">Comments</th>
+                                <th style="width:7%">Batch</th>
+                                <th style="width:7%">Lot</th>
+                                <th style="width:5%">Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var p in Model)
+                {
+                    <tr>
+                        <td style="display:none">@p.ItemCost</td>
+                        <td style="display:none">@p.MedicineID</td>
+                        <td>@p.MedicineWithDose</td>
+                        <td>@p.Quantity</td>
+                        <td>@Html.EditorFor(model => p.DeliverQty, new { htmlAttributes = new { @class = "form-control deliverQty" } })</td>
+                        <td>@p.IntakeDisplay</td>
+                        <td>@p.Comments</td>
+                        <td>@Html.EditorFor(model => p.BatchNo, new { htmlAttributes = new { @class = "form-control batchNo" } })</td>
+                        <td>@Html.EditorFor(model => p.LotNo, new { htmlAttributes = new { @class = "form-control lotNo" } })</td>
+                        <td class="price">@p.TotalCost</td>
+                    </tr>
+    }
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="7" align="right">Total:</td>
+                                <td colspan="1" align="left" id="grandTotal">@Model.Sum(i => i.TotalCost)</td>
+                            </tr>
+                            <tr>
+                                <td colspan="7" align="right">Discount(-):</td>
+                                <td colspan="1" align="left" id="discountAmount">0.00</td>
+                            </tr>
+                            <tr>
+                                <td colspan="7" align="right">Amount To be Paid:</td>
+                                <td colspan="1" align="left" id="paidAmount">@Model.Sum(i => i.TotalCost)</td>
+                            </tr>
+                        </tfoot>
+                    </table>
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-12">
-                    <div class="table-responsive">
-                        <table class="table table-striped table-bordered" id="ppTable">
-                            <thead>
-                                <tr>
-                                    <th style="width:27%">Medicine</th>
-                                    <th style="width:6%">Quantity</th>
-                                    <th style="width:6%">Delivered</th>
-                                    <th style="width:17%">Intake</th>
-                                    <th style="width:25%">Comments</th>
-                                    <th style="width:7%">Batch</th>
-                                    <th style="width:7%">Lot</th>
-                                    <th style="width:5%">Price</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var p in Model)
-                                {
-                                <tr>
-                                    <td style="display:none">@p.ItemCost</td>
-                                    <td style="display:none">@p.MedicineID</td>
-                                    <td>@p.MedicineWithDose</td>
-                                    <td>@p.Quantity</td>
-                                    <td>@Html.EditorFor(model => p.DeliverQty, new { htmlAttributes = new { @class = "form-control deliverQty" } })</td>
-                                    <td>@p.IntakeDisplay</td>
-                                    <td>@p.Comments</td>
-                                    <td>@Html.EditorFor(model => p.BatchNo, new { htmlAttributes = new { @class = "form-control batchNo" } })</td>
-                                    <td>@Html.EditorFor(model => p.LotNo, new { htmlAttributes = new { @class = "form-control lotNo" } })</td>
-                                    <td class="price">@p.TotalCost</td>
-                                </tr>
-                                }
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <td colspan="7" align="right">Total:</td>
-                                    <td colspan="1" align="left" id="grandTotal">@Model.Sum(i => i.TotalCost)</td>
-                                </tr>
-                                <tr>
-                                    <td colspan="7" align="right">Discount(-):</td>
-                                    <td colspan="1" align="left" id="discountAmount">0.00</td>
-                                </tr>
-                                <tr>
-                                    <td colspan="7" align="right">Amount To be Paid:</td>
-                                    <td colspan="1" align="left" id="paidAmount">@Model.Sum(i => i.TotalCost)</td>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="form-group">
-                        <div class="col-md-3 col-md-offset-5">
-                            <input type="submit" value="Deliver & Print" id="btnSubmit" class="btn btn-primary" />
-                        </div>
+                <div class="form-group">
+                    <div class="col-md-3 col-md-offset-5">
+                        <input type="submit" value="Deliver & Print" id="btnSubmit" class="btn btn-primary" />
                     </div>
                 </div>
             </div>
-        }
-        else
-        {
-            <span style="color:red; font-weight:bold;">No Prescriptions found for this Patient. Please contact your physician!!</span>
-        }
-    </div>
+        </div>
+    }
+    else
+    {
+        <span style="color:red; font-weight:bold;">No Prescriptions found for this Patient. Please contact your physician!!</span>
+    }
+</div>
 }
 
 <script type="text/javascript">
