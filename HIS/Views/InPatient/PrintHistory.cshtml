@@ -72,6 +72,75 @@
         </table>
 
 
+        <br />
+
+        @foreach (var p in ViewBag.InPateintPrescriptions)
+    {
+
+
+        <h4>  InPatinet Prescriptions </h4>
+
+
+        <table class="table table-striped table-bordered" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Medicine</th>
+                    <th>Quantity</th>
+                    <th>Intake</th>
+                    <th>Doctor</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                @*@foreach (var his in p.Prescriptions)
+                {*@
+                <tr>
+                    <td>@p.MedicineWithDose</td>
+                    <td>@p.Quantity</td>
+                    <td>@p.IntakeDisplay</td>
+                    <td>@p.DoctorName</td>
+                    <td>@p.DateDisplay</td>
+                </tr>
+                @*}*@
+            </tbody>
+        </table>
+
+
+
+}
+
+        <br />
+        <h4>InPatient Tests</h4>
+        @if (ViewBag.InpatientTests != null && ViewBag.InpatientTests.Count > 0)
+    {
+        <table class="table table-striped table-bordered" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Test</th>
+                    <th>Doctor</th>
+                    <th>Date</th>
+                    <th>Recorded</th>
+                    <th>Impression</th>
+                    @*<th>Path</th>*@
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var test in ViewBag.InpatientTests)
+            {
+                <tr>
+                    <td>@test.TestName</td>
+                    <td>@test.DoctorName</td>
+                    <td>@test.DateDisplay</td>
+                    <td>@test.RecordedValues</td>
+                    <td>@test.TestImpression</td>
+                    @*<td><a href='@test.ReportPath' target="_blank" class='btn btn-info btn-sm' title='ReportView'><i class="fa fa-file-download"></i></a></td>*@
+                </tr>
+        }
+            </tbody>
+        </table>
+
+}
+
 
 
         <br />
@@ -204,11 +273,6 @@
                 "sorting": false,
                 "order": [[0, "desc"]],
      });
-
-
-
-
-
 
 
             $("#feeHistoryTable").DataTable({

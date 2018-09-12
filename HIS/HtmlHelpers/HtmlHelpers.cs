@@ -144,7 +144,38 @@ namespace HIS.HtmlHelpers
             }
         }
 
-        public static List<User> GetDoctors()
+        public static List<Room> GetAvailableRooms()
+        {
+            List<Room> roomsList = new List<Room>();
+            using (HISDBEntities hs = new HISDBEntities())
+            {
+                var beds = (from b in hs.Beds
+                            join pb in hs.PatientRoomAllocations on b.BedNo equals pb.BedNo
+                            where pb.AllocationStatus == true
+                            select b.BedNo).ToList();
+                var avlbeds = hs.Beds.Select(a => a.BedNo).Except(beds);
+                var allbeds = (from b in hs.Beds
+                               select new { b }).Where(a => avlbeds.Contains(a.b.BedNo)).AsEnumerable()
+                               .Select(x => new Bed { BedNo = x.b.BedNo, RoomNo = x.b.RoomNo }).ToList();
+
+                var bedsList = allbeds.GroupBy(test => test.RoomNo)
+                   .Select(grp => grp.First())
+                   .ToList();
+
+                foreach (var b in bedsList)
+                {
+                    var room = hs.Rooms.Where(r => r.RoomNo == b.RoomNo).FirstOrDefault();
+                    roomsList.Add(new Room
+                    {
+                        RoomNo = room.RoomNo,
+                        RoomName = room.RoomName
+                    });
+                }
+            }
+            return roomsList;
+        }
+
+public static List<User> GetDoctors()
         {
             using (HISDBEntities dc = new HISDBEntities())
             {
@@ -344,6 +375,45 @@ namespace HIS.HtmlHelpers
             }
         }
 
+        public static List<PatientPrescription> InPatientPrescriptions(string enmrNo)
+        {
+            using (HISDBEntities hs = new HISDBEntities())
+            {
+
+                var patientPrescriptions = (from pp in hs.PatientPrescriptions
+                                            join pm in hs.PrescriptionMasters on pp.PMID equals pm.PMID
+                                            join mm in hs.MedicineMasters on pp.MedicineID equals mm.MMID
+                                            join ifs in hs.IntakeFrequencies on pp.IntakeFrequencyID equals ifs.FrequencyID
+                                            join u in hs.Users on pm.PrescribedBy equals u.UserID
+                                            join ut in hs.UserTypes on u.UserTypeID equals ut.UserTypeID
+                                            where ut.UserTypeName.Equals("Doctor") && pm.ENMRNO.Equals(enmrNo) && pm.VisitID == 0 && pm.ISIP == true && pm.IsDelivered == true
+                                            select new
+                                            {
+                                                pp,
+                                                pm,
+                                                u,
+                                                mm,
+                                                ifs.Frequency
+                                            })
+                                  .OrderByDescending(b => b.pm.DatePrescribed)
+                                  .AsEnumerable()
+                                 .Select(x => new PatientPrescription
+                                 {
+                                     DateDisplay = DateFormat(x.pm.DatePrescribed),
+                                     ENMRNO = x.pm.ENMRNO,
+                                     VisitID = x.pm.VisitID.Value,
+                                     DoctorName = GetFullName(x.u.FirstName, x.u.MiddleName, x.u.LastName),
+                                     Quantity = x.pp.Quantity,
+                                     MedicineWithDose = GetMedicineWithDose(x.mm.MedicineName, x.mm.MedDose),
+                                     IntakeDisplay = x.Frequency,
+                                     MedicineID = x.pp.MedicineID,
+                                     PMID = x.pm.PMID
+                                 }).ToList();
+
+                return patientPrescriptions;
+            }
+        }
+
         public static List<PatientTest> GetPatientTests(string enmrNo)
         {
             using (HISDBEntities hs = new HISDBEntities())
@@ -351,11 +421,47 @@ namespace HIS.HtmlHelpers
 
                 var patientTests = (from pt in hs.PatientTests
                                     join ltm in hs.LabTestMasters on pt.LTMID equals ltm.LTMID
+                                    join vh in hs.PatientVisitHistories on ltm.VisitID equals vh.SNO
                                     join op in hs.OutPatients on ltm.ENMRNO equals op.ENMRNO
                                     join tt in hs.TestTypes on pt.TestID equals tt.TestID
                                     join u in hs.Users on ltm.PrescribedBy equals u.UserID
                                     join ut in hs.UserTypes on u.UserTypeID equals ut.UserTypeID
                                     where ut.UserTypeName.Equals("Doctor") && ltm.ENMRNO == enmrNo 
+                                    select new
+                                    {
+                                        pt,
+                                        u,
+                                        tt
+                                    })
+                                  .OrderByDescending(b => b.pt.PTID)
+                                  .AsEnumerable()
+                                 .Select(x => new PatientTest
+                                 {
+                                     ENMRNO = enmrNo,
+                                     TestName = x.tt.TestName,
+                                     DateDisplay = DateFormat(x.pt.TestDate),
+                                     DoctorName = GetFullName(x.u.FirstName, x.u.MiddleName, x.u.LastName),
+                                     RecordedValues = x.pt.RecordedValues,
+                                     TestImpression = x.pt.TestImpression,
+                                     ReportPath = x.pt.ReportPath
+                                 }).ToList();
+
+                return patientTests;
+            }
+        }
+
+        public static List<PatientTest> GetInPatientTests(string enmrNo)
+        {
+            using (HISDBEntities hs = new HISDBEntities())
+            {
+
+                var patientTests = (from pt in hs.PatientTests
+                                    join ltm in hs.LabTestMasters on pt.LTMID equals ltm.LTMID
+                                    join tt in hs.TestTypes on pt.TestID equals tt.TestID
+                                    join u in hs.Users on ltm.PrescribedBy equals u.UserID
+                                    join ut in hs.UserTypes on u.UserTypeID equals ut.UserTypeID
+                                    where ut.UserTypeName.Equals("Doctor") && ltm.ENMRNO == enmrNo && ltm.VisitID==0
+                                    && ltm.IsDelivered== true
                                     select new
                                     {
                                         pt,
@@ -408,5 +514,30 @@ namespace HIS.HtmlHelpers
                 return roomBilling;
             }
         }
+
+        public static bool IsOPPrescriptionFormEnable(string enmrNo)
+        {
+            bool result = true;
+            bool hasPrescriptionForLastVisit = false;
+            bool hasTestForLastVisit = false;
+            using (var hs = new HISDBEntities())
+            {
+                var latestVisit = hs.PatientVisitHistories.Where(pvh => pvh.ENMRNO == enmrNo).OrderByDescending(pvh => pvh.SNO).FirstOrDefault();
+                if(latestVisit != null)
+                {
+                    hasPrescriptionForLastVisit = hs.PrescriptionMasters.Where(p => p.VisitID == latestVisit.SNO).Any();
+
+                    hasTestForLastVisit = hs.LabTestMasters.Where(p => p.VisitID == latestVisit.SNO).Any();
+
+                    if(hasPrescriptionForLastVisit && hasTestForLastVisit)
+                    {
+                        result = false;
+                    }
+                }
+                
+            }
+            return result;
+        }
+       
     }
 }

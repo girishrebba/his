@@ -298,7 +298,7 @@ namespace HIS.Controllers
                              .OrderBy(b => b.u.BedNo).AsEnumerable()
                              .Select(x => new Bed { BedNo = x.u.BedNo, BedName = x.u.BedName + " - " + x.u.Description }).ToList();
 
-                ViewBag.Rooms = new SelectList(room, "RoomNo", "RoomName");
+                ViewBag.Rooms = new SelectList(HtmlHelpers.HtmlHelpers.GetAvailableRooms(), "RoomNo", "RoomName");
                 ViewBag.Beds = new SelectList(beds, "BedNo", "BedName");
                 roomalloc.ENMRNO = enmrNo;
                 roomalloc.FromDate = DateTime.Now.Date;
@@ -355,7 +355,9 @@ namespace HIS.Controllers
         {
            // List<PatientPrescriptionHistory> patientVisitHistory = new OutPatientController.PatientPrescriptionHistory(enmrNo);
             ViewBag.Prescriptions = HtmlHelpers.HtmlHelpers.GetPatientPrescriptions(enmrNo);
+            ViewBag.InPateintPrescriptions = HtmlHelpers.HtmlHelpers.InPatientPrescriptions(enmrNo);
             ViewBag.Tests = HtmlHelpers.HtmlHelpers.GetPatientTests(enmrNo);
+            ViewBag.InpatientTests = HtmlHelpers.HtmlHelpers.GetInPatientTests(enmrNo);
             return View(GetPatientDetails(enmrNo));
         }
 
@@ -423,8 +425,7 @@ namespace HIS.Controllers
         [HttpGet]
         public ActionResult Prescription(string enmrNo)
         {
-            string currentVisit = string.Empty;
-            bool isLatestVisitPrescribed = false;
+           
             int visitID = 0;
             
             List<PatientPrescriptionHistory> patientVisitHistory = PatientPrescriptionHistory(enmrNo);
@@ -434,9 +435,9 @@ namespace HIS.Controllers
             ViewBag.Users = new SelectList(Users, "UserID", "NameDisplay");
             ViewBag.History = patientVisitHistory;
             ViewBag.MDR = GetPatientVisitPrescriptions(enmrNo, 0).Where(v => v.ISIP== false).ToList();
-            ViewBag.InPrescriptions = GetPatientVisitPrescriptions(enmrNo, 0).Where(v => v.ISIP == true).ToList();
+            ViewBag.InPrescriptions = HtmlHelpers.HtmlHelpers.InPatientPrescriptions(enmrNo);
+            ViewBag.InpatientTests = HtmlHelpers.HtmlHelpers.GetInPatientTests(enmrNo);
             ViewBag.IsNewVisit = patientVisitHistory.Count() <= 0 ? true : false;
-            ViewBag.IsLastVisitPrescribed = isLatestVisitPrescribed;
             PatientPrescription pp = new PatientPrescription();
             pp.ENMRNO = enmrNo;
             pp.VisitID = visitID;
@@ -448,18 +449,29 @@ namespace HIS.Controllers
         [HttpPost]
         public ActionResult Prescription(IList<PatientPrescription> prescriptions)
         {
+            int pmid = 0;
+            int ltmid = 0;
+            string enmrNo = string.Empty;
             using (HISDBEntities db = new HISDBEntities())
             {
                 if (prescriptions != null && prescriptions.Count() > 0)
                 {
+                    enmrNo = prescriptions[0].ENMRNO;
                     var suggestedTestsIfAny = prescriptions[0];
                     if (prescriptions[0].HasPrescription)
                     {
-                        System.Data.Entity.Core.Objects.ObjectParameter pmidOut = new System.Data.Entity.Core.Objects.ObjectParameter("PMID", typeof(Int32));
+                        var pMaster = db.PrescriptionMasters.Where(pm => pm.ENMRNO == enmrNo && pm.VisitID == 0 && pm.IsDelivered == false && pm.ISIP == true).FirstOrDefault();
+                        if (pMaster != null)
+                        {
+                            pmid = pMaster.PMID;
+                        }
+                        else
+                        {
+                            System.Data.Entity.Core.Objects.ObjectParameter pmidOut = new System.Data.Entity.Core.Objects.ObjectParameter("PMID", typeof(Int32));
 
-                        db.CreateMasterPrescription(prescriptions[0].ENMRNO, Convert.ToInt32(System.Web.HttpContext.Current.Session["UserID"]), prescriptions[0].VisitID,true,pmidOut);
-                        int pmid = Convert.ToInt32(pmidOut.Value);
-
+                            db.CreateMasterPrescription(prescriptions[0].ENMRNO, Convert.ToInt32(System.Web.HttpContext.Current.Session["UserID"]), prescriptions[0].VisitID, true, pmidOut);
+                            pmid = Convert.ToInt32(pmidOut.Value);
+                        }
 
                         foreach (PatientPrescription pp in prescriptions)
                         {
@@ -471,10 +483,17 @@ namespace HIS.Controllers
                     //Save Tests
                     if (suggestedTestsIfAny.TestIds != null)
                     {
-                        System.Data.Entity.Core.Objects.ObjectParameter ltmidOut = new System.Data.Entity.Core.Objects.ObjectParameter("LTMID", typeof(Int32));
-                        db.CreateMasterLabTest(prescriptions[0].ENMRNO, Convert.ToInt32(System.Web.HttpContext.Current.Session["UserID"]), prescriptions[0].VisitID,true, ltmidOut);
-                        int ltmid = Convert.ToInt32(ltmidOut.Value);
-
+                        var lMaster = db.LabTestMasters.Where(pm => pm.ENMRNO == enmrNo && pm.VisitID == 0 && pm.IsDelivered == false).FirstOrDefault();
+                        if (lMaster != null)
+                        {
+                            ltmid = lMaster.LTMID;
+                        }
+                        else
+                        {
+                            System.Data.Entity.Core.Objects.ObjectParameter ltmidOut = new System.Data.Entity.Core.Objects.ObjectParameter("LTMID", typeof(Int32));
+                            db.CreateMasterLabTest(prescriptions[0].ENMRNO, Convert.ToInt32(System.Web.HttpContext.Current.Session["UserID"]), prescriptions[0].VisitID, true, ltmidOut);
+                            ltmid = Convert.ToInt32(ltmidOut.Value);
+                        }
                         foreach (var id in suggestedTestsIfAny.TestIds)
                         {
                             var patientTest = new PatientTest
@@ -664,7 +683,7 @@ namespace HIS.Controllers
             {
                 var prescribedVisits = (from pv in db.PatientVisitHistories
                                         join pm in db.PrescriptionMasters on pv.SNO equals pm.VisitID
-                                        join pp in db.PatientPrescriptions on pm.PMID equals pp.PMID
+                                        //join pp in db.PatientPrescriptions on pm.PMID equals pp.PMID
                                         where pv.ENMRNO == enmrNo
                                         select pv).ToList();
                 foreach (var pre in prescribedVisits)
