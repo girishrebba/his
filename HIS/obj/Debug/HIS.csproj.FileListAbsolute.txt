@@ -306,12 +306,6 @@ F:\Projects\HIS\HIS\obj\Debug\HIS.csprojResolveAssemblyReference.cache
 F:\Projects\HIS\HIS\obj\Debug\HIS.csproj.CoreCompileInputs.cache
 F:\Projects\HIS\HIS\obj\Debug\HIS.dll
 F:\Projects\HIS\HIS\obj\Debug\HIS.pdb
-D:\HIS\his.git\trunk\HIS\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
-D:\HIS\his.git\trunk\HIS\bin\roslyn\Microsoft.CodeAnalysis.dll
-D:\HIS\his.git\trunk\HIS\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
-D:\HIS\his.git\trunk\HIS\bin\roslyn\Microsoft.DiaSymReader.Native.amd64.dll
-D:\HIS\his.git\trunk\HIS\bin\roslyn\System.IO.Compression.dll
-D:\HIS\his.git\trunk\HIS\bin\roslyn\VBCSCompiler.exe
 D:\HIS\his.git\trunk\HIS\bin\HIS.dll.config
 D:\HIS\his.git\trunk\HIS\bin\HIS.dll
 D:\HIS\his.git\trunk\HIS\bin\HIS.pdb
@@ -322,9 +316,13 @@ D:\HIS\his.git\trunk\HIS\bin\roslyn\csi.exe
 D:\HIS\his.git\trunk\HIS\bin\roslyn\csi.exe.config
 D:\HIS\his.git\trunk\HIS\bin\roslyn\csi.rsp
 D:\HIS\his.git\trunk\HIS\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+D:\HIS\his.git\trunk\HIS\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
 D:\HIS\his.git\trunk\HIS\bin\roslyn\Microsoft.CodeAnalysis.CSharp.Scripting.dll
+D:\HIS\his.git\trunk\HIS\bin\roslyn\Microsoft.CodeAnalysis.dll
 D:\HIS\his.git\trunk\HIS\bin\roslyn\Microsoft.CodeAnalysis.Scripting.dll
+D:\HIS\his.git\trunk\HIS\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
 D:\HIS\his.git\trunk\HIS\bin\roslyn\Microsoft.CSharp.Core.targets
+D:\HIS\his.git\trunk\HIS\bin\roslyn\Microsoft.DiaSymReader.Native.amd64.dll
 D:\HIS\his.git\trunk\HIS\bin\roslyn\Microsoft.DiaSymReader.Native.x86.dll
 D:\HIS\his.git\trunk\HIS\bin\roslyn\Microsoft.VisualBasic.Core.targets
 D:\HIS\his.git\trunk\HIS\bin\roslyn\Microsoft.Win32.Primitives.dll
@@ -334,6 +332,7 @@ D:\HIS\his.git\trunk\HIS\bin\roslyn\System.Console.dll
 D:\HIS\his.git\trunk\HIS\bin\roslyn\System.Diagnostics.FileVersionInfo.dll
 D:\HIS\his.git\trunk\HIS\bin\roslyn\System.Diagnostics.Process.dll
 D:\HIS\his.git\trunk\HIS\bin\roslyn\System.Diagnostics.StackTrace.dll
+D:\HIS\his.git\trunk\HIS\bin\roslyn\System.IO.Compression.dll
 D:\HIS\his.git\trunk\HIS\bin\roslyn\System.IO.FileSystem.dll
 D:\HIS\his.git\trunk\HIS\bin\roslyn\System.IO.FileSystem.DriveInfo.dll
 D:\HIS\his.git\trunk\HIS\bin\roslyn\System.IO.FileSystem.Primitives.dll
@@ -356,6 +355,7 @@ D:\HIS\his.git\trunk\HIS\bin\roslyn\System.Xml.XPath.XDocument.dll
 D:\HIS\his.git\trunk\HIS\bin\roslyn\vbc.exe
 D:\HIS\his.git\trunk\HIS\bin\roslyn\vbc.exe.config
 D:\HIS\his.git\trunk\HIS\bin\roslyn\vbc.rsp
+D:\HIS\his.git\trunk\HIS\bin\roslyn\VBCSCompiler.exe
 D:\HIS\his.git\trunk\HIS\bin\roslyn\VBCSCompiler.exe.config
 D:\HIS\his.git\trunk\HIS\bin\Antlr3.Runtime.dll
 D:\HIS\his.git\trunk\HIS\bin\EntityFramework.dll
