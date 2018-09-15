@@ -909,5 +909,13 @@ namespace HIS.Controllers
             return Json(FileName, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult PrintHistory(string enmrNo)
+        {
+            ViewBag.Prescriptions = HtmlHelpers.HtmlHelpers.GetPatientPrescriptions(enmrNo);
+            ViewBag.Tests = HtmlHelpers.HtmlHelpers.GetPatientTests(enmrNo);
+            ViewBag.Visits = HtmlHelpers.HtmlHelpers.GetOutPatientVisits(enmrNo);
+            return View(GetPatientDetails(enmrNo));
+        }
+
     }
 }

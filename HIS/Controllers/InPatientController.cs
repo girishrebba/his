@@ -360,6 +360,7 @@ namespace HIS.Controllers
             ViewBag.InPateintPrescriptions = HtmlHelpers.HtmlHelpers.InPatientPrescriptions(enmrNo);
             ViewBag.Tests = HtmlHelpers.HtmlHelpers.GetPatientTests(enmrNo);
             ViewBag.InpatientTests = HtmlHelpers.HtmlHelpers.GetInPatientTests(enmrNo);
+            ViewBag.Visits = HtmlHelpers.HtmlHelpers.GetOutPatientVisits(enmrNo);
             return View(GetPatientDetails(enmrNo));
         }
 

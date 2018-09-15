@@ -1398,6 +1398,7 @@
     <Content Include="Views\InPatient\PatientTests.cshtml" />
     <Content Include="Views\InPatient\LabTestBillPay.cshtml" />
     <Content Include="Views\InPatient\DeliverPrescription.cshtml" />
+    <Content Include="Views\OutPatient\PrintHistory.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
