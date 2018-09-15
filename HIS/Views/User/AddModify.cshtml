@@ -2,7 +2,7 @@
 @{
     Layout = null;
 }
-
+@using HIS.HtmlHelpers
 @using (Html.BeginForm("AddModify", "User", FormMethod.Post, new { onsubmit = "return SubmitForm(this)" }))
 {
     @Html.HiddenFor(model => model.UserID)
@@ -36,7 +36,7 @@
                new SelectListItem { Text = "Female", Value =  "1"},
                new SelectListItem { Text = "Others", Value =  "2"}
                },
-                     htmlAttributes: new { @class = "form-control" })
+                          htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.Gender, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -63,7 +63,7 @@
             @Html.LabelFor(model => model.DOB, "DOB", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-sm-4">
                 <div id="date-popup" class="input-group date">
-                    @Html.EditorFor(model => model.DOBDisplay, new { htmlAttributes = new { @class = "datepicker form-control" } })
+                    @Html.EditorFor(model => model.DOB, new { htmlAttributes = new { Value = Html.DateFormat(Model.DOB), @class = "datepicker form-control" } })
                     <span class="input-group-addon btnpicker"><i class="fa fa-calendar"></i></span>
                 </div>
                 @Html.ValidationMessageFor(model => model.DOB, "", new { @class = "text-danger" })
@@ -92,7 +92,7 @@
                new SelectListItem { Text = "Married", Value =  "1"},
                new SelectListItem { Text = "Others", Value =  "2"}
                },
-                     htmlAttributes: new { @class = "form-control" })
+                          htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.MaritalStatus, "", new { @class = "text-danger" })
             </div>
             @Html.LabelFor(model => model.UserTypeID, "User Type", htmlAttributes: new { @class = "control-label col-md-2 required" })
@@ -115,7 +115,7 @@
                new SelectListItem { Text = "Active", Value = "true"  },
                new SelectListItem { Text = "InActive", Value =  "false"}
                },
-                     htmlAttributes: new { @class = "form-control" })
+                          htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.UserStatus, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -136,6 +136,7 @@
             forceParse: false,
             todayHighlight: true,
             todayBtn: false,
+            autoclose:true,
             format: "mm/dd/yyyy",language: "en-US"
         });
 

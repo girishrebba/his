@@ -126,10 +126,6 @@ namespace HIS.Controllers
         {
             using (HISDBEntities db = new HISDBEntities())
             {
-                if (!string.IsNullOrEmpty(user.DOBDisplay))
-                {
-                    user.DOB = DateTime.Parse(user.DOBDisplay);
-                }
                 if (user.UserID == 0)
                 {
                     db.Users.Add(user);
