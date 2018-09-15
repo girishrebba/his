@@ -116,7 +116,7 @@
                             @Html.DropDownListFor(model => model.DoctorID, ViewBag.Users as SelectList, "--Select--", new { @class = "form-control" })
                             @Html.ValidationMessageFor(model => model.DoctorID)
                         </div>
-                        @Html.LabelFor(model => model.Enrolled, "Enroll Date:", htmlAttributes: new { @class = "control-label col-sm-2 required" })
+                        @Html.LabelFor(model => model.Enrolled, "Enroll Date:", htmlAttributes: new { @class = "control-label col-sm-2" })
                         <div class="col-sm-4">
                             <div id="date-popup" class="input-group date">
                                 @Html.EditorFor(model => model.Enrolled, new { htmlAttributes = new { Value = Html.DateFormat(Model.Enrolled), @class = "datepicker form-control", @placeholder = "" } })
