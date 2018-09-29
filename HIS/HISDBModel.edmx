@@ -55,6 +55,7 @@
           <Property Name="DoctorID" Type="int" Nullable="false" />
           <Property Name="ConsultTypeID" Type="int" Nullable="false" />
           <Property Name="Fee" Type="money" />
+          <Property Name="ValidDays" Type="int" />
         </EntityType>
         <EntityType Name="ConsultationType">
           <Key>
@@ -127,6 +128,7 @@
           <Property Name="DischargedOn" Type="datetime" />
           <Property Name="EstAmoount" Type="money" />
           <Property Name="AdvAmount" Type="money" />
+          <Property Name="DischargeReportpath" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="IntakeFrequency">
           <Key>
@@ -169,6 +171,25 @@
           <Property Name="BrandCategoryID" Type="int" Nullable="false" />
           <Property Name="MedicineName" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="MedDose" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="TriggerQty" Type="int" />
+        </EntityType>
+        <EntityType Name="OrderMaster">
+          <Key>
+            <PropertyRef Name="OMID" />
+          </Key>
+          <Property Name="OMID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OrderNO" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="Status" Type="bit" />
+        </EntityType>
+        <EntityType Name="OrderRequests">
+          <Key>
+            <PropertyRef Name="ORID" />
+          </Key>
+          <Property Name="ORID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OMID" Type="int" Nullable="false" />
+          <Property Name="MedicineID" Type="int" Nullable="false" />
+          <Property Name="Quantity" Type="int" Nullable="false" />
+          <Property Name="PlacedQty" Type="int" />
         </EntityType>
         <EntityType Name="OutPatients">
           <Key>
@@ -257,7 +278,7 @@
           <Property Name="ConsultTypeID" Type="int" Nullable="false" />
           <Property Name="ENMRNO" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="Fee" Type="money" Nullable="false" />
-          <Property Name="Discount" Type="money" />
+          <Property Name="Discount" Type="decimal" Precision="5" Scale="2" />
           <Property Name="DoctorID" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="PaymentModes">
@@ -286,7 +307,7 @@
           <Property Name="DatePrescribed" Type="date" />
           <Property Name="VisitID" Type="int" />
           <Property Name="IsDelivered" Type="bit" />
-          <Property Name="Discount" Type="decimal" Precision="4" Scale="2" />
+          <Property Name="Discount" Type="decimal" Precision="5" Scale="2" />
           <Property Name="PaidAmount" Type="money" />
           <Property Name="TotalAmount" Type="money" />
           <Property Name="ISIP" Type="bit" />
@@ -533,6 +554,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_OR_MedicineID">
+          <End Role="MedicineMaster" Type="Self.MedicineMaster" Multiplicity="1" />
+          <End Role="OrderRequests" Type="Self.OrderRequests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MedicineMaster">
+              <PropertyRef Name="MMID" />
+            </Principal>
+            <Dependent Role="OrderRequests">
+              <PropertyRef Name="MedicineID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OR_OMID">
+          <End Role="OrderMaster" Type="Self.OrderMaster" Multiplicity="1" />
+          <End Role="OrderRequests" Type="Self.OrderRequests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OrderMaster">
+              <PropertyRef Name="OMID" />
+            </Principal>
+            <Dependent Role="OrderRequests">
+              <PropertyRef Name="OMID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_OutPatients_BloodGroup">
           <End Role="BloodGroup" Type="Self.BloodGroup" Multiplicity="1" />
           <End Role="OutPatients" Type="Self.OutPatients" Multiplicity="*" />
@@ -744,6 +789,22 @@
           <Parameter Name="ISIP" Type="bit" Mode="In" />
           <Parameter Name="PMID" Type="int" Mode="InOut" />
         </Function>
+        <Function Name="CSVToTable" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="InStr" Type="varchar(max)" Mode="In" />
+          <ReturnType>
+            <CollectionType>
+              <RowType>
+                <Property Name="id" Type="int" Nullable="false" />
+              </RowType>
+            </CollectionType>
+          </ReturnType>
+        </Function>
+        <Function Name="InventoryReport" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="RevenueReport" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Doctors" Type="varchar(max)" Mode="In" />
+          <Parameter Name="Start_Time" Type="datetime" Mode="In" />
+          <Parameter Name="End_Time" Type="datetime" Mode="In" />
+        </Function>
         <EntityContainer Name="HISDBModelStoreContainer">
           <EntitySet Name="Beds" EntityType="Self.Beds" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BedType" EntityType="Self.BedType" Schema="dbo" store:Type="Tables" />
@@ -759,6 +820,8 @@
           <EntitySet Name="LabTestMaster" EntityType="Self.LabTestMaster" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MedicineInventory" EntityType="Self.MedicineInventory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MedicineMaster" EntityType="Self.MedicineMaster" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OrderMaster" EntityType="Self.OrderMaster" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OrderRequests" EntityType="Self.OrderRequests" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OutPatients" EntityType="Self.OutPatients" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PatientPrescription" EntityType="Self.PatientPrescription" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PatientRoomAllocation" EntityType="Self.PatientRoomAllocation" Schema="dbo" store:Type="Tables" />
@@ -826,6 +889,14 @@
           <AssociationSet Name="FK_MM_CategoryID" Association="Self.FK_MM_CategoryID">
             <End Role="BrandCategories" EntitySet="BrandCategories" />
             <End Role="MedicineMaster" EntitySet="MedicineMaster" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OR_MedicineID" Association="Self.FK_OR_MedicineID">
+            <End Role="MedicineMaster" EntitySet="MedicineMaster" />
+            <End Role="OrderRequests" EntitySet="OrderRequests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OR_OMID" Association="Self.FK_OR_OMID">
+            <End Role="OrderMaster" EntitySet="OrderMaster" />
+            <End Role="OrderRequests" EntitySet="OrderRequests" />
           </AssociationSet>
           <AssociationSet Name="FK_OutPatients_BloodGroup" Association="Self.FK_OutPatients_BloodGroup">
             <End Role="BloodGroup" EntitySet="BloodGroup" />
@@ -955,6 +1026,7 @@
           <Property Name="Fee" Type="Decimal" Precision="19" Scale="4" />
           <NavigationProperty Name="User" Relationship="Self.FK_Consultation_Doctor" FromRole="ConsultationFee" ToRole="Users" />
           <NavigationProperty Name="ConsultationType" Relationship="Self.FK_Consultation_Type" FromRole="ConsultationFee" ToRole="ConsultationType" />
+          <Property Name="ValidDays" Type="Int32" />
         </EntityType>
         <EntityType Name="ConsultationType">
           <Key>
@@ -1009,6 +1081,8 @@
           <NavigationProperty Name="MedicineInventories" Relationship="Self.FK_MI_MedicineID" FromRole="MedicineMaster" ToRole="MedicineInventory" />
           <NavigationProperty Name="PurchaseOrders" Relationship="Self.FK_PO_MedicineID" FromRole="MedicineMaster" ToRole="PurchaseOrder" />
           <NavigationProperty Name="PatientPrescriptions" Relationship="Self.FK_PP_Medicine" FromRole="MedicineMaster" ToRole="PatientPrescription" />
+          <Property Name="TriggerQty" Type="Int32" />
+          <NavigationProperty Name="OrderRequests" Relationship="HISDBModel.FK_OR_MedicineID" FromRole="MedicineMaster" ToRole="OrderRequest" />
         </EntityType>
         <EntityType Name="OutPatient">
           <Key>
@@ -1078,7 +1152,7 @@
           <Property Name="ConsultTypeID" Type="Int32" Nullable="false" />
           <Property Name="ENMRNO" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Fee" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
-          <Property Name="Discount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="Discount" Type="Decimal" Precision="5" Scale="2" />
           <Property Name="DoctorID" Type="Int32" Nullable="false" />
           <NavigationProperty Name="ConsultationType" Relationship="Self.FK_PVH_Consultation_Type" FromRole="PatientVisitHistory" ToRole="ConsultationType" />
           <NavigationProperty Name="OutPatient" Relationship="Self.FK_PVH_OutPatient_ENMRNO" FromRole="PatientVisitHistory" ToRole="OutPatients" />
@@ -1103,7 +1177,7 @@
           <Property Name="DatePrescribed" Type="DateTime" Precision="0" />
           <Property Name="VisitID" Type="Int32" />
           <Property Name="IsDelivered" Type="Boolean" />
-          <Property Name="Discount" Type="Decimal" Precision="4" Scale="2" />
+          <Property Name="Discount" Type="Decimal" Precision="5" Scale="2" />
           <Property Name="PaidAmount" Type="Decimal" Precision="19" Scale="4" />
           <NavigationProperty Name="PatientPrescriptions" Relationship="Self.FK_PP_PMID" FromRole="PrescriptionMaster" ToRole="PatientPrescription" />
           <NavigationProperty Name="User" Relationship="Self.FK_PM_Doctor" FromRole="PrescriptionMaster" ToRole="Users" />
@@ -1596,6 +1670,21 @@
           </AssociationSet>
           <EntitySet Name="PaymentModes" EntityType="HISDBModel.PaymentMode" />
           <EntitySet Name="FeeCollections" EntityType="HISDBModel.FeeCollection" />
+          <EntitySet Name="OrderMasters" EntityType="HISDBModel.OrderMaster" />
+          <EntitySet Name="OrderRequests" EntityType="HISDBModel.OrderRequest" />
+          <AssociationSet Name="FK_OR_MedicineID" Association="HISDBModel.FK_OR_MedicineID">
+            <End Role="MedicineMaster" EntitySet="MedicineMasters" />
+            <End Role="OrderRequest" EntitySet="OrderRequests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OR_OMID" Association="HISDBModel.FK_OR_OMID">
+            <End Role="OrderMaster" EntitySet="OrderMasters" />
+            <End Role="OrderRequest" EntitySet="OrderRequests" />
+          </AssociationSet>
+          <FunctionImport Name="RevenueReport" ReturnType="Collection(HISDBModel.RevenueReport_Result)">
+            <Parameter Name="Doctors" Mode="In" Type="String" />
+            <Parameter Name="Start_Time" Mode="In" Type="DateTime" />
+            <Parameter Name="End_Time" Mode="In" Type="DateTime" />
+          </FunctionImport>
           <EntitySet Name="InPatients" EntityType="HISDBModel.InPatient" />
           <AssociationSet Name="FK_InPatients_BloodGroup" Association="HISDBModel.FK_InPatients_BloodGroup">
             <End Role="BloodGroup" EntitySet="BloodGroups" />
@@ -1617,6 +1706,10 @@
             <End Role="InPatient" EntitySet="InPatients" />
             <End Role="PatientRoomAllocation" EntitySet="PatientRoomAllocations" />
           </AssociationSet>
+          <FunctionImport Name="CSVToTable" IsComposable="true" ReturnType="Collection(Int32)">
+            <Parameter Name="InStr" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="InventoryReport" ReturnType="Collection(HISDBModel.InventoryReport_Result)" />
           </EntityContainer>
         <EntityType Name="LabTestMaster">
           <Key>
@@ -1733,6 +1826,64 @@
           <Property Name="LastFourDigits" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="InPatient" Relationship="HISDBModel.FK_FeeCollection_ENMRNO" FromRole="FeeCollection" ToRole="InPatient" />
         </EntityType>
+        <EntityType Name="OrderMaster">
+          <Key>
+            <PropertyRef Name="OMID" />
+          </Key>
+          <Property Name="OMID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrderNO" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Status" Type="Boolean" />
+          <NavigationProperty Name="OrderRequests" Relationship="HISDBModel.FK_OR_OMID" FromRole="OrderMaster" ToRole="OrderRequest" />
+        </EntityType>
+        <EntityType Name="OrderRequest">
+          <Key>
+            <PropertyRef Name="ORID" />
+          </Key>
+          <Property Name="ORID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OMID" Type="Int32" Nullable="false" />
+          <Property Name="MedicineID" Type="Int32" Nullable="false" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <Property Name="PlacedQty" Type="Int32" />
+          <NavigationProperty Name="MedicineMaster" Relationship="HISDBModel.FK_OR_MedicineID" FromRole="OrderRequest" ToRole="MedicineMaster" />
+          <NavigationProperty Name="OrderMaster" Relationship="HISDBModel.FK_OR_OMID" FromRole="OrderRequest" ToRole="OrderMaster" />
+        </EntityType>
+        <Association Name="FK_OR_MedicineID">
+          <End Type="HISDBModel.MedicineMaster" Role="MedicineMaster" Multiplicity="1" />
+          <End Type="HISDBModel.OrderRequest" Role="OrderRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MedicineMaster">
+              <PropertyRef Name="MMID" />
+            </Principal>
+            <Dependent Role="OrderRequest">
+              <PropertyRef Name="MedicineID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OR_OMID">
+          <End Type="HISDBModel.OrderMaster" Role="OrderMaster" Multiplicity="1" />
+          <End Type="HISDBModel.OrderRequest" Role="OrderRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OrderMaster">
+              <PropertyRef Name="OMID" />
+            </Principal>
+            <Dependent Role="OrderRequest">
+              <PropertyRef Name="OMID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="RevenueReport_Result">
+          <Property Type="String" Name="ENMRNO" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="PatientFirstName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="PatientLasttName" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="DoctorID" Nullable="false" />
+          <Property Type="String" Name="DoctorFirstName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="DoctorLasttName" Nullable="true" MaxLength="50" />
+          <Property Type="Decimal" Name="consultationFee" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="feeDiscount" Nullable="true" Precision="38" Scale="2" />
+          <Property Type="Decimal" Name="LabTotalAmount" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="LabTestPaidAmount" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="LabTestDiscount" Nullable="true" Precision="19" />
+        </ComplexType>
         <EntityType Name="InPatient">
           <Key>
             <PropertyRef Name="ENMRNO" />
@@ -1775,6 +1926,7 @@
           <Property Name="DischargedOn" Type="DateTime" Precision="3" />
           <Property Name="EstAmoount" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="AdvAmount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="DischargeReportpath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="BloodGroup" Relationship="HISDBModel.FK_InPatients_BloodGroup" FromRole="InPatient" ToRole="BloodGroup" />
           <NavigationProperty Name="FeeCollections" Relationship="HISDBModel.FK_FeeCollection_ENMRNO" FromRole="InPatient" ToRole="FeeCollection" />
           <NavigationProperty Name="InPatientHistories" Relationship="HISDBModel.FK_IPH_InPatients_ENMRNO" FromRole="InPatient" ToRole="InPatientHistory" />
@@ -1841,6 +1993,17 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <ComplexType Name="InventoryReport_Result">
+          <Property Type="Int32" Name="MedicineID" Nullable="false" />
+          <Property Type="String" Name="MedicineName" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="medDose" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="Brandname" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="category" Nullable="true" MaxLength="100" />
+          <Property Type="Decimal" Name="PricePerItem" Nullable="true" Precision="6" Scale="2" />
+          <Property Type="Int32" Name="AvailableQty" Nullable="true" />
+          <Property Type="Int32" Name="Placedqty" Nullable="true" />
+          <Property Type="Int32" Name="TriggerQty" Nullable="true" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1897,6 +2060,7 @@
           <EntitySetMapping Name="ConsultationFees">
             <EntityTypeMapping TypeName="HISDBModel.ConsultationFee">
               <MappingFragment StoreEntitySet="ConsultationFee">
+                <ScalarProperty Name="ValidDays" ColumnName="ValidDays" />
                 <ScalarProperty Name="ConsultationID" ColumnName="ConsultationID" />
                 <ScalarProperty Name="DoctorID" ColumnName="DoctorID" />
                 <ScalarProperty Name="ConsultTypeID" ColumnName="ConsultTypeID" />
@@ -1944,6 +2108,7 @@
           <EntitySetMapping Name="MedicineMasters">
             <EntityTypeMapping TypeName="HISDBModel.MedicineMaster">
               <MappingFragment StoreEntitySet="MedicineMaster">
+                <ScalarProperty Name="TriggerQty" ColumnName="TriggerQty" />
                 <ScalarProperty Name="MMID" ColumnName="MMID" />
                 <ScalarProperty Name="BrandID" ColumnName="BrandID" />
                 <ScalarProperty Name="BrandCategoryID" ColumnName="BrandCategoryID" />
@@ -2207,9 +2372,47 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="OrderMasters">
+            <EntityTypeMapping TypeName="HISDBModel.OrderMaster">
+              <MappingFragment StoreEntitySet="OrderMaster">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="OrderNO" ColumnName="OrderNO" />
+                <ScalarProperty Name="OMID" ColumnName="OMID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OrderRequests">
+            <EntityTypeMapping TypeName="HISDBModel.OrderRequest">
+              <MappingFragment StoreEntitySet="OrderRequests">
+                <ScalarProperty Name="PlacedQty" ColumnName="PlacedQty" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="MedicineID" ColumnName="MedicineID" />
+                <ScalarProperty Name="OMID" ColumnName="OMID" />
+                <ScalarProperty Name="ORID" ColumnName="ORID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="RevenueReport" FunctionName="HISDBModel.Store.RevenueReport">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="HISDBModel.RevenueReport_Result">
+                <ScalarProperty Name="ENMRNO" ColumnName="ENMRNO" />
+                <ScalarProperty Name="PatientFirstName" ColumnName="PatientFirstName" />
+                <ScalarProperty Name="PatientLasttName" ColumnName="PatientLasttName" />
+                <ScalarProperty Name="DoctorID" ColumnName="DoctorID" />
+                <ScalarProperty Name="DoctorFirstName" ColumnName="DoctorFirstName" />
+                <ScalarProperty Name="DoctorLasttName" ColumnName="DoctorLasttName" />
+                <ScalarProperty Name="consultationFee" ColumnName="consultationFee" />
+                <ScalarProperty Name="feeDiscount" ColumnName="feeDiscount" />
+                <ScalarProperty Name="LabTotalAmount" ColumnName="LabTotalAmount" />
+                <ScalarProperty Name="LabTestPaidAmount" ColumnName="LabTestPaidAmount" />
+                <ScalarProperty Name="LabTestDiscount" ColumnName="LabTestDiscount" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <EntitySetMapping Name="InPatients">
             <EntityTypeMapping TypeName="HISDBModel.InPatient">
               <MappingFragment StoreEntitySet="InPatients">
+                <ScalarProperty Name="DischargeReportpath" ColumnName="DischargeReportpath" />
                 <ScalarProperty Name="AdvAmount" ColumnName="AdvAmount" />
                 <ScalarProperty Name="EstAmoount" ColumnName="EstAmoount" />
                 <ScalarProperty Name="DischargedOn" ColumnName="DischargedOn" />
@@ -2251,6 +2454,22 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="CSVToTable" FunctionName="HISDBModel.Store.CSVToTable" />
+          <FunctionImportMapping FunctionImportName="InventoryReport" FunctionName="HISDBModel.Store.InventoryReport">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="HISDBModel.InventoryReport_Result">
+                <ScalarProperty Name="MedicineID" ColumnName="MedicineID" />
+                <ScalarProperty Name="MedicineName" ColumnName="MedicineName" />
+                <ScalarProperty Name="medDose" ColumnName="medDose" />
+                <ScalarProperty Name="Brandname" ColumnName="Brandname" />
+                <ScalarProperty Name="category" ColumnName="category" />
+                <ScalarProperty Name="PricePerItem" ColumnName="PricePerItem" />
+                <ScalarProperty Name="AvailableQty" ColumnName="AvailableQty" />
+                <ScalarProperty Name="Placedqty" ColumnName="Placedqty" />
+                <ScalarProperty Name="TriggerQty" ColumnName="TriggerQty" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

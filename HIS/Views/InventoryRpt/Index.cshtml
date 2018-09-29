@@ -1,0 +1,116 @@
+﻿
+
+@{
+    ViewBag.Title = "Invetory Report";
+}
+
+<script src="~/Scripts/jquery-1.12.4.min.js"></script>
+
+<div class="form-horizontal">
+    <table>       
+        <tr>          
+            <td valign="middle" style="padding:5px;">
+                <br />
+                <input type="submit" value="Generate Report" id="btnSubmit" class="btn btn-success" />
+            </td>
+            <td valign="middle" style="padding:5px;">
+                <br />
+                <span class="input-group-addon" id="btnPrint"><i class="fa fa-print"></i></span>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="4"></td>
+        </tr>
+    </table>
+    <div class="row">
+        <div id="dynamicTable">
+        </div>
+    </div>
+
+</div>
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+      
+
+        $('#btnPrint').click(function () {
+            $('#dynamicTable').printThis({
+                header: '<img src="http://localhost:50415/light/images/hms-logo_login.png" style="width:420px;" alt="Mouldifi" title="Sravanthi Hospitals">',
+                footer: false,
+                pageTitle: ""
+            });
+        });
+
+        $('#btnSubmit').click(function () {
+                     $.ajax({
+                    type: "POST",
+                    url: '/InventoryRpt/GetReportdata',
+                    success: function (data) {
+                        if (data != null) {
+                            var str = "";
+                            str += "<table id='mytab' class='table table-striped table-bordered'><tr>"
+                            str += "<td><b>Medicine</b></td>";
+                            str += "<td><b>Brand Name</b></td>";
+                            str += "<td><b>Category</b></td>";
+                            str += "<td><b>Price/Item</b></td>";
+                            str += "<td><b>Available Quantity</b></td>";
+                            str += "<td><b>Placed Quantity</b></td>";
+                            str += "<td><b>Triggered Quantity</b></td>";
+                            str += "<tr>";
+                            var consultationFeesum = 0;
+                            var feeDiscountsum = 0;
+                            var LabTotalAmountsum = 0;
+                            var LabTestPaidAmountsum = 0;
+                            var LabTestDiscountsum = 0;
+                            var RowSum = 0;
+                            for (var i = 0; i < data.data.length; i++) {
+                                str += "<tr>";
+                               // str += "<td>" + data.data[i]["MedicineName"] + " " + data.data[i]["medDose"] + "</td>";
+                                if (data.data[i]["AvailableQty"] > data.data[i]["TriggerQty"]) {
+                                    str += "<td style='padding: 5px; background-color:red;'>" + data.data[i]["MedicineName"] + " " + data.data[i]["medDose"] + "</td>";
+                                } else {
+                                    str += "<td>" + data.data[i]["MedicineName"] + " " + data.data[i]["medDose"] + "</td>";
+                                }
+                                //str += "<td>" + data.data[i]["medDose"] + "</td>";
+                                str += "<td>" + data.data[i]["Brandname"] + "</td>";
+                                str += "<td>" + data.data[i]["category"] + "</td>";
+                                
+                                if (data.data[i]["PricePerItem"] != null) {                                   
+                                        str += "<td>" + data.data[i]["PricePerItem"] + " rs" + "</td>";
+                                }
+                                else {
+                                    str += "<td>0</td>";
+                                }
+                                if (data.data[i]["AvailableQty"] != null) {
+                                    str += "<td>" + data.data[i]["AvailableQty"] + "</td>";
+                                }
+                                else {
+                                    str += "<td>0</td>";
+                                }
+                                if (data.data[i]["Placedqty"] != null) {
+                                    str += "<td>" + data.data[i]["Placedqty"] + "</td>";
+                                }
+                                else {
+                                    str += "<td>0</td>";
+                                }
+                                if (data.data[i]["TriggerQty"] != null) {
+                                    str += "<td>" + data.data[i]["TriggerQty"] + "</td>";
+                                }
+                                else {
+                                    str += "<td>0</td>";
+                                }
+
+                                str += "</tr >";                              
+                            }
+
+                            str += "</table>";
+                            $("#dynamicTable").append(str);
+                        }
+                    }
+                });           
+        });
+    });
+
+</script>

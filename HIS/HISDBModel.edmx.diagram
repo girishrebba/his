@@ -58,7 +58,11 @@
         <AssociationConnector Association="HISDBModel.FK_PRA_RoomNo" />
         <EntityTypeShape EntityType="HISDBModel.PaymentMode" Width="1.5" PointX="5.375" PointY="0.75" />
         <EntityTypeShape EntityType="HISDBModel.FeeCollection" Width="1.5" PointX="10.5" PointY="17.125" />
-        <EntityTypeShape EntityType="HISDBModel.InPatient" Width="1.5" PointX="16.25" PointY="11.625" />
+        <EntityTypeShape EntityType="HISDBModel.OrderMaster" Width="1.5" PointX="8.25" PointY="57.25" />
+        <EntityTypeShape EntityType="HISDBModel.OrderRequest" Width="1.5" PointX="10.5" PointY="50" />
+        <AssociationConnector Association="HISDBModel.FK_OR_MedicineID" />
+        <AssociationConnector Association="HISDBModel.FK_OR_OMID" />
+        <EntityTypeShape EntityType="HISDBModel.InPatient" Width="1.5" PointX="16.25" PointY="11.5" />
         <AssociationConnector Association="HISDBModel.FK_InPatients_BloodGroup" />
         <AssociationConnector Association="HISDBModel.FK_FeeCollection_ENMRNO" />
         <AssociationConnector Association="HISDBModel.FK_IPH_InPatients_ENMRNO" />

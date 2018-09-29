@@ -1,0 +1,217 @@
+﻿
+@{
+    ViewBag.Title = "Revenue Report";
+}
+
+<script src="~/Scripts/jquery-1.12.4.min.js"></script>
+
+<div class="form-horizontal">
+    <table>
+        <tr style="height:100px;width:100%;overflow-y:scroll;">
+            <td style="padding:5px;vertical-align:top;">
+                <div id="dynamicdpd">
+                    Select Doctor's<br />
+                </div>
+            </td>
+        </tr>
+
+        <tr>
+            <td valign="middle" style="padding:5px;">
+                Start Date
+                <div id="date-popup" class="input-group date">
+                    <input id="stdt" type="text" data-mask="99/99/9999" class="form-control">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                </div>
+            </td>
+            <td valign="middle" style="padding:5px;">
+                End Date
+                <div id="date-popup" class="input-group date">
+                    <input id="enddt" type="text" data-mask="99/99/9999" class="form-control">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                </div>
+            </td>
+            <td valign="middle" style="padding:5px;">
+                <br />
+                <input type="submit" value="Submit" id="btnSubmit" class="btn btn-success" />
+            </td>
+            <td valign="middle" style="padding:5px;">
+                <br />
+                <span class="input-group-addon" id="btnPrint"><i class="fa fa-print"></i></span>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="4"></td>
+        </tr>
+    </table>
+    <div class="row">
+        <div id="dynamicTable">
+        </div>
+    </div>
+
+</div>
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        var stdate = new Date();
+        stdate.setDate(stdate.getDate() - 7);
+        $('#stdt').datepicker({
+            keyboardNavigation: false,
+            forceParse: false,
+            todayHighlight: true,
+            todayBtn: false,
+            endDate: '+0d',
+            format: "mm/dd/yyyy", language: "en-US"
+        }).datepicker("setDate", stdate);
+        $('#enddt').datepicker({
+            keyboardNavigation: false,
+            forceParse: false,
+            todayHighlight: true,
+            todayBtn: false,
+            endDate: '+0d',
+            format: "mm/dd/yyyy", language: "en-US"
+        }).datepicker("setDate", "0");
+        $.ajax({
+            type: "POST",
+            url: '/Revenuerpt/GetDoctors',
+            success: function (data) {
+                if (data != null) {
+                    var str="";                  
+                    for (var i = 0; i < data.data.length; i++) {                   
+                        str += " <input id=" + data.data[i]["UserID"] + " type='checkbox'/> " + data.data[i]["NameDisplay"] + "  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  ";
+                    } 
+                    $("#dynamicdpd").append(str);
+                }
+            }
+        });
+
+        $('#btnPrint').click(function () {
+            $('#dynamicTable').printThis({
+                header: '<img src="http://localhost:50415/light/images/hms-logo_login.png" style="width:420px;" alt="Mouldifi" title="Sravanthi Hospitals">',
+                footer: false,
+                pageTitle: ""
+            });
+        });
+
+        $('#btnSubmit').click(function () {
+            var stdt = $("#stdt").val();
+            var eddt = $("#enddt").val();
+            var doctors = "";
+            $("#mytab").remove();
+            $('#dynamicdpd input:checked').each(function () {
+                doctors += $(this).attr('id') + ",";
+            });
+            if (doctors == "") { alert('Please select atleast one doctor'); }
+            else
+            {
+                var data1 = { "doctors": doctors.substring(0, doctors.length - 1), "stdt": stdt + ' 00:00:00.000', "enddt": eddt + ' 23:59:59.000' };
+                $.ajax({
+                    type: "POST",
+                    data: data1,
+                    url: '/Revenuerpt/GetReportdata',
+                    success: function (data) {
+                        if (data != null) {
+                            var str = "";
+                            str += "<table id='mytab' class='table table-striped table-bordered'><tr><td  colspan='2'></td><td  colspan='2'>Consultation</td><td  colspan='3'>Lab Tests</td><td></td></tr><tr>"
+                            str += "<td  colspan='2'></td>";
+                            str += "<td>Fee</td>";
+                            str += "<td>Discount</td>";
+                            str += "<td>Total Amount</td>";
+                            str += "<td>Paid Amount</td>";
+                            str += "<td>Discount</td>";
+                            str += "<td>Total</td>";
+                            str += "<tr>";
+                            var consultationFeesum = 0;
+                            var feeDiscountsum = 0;
+                            var LabTotalAmountsum = 0;
+                            var LabTestPaidAmountsum = 0;
+                            var LabTestDiscountsum = 0;
+                            var RowSum = 0;
+                            for (var i = 0; i < data.data.length; i++) {
+                                if (i == 0) {
+                                    str += "<tr><td colspan='8' style='font- size:x - large;'><b>Doctor: " + data.data[i]["DoctorFirstName"] + " " + data.data[i]["DoctorLasttName"] + "  " + stdt + " - " + eddt + " Revenue Report</b></td></tr >";
+                                }
+                                else if (data.data[i]["DoctorID"] != data.data[i - 1]["DoctorID"]) {
+                                    str += "<tr><td colspan='8' style='font- size:x - large;'><b>Doctor: " + data.data[i]["DoctorFirstName"] + " " + data.data[i]["DoctorLasttName"] + "  " + stdt + " - " + eddt + " Revenue Report</b></td></tr >";
+                                }
+
+                                str += "<tr>";
+                                str += "<td>" + data.data[i]["ENMRNO"] + "</td>";
+                                str += "<td>" + data.data[i]["PatientFirstName"] + " " + data.data[i]["PatientLasttName"] + "</td>";
+
+                                if (data.data[i]["consultationFee"] != null) {
+                                    consultationFeesum += data.data[i]["consultationFee"];
+                                    RowSum += data.data[i]["consultationFee"];
+                                    str += "<td>" + data.data[i]["consultationFee"] + "</td>";
+                                }
+                                else {
+                                    str += "<td>0</td>";
+                                }
+                                if (data.data[i]["feeDiscount"] != null) {
+                                    feeDiscountsum += data.data[i]["feeDiscount"];
+                                    RowSum -= data.data[i]["feeDiscount"];
+                                    str += "<td>" + data.data[i]["feeDiscount"] + "</td>";
+                                }
+                                else {
+                                    str += "<td>0</td>";
+                                }
+                                if (data.data[i]["LabTotalAmount"] != null) {
+                                    LabTotalAmountsum += data.data[i]["LabTotalAmount"];
+                                    // RowSum += data.data[i]["LabTotalAmount"];
+                                    str += "<td>" + data.data[i]["LabTotalAmount"] + "</td>";
+                                }
+                                else {
+                                    str += "<td>0</td>";
+                                }
+                                if (data.data[i]["LabTestPaidAmount"] != null) {
+                                    LabTestPaidAmountsum += data.data[i]["LabTestPaidAmount"];
+                                    RowSum += data.data[i]["LabTestPaidAmount"];
+                                    str += "<td>" + data.data[i]["LabTestPaidAmount"] + "</td>";
+                                }
+                                else {
+                                    str += "<td>0</td>";
+                                }
+                                if (data.data[i]["LabTestDiscount"] != null) {
+                                    LabTestDiscountsum += data.data[i]["LabTestDiscount"];
+                                    //RowSum -= data.data[i]["LabTestDiscount"];
+                                    str += "<td>" + data.data[i]["LabTestDiscount"] + "</td>";
+                                }
+                                else {
+                                    str += "<td>0</td>";
+                                }
+
+                                str += "<td>" + RowSum + "</td>";
+
+                                str += "</tr >";
+                                if (i == data.data.length - 1) {
+                                    var tot = consultationFeesum - feeDiscountsum + LabTestPaidAmountsum;
+                                    str += "<tr><td colspan='2' style='font- size:x - large;'>Total: </td><td>" + consultationFeesum + "</td><td>" + feeDiscountsum + "</td><td>" + LabTotalAmountsum + "</td><td>" + LabTestPaidAmountsum + "</td><td>" + LabTestDiscountsum + "</td><td>" + tot + "</td></tr >";
+                                    consultationFeesum = 0;
+                                    feeDiscountsum = 0;
+                                    LabTotalAmountsum = 0;
+                                    LabTestPaidAmountsum = 0;
+                                    LabTestDiscountsum = 0;
+                                }
+                                else if (data.data[i]["DoctorID"] != data.data[i + 1]["DoctorID"]) {
+                                    var tot = consultationFeesum - feeDiscountsum + LabTestPaidAmountsum;
+                                    str += "<tr><td colspan='2' style='font- size:x - large;'>Total: </td><td>" + consultationFeesum + "</td><td>" + feeDiscountsum + "</td><td>" + LabTotalAmountsum + "</td><td>" + LabTestPaidAmountsum + "</td><td>" + LabTestDiscountsum + "</td><td>" + tot + "</td></tr >";
+                                    consultationFeesum = 0;
+                                    feeDiscountsum = 0;
+                                    LabTotalAmountsum = 0;
+                                    LabTestPaidAmountsum = 0;
+                                    LabTestDiscountsum = 0;
+                                }
+                                RowSum = 0;
+                            }
+
+                            str += "</table>";
+                            $("#dynamicTable").append(str);
+                        }
+                    }
+                });
+            }
+        });
+    });
+
+</script>

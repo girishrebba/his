@@ -7,6 +7,7 @@ using System.Data.Entity;
 using HIS.Action_Filters;
 using HIS.Controllers;
 using System.ComponentModel;
+using System.IO;
 
 namespace HIS.Controllers
 {
@@ -929,6 +930,51 @@ namespace HIS.Controllers
 
                 return consultName;
             }
+        }
+
+        public ActionResult DischargeFileUpload()
+        {
+            string FileName = "";
+            HttpFileCollectionBase files = Request.Files;
+
+            string emrno = Request.Form.AllKeys[0];
+           // int test = Convert.ToInt32(Request.Form.AllKeys[1]);
+
+            HttpPostedFileBase file = files[0];
+            string fname;
+
+            // Checking for Internet Explorer    
+            if (Request.Browser.Browser.ToUpper() == "IE" || Request.Browser.Browser.ToUpper() == "INTERNETEXPLORER")
+            {
+                string[] testfiles = file.FileName.Split(new char[] { '\\' });
+                fname = testfiles[testfiles.Length - 1];
+            }
+            else
+            {
+                fname = file.FileName;
+                FileName = file.FileName;
+            }
+
+            string subPath = "~/PatientRecords/" + emrno + "/"; // your code goes here
+
+            bool exists = System.IO.Directory.Exists(Server.MapPath(subPath));
+
+            if (!exists)
+                System.IO.Directory.CreateDirectory(Server.MapPath(subPath));
+
+            // Get the complete folder path and store the file inside it.
+            string dbfname = Path.Combine(subPath.Replace("~", ".."), fname);
+            fname = Path.Combine(Server.MapPath(subPath), fname);
+            file.SaveAs(fname);
+
+            using (HISDBEntities db = new HISDBEntities())
+            {
+               // int emr = db.LabTestMasters.Where(a => a.ENMRNO == emrno).OrderByDescending(a => a.LTMID).Select(b => b.LTMID).FirstOrDefault();
+
+                db.Database.ExecuteSqlCommand("update inpatients set DischargeReportpath='" + dbfname + "' where ENMRNO = '" + emrno + "'");
+                db.SaveChanges();
+            }
+            return Json(FileName, JsonRequestBehavior.AllowGet);
         }
     }
 }

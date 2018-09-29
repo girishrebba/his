@@ -56,6 +56,8 @@ namespace HIS
         public virtual DbSet<PatientRoomAllocation> PatientRoomAllocations { get; set; }
         public virtual DbSet<PaymentMode> PaymentModes { get; set; }
         public virtual DbSet<FeeCollection> FeeCollections { get; set; }
+        public virtual DbSet<OrderMaster> OrderMasters { get; set; }
+        public virtual DbSet<OrderRequest> OrderRequests { get; set; }
         public virtual DbSet<InPatient> InPatients { get; set; }
     
         public virtual int ConvertOutPatientToInPatient(string eNMRNO, Nullable<decimal> estAmount, Nullable<decimal> advAmount)
@@ -115,6 +117,38 @@ namespace HIS
                 new ObjectParameter("ISIP", typeof(bool));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("CreateMasterLabTest", eNMRNOParameter, doctorIDParameter, visitIDParameter, iSIPParameter, lTMID);
+        }
+    
+        public virtual ObjectResult<RevenueReport_Result> RevenueReport(string doctors, Nullable<System.DateTime> start_Time, Nullable<System.DateTime> end_Time)
+        {
+            var doctorsParameter = doctors != null ?
+                new ObjectParameter("Doctors", doctors) :
+                new ObjectParameter("Doctors", typeof(string));
+    
+            var start_TimeParameter = start_Time.HasValue ?
+                new ObjectParameter("Start_Time", start_Time) :
+                new ObjectParameter("Start_Time", typeof(System.DateTime));
+    
+            var end_TimeParameter = end_Time.HasValue ?
+                new ObjectParameter("End_Time", end_Time) :
+                new ObjectParameter("End_Time", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RevenueReport_Result>("RevenueReport", doctorsParameter, start_TimeParameter, end_TimeParameter);
+        }
+    
+        [DbFunction("HISDBEntities", "CSVToTable")]
+        public virtual IQueryable<Nullable<int>> CSVToTable(string inStr)
+        {
+            var inStrParameter = inStr != null ?
+                new ObjectParameter("InStr", inStr) :
+                new ObjectParameter("InStr", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<Nullable<int>>("[HISDBEntities].[CSVToTable](@InStr)", inStrParameter);
+        }
+    
+        public virtual ObjectResult<InventoryReport_Result> InventoryReport()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<InventoryReport_Result>("InventoryReport");
         }
     }
 }
