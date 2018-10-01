@@ -38,7 +38,8 @@ namespace HIS.Controllers
                                             ConsultTypeID = x.cf.ConsultTypeID,
                                             Fee = x.cf.Fee,
                                             DoctorName = HtmlHelpers.HtmlHelpers.GetFullName(x.u.FirstName, x.u.MiddleName, x.u.LastName),
-                                            ConsultationTypeName = x.ct.ConsultType
+                                            ConsultationTypeName = x.ct.ConsultType,
+                                            ValidDays = x.cf.ValidDays
                                         })                                
                                         .ToList();
 

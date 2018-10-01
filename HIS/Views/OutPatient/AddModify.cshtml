@@ -37,14 +37,41 @@
     <div class="astriskNote"><span></span></div>
     <div id="tabs">
         <ul class="nav nav-tabs">
-            <li class="active"><a data-toggle="tab" href="#profileTab">Basic Info</a></li>
+            <li class="active"><a data-toggle="tab" href="#referralTab">Referral Info</a></li>
+            <li><a data-toggle="tab" href="#profileTab">Basic Info</a></li>
             <li><a data-toggle="tab" href="#addressTab">Additional Info</a></li>
             <li><a data-toggle="tab" href="#historyTab">Patient History</a></li>
             <li><a data-toggle="tab" href="#metricsTab">Metrics</a></li>
-            <li><a data-toggle="tab" href="#referralTab">Referral Info</a></li>
+
         </ul>
         <div class="tab-content" id="tabContent">
-            <div id="profileTab" class="tab-pane fade in active" role="tabpanel">
+            <div id="referralTab" class="tab-pane fade in active" role="tabpanel">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ReferredBy, "Referred By:", new { @class = "control-label col-sm-2" })
+                        <div class="col-sm-4">
+                            @Html.EditorFor(model => model.ReferredBy, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                        @Html.LabelFor(model => model.RefPhone, "Referred Phone:", new { @class = "control-label col-sm-2" })
+                        <div class="col-sm-4">
+                            @Html.EditorFor(model => model.RefPhone, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.PrevENMR, "Previous ENMR:", new { @class = "control-label col-sm-2" })
+                        <div class="col-sm-4">
+                            @Html.EditorFor(model => model.PrevENMR, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-8 col-sm-offset-4">
+                            <input type="button" value="Next" class="btn btn-primary nexttab" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div id="profileTab" class="tab-pane fade in" role="tabpanel">
                 <div class="form-horizontal">
                     <div class="form-group">
                         @Html.LabelFor(model => model.ENMRNO, "ENMRNO:", new { @class = "control-label col-sm-2" })
@@ -81,22 +108,22 @@
                         @Html.LabelFor(model => model.Gender, "Gender:", new { @class = "control-label col-sm-2" })
                         <div class="col-sm-4">
                             @Html.DropDownList("Gender", new List<SelectListItem>(){
-                                               new SelectListItem { Text = "--Select--", Value = "" },
-                                               new SelectListItem { Text = "Male", Value = "0"  },
-                                               new SelectListItem { Text = "Female", Value =  "1"},
-                                               new SelectListItem { Text = "Others", Value =  "2"}
-                                               },
-                              htmlAttributes: new { @class = "form-control" })
+                                                   new SelectListItem { Text = "--Select--", Value = "" },
+                                                   new SelectListItem { Text = "Male", Value = "0"  },
+                                                   new SelectListItem { Text = "Female", Value =  "1"},
+                                                   new SelectListItem { Text = "Others", Value =  "2"}
+                                                   },
+                           htmlAttributes: new { @class = "form-control" })
                         </div>
                         @Html.LabelFor(model => model.MaritalStatus, "Marital Status:", htmlAttributes: new { @class = "control-label col-sm-2" })
                         <div class="col-sm-4">
                             @Html.DropDownList("MaritalStatus", new List<SelectListItem>(){
-                                               new SelectListItem { Text = "--Select--", Value = "" },
-                                               new SelectListItem { Text = "Single", Value = "0"  },
-                                               new SelectListItem { Text = "Married", Value =  "1"},
-                                               new SelectListItem { Text = "Others", Value =  "2"}
-                                               },
-                              htmlAttributes: new { @class = "form-control" })
+                                                   new SelectListItem { Text = "--Select--", Value = "" },
+                                                   new SelectListItem { Text = "Single", Value = "0"  },
+                                                   new SelectListItem { Text = "Married", Value =  "1"},
+                                                   new SelectListItem { Text = "Others", Value =  "2"}
+                                                   },
+                           htmlAttributes: new { @class = "form-control" })
                         </div>
                     </div>
                     <div class="form-group">
@@ -140,6 +167,7 @@
                     </div>
                     <div class="form-group">
                         <div class="col-sm-8 col-sm-offset-5">
+                            <input type="button" value="Previous" class="btn btn-primary previoustab" />
                             <input type="button" value="Next" class="btn btn-primary nexttab" />
                         </div>
                     </div>
@@ -240,32 +268,6 @@
                         @Html.LabelFor(model => model.BMI, "BMI:", new { @class = "control-label col-sm-2" })
                         <div class="col-sm-4">
                             @Html.EditorFor(model => model.BMI, new { htmlAttributes = new { @class = "form-control" } })
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-sm-8 col-sm-offset-4">
-                            <input type="button" value="Previous" class="btn btn-primary previoustab" />
-                            <input type="button" value="Next" class="btn btn-primary nexttab" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div id="referralTab" class="tab-pane fade in" role="tabpanel">
-                <div class="form-horizontal">
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.ReferredBy, "Referred By:", new { @class = "control-label col-sm-2" })
-                        <div class="col-sm-4">
-                            @Html.EditorFor(model => model.ReferredBy, new { htmlAttributes = new { @class = "form-control" } })
-                        </div>
-                        @Html.LabelFor(model => model.RefPhone, "Referred Phone:", new { @class = "control-label col-sm-2" })
-                        <div class="col-sm-4">
-                            @Html.EditorFor(model => model.RefPhone, new { htmlAttributes = new { @class = "form-control" } })
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.PrevENMR, "Previous ENMR:", new { @class = "control-label col-sm-2" })
-                        <div class="col-sm-4">
-                            @Html.EditorFor(model => model.PrevENMR, new { htmlAttributes = new { @class = "form-control" } })
                         </div>
                     </div>
                     <div class="form-group">

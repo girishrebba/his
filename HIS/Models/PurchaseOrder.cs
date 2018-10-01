@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace HIS
 {
-    [MetadataType(typeof(PurchaseOrderMetaData))]
+    
     public partial class PurchaseOrder
     {
         public string MedicineWithDose { get; set; }
@@ -11,6 +11,11 @@ namespace HIS
         public string ExpiryDateDisplay { get; set; }
     }
 
+    [MetadataType(typeof(PurchaseOrderMetaData))]
+    public class PurchaseOrderViewModel : PurchaseOrder
+    {
+
+    }
     public class PurchaseOrderMetaData
     {
         [Display(Name = "PO Number:")]

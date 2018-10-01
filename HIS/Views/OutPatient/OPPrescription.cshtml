@@ -30,8 +30,11 @@
 @using HIS.HtmlHelpers
 @using (Html.BeginForm("OPPrescription", "OutPatient", FormMethod.Post, new { id = "ppForm", onsubmit = "return SubmitPrescriptionForm(this)" }))
 {
-    @Html.HiddenFor(model => model.ENMRNO)
-    @Html.HiddenFor(model => model.VisitID)
+    @Html.HiddenFor(model => model.ENMRNO, new { @id = "ENMRNO" })
+    @Html.HiddenFor(model => model.VisitID, new { @id = "VisitID" })
+    @Html.HiddenFor(model => model.VisitName, new { @id = "VisitName" })
+    @Html.HiddenFor(model => model.DoctorName, new { @id = "DoctorName" })
+    @Html.HiddenFor(model => model.DateDisplay, new { @id = "DateDisplay" })
     <div class="form-horizontal">
         <div class="row">
             <div class="col-lg-12">
@@ -116,61 +119,63 @@
                     }
                     @if (!ViewBag.IsNewVisit)
                     {
-                        
-                            if (ViewBag.MDR != null && ViewBag.MDR.Count > 0)
-    {
-                                <div class="historyGrid">
-    <div class="panel-body">
-        <div class="panel panel-default">
-            <div class="panel-heading" style="padding-left:1px;">
-                <span class="lableDisplay">MDR Prescription</span>
-            </div>
-            <div class="panel-body">
-                <div class="table-responsive">
-                    <table class="table table-striped table-bordered" style="width:100%">
-                        <thead>
-                            <tr>
-                                <th>Medicine</th>
-                                <th>Quantity</th>
-                                <th>Intake</th>
-                                <th>Doctor</th>
-                                <th>Date</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var his in ViewBag.MDR)
-                            {
-                                <tr>
-                                    <td>@his.MedicineWithDose</td>
-                                    <td>@his.Quantity</td>
-                                    <td>@his.IntakeDisplay</td>
-                                    <td>@his.DoctorName</td>
-                                    <td>@his.DateDisplay</td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-                            }
-                        
+
+                        if (ViewBag.MDR != null && ViewBag.MDR.Count > 0)
+                        {
+                            <div class="historyGrid">
+                                <div class="panel-body">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading" style="padding-left:1px;">
+                                            <span class="lableDisplay">MDR Prescription</span>
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="table-responsive">
+                                                <table class="table table-striped table-bordered" style="width:100%">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Medicine</th>
+                                                            <th>Quantity</th>
+                                                            <th>Intake</th>
+                                                            <th>Doctor</th>
+                                                            <th>Date</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach (var his in ViewBag.MDR)
+                                                        {
+                                                            <tr>
+                                                                <td>@his.MedicineWithDose</td>
+                                                                <td>@his.Quantity</td>
+                                                                <td>@his.IntakeDisplay</td>
+                                                                <td>@his.DoctorName</td>
+                                                                <td>@his.DateDisplay</td>
+                                                            </tr>
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
                     }
 
                 </div>
             </div>
         </div>
-            <div class="row @(HtmlHelpers.IsOPPrescriptionFormEnable(Model.ENMRNO) == false ? "hidden" : "")" style="border: 1px;">
-                @*<div class="panel panel-default">*@
-                <div class="panel-heading clearfix">
-                    <span class="lableDisplay">@Model.VisitName</span>
-                </div>
-                <div class="panel-body prescriptionGrid">
+        <div class="row @(HtmlHelpers.IsOPPrescriptionFormEnable(Model.ENMRNO) == false ? "hidden" : "")" style="border: 1px;">
+            @*<div class="panel panel-default">*@
+            <div class="panel-heading clearfix">
+                <span class="lableDisplay">@Model.VisitName</span>
+            </div>
+            <div class="panel-body prescriptionGrid">
+                <div id="printgrid">
+                    <div id="headerDiv"></div>
                     <div class="table-responsive">
                         <table class="table table-striped table-bordered" id="ppTable">
-                            <thead>
+                            <thead id="thd">
                                 <tr>
                                     <th style="width:35%">Medicine</th>
                                     <th style="width:5%">Quantity</th>
@@ -179,8 +184,8 @@
                                     <th></th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
+                            <tbody id="tbd">
+                                <tr id="fstRow">
                                     <td>
                                         @Html.EditorFor(model => model.MedicineWithDose, new { htmlAttributes = new { @class = "form-control" } })
                                         @Html.HiddenFor(model => model.MedicineID)
@@ -199,6 +204,7 @@
                             </tbody>
                         </table>
                     </div>
+                </div>
                 </div>
                 @*</div>*@
                 <div class="col-lg-12">
@@ -222,10 +228,10 @@
                     </div>
                 </div>
             </div>
-        </div>
-        }
+    </div>
+}
 
-        <script type="text/javascript">
+<script type="text/javascript">
     $(document).ready(function () {
         $('#TestIds').trigger('chosen:updated');
         $('#TestIds').chosen();
@@ -323,4 +329,4 @@
             $('#Comments').val('');
             $('#btnSubmit').removeClass('disabled');
         }
-        </script>
+</script>

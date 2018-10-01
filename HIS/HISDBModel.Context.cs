@@ -150,5 +150,14 @@ namespace HIS
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<InventoryReport_Result>("InventoryReport");
         }
+    
+        public virtual int CreateMasterOrder(string orderNo, ObjectParameter oMID)
+        {
+            var orderNoParameter = orderNo != null ?
+                new ObjectParameter("OrderNo", orderNo) :
+                new ObjectParameter("OrderNo", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("CreateMasterOrder", orderNoParameter, oMID);
+        }
     }
 }

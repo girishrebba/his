@@ -37,7 +37,8 @@ namespace HIS.Controllers
                                                BrandName = x.BrandName,
                                                Category = x.Category,
                                                MedicineName = x.med.MedicineName,
-                                               MedDose = x.med.MedDose
+                                               MedDose = x.med.MedDose,
+                                               TriggerQty = x.med.TriggerQty
                                            }).ToList();
 
                 return Json(new { data = medicines }, JsonRequestBehavior.AllowGet);

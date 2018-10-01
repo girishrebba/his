@@ -50,6 +50,7 @@
     <Property Name="DoctorID" Type="int" Nullable="false" />
     <Property Name="ConsultTypeID" Type="int" Nullable="false" />
     <Property Name="Fee" Type="money" />
+    <Property Name="ValidDays" Type="int" />
   </EntityType>
   <EntityType Name="ConsultationType">
     <Key>
@@ -122,6 +123,7 @@
     <Property Name="DischargedOn" Type="datetime" />
     <Property Name="EstAmoount" Type="money" />
     <Property Name="AdvAmount" Type="money" />
+    <Property Name="DischargeReportpath" Type="nvarchar(max)" />
   </EntityType>
   <EntityType Name="IntakeFrequency">
     <Key>
@@ -141,7 +143,7 @@
     <Property Name="VisitID" Type="int" />
     <Property Name="IsBillPaid" Type="bit" />
     <Property Name="IsDelivered" Type="bit" />
-    <Property Name="Discount" Type="decimal" Precision="4" Scale="2" />
+    <Property Name="Discount" Type="decimal" Precision="5" Scale="2" />
     <Property Name="PaidAmount" Type="money" />
     <Property Name="TotalAmount" Type="money" />
     <Property Name="ISIP" Type="bit" />
@@ -164,6 +166,25 @@
     <Property Name="BrandCategoryID" Type="int" Nullable="false" />
     <Property Name="MedicineName" Type="varchar" MaxLength="100" Nullable="false" />
     <Property Name="MedDose" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="TriggerQty" Type="int" />
+  </EntityType>
+  <EntityType Name="OrderMaster">
+    <Key>
+      <PropertyRef Name="OMID" />
+    </Key>
+    <Property Name="OMID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="OrderNO" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="Status" Type="bit" />
+  </EntityType>
+  <EntityType Name="OrderRequests">
+    <Key>
+      <PropertyRef Name="ORID" />
+    </Key>
+    <Property Name="ORID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="OMID" Type="int" Nullable="false" />
+    <Property Name="MedicineID" Type="int" Nullable="false" />
+    <Property Name="Quantity" Type="int" Nullable="false" />
+    <Property Name="PlacedQty" Type="int" />
   </EntityType>
   <EntityType Name="OutPatients">
     <Key>
@@ -252,7 +273,7 @@
     <Property Name="ConsultTypeID" Type="int" Nullable="false" />
     <Property Name="ENMRNO" Type="varchar" MaxLength="30" Nullable="false" />
     <Property Name="Fee" Type="money" Nullable="false" />
-    <Property Name="Discount" Type="money" />
+    <Property Name="Discount" Type="decimal" Precision="5" Scale="2" />
     <Property Name="DoctorID" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="PaymentModes">
@@ -281,7 +302,7 @@
     <Property Name="DatePrescribed" Type="date" />
     <Property Name="VisitID" Type="int" />
     <Property Name="IsDelivered" Type="bit" />
-    <Property Name="Discount" Type="decimal" Precision="4" Scale="2" />
+    <Property Name="Discount" Type="decimal" Precision="5" Scale="2" />
     <Property Name="PaidAmount" Type="money" />
     <Property Name="TotalAmount" Type="money" />
     <Property Name="ISIP" Type="bit" />
@@ -528,6 +549,30 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_OR_MedicineID">
+    <End Role="MedicineMaster" Type="Self.MedicineMaster" Multiplicity="1" />
+    <End Role="OrderRequests" Type="Self.OrderRequests" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MedicineMaster">
+        <PropertyRef Name="MMID" />
+      </Principal>
+      <Dependent Role="OrderRequests">
+        <PropertyRef Name="MedicineID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OR_OMID">
+    <End Role="OrderMaster" Type="Self.OrderMaster" Multiplicity="1" />
+    <End Role="OrderRequests" Type="Self.OrderRequests" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="OrderMaster">
+        <PropertyRef Name="OMID" />
+      </Principal>
+      <Dependent Role="OrderRequests">
+        <PropertyRef Name="OMID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_OutPatients_BloodGroup">
     <End Role="BloodGroup" Type="Self.BloodGroup" Multiplicity="1" />
     <End Role="OutPatients" Type="Self.OutPatients" Multiplicity="*" />
@@ -732,12 +777,32 @@
     <Parameter Name="ISIP" Type="bit" Mode="In" />
     <Parameter Name="LTMID" Type="int" Mode="InOut" />
   </Function>
+  <Function Name="CreateMasterOrder" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="OrderNo" Type="varchar" Mode="In" />
+    <Parameter Name="OMID" Type="int" Mode="InOut" />
+  </Function>
   <Function Name="CreateMasterPrescription" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="ENMRNO" Type="varchar" Mode="In" />
     <Parameter Name="DoctorID" Type="int" Mode="In" />
     <Parameter Name="VisitID" Type="int" Mode="In" />
     <Parameter Name="ISIP" Type="bit" Mode="In" />
     <Parameter Name="PMID" Type="int" Mode="InOut" />
+  </Function>
+  <Function Name="CSVToTable" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="InStr" Type="varchar(max)" Mode="In" />
+    <ReturnType>
+      <CollectionType>
+        <RowType>
+          <Property Name="id" Type="int" Nullable="false" />
+        </RowType>
+      </CollectionType>
+    </ReturnType>
+  </Function>
+  <Function Name="InventoryReport" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="RevenueReport" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Doctors" Type="varchar(max)" Mode="In" />
+    <Parameter Name="Start_Time" Type="datetime" Mode="In" />
+    <Parameter Name="End_Time" Type="datetime" Mode="In" />
   </Function>
   <EntityContainer Name="HISDBModelStoreContainer">
     <EntitySet Name="Beds" EntityType="Self.Beds" Schema="dbo" store:Type="Tables" />
@@ -754,6 +819,8 @@
     <EntitySet Name="LabTestMaster" EntityType="Self.LabTestMaster" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="MedicineInventory" EntityType="Self.MedicineInventory" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="MedicineMaster" EntityType="Self.MedicineMaster" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="OrderMaster" EntityType="Self.OrderMaster" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="OrderRequests" EntityType="Self.OrderRequests" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="OutPatients" EntityType="Self.OutPatients" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PatientPrescription" EntityType="Self.PatientPrescription" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PatientRoomAllocation" EntityType="Self.PatientRoomAllocation" Schema="dbo" store:Type="Tables" />
@@ -821,6 +888,14 @@
     <AssociationSet Name="FK_MM_CategoryID" Association="Self.FK_MM_CategoryID">
       <End Role="BrandCategories" EntitySet="BrandCategories" />
       <End Role="MedicineMaster" EntitySet="MedicineMaster" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OR_MedicineID" Association="Self.FK_OR_MedicineID">
+      <End Role="MedicineMaster" EntitySet="MedicineMaster" />
+      <End Role="OrderRequests" EntitySet="OrderRequests" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OR_OMID" Association="Self.FK_OR_OMID">
+      <End Role="OrderMaster" EntitySet="OrderMaster" />
+      <End Role="OrderRequests" EntitySet="OrderRequests" />
     </AssociationSet>
     <AssociationSet Name="FK_OutPatients_BloodGroup" Association="Self.FK_OutPatients_BloodGroup">
       <End Role="BloodGroup" EntitySet="BloodGroup" />

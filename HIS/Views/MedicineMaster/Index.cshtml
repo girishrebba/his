@@ -24,6 +24,7 @@
                                 <th>Category</th>
                                 <th>Medicine</th>
                                 <th>Dose</th>
+                                <th>Trigger Quantity</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -49,6 +50,7 @@
                     { "data": "Category" },
                     { "data": "MedicineName" },
                     { "data": "MedDose" },
+                    { "data": "TriggerQty" },
                     {
                         "data":"MMID", "render" : function (data) {
                         return "<a class='btn btn-default btn-sm' onclick=PopupForm('@Url.Action("AddModify","MedicineMaster")/" + data + "')><i class='fa fa-pencil-alt'></i> Edit</a>";

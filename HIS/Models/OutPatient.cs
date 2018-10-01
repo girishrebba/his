@@ -17,6 +17,7 @@ namespace HIS
         public string MaritalStatusDisplay { get; set; }
         public string DOBDisplay { get; set; }
         public string EnrolledDisplay { get; set; }
+        public string ValidDateDisplay { get; set; }
         public string GetFullName()
         {
             return string.Format("{0} {1} {2}",

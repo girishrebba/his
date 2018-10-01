@@ -20,6 +20,7 @@ namespace HIS
             this.MedicineInventories = new HashSet<MedicineInventory>();
             this.PurchaseOrders = new HashSet<PurchaseOrder>();
             this.PatientPrescriptions = new HashSet<PatientPrescription>();
+            this.OrderRequests = new HashSet<OrderRequest>();
         }
     
         public int MMID { get; set; }
@@ -27,6 +28,7 @@ namespace HIS
         public int BrandCategoryID { get; set; }
         public string MedicineName { get; set; }
         public string MedDose { get; set; }
+        public Nullable<int> TriggerQty { get; set; }
     
         public virtual BrandCategory BrandCategory { get; set; }
         public virtual Brand Brand { get; set; }
@@ -36,5 +38,7 @@ namespace HIS
         public virtual ICollection<PurchaseOrder> PurchaseOrders { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PatientPrescription> PatientPrescriptions { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<OrderRequest> OrderRequests { get; set; }
     }
 }

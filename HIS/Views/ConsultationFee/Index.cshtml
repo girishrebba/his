@@ -23,6 +23,7 @@
                                 <th>Doctor</th>
                                 <th>Consultation</th>
                                 <th>Fee</th>
+                                <th>Validity(Days)</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -39,7 +40,7 @@
         $(document).ready(function () {
             dataTable = $("#consultationTypeTable").DataTable({
                 "ajax": {
-                    "url": "/COnsultationFee/GetConsultationFeeList",
+                    "url": "/ConsultationFee/GetConsultationFeeList",
                     "type": "GET",
                     "datatype": "json"
                 },
@@ -47,6 +48,7 @@
                     { "data": "DoctorName" },
                     { "data": "ConsultationTypeName" },        
                     { "data": "Fee" },
+                    { "data": "ValidDays"},
                     { "data":"ConsultationID", "render" : function (data) {
                         return "<a class='btn btn-default btn-sm' onclick=PopupForm('@Url.Action("AddModify","ConsultationFee")/" + data + "')><i class='fa fa-pencil-alt'></i> Edit</a><a class='btn btn-danger btn-sm' style='margin-left:5px' onclick=Delete("+data+")><i class='fa fa-trash'></i> Delete</a>";
                     },

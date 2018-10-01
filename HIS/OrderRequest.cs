@@ -12,15 +12,15 @@ namespace HIS
     using System;
     using System.Collections.Generic;
     
-    public partial class ConsultationFee
+    public partial class OrderRequest
     {
-        public int ConsultationID { get; set; }
-        public int DoctorID { get; set; }
-        public int ConsultTypeID { get; set; }
-        public Nullable<decimal> Fee { get; set; }
-        public Nullable<int> ValidDays { get; set; }
+        public int ORID { get; set; }
+        public int OMID { get; set; }
+        public int MedicineID { get; set; }
+        public int Quantity { get; set; }
+        public Nullable<int> PlacedQty { get; set; }
     
-        public virtual User User { get; set; }
-        public virtual ConsultationType ConsultationType { get; set; }
+        public virtual MedicineMaster MedicineMaster { get; set; }
+        public virtual OrderMaster OrderMaster { get; set; }
     }
 }

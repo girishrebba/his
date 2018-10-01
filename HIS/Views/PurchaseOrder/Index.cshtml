@@ -23,7 +23,8 @@
     <div class="col-lg-8">
         <div class="panel panel-default">
             <div class="panel-heading clearfix">
-                <a class="btn btn-success" style="margin-bottom:10px" onclick="PopupForm('@Url.Action("CreatePO","PurchaseOrder")')"><i class="fa fa-plus"></i> Add New</a>
+                <a class="btn btn-success" style="margin-bottom:10px" onclick="PopupForm('@Url.Action("CreatePO","PurchaseOrder")')"><i class="fa fa-plus"></i> Create Purchase Order</a>
+                <a class="btn btn-success" style="margin-bottom:10px" onclick="PopupPlaceOrderForm('@Url.Action("PlaceOrder","PurchaseOrder")')"><i class="fa fa-plus"></i> Place Order</a>
             </div>
             <div class="panel-body">
                 <div class="table-responsive">
@@ -199,7 +200,30 @@
                                 }
                             });
                         });
-                } 
+                }
+
+                function PopupPlaceOrderForm(url) {
+                    $('body').loadingModal({ text: 'Loading...' });
+                    var placeOrderDiv = $('<div />');
+                    $.get(url)
+                        .done(function (response) {
+                            placeOrderDiv.html(response);
+                            POPop = placeOrderDiv.dialog({
+                                autoOpen: true,
+                                resizable: true,
+                                modal: true,
+                                title: 'Place New Order',
+                                width: '55%',
+                                close: function () {
+                                    POPop.dialog('destroy').remove();
+                                },
+                                open: function (event, ui) {
+                                    $('.ui-dialog-content').css('overflow', 'hidden');
+                                    $('body').loadingModal('destroy');
+                                }
+                            });
+                        });
+                }
 
                 function SubmitForm(form) {
                     $('body').loadingModal({ text: 'Processing...' });
@@ -311,6 +335,7 @@
                             tbl.ExpiryDate = $($(this).find('td:eq(8)')).find('.datepicker').val();
                             items.push(tbl);
                         });
+
                         $.ajax({
                             type: "POST",
                             contentType: "application/json",
@@ -331,7 +356,63 @@
                     }
                     return false;
                 }
-                        </script>
+
+                function SubmitPlaceOrderForm(form) {
+                    //$.validator.unobtrusive.parse(form);
+                   // if ($(form).valid()) {
+                        $('body').loadingModal({ text: 'Processing...' });
+                        var items = [];
+                        var orderNo = $('#OrderNo').val();
+                    var orderDate = $('#OrderDate').val();
+                    if ($(form).find('table#orderTable tr').length >= 2) {
+                        $(form).find('#orderTable > tbody tr').each(function (index, elem) {
+                            var tbl = {};
+                            tbl.OrderNo = orderNo;
+                            tbl.MedicineID = $($(this).find('td:eq(0)')).html();
+                            tbl.MedicineWithDose = $($(this).find('td:eq(1)')).html();
+                            tbl.Quantity = $($(this).find('td:eq(2)')).html();
+                            tbl.PlacedQty = $($(this).find('td:eq(3)')).find('.placeQty').val();
+                            items.push(tbl);
+                        });
+                    }
+                    else {
+                        var tbl = {};
+                        tbl.OrderNo = orderNo;
+                        tbl.MedicineID = 0;
+                        items.push(tbl);
+                    }
+                    $(form).find('#headerDivdp').append("</br><table><tr><td>Order No: " + orderNo + "</td></tr><tr><td >Order Date: " + orderDate + "</td></tr></table>");
+                    $(form).find('#headerDivdp').append($(form).find('#orderTable'));
+                    $('#thd').find('th:last').remove();
+                    $("#tbd tr").each(function () {
+                        $(this).find('td:last').remove();
+                    });
+                        $.ajax({
+                            type: "POST",
+                            contentType: "application/json",
+                            url: form.action,
+                            data: JSON.stringify(items),
+                            success: function (data) {
+                                if (data.success) {
+                                    $('#headerDivdp').printThis({
+                                        header: '<img src="http://localhost:50415/light/images/hms-logo_login.png" style="width:420px;" alt="Mouldifi" title="Sravanthi Hospitals">',
+                                        footer: false,
+                                        pageTitle: ""
+                                    });
+                                    POPop.dialog('close');
+                                    dataTable.ajax.reload();
+                                    $.notify(data.message, {
+                                        globalPosition: "top center",
+                                        className: "success"
+                                    })
+                                }
+                                $('body').loadingModal('destroy');
+                            }
+                        });
+                    //}
+                    return false;
+                }
+            </script>
                     }
 
 

@@ -25,6 +25,7 @@ namespace HIS
         public decimal TotalAmount { get; set; }
         public bool HasPrescription { get; set; }
         public bool ISIP { get; set; }
+        public int RequestQty { get; set; }
     }
 
     public class PPMetaData

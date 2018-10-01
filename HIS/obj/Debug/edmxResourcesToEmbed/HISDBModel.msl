@@ -51,6 +51,7 @@
     <EntitySetMapping Name="ConsultationFees">
       <EntityTypeMapping TypeName="HISDBModel.ConsultationFee">
         <MappingFragment StoreEntitySet="ConsultationFee">
+          <ScalarProperty Name="ValidDays" ColumnName="ValidDays" />
           <ScalarProperty Name="ConsultationID" ColumnName="ConsultationID" />
           <ScalarProperty Name="DoctorID" ColumnName="DoctorID" />
           <ScalarProperty Name="ConsultTypeID" ColumnName="ConsultTypeID" />
@@ -98,6 +99,7 @@
     <EntitySetMapping Name="MedicineMasters">
       <EntityTypeMapping TypeName="HISDBModel.MedicineMaster">
         <MappingFragment StoreEntitySet="MedicineMaster">
+          <ScalarProperty Name="TriggerQty" ColumnName="TriggerQty" />
           <ScalarProperty Name="MMID" ColumnName="MMID" />
           <ScalarProperty Name="BrandID" ColumnName="BrandID" />
           <ScalarProperty Name="BrandCategoryID" ColumnName="BrandCategoryID" />
@@ -361,9 +363,47 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="OrderMasters">
+      <EntityTypeMapping TypeName="HISDBModel.OrderMaster">
+        <MappingFragment StoreEntitySet="OrderMaster">
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="OrderNO" ColumnName="OrderNO" />
+          <ScalarProperty Name="OMID" ColumnName="OMID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="OrderRequests">
+      <EntityTypeMapping TypeName="HISDBModel.OrderRequest">
+        <MappingFragment StoreEntitySet="OrderRequests">
+          <ScalarProperty Name="PlacedQty" ColumnName="PlacedQty" />
+          <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+          <ScalarProperty Name="MedicineID" ColumnName="MedicineID" />
+          <ScalarProperty Name="OMID" ColumnName="OMID" />
+          <ScalarProperty Name="ORID" ColumnName="ORID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="RevenueReport" FunctionName="HISDBModel.Store.RevenueReport">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="HISDBModel.RevenueReport_Result">
+          <ScalarProperty Name="ENMRNO" ColumnName="ENMRNO" />
+          <ScalarProperty Name="PatientFirstName" ColumnName="PatientFirstName" />
+          <ScalarProperty Name="PatientLasttName" ColumnName="PatientLasttName" />
+          <ScalarProperty Name="DoctorID" ColumnName="DoctorID" />
+          <ScalarProperty Name="DoctorFirstName" ColumnName="DoctorFirstName" />
+          <ScalarProperty Name="DoctorLasttName" ColumnName="DoctorLasttName" />
+          <ScalarProperty Name="consultationFee" ColumnName="consultationFee" />
+          <ScalarProperty Name="feeDiscount" ColumnName="feeDiscount" />
+          <ScalarProperty Name="LabTotalAmount" ColumnName="LabTotalAmount" />
+          <ScalarProperty Name="LabTestPaidAmount" ColumnName="LabTestPaidAmount" />
+          <ScalarProperty Name="LabTestDiscount" ColumnName="LabTestDiscount" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
     <EntitySetMapping Name="InPatients">
       <EntityTypeMapping TypeName="HISDBModel.InPatient">
         <MappingFragment StoreEntitySet="InPatients">
+          <ScalarProperty Name="DischargeReportpath" ColumnName="DischargeReportpath" />
           <ScalarProperty Name="AdvAmount" ColumnName="AdvAmount" />
           <ScalarProperty Name="EstAmoount" ColumnName="EstAmoount" />
           <ScalarProperty Name="DischargedOn" ColumnName="DischargedOn" />
@@ -405,5 +445,22 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="CSVToTable" FunctionName="HISDBModel.Store.CSVToTable" />
+    <FunctionImportMapping FunctionImportName="InventoryReport" FunctionName="HISDBModel.Store.InventoryReport">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="HISDBModel.InventoryReport_Result">
+          <ScalarProperty Name="MedicineID" ColumnName="MedicineID" />
+          <ScalarProperty Name="MedicineName" ColumnName="MedicineName" />
+          <ScalarProperty Name="medDose" ColumnName="medDose" />
+          <ScalarProperty Name="Brandname" ColumnName="Brandname" />
+          <ScalarProperty Name="category" ColumnName="category" />
+          <ScalarProperty Name="PricePerItem" ColumnName="PricePerItem" />
+          <ScalarProperty Name="AvailableQty" ColumnName="AvailableQty" />
+          <ScalarProperty Name="Placedqty" ColumnName="Placedqty" />
+          <ScalarProperty Name="TriggerQty" ColumnName="TriggerQty" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="CreateMasterOrder" FunctionName="HISDBModel.Store.CreateMasterOrder" />
   </EntityContainerMapping>
 </Mapping>

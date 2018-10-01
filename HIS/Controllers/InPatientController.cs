@@ -631,6 +631,7 @@ namespace HIS.Controllers
                         pp.TotalCost = pp.Quantity * itemCost;
                         pp.VisitName = visitName;
                         pp.DeliverQty = pp.Quantity;
+                        pp.RequestQty = 0;
                     }
                 }
             }
@@ -652,7 +653,9 @@ namespace HIS.Controllers
                         {
                             prescription.MedicineWithDose = "text";
                             prescription.DeliverQty = pp.DeliverQty;
+                            prescription.RequestQty = pp.RequestQty;
                             db.Entry(prescription).State = EntityState.Modified;
+                            HtmlHelpers.HtmlHelpers.CreateOrderRequest(prescription);
                         }
 
                         db.SaveChanges();

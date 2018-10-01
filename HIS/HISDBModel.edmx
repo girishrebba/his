@@ -148,7 +148,7 @@
           <Property Name="VisitID" Type="int" />
           <Property Name="IsBillPaid" Type="bit" />
           <Property Name="IsDelivered" Type="bit" />
-          <Property Name="Discount" Type="decimal" Precision="4" Scale="2" />
+          <Property Name="Discount" Type="decimal" Precision="5" Scale="2" />
           <Property Name="PaidAmount" Type="money" />
           <Property Name="TotalAmount" Type="money" />
           <Property Name="ISIP" Type="bit" />
@@ -781,6 +781,10 @@
           <Parameter Name="VisitID" Type="int" Mode="In" />
           <Parameter Name="ISIP" Type="bit" Mode="In" />
           <Parameter Name="LTMID" Type="int" Mode="InOut" />
+        </Function>
+        <Function Name="CreateMasterOrder" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="OrderNo" Type="varchar" Mode="In" />
+          <Parameter Name="OMID" Type="int" Mode="InOut" />
         </Function>
         <Function Name="CreateMasterPrescription" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ENMRNO" Type="varchar" Mode="In" />
@@ -1707,9 +1711,13 @@
             <End Role="PatientRoomAllocation" EntitySet="PatientRoomAllocations" />
           </AssociationSet>
           <FunctionImport Name="CSVToTable" IsComposable="true" ReturnType="Collection(Int32)">
-            <Parameter Name="InStr" Mode="In" Type="String" />
+          <Parameter Name="InStr" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="InventoryReport" ReturnType="Collection(HISDBModel.InventoryReport_Result)" />
+          <FunctionImport Name="CreateMasterOrder">
+            <Parameter Name="OrderNo" Mode="In" Type="String" />
+            <Parameter Name="OMID" Mode="InOut" Type="Int32" />
+          </FunctionImport>
           </EntityContainer>
         <EntityType Name="LabTestMaster">
           <Key>
@@ -1722,7 +1730,7 @@
           <Property Name="VisitID" Type="Int32" />
           <Property Name="IsBillPaid" Type="Boolean" />
           <Property Name="IsDelivered" Type="Boolean" />
-          <Property Name="Discount" Type="Decimal" Precision="4" Scale="2" />
+          <Property Name="Discount" Type="Decimal" Precision="5" Scale="2" />
           <Property Name="PaidAmount" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="TotalAmount" Type="Decimal" Precision="19" Scale="4" />
           <NavigationProperty Name="User" Relationship="HISDBModel.FK_LTM_Doctor" FromRole="LabTestMaster" ToRole="User" />
@@ -2470,6 +2478,7 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="CreateMasterOrder" FunctionName="HISDBModel.Store.CreateMasterOrder" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

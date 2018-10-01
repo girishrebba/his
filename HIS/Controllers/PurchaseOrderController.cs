@@ -36,11 +36,11 @@ namespace HIS.Controllers
         [HttpGet]
         public ActionResult GetShippedMedicines(string poNumber)
         {       
-                List<PurchaseOrder> shippedMedicines = GetPOItems(poNumber);
+                List<PurchaseOrderViewModel> shippedMedicines = GetPOItems(poNumber);
                 return Json(new { data = shippedMedicines }, JsonRequestBehavior.AllowGet);       
         }
 
-        public List<PurchaseOrder> GetPOItems(string poNumber)
+        public List<PurchaseOrderViewModel> GetPOItems(string poNumber)
         {
             using (HISDBEntities hs = new HISDBEntities())
             {
@@ -54,7 +54,7 @@ namespace HIS.Controllers
                             mm.MedDose
                         }).OrderByDescending(p => p.po.OrderID)
                                                     .AsEnumerable().
-                                                       Select(x => new PurchaseOrder
+                                                       Select(x => new PurchaseOrderViewModel
                                                        {
                                                            OrderID = x.po.OrderID,
                                                            PONumber = x.po.PONumber,
@@ -71,6 +71,44 @@ namespace HIS.Controllers
                                                            BatchNo = x.po.BatchNo,
                                                            LotNo = x.po.LotNo
                                                        }).ToList();
+            }
+        }
+
+        public List<OrderRequest> GetRequestedItems()
+        {
+            using (HISDBEntities hs = new HISDBEntities())
+            {
+                var order = hs.OrderMasters.OrderByDescending(o => o.OrderNO).FirstOrDefault();
+
+                if (order != null && order.Status == false)
+                {
+                    return (from om in hs.OrderMasters
+                            join or in hs.OrderRequests on om.OMID equals or.OMID
+                            join mm in hs.MedicineMasters on or.MedicineID equals mm.MMID
+                            where om.OrderNO == order.OrderNO
+                            select new
+                            {
+                                om,
+                                or,
+                                mm.MedicineName,
+                                mm.MedDose
+                            }).OrderByDescending(p => p.om.OMID)
+                                                        .AsEnumerable().
+                                                           Select(x => new OrderRequest
+                                                           {
+                                                               OrderNo = x.om.OrderNO,
+                                                               MedicineID = x.or.MedicineID,
+                                                               MedicineWithDose = HtmlHelpers.HtmlHelpers.GetMedicineWithDose(x.MedicineName, x.MedDose),
+                                                               Quantity = x.or.Quantity,
+                                                               PlacedQty = x.or.Quantity,
+                                                               OrderDate = DateTime.Now.ToString("MM/dd/yyyy") 
+
+                                                           }).ToList();
+                }
+                else
+                {
+                    return new List<OrderRequest>();
+                }
             }
         }
 
@@ -275,7 +313,7 @@ namespace HIS.Controllers
 
         private ActionResult EmptyPurchaseOrder()
         {
-            return View(new PurchaseOrder
+            return View(new PurchaseOrderViewModel
             {
                 PONumber = string.Empty,
                 MedicineID = 0,
@@ -293,9 +331,62 @@ namespace HIS.Controllers
         [HttpGet]
         public ActionResult EditPO(string poNumber)
         {
-            List<PurchaseOrder> shippedMedicines = GetPOItems(poNumber);
+            List<PurchaseOrderViewModel> shippedMedicines = GetPOItems(poNumber);
             return View(shippedMedicines);
         }
+
+        [HttpGet]
+        public ActionResult PlaceOrder()
+        {
+            List<OrderRequest> reqMedicines = GetRequestedItems();
+            return View(reqMedicines);
+        }
+
+        [HttpPost]
+        public ActionResult PlaceOrder(List<OrderRequest> items)
+        {
+            bool hasItems = true;
+            string orderNo = string.Empty;
+            using (HISDBEntities db = new HISDBEntities())
+            {
+                if (items != null && items.Count() > 0)
+                {
+                    orderNo = items[0].OrderNo;
+                    if(items.Count() == 1 && items[0].MedicineID == 0)
+                    {
+                        hasItems = false;
+                    }
+
+                    if (hasItems)
+                    {
+                        foreach (OrderRequest or in items)
+                        {
+                            var po = new PurchaseOrder()
+                            {
+                                PONumber = or.OrderNo,
+                                OrderedDate = DateTime.Now,
+                                OrderedQty = or.PlacedQty.HasValue ? or.PlacedQty.Value : 0,
+                                MedicineID = or.MedicineID
+                            };
+                            db.PurchaseOrders.Add(po);
+                        }
+                    }
+                    var reqOrder = db.OrderMasters.Where(o => o.OrderNO == orderNo).FirstOrDefault();
+                    if(reqOrder != null)
+                    {
+                        reqOrder.Status = true;
+                        db.Entry(reqOrder).State = EntityState.Modified;
+                    }
+                    db.SaveChanges();
+                    return Json(new { success = true, message = string.Format("Order# - {0} placed Successfully", items[0].OrderNo) }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Error occured" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+        }
+
 
         [HttpPost]
         public ActionResult EditPO(List<PurchaseOrder> items)

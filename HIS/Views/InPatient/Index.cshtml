@@ -116,8 +116,8 @@
                         resizable: true,
                         modal: true,
                         title: id == 0?'Create In-Patient' : 'Edit In-Patient',
-                        width: 850,
-                        top: 147,
+                        width: '60%',
+                        top: '15%',
                         close: function () {
                             Popup.dialog('destroy').remove();
                         },
@@ -521,13 +521,13 @@
             tbl.VisitID = visitID;
             tbl.MedicineID = $($(this).find('td:eq(1)')).html();
             tbl.DeliverQty = $($(this).find('td:eq(4)')).find('.deliverQty').val();
+            tbl.RequestQty = $($(this).find('td:eq(5)')).find('.reqQty').val();
             tbl.BatchNo = $($(this).find('td:eq(8)')).find('.batchNo').val();
             tbl.LotNo = $($(this).find('td:eq(9)')).find('.lotNo').val();
             tbl.Discount = discount;
             tbl.PaidAmount = amountToBePaid;
             tbl.TotalAmount = totalAmount;
             tbl.PMID = PmID;
-            //tbl.MedicineWithDose = $($(this).find('td:eq(2)')).html();
             prescriptions.push(tbl);
         });
         $.ajax({
@@ -589,6 +589,26 @@
             ppItems.push(tbl);
         }
         $('body').loadingModal({ text: 'Processing...' });
+        $(form).find('#headerDiv').append("</br><table><tr><td>ENMRNO: " + $('#ENMRNO').val() + "</td></tr><tr><td>Doctor: " + $('#DoctorName').val() + "</td></tr></table>");
+        $(form).find('#headerDiv').append($(form).find('#ppTable'));
+        $('#fstRow').closest('tr').remove();
+        $('#thd').find('th:last').remove();
+        $("#tbd tr").each(function () {
+            $(this).find('td:last').remove();
+        });
+        var option_all = $("#TestIds option:selected").map(function () {
+            return $(this).text();
+        }).get().join(',');
+
+        var str_array = option_all.split(',');
+        var tbodyTR = '';
+        var tbodtTD = '';
+        for (var i = 0; i < str_array.length; i++) {
+            tbodtTD += '<tr><td>' + str_array[i].replace(/^\s*/, "").replace(/\s*$/, "") + '</td></tr>'
+        }
+        tbodyTR += tbodtTD;
+        $(form).find('#headerDiv').append("</br><table class='table table-striped table-bordered'><thead><tr><td>Test Name</td></tr></thead><tbody>" + tbodyTR + "</tbody></table>");
+
         $.ajax({
             type: "POST",
             contentType: "application/json",
@@ -596,6 +616,11 @@
             data: JSON.stringify(ppItems),
             success: function (data) {
                 if (data.success) {
+                    $('#headerDiv').printThis({
+                        header: '<img src="http://localhost:50415/light/images/hms-logo_login.png" style="width:420px;" alt="Mouldifi" title="Sravanthi Hospitals">',
+                        footer: false,
+                        pageTitle: ""
+                    });
                     newPP.dialog('close');
                     dataTable.ajax.reload();
                     $.notify(data.message, {

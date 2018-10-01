@@ -1,4 +1,4 @@
-﻿@model List<HIS.PurchaseOrder>
+﻿@model List<HIS.PurchaseOrderViewModel>
 @{
     Layout = null;
 }
@@ -51,7 +51,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (PurchaseOrder p in Model)
+                            @foreach (PurchaseOrderViewModel p in Model)
                     {
                         <tr>
                             <td style="display:none">@p.OrderID</td>

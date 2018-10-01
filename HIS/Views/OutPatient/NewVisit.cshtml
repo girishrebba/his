@@ -116,7 +116,8 @@
     $("#Discount").blur(function () {
         var calculatedFee = $('#Fee').val();
         if ($("#Discount").val() > 0) {
-            calculatedFee = $('#Fee').val() - $("#Discount").val();
+            var discountAmnt = ($('#Fee').val() * ($("#Discount").val() / 100)).toFixed(2);
+            calculatedFee = $('#Fee').val() - discountAmnt;
         }
         $('#Fee').val(calculatedFee);
     });

@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Configuration;
 using System.IO;
+using System.Data.Entity;
 
 namespace HIS.HtmlHelpers
 {
@@ -539,5 +540,64 @@ public static List<User> GetDoctors()
             return result;
         }
        
+        public static void CreateOrderRequest(PatientPrescription prescription)
+        {
+            string orderNo = "0";
+            int omid = 0;
+            using (var db = new HISDBEntities())
+            {
+                if (prescription != null && prescription.RequestQty > 0)
+                {
+                    var order = db.OrderMasters.OrderByDescending(o => o.OrderNO).FirstOrDefault();
+                    if (order != null && order.Status == false)
+                    {
+                        omid = order.OMID;
+                    }
+                    else
+                    {
+                        var lastOrder = db.OrderMasters.OrderByDescending(o => o.OMID).FirstOrDefault();
+                        if (lastOrder != null)
+                        {
+                            orderNo = (Convert.ToInt32(lastOrder.OrderNO) + 1).ToString().PadLeft(5, '0');
+                        }
+                        else
+                        {
+                            orderNo = (Convert.ToInt32(orderNo) + 1).ToString().PadLeft(5, '0');
+                        }
+                        System.Data.Entity.Core.Objects.ObjectParameter omidOut = new System.Data.Entity.Core.Objects.ObjectParameter("OMID", typeof(Int32));
+                        db.CreateMasterOrder(orderNo, omidOut);
+                        omid = Convert.ToInt32(omidOut.Value);
+                    }
+                    var requestWithOrder = db.OrderRequests.Where(or => or.OMID == omid && or.MedicineID == prescription.MedicineID).FirstOrDefault();
+                    if (requestWithOrder != null)
+                    {
+                        requestWithOrder.Quantity = requestWithOrder.Quantity + prescription.RequestQty;
+                        db.Entry(requestWithOrder).State = EntityState.Modified;
+                    }
+                    else {
+                        OrderRequest oReq = new OrderRequest();
+                        oReq.OMID = omid;
+                        oReq.MedicineID = prescription.MedicineID;
+                        oReq.Quantity = prescription.RequestQty;
+                        db.OrderRequests.Add(oReq);
+                    }
+                    db.SaveChanges();
+                }     
+            }
+        }
+
+        public static string LoginUserName()
+        {
+            using (var db = new HISDBEntities())
+            {
+                int loginUser = Convert.ToInt32(System.Web.HttpContext.Current.Session["UserID"]);
+                var user = db.Users.Where(u => u.UserID == loginUser).FirstOrDefault();
+                if(user != null)
+                {
+                    return GetFullName(user.FirstName,user.MiddleName,user.LastName);
+                }
+            }
+            return string.Empty;
+        }
     }
 }

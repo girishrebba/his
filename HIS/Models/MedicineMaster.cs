@@ -28,5 +28,8 @@ namespace HIS
         [Display(Name = "Dose:")]
         [Required(ErrorMessage = "Please enter Dose", AllowEmptyStrings = false)]
         public string MedDose { get; set; }
+        [Display(Name = "Trigger Quantity:")]
+        [Required(ErrorMessage = "Please enter Trigger Quantity", AllowEmptyStrings = false)]
+        public int TriggerQty { get; set; }
     }
 }
