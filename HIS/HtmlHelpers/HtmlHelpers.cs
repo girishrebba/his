@@ -325,6 +325,9 @@ public static List<User> GetDoctors()
                                          ConsultType = x.ConsultType,
                                          Fee = x.pv.Fee,
                                          Discount = x.pv.Discount,
+                                         DoctorID = x.pv.DoctorID,
+                                         ConsultTypeID = x.pv.ConsultTypeID,
+                                         DateOfVisit = x.pv.DateOfVisit,
                                          DoctorName = GetFullName(x.u.FirstName, x.u.MiddleName, x.u.LastName)  
                                      }).ToList();
                 }
@@ -337,7 +340,8 @@ public static List<User> GetDoctors()
                         var cfee = hs.ConsultationFees.Where(cf => cf.DoctorID == pv.DoctorID && cf.ConsultTypeID == pv.ConsultTypeID).FirstOrDefault();
                         if (cfee != null)
                         {
-                            pv.ValidDate = DateFormat(pv.DateOfVisit.AddDays(cfee.ValidDays.HasValue ? cfee.ValidDays.Value : 0));
+                            int days = cfee.ValidDays.HasValue ? cfee.ValidDays.Value : 0;
+                            pv.ValidDate = DateFormat(pv.DateOfVisit.AddDays(days));
                         }
                         else
                         {
