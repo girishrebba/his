@@ -307,7 +307,6 @@ public static List<User> GetDoctors()
                     patientVisits = (from pv in hs.PatientVisitHistories
                                          join op in hs.OutPatients on pv.ENMRNO equals op.ENMRNO
                                          join ct in hs.ConsultationTypes on pv.ConsultTypeID equals ct.ConsultTypeID
-                                         join cf in hs.ConsultationFees on ct.ConsultTypeID equals cf.ConsultTypeID
                                          join u in hs.Users on pv.DoctorID equals u.UserID
                                          join ut in hs.UserTypes on u.UserTypeID equals ut.UserTypeID
                                          where pv.ENMRNO.Equals(enmrNo)
@@ -315,8 +314,7 @@ public static List<User> GetDoctors()
                                          {
                                              pv,
                                              u,
-                                             ct.ConsultType,
-                                             cf.ValidDays
+                                             ct.ConsultType
                                          })
                                       .OrderByDescending(b => b.pv.DateOfVisit)
                                       .AsEnumerable()
@@ -327,10 +325,29 @@ public static List<User> GetDoctors()
                                          ConsultType = x.ConsultType,
                                          Fee = x.pv.Fee,
                                          Discount = x.pv.Discount,
-                                         DoctorName = GetFullName(x.u.FirstName, x.u.MiddleName, x.u.LastName),
-                                         ValidDate = DateFormat(x.pv.DateOfVisit.AddDays(x.ValidDays.HasValue ? x.ValidDays.Value : 0))
+                                         DoctorName = GetFullName(x.u.FirstName, x.u.MiddleName, x.u.LastName)  
                                      }).ToList();
                 }
+
+                // Bind the Valid till date
+                if (patientVisits != null && patientVisits.Count() > 0)
+                {
+                    foreach (PatientVisitHistory pv in patientVisits)
+                    {
+                        var cfee = hs.ConsultationFees.Where(cf => cf.DoctorID == pv.DoctorID && cf.ConsultTypeID == pv.ConsultTypeID).FirstOrDefault();
+                        if (cfee != null)
+                        {
+                            pv.ValidDate = DateFormat(pv.DateOfVisit.AddDays(cfee.ValidDays.HasValue ? cfee.ValidDays.Value : 0));
+                        }
+                        else
+                        {
+                            pv.ValidDate = pv.DOVDisplay;
+                        }
+                        
+
+                    }
+                }
+
                 return patientVisits;
             }
         }
