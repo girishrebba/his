@@ -1065,12 +1065,14 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InPatientController.cs" />
     <Compile Include="Controllers\IntakesController.cs" />
+    <Compile Include="Controllers\InventoryRptController.cs" />
     <Compile Include="Controllers\LabController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\MedicineMasterController.cs" />
     <Compile Include="Controllers\OutPatientController.cs" />
     <Compile Include="Controllers\PermissionsController.cs" />
     <Compile Include="Controllers\PurchaseOrderController.cs" />
+    <Compile Include="Controllers\RevenuerptController.cs" />
     <Compile Include="Controllers\RolePermissionsController.cs" />
     <Compile Include="Controllers\RoomsController.cs" />
     <Compile Include="Controllers\RoomTypeController.cs" />
@@ -1413,6 +1415,8 @@
     <Content Include="Views\InPatient\DeliverPrescription.cshtml" />
     <Content Include="Views\OutPatient\PrintHistory.cshtml" />
     <Content Include="Views\PurchaseOrder\PlaceOrder.cshtml" />
+    <Content Include="Views\Revenuerpt\Index.cshtml" />
+    <Content Include="Views\InventoryRpt\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

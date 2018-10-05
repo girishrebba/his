@@ -56,23 +56,23 @@ namespace HIS.Controllers
                                  }).ToList();
 
                 // Bind the Valid till date
-                if(outPatients != null && outPatients.Count() > 0)
-                {
-                    int validDays = 0;
-                    foreach(OutPatient op in outPatients)
-                    {
-                        var latestVisit = hs.PatientVisitHistories.Where(pvh => pvh.ENMRNO == op.ENMRNO).OrderByDescending(pvh => pvh.SNO).FirstOrDefault();
-                        if(latestVisit != null)
-                        {
-                            validDays = hs.ConsultationFees.Where(cf => cf.DoctorID == latestVisit.DoctorID && cf.ConsultTypeID == latestVisit.ConsultTypeID).First().ValidDays.Value;
-                            if (latestVisit.DateOfVisit.AddDays(validDays) > DateTime.Today)
-                            {
-                                op.ValidDateDisplay = HtmlHelpers.HtmlHelpers.DateFormat(latestVisit.DateOfVisit.AddDays(validDays));
-                            }
-                        }
+                //if(outPatients != null && outPatients.Count() > 0)
+                //{
+                //    int validDays = 0;
+                //    foreach(OutPatient op in outPatients)
+                //    {
+                //        var latestVisit = hs.PatientVisitHistories.Where(pvh => pvh.ENMRNO == op.ENMRNO).OrderByDescending(pvh => pvh.SNO).FirstOrDefault();
+                //        if(latestVisit != null)
+                //        {
+                //            validDays = hs.ConsultationFees.Where(cf => cf.DoctorID == latestVisit.DoctorID && cf.ConsultTypeID == latestVisit.ConsultTypeID).First().ValidDays.Value;
+                //            if (latestVisit.DateOfVisit.AddDays(validDays) > DateTime.Today)
+                //            {
+                //                op.ValidDateDisplay = HtmlHelpers.HtmlHelpers.DateFormat(latestVisit.DateOfVisit.AddDays(validDays));
+                //            }
+                //        }
                         
-                    }
-                }
+                //    }
+                //}
 
                 return Json(new { data = outPatients }, JsonRequestBehavior.AllowGet);
             }

@@ -70,27 +70,27 @@
                         "data": null, "render": function (data) {
                             var disabled = 'disabled btn-success';
                             if (!data.IsDischarged) { disabled = '' }
-                            return "@if (ViewContext.Controller.HasPermission("InPatient-AddModify")){<a class='btn btn-default btn-sm "+disabled+"' title='Edit' onclick=PopupPatient('@Url.Action("AddModify","InPatient")/?enmrNo=" + data.ENMRNO + "',1)><i class='fa fa-user-edit'></i>"
-                                    + "</a>}@if (ViewContext.Controller.HasPermission("InPatient-ViewPatient"))
-                                {<a class='btn btn-info btn-sm' title='View Patient' style='margin-left:5px' onclick=PopupViewPatient('@Url.Action("ViewPatient", "InPatient")/?enmrNo=" + data.ENMRNO + "')><i class='fa fa-info-circle'></i></a>}"
+                            return "@if (ViewContext.Controller.HasPermission("InPatient-AddModify")){<a class='btn btn-default btn-sm " + disabled + "' title='Edit' onclick=PopupPatient('@Url.Action("AddModify","InPatient")/?enmrNo=" + data.ENMRNO + "',1)><i class='fa fa-user-edit his-fa-size'></i>"
+                                + "</a>}@if (ViewContext.Controller.HasPermission("InPatient-ViewPatient"))
+                                {<a class='btn btn-info btn-sm' title='View Patient' style='margin-left:5px' onclick=PopupViewPatient('@Url.Action("ViewPatient", "InPatient")/?enmrNo=" + data.ENMRNO + "')><i class='fa fa-info-circle his-fa-size'></i></a>}"
                                 + "@if (ViewContext.Controller.HasPermission("InPatient-BedAllocation")){
-                                    <a class='btn btn-primary btn-sm " + disabled +"' title='Bed' style='margin-left:5px' onclick=PopupPatientAllocationView('@Url.Action("BedAllocation", "InPatient")/?enmrNo=" + data.ENMRNO + "')><i class='fa fa-bed'></i></a>}"
-                                    + "@if (ViewContext.Controller.HasPermission("InPatient-Fee")){
-                                        <a class='btn btn-primary btn-sm' title='Fee' style='margin-left:5px' onclick=PopupFee('@Url.Action("Fee", "InPatient")/?enmrNo=" + data.ENMRNO + "')><i class='fa fa-rupee-sign'></i></a>}"
+                                    <a class='btn btn-primary btn-sm " + disabled + "' title='Bed' style='margin-left:5px' onclick=PopupPatientAllocationView('@Url.Action("BedAllocation", "InPatient")/?enmrNo=" + data.ENMRNO + "')><i class='fa fa-bed his-fa-size'></i></a>}"
+                                + "@if (ViewContext.Controller.HasPermission("InPatient-Fee")){
+                                        <a class='btn btn-primary btn-sm' title='Fee' style='margin-left:5px' onclick=PopupFee('@Url.Action("Fee", "InPatient")/?enmrNo=" + data.ENMRNO + "')><i class='fa fa-rupee-sign his-fa-size'></i></a>}"
                                 + "@if (ViewContext.Controller.HasPermission("InPatient-Observations")){
-                                        <a class='btn btn-primary btn-sm' title='Observation' style='margin-left:5px' onclick=PopupObservations('@Url.Action("Observations", "InPatient")/?enmrNo=" + data.ENMRNO + "')><i class='fa fa-briefcase-medical'></i></a>}"
+                                        <a class='btn btn-primary btn-sm' title='Observation' style='margin-left:5px' onclick=PopupObservations('@Url.Action("Observations", "InPatient")/?enmrNo=" + data.ENMRNO + "')><i class='fa fa-briefcase-medical his-fa-size'></i></a>}"
                                 + "@if (ViewContext.Controller.HasPermission("InPatient-Prescription")){
-                                    <a class='btn btn-primary btn-sm' title='Prescription' style='margin-left:5px' onclick=PopupPrescription('@Url.Action("Prescription", "InPatient")/?enmrNo=" + data.ENMRNO + "')><i class='fa fa-prescription'></i></a>}"
+                                    <a class='btn btn-primary btn-sm' title='Prescription' style='margin-left:5px' onclick=PopupPrescription('@Url.Action("Prescription", "InPatient")/?enmrNo=" + data.ENMRNO + "')><i class='fa fa-prescription his-fa-size'></i></a>}"
                                 + "@if (ViewContext.Controller.HasPermission("InPatient-DeliverPrescription")){
-                                    <a class='btn btn-primary btn-sm " + disabled+"' title='Deliver Prescription' style='margin-left:5px' onclick=PopupDeliverPrescription('@Url.Action("DeliverPrescription", "InPatient")/?enmrNo=" + data.ENMRNO + "')><i class='fa fa-prescription-bottle-alt'></i></a>}"
+                                    <a class='btn btn-primary btn-sm " + disabled + "' title='Deliver Prescription' style='margin-left:5px' onclick=PopupDeliverPrescription('@Url.Action("DeliverPrescription", "InPatient")/?enmrNo=" + data.ENMRNO + "')><i class='fa fa-prescription-bottle-alt his-fa-size'></i></a>}"
                                 + "@if (ViewContext.Controller.HasPermission("InPatient-PatientTests")){
-                                    <a class='btn btn-primary btn-sm' title='Lab' style='margin-left:5px' onclick=PopupPatientTests('@Url.Action("PatientTests", "InPatient")/?enmrNo=" + data.ENMRNO + "')><i class='fa fa-flask'></i></a>}"
+                                    <a class='btn btn-primary btn-sm' title='Lab' style='margin-left:5px' onclick=PopupPatientTests('@Url.Action("PatientTests", "InPatient")/?enmrNo=" + data.ENMRNO + "')><i class='fa fa-flask his-fa-size'></i></a>}"
                                 + "@if (ViewContext.Controller.HasPermission("InPatient-LabTestBillPay")){
-                                    <a class='btn btn-primary btn-sm " + disabled+"' title='Lab Test Bill Payment' style='margin-left:5px' onclick=PopupLabTestBillPayForm('@Url.Action("LabTestBillPay", "InPatient")/?enmrNo=" + data.ENMRNO + "')><i class='fa fa-credit-card'></i></a>}"
-                                    + "@if (ViewContext.Controller.HasPermission("InPatient-PrintHistory")){
-                                        <a class='btn btn-primary btn-sm' title='View & Print' style='margin-left:5px' onclick=PopupPrint('@Url.Action("PrintHistory", "InPatient")/?enmrNo=" + data.ENMRNO + "')><i class='fa fa-print'></i></a>}"
+                                    <a class='btn btn-primary btn-sm " + disabled + "' title='Lab Test Bill Payment' style='margin-left:5px' onclick=PopupLabTestBillPayForm('@Url.Action("LabTestBillPay", "InPatient")/?enmrNo=" + data.ENMRNO + "')><i class='fa fa-credit-card his-fa-size'></i></a>}"
+                                + "@if (ViewContext.Controller.HasPermission("InPatient-PrintHistory")){
+                                        <a class='btn btn-primary btn-sm' title='View & Print' style='margin-left:5px' onclick=PopupPrint('@Url.Action("PrintHistory", "InPatient")/?enmrNo=" + data.ENMRNO + "')><i class='fa fa-print his-fa-size'></i></a>}"
                                 + "@if (ViewContext.Controller.HasPermission("InPatient-AddModify")){
-                                    <a class='btn btn-default btn-sm " + disabled +"' title='Discharge' style='margin-left:5px' onclick=PopupDischargeForm('@Url.Action("Discharge","InPatient")/?enmrNo=" + data.ENMRNO + "'," + JSON.stringify(data.ENMRNO)+")><i class='fa fa-sign-out-alt'></i></a>}";
+                                    <a class='btn btn-default btn-sm " + disabled + "' title='Discharge' style='margin-left:5px' onclick=PopupDischargeForm('@Url.Action("Discharge","InPatient")/?enmrNo=" + data.ENMRNO + "'," + JSON.stringify(data.ENMRNO) +")><i class='fa fa-sign-out-alt his-fa-size'></i></a>}";
                             },
                         "orderable": false,
                         "searchable": false

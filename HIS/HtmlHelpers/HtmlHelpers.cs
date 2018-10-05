@@ -307,14 +307,16 @@ public static List<User> GetDoctors()
                     patientVisits = (from pv in hs.PatientVisitHistories
                                          join op in hs.OutPatients on pv.ENMRNO equals op.ENMRNO
                                          join ct in hs.ConsultationTypes on pv.ConsultTypeID equals ct.ConsultTypeID
+                                         join cf in hs.ConsultationFees on ct.ConsultTypeID equals cf.ConsultTypeID
                                          join u in hs.Users on pv.DoctorID equals u.UserID
                                          join ut in hs.UserTypes on u.UserTypeID equals ut.UserTypeID
-                                         where ut.UserTypeName.Equals("Doctor") && pv.ENMRNO.Equals(enmrNo)
+                                         where pv.ENMRNO.Equals(enmrNo)
                                          select new
                                          {
                                              pv,
                                              u,
-                                             ct.ConsultType
+                                             ct.ConsultType,
+                                             cf.ValidDays
                                          })
                                       .OrderByDescending(b => b.pv.DateOfVisit)
                                       .AsEnumerable()
@@ -325,11 +327,18 @@ public static List<User> GetDoctors()
                                          ConsultType = x.ConsultType,
                                          Fee = x.pv.Fee,
                                          Discount = x.pv.Discount,
-                                         DoctorName = GetFullName(x.u.FirstName, x.u.MiddleName, x.u.LastName)
+                                         DoctorName = GetFullName(x.u.FirstName, x.u.MiddleName, x.u.LastName),
+                                         ValidDate = DateFormat(x.pv.DateOfVisit.AddDays(x.ValidDays.HasValue ? x.ValidDays.Value : 0))
                                      }).ToList();
                 }
                 return patientVisits;
             }
+        }
+
+        private static int ValidDays(int? days)
+        {
+            if (days.HasValue) return days.Value;
+            return 0;
         }
 
         public static List<PatientPrescription> GetPatientPrescriptions(string enmrNo)

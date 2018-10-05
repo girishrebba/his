@@ -19,7 +19,7 @@ namespace HIS.Controllers
             return View();
         }
 
-        public ActionResult GetPoNumbers()
+        public JsonResult GetPoNumbers()
         {
             using (HISDBEntities hs = new HISDBEntities())
             {
@@ -34,7 +34,7 @@ namespace HIS.Controllers
         }
 
         [HttpGet]
-        public ActionResult GetShippedMedicines(string poNumber)
+        public JsonResult GetShippedMedicines(string poNumber)
         {       
                 List<PurchaseOrderViewModel> shippedMedicines = GetPOItems(poNumber);
                 return Json(new { data = shippedMedicines }, JsonRequestBehavior.AllowGet);       
@@ -196,7 +196,7 @@ namespace HIS.Controllers
             }
         }
 
-        public ActionResult GetShippedMedicines()
+        public JsonResult GetShippedMedicines()
         {
             using (HISDBEntities hs = new HISDBEntities())
             {
@@ -227,26 +227,26 @@ namespace HIS.Controllers
             }
         }
 
-        [HttpGet]
-        public ActionResult AddModify(int id = 0)
-        {
-            if (id == 0)
-            {
-                return View(new PurchaseOrder());
-            }
-            else
-            {
-                var shippedMedicine = GetShipmentInfo(id);
-                if (shippedMedicine != null)
-                {
-                  return View(shippedMedicine);
-                }
-                else
-                {
-                    return HttpNotFound();
-                }
-            }
-        }
+        //[HttpGet]
+        //public ActionResult AddModify(int id = 0)
+        //{
+        //    if (id == 0)
+        //    {
+        //        return View(new PurchaseOrder());
+        //    }
+        //    else
+        //    {
+        //        var shippedMedicine = GetShipmentInfo(id);
+        //        if (shippedMedicine != null)
+        //        {
+        //          return View(shippedMedicine);
+        //        }
+        //        else
+        //        {
+        //            return HttpNotFound();
+        //        }
+        //    }
+        //}
 
         [HttpPost]
         public JsonResult GetMedicines(string Prefix)
@@ -263,25 +263,25 @@ namespace HIS.Controllers
             }         
         }
         
-        [HttpPost]
-        public ActionResult AddModify(PurchaseOrder po)
-        {
-            using (HISDBEntities db = new HISDBEntities())
-            {
-                if (po.OrderID == 0)
-                {
-                    db.PurchaseOrders.Add(po);
-                    db.SaveChanges();
-                    return Json(new { success = true, message = "Saved Successfully" }, JsonRequestBehavior.AllowGet);
-                }
-                else
-                {
-                    db.Entry(po).State = EntityState.Modified;
-                    db.SaveChanges();
-                    return Json(new { success = true, message = "Updated Successfully" }, JsonRequestBehavior.AllowGet);
-                }
-            }
-        }
+        //[HttpPost]
+        //public ActionResult AddModify(PurchaseOrder po)
+        //{
+        //    using (HISDBEntities db = new HISDBEntities())
+        //    {
+        //        if (po.OrderID == 0)
+        //        {
+        //            db.PurchaseOrders.Add(po);
+        //            db.SaveChanges();
+        //            return Json(new { success = true, message = "Saved Successfully" }, JsonRequestBehavior.AllowGet);
+        //        }
+        //        else
+        //        {
+        //            db.Entry(po).State = EntityState.Modified;
+        //            db.SaveChanges();
+        //            return Json(new { success = true, message = "Updated Successfully" }, JsonRequestBehavior.AllowGet);
+        //        }
+        //    }
+        //}
 
         public PurchaseOrder GetShipmentInfo(int orderID)
         {

@@ -133,18 +133,20 @@
                     <th>Doctor</th>
                     <th>Fee</th>
                     <th>Discount</th>
+                    <th>Expiry Date</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var visit in ViewBag.Visits)
                 {
-            <tr>
-                <td>@visit.DOVDisplay</td>
-                <td>@visit.ConsultType</td>
-                <td>@visit.DoctorName</td>
-                <td>@visit.Fee</td>
-                <td>@visit.Discount</td>
-            </tr>
+                <tr>
+                    <td>@visit.DOVDisplay</td>
+                    <td>@visit.ConsultType</td>
+                    <td>@visit.DoctorName</td>
+                    <td>@visit.Fee</td>
+                    <td>@visit.Discount</td>
+                    <td>@visit.ValidDate</td>
+                </tr>
                 }
             </tbody>
         </table>

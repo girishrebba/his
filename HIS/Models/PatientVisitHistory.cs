@@ -12,6 +12,7 @@ namespace HIS
         public string DOVDisplay { get; set; }
         public string ConsultType { get; set; }
         public string DoctorName { get; set; }
+        public string ValidDate { get; set; }
     }
 
     public class PatientVisitHistoryMetaData

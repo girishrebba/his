@@ -73,7 +73,7 @@
                             for (var i = 0; i < data.data.length; i++) {
                                 str += "<tr>";
                                // str += "<td>" + data.data[i]["MedicineName"] + " " + data.data[i]["medDose"] + "</td>";
-                                if (data.data[i]["AvailableQty"] > data.data[i]["TriggerQty"]) {
+                                if (data.data[i]["AvailableQty"] < data.data[i]["TriggerQty"]) {
                                     str += "<td style='padding: 5px; background-color:red;'>" + data.data[i]["MedicineName"] + " " + data.data[i]["medDose"] + "</td>";
                                 } else {
                                     str += "<td>" + data.data[i]["MedicineName"] + " " + data.data[i]["medDose"] + "</td>";
