@@ -193,7 +193,7 @@ namespace HIS.Controllers
                                  join ip in hs.InPatients on hist.ENMRNO equals ip.ENMRNO
                                  join u in hs.Users on hist.DoctorID equals u.UserID
                                  join ut in hs.UserTypes on u.UserTypeID equals ut.UserTypeID
-                                 where ut.UserTypeName.Equals("Doctor") && hist.ENMRNO.Equals(enmrNo)
+                                 where hist.ENMRNO.Equals(enmrNo)
                                  select new { hist, u }).OrderByDescending(c => c.hist.ObservationDate).AsEnumerable()
                                 .Select(x => new InPatientHistory
                                 {
@@ -727,7 +727,7 @@ namespace HIS.Controllers
                                             join ifs in hs.IntakeFrequencies on pp.IntakeFrequencyID equals ifs.FrequencyID
                                             join u in hs.Users on pm.PrescribedBy equals u.UserID
                                             join ut in hs.UserTypes on u.UserTypeID equals ut.UserTypeID
-                                            where ut.UserTypeName.Equals("Doctor") && pm.ENMRNO.Equals(enmrNo) && pm.VisitID == visitID
+                                            where pm.ENMRNO.Equals(enmrNo) && pm.VisitID == visitID
                                             select new
                                             {
                                                 pp,
@@ -768,7 +768,7 @@ namespace HIS.Controllers
                                             join ifs in hs.IntakeFrequencies on pp.IntakeFrequencyID equals ifs.FrequencyID
                                             join u in hs.Users on pm.PrescribedBy equals u.UserID
                                             join ut in hs.UserTypes on u.UserTypeID equals ut.UserTypeID
-                                            where ut.UserTypeName.Equals("Doctor") && pm.ENMRNO.Equals(enmrNo) && pm.VisitID == visitID && pm.IsDelivered == false && pm.ISIP == true && pm.PMID == latestPMID
+                                            where pm.ENMRNO.Equals(enmrNo) && pm.VisitID == visitID && pm.IsDelivered == false && pm.ISIP == true && pm.PMID == latestPMID
                                             select new
                                             {
                                                 pp,
@@ -816,7 +816,7 @@ namespace HIS.Controllers
                                     join tt in hs.TestTypes on pt.TestID equals tt.TestID
                                     join u in hs.Users on ltm.PrescribedBy equals u.UserID
                                     join ut in hs.UserTypes on u.UserTypeID equals ut.UserTypeID
-                                    where ut.UserTypeName.Equals("Doctor") && ltm.ENMRNO == enmrNo && ltm.VisitID == visitID
+                                    where ltm.ENMRNO == enmrNo && ltm.VisitID == visitID
                                     select new
                                     {
                                         pt,
@@ -852,7 +852,7 @@ namespace HIS.Controllers
                                     join tt in hs.TestTypes on pt.TestID equals tt.TestID
                                     join u in hs.Users on ltm.PrescribedBy equals u.UserID
                                     join ut in hs.UserTypes on u.UserTypeID equals ut.UserTypeID
-                                    where ut.UserTypeName.Equals("Doctor") && ltm.ENMRNO == enmrNo && ltm.VisitID == visitID && ltm.IsDelivered == false
+                                    where ltm.ENMRNO == enmrNo && ltm.VisitID == visitID && ltm.IsDelivered == false
                                     select new
                                     {
                                         pt,
@@ -888,7 +888,7 @@ namespace HIS.Controllers
                                     join tt in hs.TestTypes on pt.TestID equals tt.TestID
                                     join u in hs.Users on ltm.PrescribedBy equals u.UserID
                                     join ut in hs.UserTypes on u.UserTypeID equals ut.UserTypeID
-                                    where ut.UserTypeName.Equals("Doctor") && ltm.ENMRNO == enmrNo && ltm.VisitID == visitID && ltm.IsBillPaid == false
+                                    where ltm.ENMRNO == enmrNo && ltm.VisitID == visitID && ltm.IsBillPaid == false
                                     select new
                                     {
                                         pt,

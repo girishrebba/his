@@ -387,7 +387,7 @@ namespace HIS.Controllers
                                             join ifs in hs.IntakeFrequencies on pp.IntakeFrequencyID equals ifs.FrequencyID
                                             join u in hs.Users on pm.PrescribedBy equals u.UserID
                                             join ut in hs.UserTypes on u.UserTypeID equals ut.UserTypeID
-                                            where ut.UserTypeName.Equals("Doctor") && pm.ENMRNO.Equals(enmrNo)&& pm.VisitID == visitID
+                                            where pm.ENMRNO.Equals(enmrNo)&& pm.VisitID == visitID
                                             select new
                                             {
                                                 pp,
@@ -427,7 +427,7 @@ namespace HIS.Controllers
                                             join ifs in hs.IntakeFrequencies on pp.IntakeFrequencyID equals ifs.FrequencyID
                                             join u in hs.Users on pm.PrescribedBy equals u.UserID
                                             join ut in hs.UserTypes on u.UserTypeID equals ut.UserTypeID
-                                            where ut.UserTypeName.Equals("Doctor") && pm.ENMRNO.Equals(enmrNo) && pm.VisitID == visitID && pm.IsDelivered == false 
+                                            where pm.ENMRNO.Equals(enmrNo) && pm.VisitID == visitID && pm.IsDelivered == false 
                                             select new
                                             {
                                                 pp,
@@ -476,7 +476,7 @@ namespace HIS.Controllers
                                     join tt in hs.TestTypes on pt.TestID equals tt.TestID
                                     join u in hs.Users on ltm.PrescribedBy equals u.UserID
                                     join ut in hs.UserTypes on u.UserTypeID equals ut.UserTypeID
-                                    where ut.UserTypeName.Equals("Doctor") && ltm.ENMRNO == enmrNo && ltm.VisitID == visitID
+                                    where ltm.ENMRNO == enmrNo && ltm.VisitID == visitID
                                     select new
                                     {
                                         pt,
@@ -513,7 +513,7 @@ namespace HIS.Controllers
                                     join tt in hs.TestTypes on pt.TestID equals tt.TestID
                                     join u in hs.Users on ltm.PrescribedBy equals u.UserID
                                     join ut in hs.UserTypes on u.UserTypeID equals ut.UserTypeID
-                                    where ut.UserTypeName.Equals("Doctor") && ltm.ENMRNO == enmrNo && ltm.VisitID == visitID && ltm.IsDelivered == false
+                                    where ltm.ENMRNO == enmrNo && ltm.VisitID == visitID && ltm.IsDelivered == false
                                     select new
                                     {
                                         pt,
@@ -550,7 +550,7 @@ namespace HIS.Controllers
                                     join tt in hs.TestTypes on pt.TestID equals tt.TestID
                                     join u in hs.Users on ltm.PrescribedBy equals u.UserID
                                     join ut in hs.UserTypes on u.UserTypeID equals ut.UserTypeID
-                                    where ut.UserTypeName.Equals("Doctor") && ltm.ENMRNO == enmrNo && ltm.VisitID == visitID && ltm.IsBillPaid == false
+                                    where ltm.ENMRNO == enmrNo && ltm.VisitID == visitID && ltm.IsBillPaid == false
                                     select new
                                     {
                                         pt,

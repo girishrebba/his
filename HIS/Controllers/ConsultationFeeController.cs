@@ -51,7 +51,7 @@ namespace HIS.Controllers
         [Description(" - Consultation Fee Add/Edit page.")]
         public ActionResult AddModify(int id = 0)
         {
-            List<User> Users = HtmlHelpers.HtmlHelpers.GetUsers();
+            List<User> Users = HtmlHelpers.HtmlHelpers.GetDoctors();
             List<ConsultationType> ConsultationTypes = HtmlHelpers.HtmlHelpers.GetConsultationTypes();
             if (id == 0)
             {

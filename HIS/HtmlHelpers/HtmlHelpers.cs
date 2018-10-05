@@ -355,7 +355,7 @@ public static List<User> GetDoctors()
                                             join ut in hs.UserTypes on u.UserTypeID equals ut.UserTypeID
                                             join pv in hs.PatientVisitHistories on pm.VisitID equals pv.SNO
                                             join ct in hs.ConsultationTypes on pv.ConsultTypeID equals ct.ConsultTypeID
-                                            where ut.UserTypeName.Equals("Doctor") && pm.ENMRNO.Equals(enmrNo)
+                                            where pm.ENMRNO.Equals(enmrNo)
                                             select new
                                             {
                                                 pp,
@@ -396,7 +396,7 @@ public static List<User> GetDoctors()
                                             join ifs in hs.IntakeFrequencies on pp.IntakeFrequencyID equals ifs.FrequencyID
                                             join u in hs.Users on pm.PrescribedBy equals u.UserID
                                             join ut in hs.UserTypes on u.UserTypeID equals ut.UserTypeID
-                                            where ut.UserTypeName.Equals("Doctor") && pm.ENMRNO.Equals(enmrNo) && pm.VisitID == 0 && pm.ISIP == true && pm.IsDelivered == true
+                                            where pm.ENMRNO.Equals(enmrNo) && pm.VisitID == 0 && pm.ISIP == true && pm.IsDelivered == true
                                             select new
                                             {
                                                 pp,
@@ -436,7 +436,7 @@ public static List<User> GetDoctors()
                                     join tt in hs.TestTypes on pt.TestID equals tt.TestID
                                     join u in hs.Users on ltm.PrescribedBy equals u.UserID
                                     join ut in hs.UserTypes on u.UserTypeID equals ut.UserTypeID
-                                    where ut.UserTypeName.Equals("Doctor") && ltm.ENMRNO == enmrNo 
+                                    where ltm.ENMRNO == enmrNo 
                                     select new
                                     {
                                         pt,
@@ -470,7 +470,7 @@ public static List<User> GetDoctors()
                                     join tt in hs.TestTypes on pt.TestID equals tt.TestID
                                     join u in hs.Users on ltm.PrescribedBy equals u.UserID
                                     join ut in hs.UserTypes on u.UserTypeID equals ut.UserTypeID
-                                    where ut.UserTypeName.Equals("Doctor") && ltm.ENMRNO == enmrNo && ltm.VisitID==0
+                                    where ltm.ENMRNO == enmrNo && ltm.VisitID==0
                                     && ltm.IsDelivered== true
                                     select new
                                     {
