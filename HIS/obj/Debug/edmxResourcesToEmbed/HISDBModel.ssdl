@@ -343,6 +343,21 @@
     <Property Name="RoomTypeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="RoomType" Type="nvarchar" MaxLength="50" Nullable="false" />
   </EntityType>
+  <EntityType Name="ScanCategories">
+    <Key>
+      <PropertyRef Name="SCID" />
+    </Key>
+    <Property Name="SCID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Category" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="ScanID" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Scans">
+    <Key>
+      <PropertyRef Name="ScanID" />
+    </Key>
+    <Property Name="ScanID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ScanName" Type="varchar" MaxLength="50" Nullable="false" />
+  </EntityType>
   <EntityType Name="Specialization">
     <Key>
       <PropertyRef Name="SpecializationID" />
@@ -741,6 +756,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_ScanCategories_ScanID">
+    <End Role="Scans" Type="Self.Scans" Multiplicity="1" />
+    <End Role="ScanCategories" Type="Self.ScanCategories" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Scans">
+        <PropertyRef Name="ScanID" />
+      </Principal>
+      <Dependent Role="ScanCategories">
+        <PropertyRef Name="ScanID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_User_Specialization">
     <End Role="Specialization" Type="Self.Specialization" Multiplicity="1" />
     <End Role="Users" Type="Self.Users" Multiplicity="*" />
@@ -832,6 +859,8 @@
     <EntitySet Name="PurchaseOrder" EntityType="Self.PurchaseOrder" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Rooms" EntityType="Self.Rooms" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="RoomType" EntityType="Self.RoomType" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ScanCategories" EntityType="Self.ScanCategories" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Scans" EntityType="Self.Scans" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Specialization" EntityType="Self.Specialization" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="TestTypes" EntityType="Self.TestTypes" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="UserPermission" EntityType="Self.UserPermission" Schema="dbo" store:Type="Tables" />
@@ -952,6 +981,10 @@
     <AssociationSet Name="FK_PVH_OutPatient_ENMRNO" Association="Self.FK_PVH_OutPatient_ENMRNO">
       <End Role="OutPatients" EntitySet="OutPatients" />
       <End Role="PatientVisitHistory" EntitySet="PatientVisitHistory" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ScanCategories_ScanID" Association="Self.FK_ScanCategories_ScanID">
+      <End Role="Scans" EntitySet="Scans" />
+      <End Role="ScanCategories" EntitySet="ScanCategories" />
     </AssociationSet>
     <AssociationSet Name="FK_User_Specialization" Association="Self.FK_User_Specialization">
       <End Role="Specialization" EntitySet="Specialization" />
