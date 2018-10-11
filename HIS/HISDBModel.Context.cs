@@ -59,6 +59,8 @@ namespace HIS
         public virtual DbSet<OrderMaster> OrderMasters { get; set; }
         public virtual DbSet<OrderRequest> OrderRequests { get; set; }
         public virtual DbSet<InPatient> InPatients { get; set; }
+        public virtual DbSet<ScanCategory> ScanCategories { get; set; }
+        public virtual DbSet<Scan> Scans { get; set; }
     
         public virtual int ConvertOutPatientToInPatient(string eNMRNO, Nullable<decimal> estAmount, Nullable<decimal> advAmount)
         {

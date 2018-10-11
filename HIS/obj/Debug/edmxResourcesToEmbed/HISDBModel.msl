@@ -462,5 +462,22 @@
       </ResultMapping>
     </FunctionImportMapping>
     <FunctionImportMapping FunctionImportName="CreateMasterOrder" FunctionName="HISDBModel.Store.CreateMasterOrder" />
+    <EntitySetMapping Name="ScanCategories">
+      <EntityTypeMapping TypeName="HISDBModel.ScanCategory">
+        <MappingFragment StoreEntitySet="ScanCategories">
+          <ScalarProperty Name="ScanID" ColumnName="ScanID" />
+          <ScalarProperty Name="Category" ColumnName="Category" />
+          <ScalarProperty Name="SCID" ColumnName="SCID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Scans">
+      <EntityTypeMapping TypeName="HISDBModel.Scan">
+        <MappingFragment StoreEntitySet="Scans">
+          <ScalarProperty Name="ScanName" ColumnName="ScanName" />
+          <ScalarProperty Name="ScanID" ColumnName="ScanID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

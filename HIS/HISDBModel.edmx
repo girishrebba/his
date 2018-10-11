@@ -348,6 +348,21 @@
           <Property Name="RoomTypeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="RoomType" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
+        <EntityType Name="ScanCategories">
+          <Key>
+            <PropertyRef Name="SCID" />
+          </Key>
+          <Property Name="SCID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Category" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ScanID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Scans">
+          <Key>
+            <PropertyRef Name="ScanID" />
+          </Key>
+          <Property Name="ScanID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ScanName" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
         <EntityType Name="Specialization">
           <Key>
             <PropertyRef Name="SpecializationID" />
@@ -746,6 +761,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_ScanCategories_ScanID">
+          <End Role="Scans" Type="Self.Scans" Multiplicity="1" />
+          <End Role="ScanCategories" Type="Self.ScanCategories" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Scans">
+              <PropertyRef Name="ScanID" />
+            </Principal>
+            <Dependent Role="ScanCategories">
+              <PropertyRef Name="ScanID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_User_Specialization">
           <End Role="Specialization" Type="Self.Specialization" Multiplicity="1" />
           <End Role="Users" Type="Self.Users" Multiplicity="*" />
@@ -837,6 +864,8 @@
           <EntitySet Name="PurchaseOrder" EntityType="Self.PurchaseOrder" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Rooms" EntityType="Self.Rooms" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RoomType" EntityType="Self.RoomType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ScanCategories" EntityType="Self.ScanCategories" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Scans" EntityType="Self.Scans" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Specialization" EntityType="Self.Specialization" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TestTypes" EntityType="Self.TestTypes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserPermission" EntityType="Self.UserPermission" Schema="dbo" store:Type="Tables" />
@@ -957,6 +986,10 @@
           <AssociationSet Name="FK_PVH_OutPatient_ENMRNO" Association="Self.FK_PVH_OutPatient_ENMRNO">
             <End Role="OutPatients" EntitySet="OutPatients" />
             <End Role="PatientVisitHistory" EntitySet="PatientVisitHistory" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ScanCategories_ScanID" Association="Self.FK_ScanCategories_ScanID">
+            <End Role="Scans" EntitySet="Scans" />
+            <End Role="ScanCategories" EntitySet="ScanCategories" />
           </AssociationSet>
           <AssociationSet Name="FK_User_Specialization" Association="Self.FK_User_Specialization">
             <End Role="Specialization" EntitySet="Specialization" />
@@ -1718,6 +1751,12 @@
             <Parameter Name="OrderNo" Mode="In" Type="String" />
             <Parameter Name="OMID" Mode="InOut" Type="Int32" />
           </FunctionImport>
+          <EntitySet Name="ScanCategories" EntityType="HISDBModel.ScanCategory" />
+          <EntitySet Name="Scans" EntityType="HISDBModel.Scan" />
+          <AssociationSet Name="FK_ScanCategories_ScanID" Association="HISDBModel.FK_ScanCategories_ScanID">
+            <End Role="Scan" EntitySet="Scans" />
+            <End Role="ScanCategory" EntitySet="ScanCategories" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="LabTestMaster">
           <Key>
@@ -2012,6 +2051,35 @@
           <Property Type="Int32" Name="Placedqty" Nullable="true" />
           <Property Type="Int32" Name="TriggerQty" Nullable="true" />
         </ComplexType>
+        <EntityType Name="ScanCategory">
+          <Key>
+            <PropertyRef Name="SCID" />
+          </Key>
+          <Property Name="SCID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Category" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ScanID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Scan" Relationship="HISDBModel.FK_ScanCategories_ScanID" FromRole="ScanCategory" ToRole="Scan" />
+        </EntityType>
+        <EntityType Name="Scan">
+          <Key>
+            <PropertyRef Name="ScanID" />
+          </Key>
+          <Property Name="ScanID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ScanName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="ScanCategories" Relationship="HISDBModel.FK_ScanCategories_ScanID" FromRole="Scan" ToRole="ScanCategory" />
+        </EntityType>
+        <Association Name="FK_ScanCategories_ScanID">
+          <End Type="HISDBModel.Scan" Role="Scan" Multiplicity="1" />
+          <End Type="HISDBModel.ScanCategory" Role="ScanCategory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Scan">
+              <PropertyRef Name="ScanID" />
+            </Principal>
+            <Dependent Role="ScanCategory">
+              <PropertyRef Name="ScanID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2479,6 +2547,23 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="CreateMasterOrder" FunctionName="HISDBModel.Store.CreateMasterOrder" />
+          <EntitySetMapping Name="ScanCategories">
+            <EntityTypeMapping TypeName="HISDBModel.ScanCategory">
+              <MappingFragment StoreEntitySet="ScanCategories">
+                <ScalarProperty Name="ScanID" ColumnName="ScanID" />
+                <ScalarProperty Name="Category" ColumnName="Category" />
+                <ScalarProperty Name="SCID" ColumnName="SCID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Scans">
+            <EntityTypeMapping TypeName="HISDBModel.Scan">
+              <MappingFragment StoreEntitySet="Scans">
+                <ScalarProperty Name="ScanName" ColumnName="ScanName" />
+                <ScalarProperty Name="ScanID" ColumnName="ScanID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

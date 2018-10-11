@@ -1076,6 +1076,8 @@
     <Compile Include="Controllers\RolePermissionsController.cs" />
     <Compile Include="Controllers\RoomsController.cs" />
     <Compile Include="Controllers\RoomTypeController.cs" />
+    <Compile Include="Controllers\ScanCategoryController.cs" />
+    <Compile Include="Controllers\ScanController.cs" />
     <Compile Include="Controllers\SpecializationController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\UserTypeController.cs" />
@@ -1155,6 +1157,8 @@
     <Compile Include="Models\Room.cs" />
     <Compile Include="Models\RoomBilling.cs" />
     <Compile Include="Models\RoomType.cs" />
+    <Compile Include="Models\Scan.cs" />
+    <Compile Include="Models\ScanCategory.cs" />
     <Compile Include="Models\Specialization.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserType.cs" />
@@ -1199,6 +1203,12 @@
       <DependentUpon>HISDBModel.tt</DependentUpon>
     </Compile>
     <Compile Include="RoomType.cs">
+      <DependentUpon>HISDBModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Scan.cs">
+      <DependentUpon>HISDBModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ScanCategory.cs">
       <DependentUpon>HISDBModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Specialization.cs">
@@ -1417,6 +1427,10 @@
     <Content Include="Views\PurchaseOrder\PlaceOrder.cshtml" />
     <Content Include="Views\Revenuerpt\Index.cshtml" />
     <Content Include="Views\InventoryRpt\Index.cshtml" />
+    <Content Include="Views\Scan\Index.cshtml" />
+    <Content Include="Views\Scan\AddModify.cshtml" />
+    <Content Include="Views\ScanCategory\Index.cshtml" />
+    <Content Include="Views\ScanCategory\AddModify.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

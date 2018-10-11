@@ -747,6 +747,12 @@
       <Parameter Name="OrderNo" Mode="In" Type="String" />
       <Parameter Name="OMID" Mode="InOut" Type="Int32" />
     </FunctionImport>
+    <EntitySet Name="ScanCategories" EntityType="HISDBModel.ScanCategory" />
+    <EntitySet Name="Scans" EntityType="HISDBModel.Scan" />
+    <AssociationSet Name="FK_ScanCategories_ScanID" Association="HISDBModel.FK_ScanCategories_ScanID">
+      <End Role="Scan" EntitySet="Scans" />
+      <End Role="ScanCategory" EntitySet="ScanCategories" />
+    </AssociationSet>
   </EntityContainer>
   <EntityType Name="LabTestMaster">
     <Key>
@@ -1041,4 +1047,33 @@
     <Property Type="Int32" Name="Placedqty" Nullable="true" />
     <Property Type="Int32" Name="TriggerQty" Nullable="true" />
   </ComplexType>
+  <EntityType Name="ScanCategory">
+    <Key>
+      <PropertyRef Name="SCID" />
+    </Key>
+    <Property Name="SCID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Category" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="ScanID" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Scan" Relationship="HISDBModel.FK_ScanCategories_ScanID" FromRole="ScanCategory" ToRole="Scan" />
+  </EntityType>
+  <EntityType Name="Scan">
+    <Key>
+      <PropertyRef Name="ScanID" />
+    </Key>
+    <Property Name="ScanID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ScanName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="ScanCategories" Relationship="HISDBModel.FK_ScanCategories_ScanID" FromRole="Scan" ToRole="ScanCategory" />
+  </EntityType>
+  <Association Name="FK_ScanCategories_ScanID">
+    <End Type="HISDBModel.Scan" Role="Scan" Multiplicity="1" />
+    <End Type="HISDBModel.ScanCategory" Role="ScanCategory" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Scan">
+        <PropertyRef Name="ScanID" />
+      </Principal>
+      <Dependent Role="ScanCategory">
+        <PropertyRef Name="ScanID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
 </Schema>

@@ -263,6 +263,19 @@ public static List<User> GetDoctors()
                 return consultationFees;
             }
         }
+
+        public static List<Scan> GetScans()
+        {
+            using (HISDBEntities dc = new HISDBEntities())
+            {
+                var scans = (from s in dc.Scans
+                              select new { s.ScanID, s.ScanName })
+                              .OrderBy(b => b.ScanName).AsEnumerable()
+                              .Select(x => new Scan { ScanID = x.ScanID, ScanName = x.ScanName }).ToList();
+                return scans;
+            }
+        }
+
         public static string GetSequencedEnmrNo()
         {
             string initial = ConfigurationManager.AppSettings["EnmrNoStartsWith"];
