@@ -272,6 +272,7 @@
     <Property Name="TestName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
     <Property Name="TestCost" Type="Decimal" Precision="19" Scale="4" />
     <NavigationProperty Name="PatientTests" Relationship="HISDBModel.FK_PatientTests_TestID" FromRole="TestType" ToRole="PatientTest" />
+    <NavigationProperty Name="PatientScans" Relationship="HISDBModel.FK_PatientScans_ScanID" FromRole="TestType" ToRole="PatientScan" />
   </EntityType>
   <EntityType Name="UserPermission">
     <Key>
@@ -309,6 +310,7 @@
     <NavigationProperty Name="UserType" Relationship="Self.FK_User_Type" FromRole="Users" ToRole="UserType" />
     <NavigationProperty Name="LabTestMasters" Relationship="HISDBModel.FK_LTM_Doctor" FromRole="User" ToRole="LabTestMaster" />
     <NavigationProperty Name="InPatients" Relationship="HISDBModel.FK_InPatients_Doctor" FromRole="User" ToRole="InPatient" />
+    <NavigationProperty Name="ScanTestMasters" Relationship="HISDBModel.FK_STM_Doctor" FromRole="User" ToRole="ScanTestMaster" />
   </EntityType>
   <EntityType Name="UserType">
     <Key>
@@ -753,6 +755,31 @@
       <End Role="Scan" EntitySet="Scans" />
       <End Role="ScanCategory" EntitySet="ScanCategories" />
     </AssociationSet>
+    <EntitySet Name="PatientScans" EntityType="HISDBModel.PatientScan" />
+    <EntitySet Name="ScanTestMasters" EntityType="HISDBModel.ScanTestMaster" />
+    <AssociationSet Name="FK_PatientScan_ScanID" Association="HISDBModel.FK_PatientScan_ScanID">
+      <End Role="Scan" EntitySet="Scans" />
+      <End Role="PatientScan" EntitySet="PatientScans" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PatientScans_ScanID" Association="HISDBModel.FK_PatientScans_ScanID">
+      <End Role="TestType" EntitySet="TestTypes" />
+      <End Role="PatientScan" EntitySet="PatientScans" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PatientScans_STMID" Association="HISDBModel.FK_PatientScans_STMID">
+      <End Role="ScanTestMaster" EntitySet="ScanTestMasters" />
+      <End Role="PatientScan" EntitySet="PatientScans" />
+    </AssociationSet>
+    <AssociationSet Name="FK_STM_Doctor" Association="HISDBModel.FK_STM_Doctor">
+      <End Role="User" EntitySet="Users" />
+      <End Role="ScanTestMaster" EntitySet="ScanTestMasters" />
+    </AssociationSet>
+    <FunctionImport Name="CreateMasterScanTest">
+      <Parameter Name="ENMRNO" Mode="In" Type="String" />
+      <Parameter Name="DoctorID" Mode="In" Type="Int32" />
+      <Parameter Name="VisitID" Mode="In" Type="Int32" />
+      <Parameter Name="ISIP" Mode="In" Type="Boolean" />
+      <Parameter Name="STMID" Mode="InOut" Type="Int32" />
+    </FunctionImport>
   </EntityContainer>
   <EntityType Name="LabTestMaster">
     <Key>
@@ -765,7 +792,7 @@
     <Property Name="VisitID" Type="Int32" />
     <Property Name="IsBillPaid" Type="Boolean" />
     <Property Name="IsDelivered" Type="Boolean" />
-    <Property Name="Discount" Type="Decimal" Precision="5" Scale="2" />
+    <Property Name="Discount" Type="Decimal" Precision="4" Scale="2" />
     <Property Name="PaidAmount" Type="Decimal" Precision="19" Scale="4" />
     <Property Name="TotalAmount" Type="Decimal" Precision="19" Scale="4" />
     <NavigationProperty Name="User" Relationship="HISDBModel.FK_LTM_Doctor" FromRole="LabTestMaster" ToRole="User" />
@@ -1063,6 +1090,8 @@
     <Property Name="ScanID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="ScanName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
     <NavigationProperty Name="ScanCategories" Relationship="HISDBModel.FK_ScanCategories_ScanID" FromRole="Scan" ToRole="ScanCategory" />
+    <Property Name="ScanCost" Type="Decimal" Precision="19" Scale="4" />
+    <NavigationProperty Name="PatientScans" Relationship="HISDBModel.FK_PatientScan_ScanID" FromRole="Scan" ToRole="PatientScan" />
   </EntityType>
   <Association Name="FK_ScanCategories_ScanID">
     <End Type="HISDBModel.Scan" Role="Scan" Multiplicity="1" />
@@ -1073,6 +1102,87 @@
       </Principal>
       <Dependent Role="ScanCategory">
         <PropertyRef Name="ScanID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="PatientScan">
+    <Key>
+      <PropertyRef Name="PSID" />
+    </Key>
+    <Property Name="PSID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="STMID" Type="Int32" Nullable="false" />
+    <Property Name="ScanID" Type="Int32" Nullable="false" />
+    <Property Name="ScanDate" Type="DateTime" Precision="3" />
+    <Property Name="RecordedValues" Type="Decimal" Precision="4" Scale="2" />
+    <Property Name="TestImpression" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="ReportPath" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Scan" Relationship="HISDBModel.FK_PatientScan_ScanID" FromRole="PatientScan" ToRole="Scan" />
+    <NavigationProperty Name="TestType" Relationship="HISDBModel.FK_PatientScans_ScanID" FromRole="PatientScan" ToRole="TestType" />
+    <NavigationProperty Name="ScanTestMaster" Relationship="HISDBModel.FK_PatientScans_STMID" FromRole="PatientScan" ToRole="ScanTestMaster" />
+  </EntityType>
+  <EntityType Name="ScanTestMaster">
+    <Key>
+      <PropertyRef Name="STMID" />
+    </Key>
+    <Property Name="STMID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ENMRNO" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="PrescribedBy" Type="Int32" Nullable="false" />
+    <Property Name="DatePrescribed" Type="DateTime" Precision="0" />
+    <Property Name="VisitID" Type="Int32" />
+    <Property Name="IsBillPaid" Type="Boolean" />
+    <Property Name="IsDelivered" Type="Boolean" />
+    <Property Name="Discount" Type="Decimal" Precision="4" Scale="2" />
+    <Property Name="PaidAmount" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="TotalAmount" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="ISIP" Type="Boolean" />
+    <NavigationProperty Name="PatientScans" Relationship="HISDBModel.FK_PatientScans_STMID" FromRole="ScanTestMaster" ToRole="PatientScan" />
+    <NavigationProperty Name="User" Relationship="HISDBModel.FK_STM_Doctor" FromRole="ScanTestMaster" ToRole="User" />
+  </EntityType>
+  <Association Name="FK_PatientScan_ScanID">
+    <End Type="HISDBModel.Scan" Role="Scan" Multiplicity="1" />
+    <End Type="HISDBModel.PatientScan" Role="PatientScan" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Scan">
+        <PropertyRef Name="ScanID" />
+      </Principal>
+      <Dependent Role="PatientScan">
+        <PropertyRef Name="ScanID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PatientScans_ScanID">
+    <End Type="HISDBModel.TestType" Role="TestType" Multiplicity="1" />
+    <End Type="HISDBModel.PatientScan" Role="PatientScan" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TestType">
+        <PropertyRef Name="TestID" />
+      </Principal>
+      <Dependent Role="PatientScan">
+        <PropertyRef Name="ScanID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PatientScans_STMID">
+    <End Type="HISDBModel.ScanTestMaster" Role="ScanTestMaster" Multiplicity="1" />
+    <End Type="HISDBModel.PatientScan" Role="PatientScan" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ScanTestMaster">
+        <PropertyRef Name="STMID" />
+      </Principal>
+      <Dependent Role="PatientScan">
+        <PropertyRef Name="STMID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_STM_Doctor">
+    <End Type="HISDBModel.User" Role="User" Multiplicity="1" />
+    <End Type="HISDBModel.ScanTestMaster" Role="ScanTestMaster" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="ScanTestMaster">
+        <PropertyRef Name="PrescribedBy" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

@@ -148,7 +148,7 @@
           <Property Name="VisitID" Type="int" />
           <Property Name="IsBillPaid" Type="bit" />
           <Property Name="IsDelivered" Type="bit" />
-          <Property Name="Discount" Type="decimal" Precision="5" Scale="2" />
+          <Property Name="Discount" Type="decimal" Precision="4" Scale="2" />
           <Property Name="PaidAmount" Type="money" />
           <Property Name="TotalAmount" Type="money" />
           <Property Name="ISIP" Type="bit" />
@@ -256,6 +256,18 @@
           <Property Name="EndDate" Type="datetime" />
           <Property Name="AllocationStatus" Type="bit" />
         </EntityType>
+        <EntityType Name="PatientScans">
+          <Key>
+            <PropertyRef Name="PSID" />
+          </Key>
+          <Property Name="PSID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="STMID" Type="int" Nullable="false" />
+          <Property Name="ScanID" Type="int" Nullable="false" />
+          <Property Name="ScanDate" Type="datetime" />
+          <Property Name="RecordedValues" Type="decimal" Precision="4" Scale="2" />
+          <Property Name="TestImpression" Type="nvarchar(max)" />
+          <Property Name="ReportPath" Type="nvarchar" MaxLength="200" />
+        </EntityType>
         <EntityType Name="PatientTests">
           <Key>
             <PropertyRef Name="PTID" />
@@ -362,6 +374,23 @@
           </Key>
           <Property Name="ScanID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ScanName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ScanCost" Type="money" />
+        </EntityType>
+        <EntityType Name="ScanTestMaster">
+          <Key>
+            <PropertyRef Name="STMID" />
+          </Key>
+          <Property Name="STMID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ENMRNO" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="PrescribedBy" Type="int" Nullable="false" />
+          <Property Name="DatePrescribed" Type="date" />
+          <Property Name="VisitID" Type="int" />
+          <Property Name="IsBillPaid" Type="bit" />
+          <Property Name="IsDelivered" Type="bit" />
+          <Property Name="Discount" Type="decimal" Precision="4" Scale="2" />
+          <Property Name="PaidAmount" Type="money" />
+          <Property Name="TotalAmount" Type="money" />
+          <Property Name="ISIP" Type="bit" />
         </EntityType>
         <EntityType Name="Specialization">
           <Key>
@@ -617,6 +646,42 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_PatientScan_ScanID">
+          <End Role="Scans" Type="Self.Scans" Multiplicity="1" />
+          <End Role="PatientScans" Type="Self.PatientScans" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Scans">
+              <PropertyRef Name="ScanID" />
+            </Principal>
+            <Dependent Role="PatientScans">
+              <PropertyRef Name="ScanID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PatientScans_ScanID">
+          <End Role="TestTypes" Type="Self.TestTypes" Multiplicity="1" />
+          <End Role="PatientScans" Type="Self.PatientScans" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TestTypes">
+              <PropertyRef Name="TestID" />
+            </Principal>
+            <Dependent Role="PatientScans">
+              <PropertyRef Name="ScanID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PatientScans_STMID">
+          <End Role="ScanTestMaster" Type="Self.ScanTestMaster" Multiplicity="1" />
+          <End Role="PatientScans" Type="Self.PatientScans" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ScanTestMaster">
+              <PropertyRef Name="STMID" />
+            </Principal>
+            <Dependent Role="PatientScans">
+              <PropertyRef Name="STMID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_PatientTests_LTMID">
           <End Role="LabTestMaster" Type="Self.LabTestMaster" Multiplicity="1" />
           <End Role="PatientTests" Type="Self.PatientTests" Multiplicity="*" />
@@ -773,6 +838,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_STM_Doctor">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="ScanTestMaster" Type="Self.ScanTestMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="ScanTestMaster">
+              <PropertyRef Name="PrescribedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_User_Specialization">
           <End Role="Specialization" Type="Self.Specialization" Multiplicity="1" />
           <End Role="Users" Type="Self.Users" Multiplicity="*" />
@@ -809,16 +886,19 @@
           <Parameter Name="ISIP" Type="bit" Mode="In" />
           <Parameter Name="LTMID" Type="int" Mode="InOut" />
         </Function>
-        <Function Name="CreateMasterOrder" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="OrderNo" Type="varchar" Mode="In" />
-          <Parameter Name="OMID" Type="int" Mode="InOut" />
-        </Function>
         <Function Name="CreateMasterPrescription" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ENMRNO" Type="varchar" Mode="In" />
           <Parameter Name="DoctorID" Type="int" Mode="In" />
           <Parameter Name="VisitID" Type="int" Mode="In" />
           <Parameter Name="ISIP" Type="bit" Mode="In" />
           <Parameter Name="PMID" Type="int" Mode="InOut" />
+        </Function>
+        <Function Name="CreateMasterScanTest" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ENMRNO" Type="varchar" Mode="In" />
+          <Parameter Name="DoctorID" Type="int" Mode="In" />
+          <Parameter Name="VisitID" Type="int" Mode="In" />
+          <Parameter Name="ISIP" Type="bit" Mode="In" />
+          <Parameter Name="STMID" Type="int" Mode="InOut" />
         </Function>
         <Function Name="CSVToTable" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="InStr" Type="varchar(max)" Mode="In" />
@@ -856,6 +936,7 @@
           <EntitySet Name="OutPatients" EntityType="Self.OutPatients" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PatientPrescription" EntityType="Self.PatientPrescription" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PatientRoomAllocation" EntityType="Self.PatientRoomAllocation" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PatientScans" EntityType="Self.PatientScans" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PatientTests" EntityType="Self.PatientTests" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PatientVisitHistory" EntityType="Self.PatientVisitHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PaymentModes" EntityType="Self.PaymentModes" Schema="dbo" store:Type="Tables" />
@@ -866,6 +947,7 @@
           <EntitySet Name="RoomType" EntityType="Self.RoomType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ScanCategories" EntityType="Self.ScanCategories" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Scans" EntityType="Self.Scans" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ScanTestMaster" EntityType="Self.ScanTestMaster" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Specialization" EntityType="Self.Specialization" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TestTypes" EntityType="Self.TestTypes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserPermission" EntityType="Self.UserPermission" Schema="dbo" store:Type="Tables" />
@@ -939,6 +1021,18 @@
             <End Role="Users" EntitySet="Users" />
             <End Role="OutPatients" EntitySet="OutPatients" />
           </AssociationSet>
+          <AssociationSet Name="FK_PatientScan_ScanID" Association="Self.FK_PatientScan_ScanID">
+            <End Role="Scans" EntitySet="Scans" />
+            <End Role="PatientScans" EntitySet="PatientScans" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PatientScans_ScanID" Association="Self.FK_PatientScans_ScanID">
+            <End Role="TestTypes" EntitySet="TestTypes" />
+            <End Role="PatientScans" EntitySet="PatientScans" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PatientScans_STMID" Association="Self.FK_PatientScans_STMID">
+            <End Role="ScanTestMaster" EntitySet="ScanTestMaster" />
+            <End Role="PatientScans" EntitySet="PatientScans" />
+          </AssociationSet>
           <AssociationSet Name="FK_PatientTests_LTMID" Association="Self.FK_PatientTests_LTMID">
             <End Role="LabTestMaster" EntitySet="LabTestMaster" />
             <End Role="PatientTests" EntitySet="PatientTests" />
@@ -990,6 +1084,10 @@
           <AssociationSet Name="FK_ScanCategories_ScanID" Association="Self.FK_ScanCategories_ScanID">
             <End Role="Scans" EntitySet="Scans" />
             <End Role="ScanCategories" EntitySet="ScanCategories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_STM_Doctor" Association="Self.FK_STM_Doctor">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="ScanTestMaster" EntitySet="ScanTestMaster" />
           </AssociationSet>
           <AssociationSet Name="FK_User_Specialization" Association="Self.FK_User_Specialization">
             <End Role="Specialization" EntitySet="Specialization" />
@@ -1276,6 +1374,7 @@
           <Property Name="TestName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="TestCost" Type="Decimal" Precision="19" Scale="4" />
           <NavigationProperty Name="PatientTests" Relationship="HISDBModel.FK_PatientTests_TestID" FromRole="TestType" ToRole="PatientTest" />
+          <NavigationProperty Name="PatientScans" Relationship="HISDBModel.FK_PatientScans_ScanID" FromRole="TestType" ToRole="PatientScan" />
         </EntityType>
         <EntityType Name="UserPermission">
           <Key>
@@ -1313,6 +1412,7 @@
           <NavigationProperty Name="UserType" Relationship="Self.FK_User_Type" FromRole="Users" ToRole="UserType" />
           <NavigationProperty Name="LabTestMasters" Relationship="HISDBModel.FK_LTM_Doctor" FromRole="User" ToRole="LabTestMaster" />
           <NavigationProperty Name="InPatients" Relationship="HISDBModel.FK_InPatients_Doctor" FromRole="User" ToRole="InPatient" />
+          <NavigationProperty Name="ScanTestMasters" Relationship="HISDBModel.FK_STM_Doctor" FromRole="User" ToRole="ScanTestMaster" />
         </EntityType>
         <EntityType Name="UserType">
           <Key>
@@ -1757,6 +1857,31 @@
             <End Role="Scan" EntitySet="Scans" />
             <End Role="ScanCategory" EntitySet="ScanCategories" />
           </AssociationSet>
+          <EntitySet Name="PatientScans" EntityType="HISDBModel.PatientScan" />
+          <EntitySet Name="ScanTestMasters" EntityType="HISDBModel.ScanTestMaster" />
+          <AssociationSet Name="FK_PatientScan_ScanID" Association="HISDBModel.FK_PatientScan_ScanID">
+            <End Role="Scan" EntitySet="Scans" />
+            <End Role="PatientScan" EntitySet="PatientScans" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PatientScans_ScanID" Association="HISDBModel.FK_PatientScans_ScanID">
+            <End Role="TestType" EntitySet="TestTypes" />
+            <End Role="PatientScan" EntitySet="PatientScans" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PatientScans_STMID" Association="HISDBModel.FK_PatientScans_STMID">
+            <End Role="ScanTestMaster" EntitySet="ScanTestMasters" />
+            <End Role="PatientScan" EntitySet="PatientScans" />
+          </AssociationSet>
+          <AssociationSet Name="FK_STM_Doctor" Association="HISDBModel.FK_STM_Doctor">
+            <End Role="User" EntitySet="Users" />
+            <End Role="ScanTestMaster" EntitySet="ScanTestMasters" />
+          </AssociationSet>
+          <FunctionImport Name="CreateMasterScanTest">
+            <Parameter Name="ENMRNO" Mode="In" Type="String" />
+            <Parameter Name="DoctorID" Mode="In" Type="Int32" />
+            <Parameter Name="VisitID" Mode="In" Type="Int32" />
+            <Parameter Name="ISIP" Mode="In" Type="Boolean" />
+            <Parameter Name="STMID" Mode="InOut" Type="Int32" />
+          </FunctionImport>
           </EntityContainer>
         <EntityType Name="LabTestMaster">
           <Key>
@@ -1769,7 +1894,7 @@
           <Property Name="VisitID" Type="Int32" />
           <Property Name="IsBillPaid" Type="Boolean" />
           <Property Name="IsDelivered" Type="Boolean" />
-          <Property Name="Discount" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="Discount" Type="Decimal" Precision="4" Scale="2" />
           <Property Name="PaidAmount" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="TotalAmount" Type="Decimal" Precision="19" Scale="4" />
           <NavigationProperty Name="User" Relationship="HISDBModel.FK_LTM_Doctor" FromRole="LabTestMaster" ToRole="User" />
@@ -2067,6 +2192,8 @@
           <Property Name="ScanID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ScanName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="ScanCategories" Relationship="HISDBModel.FK_ScanCategories_ScanID" FromRole="Scan" ToRole="ScanCategory" />
+          <Property Name="ScanCost" Type="Decimal" Precision="19" Scale="4" />
+          <NavigationProperty Name="PatientScans" Relationship="HISDBModel.FK_PatientScan_ScanID" FromRole="Scan" ToRole="PatientScan" />
         </EntityType>
         <Association Name="FK_ScanCategories_ScanID">
           <End Type="HISDBModel.Scan" Role="Scan" Multiplicity="1" />
@@ -2077,6 +2204,87 @@
             </Principal>
             <Dependent Role="ScanCategory">
               <PropertyRef Name="ScanID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="PatientScan">
+          <Key>
+            <PropertyRef Name="PSID" />
+          </Key>
+          <Property Name="PSID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="STMID" Type="Int32" Nullable="false" />
+          <Property Name="ScanID" Type="Int32" Nullable="false" />
+          <Property Name="ScanDate" Type="DateTime" Precision="3" />
+          <Property Name="RecordedValues" Type="Decimal" Precision="4" Scale="2" />
+          <Property Name="TestImpression" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ReportPath" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Scan" Relationship="HISDBModel.FK_PatientScan_ScanID" FromRole="PatientScan" ToRole="Scan" />
+          <NavigationProperty Name="TestType" Relationship="HISDBModel.FK_PatientScans_ScanID" FromRole="PatientScan" ToRole="TestType" />
+          <NavigationProperty Name="ScanTestMaster" Relationship="HISDBModel.FK_PatientScans_STMID" FromRole="PatientScan" ToRole="ScanTestMaster" />
+        </EntityType>
+        <EntityType Name="ScanTestMaster">
+          <Key>
+            <PropertyRef Name="STMID" />
+          </Key>
+          <Property Name="STMID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ENMRNO" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="PrescribedBy" Type="Int32" Nullable="false" />
+          <Property Name="DatePrescribed" Type="DateTime" Precision="0" />
+          <Property Name="VisitID" Type="Int32" />
+          <Property Name="IsBillPaid" Type="Boolean" />
+          <Property Name="IsDelivered" Type="Boolean" />
+          <Property Name="Discount" Type="Decimal" Precision="4" Scale="2" />
+          <Property Name="PaidAmount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="TotalAmount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="ISIP" Type="Boolean" />
+          <NavigationProperty Name="PatientScans" Relationship="HISDBModel.FK_PatientScans_STMID" FromRole="ScanTestMaster" ToRole="PatientScan" />
+          <NavigationProperty Name="User" Relationship="HISDBModel.FK_STM_Doctor" FromRole="ScanTestMaster" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_PatientScan_ScanID">
+          <End Type="HISDBModel.Scan" Role="Scan" Multiplicity="1" />
+          <End Type="HISDBModel.PatientScan" Role="PatientScan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Scan">
+              <PropertyRef Name="ScanID" />
+            </Principal>
+            <Dependent Role="PatientScan">
+              <PropertyRef Name="ScanID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PatientScans_ScanID">
+          <End Type="HISDBModel.TestType" Role="TestType" Multiplicity="1" />
+          <End Type="HISDBModel.PatientScan" Role="PatientScan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TestType">
+              <PropertyRef Name="TestID" />
+            </Principal>
+            <Dependent Role="PatientScan">
+              <PropertyRef Name="ScanID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PatientScans_STMID">
+          <End Type="HISDBModel.ScanTestMaster" Role="ScanTestMaster" Multiplicity="1" />
+          <End Type="HISDBModel.PatientScan" Role="PatientScan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ScanTestMaster">
+              <PropertyRef Name="STMID" />
+            </Principal>
+            <Dependent Role="PatientScan">
+              <PropertyRef Name="STMID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_STM_Doctor">
+          <End Type="HISDBModel.User" Role="User" Multiplicity="1" />
+          <End Type="HISDBModel.ScanTestMaster" Role="ScanTestMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="ScanTestMaster">
+              <PropertyRef Name="PrescribedBy" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2546,7 +2754,6 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="CreateMasterOrder" FunctionName="HISDBModel.Store.CreateMasterOrder" />
           <EntitySetMapping Name="ScanCategories">
             <EntityTypeMapping TypeName="HISDBModel.ScanCategory">
               <MappingFragment StoreEntitySet="ScanCategories">
@@ -2559,11 +2766,43 @@
           <EntitySetMapping Name="Scans">
             <EntityTypeMapping TypeName="HISDBModel.Scan">
               <MappingFragment StoreEntitySet="Scans">
+                <ScalarProperty Name="ScanCost" ColumnName="ScanCost" />
                 <ScalarProperty Name="ScanName" ColumnName="ScanName" />
                 <ScalarProperty Name="ScanID" ColumnName="ScanID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="PatientScans">
+            <EntityTypeMapping TypeName="HISDBModel.PatientScan">
+              <MappingFragment StoreEntitySet="PatientScans">
+                <ScalarProperty Name="ReportPath" ColumnName="ReportPath" />
+                <ScalarProperty Name="TestImpression" ColumnName="TestImpression" />
+                <ScalarProperty Name="RecordedValues" ColumnName="RecordedValues" />
+                <ScalarProperty Name="ScanDate" ColumnName="ScanDate" />
+                <ScalarProperty Name="ScanID" ColumnName="ScanID" />
+                <ScalarProperty Name="STMID" ColumnName="STMID" />
+                <ScalarProperty Name="PSID" ColumnName="PSID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ScanTestMasters">
+            <EntityTypeMapping TypeName="HISDBModel.ScanTestMaster">
+              <MappingFragment StoreEntitySet="ScanTestMaster">
+                <ScalarProperty Name="ISIP" ColumnName="ISIP" />
+                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
+                <ScalarProperty Name="PaidAmount" ColumnName="PaidAmount" />
+                <ScalarProperty Name="Discount" ColumnName="Discount" />
+                <ScalarProperty Name="IsDelivered" ColumnName="IsDelivered" />
+                <ScalarProperty Name="IsBillPaid" ColumnName="IsBillPaid" />
+                <ScalarProperty Name="VisitID" ColumnName="VisitID" />
+                <ScalarProperty Name="DatePrescribed" ColumnName="DatePrescribed" />
+                <ScalarProperty Name="PrescribedBy" ColumnName="PrescribedBy" />
+                <ScalarProperty Name="ENMRNO" ColumnName="ENMRNO" />
+                <ScalarProperty Name="STMID" ColumnName="STMID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="CreateMasterScanTest" FunctionName="HISDBModel.Store.CreateMasterScanTest" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

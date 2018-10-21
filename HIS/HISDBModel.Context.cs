@@ -61,6 +61,8 @@ namespace HIS
         public virtual DbSet<InPatient> InPatients { get; set; }
         public virtual DbSet<ScanCategory> ScanCategories { get; set; }
         public virtual DbSet<Scan> Scans { get; set; }
+        public virtual DbSet<PatientScan> PatientScans { get; set; }
+        public virtual DbSet<ScanTestMaster> ScanTestMasters { get; set; }
     
         public virtual int ConvertOutPatientToInPatient(string eNMRNO, Nullable<decimal> estAmount, Nullable<decimal> advAmount)
         {
@@ -160,6 +162,27 @@ namespace HIS
                 new ObjectParameter("OrderNo", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("CreateMasterOrder", orderNoParameter, oMID);
+        }
+    
+        public virtual int CreateMasterScanTest(string eNMRNO, Nullable<int> doctorID, Nullable<int> visitID, Nullable<bool> iSIP, ObjectParameter sTMID)
+        {
+            var eNMRNOParameter = eNMRNO != null ?
+                new ObjectParameter("ENMRNO", eNMRNO) :
+                new ObjectParameter("ENMRNO", typeof(string));
+    
+            var doctorIDParameter = doctorID.HasValue ?
+                new ObjectParameter("DoctorID", doctorID) :
+                new ObjectParameter("DoctorID", typeof(int));
+    
+            var visitIDParameter = visitID.HasValue ?
+                new ObjectParameter("VisitID", visitID) :
+                new ObjectParameter("VisitID", typeof(int));
+    
+            var iSIPParameter = iSIP.HasValue ?
+                new ObjectParameter("ISIP", iSIP) :
+                new ObjectParameter("ISIP", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("CreateMasterScanTest", eNMRNOParameter, doctorIDParameter, visitIDParameter, iSIPParameter, sTMID);
         }
     }
 }

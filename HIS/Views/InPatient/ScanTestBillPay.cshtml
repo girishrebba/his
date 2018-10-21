@@ -1,0 +1,138 @@
+﻿@model List<HIS.PatientScan>
+@{
+    /**/
+
+    Layout = null;
+}
+<style>
+    .ui-widget-content a {
+        color: #fff !important
+    }
+
+    .table > thead > tr > th {
+        text-transform: none;
+        font-weight: bold;
+    }
+
+    .ui-dialog {
+        top: 60px !important;
+    }
+</style>
+@using HIS.HtmlHelpers
+@using (Html.BeginForm("ScanTestBillPay", "InPatient", FormMethod.Post, new { id = "billPayForm", onsubmit = "return SubmitScanTestBillPayForm(this)" }))
+{
+    <div class="form-horizontal">
+        @if (Model != null && Model.Count > 0)
+        {
+            @Html.HiddenFor(model => model[0].ENMRNO, new { @id = "ENMRNO" })
+            @Html.HiddenFor(model => model[0].STMID, new { @id = "STMID" })
+            @Html.HiddenFor(model => model[0].VisitName, new { @id = "VisitName" })
+            @Html.HiddenFor(model => model[0].DoctorName, new { @id = "DoctorName" })
+            @Html.HiddenFor(model => model[0].DateDisplay, new { @id = "DateDisplay" })
+            <div class="col-lg-10">
+                <div class="form-group">
+                    @Html.LabelFor(model => model[0].ENMRNO, "ENMRNO:", new { @class = "control-label col-md-2" })
+                    <div class="col-sm-4 lableDisplay">
+                        @Html.DisplayFor(model => model[0].ENMRNO, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    @Html.LabelFor(model => model[0].VisitName, "Visit:", new { @class = "control-label col-md-2" })
+                    <div class="col-sm-4 lableDisplay">
+                        @Html.DisplayFor(model => model[0].VisitName, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model[0].DoctorName, "Doctor:", new { @class = "control-label col-md-2" })
+                    <div class="col-sm-4 lableDisplay">
+                        @Html.DisplayFor(model => model[0].DoctorName, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    @Html.LabelFor(model => model[0].DateDisplay, "Suggested Date:", new { @class = "control-label col-md-2" })
+                    <div class="col-sm-4 lableDisplay">
+                        @Html.DisplayFor(model => model[0].DateDisplay, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model[0].Discount, "Discount:", new { @class = "control-label col-md-2" })
+                    <div class="input-group col-sm-2">
+                        @Html.EditorFor(model => model[0].Discount, new { htmlAttributes = new { Value = Model[0].Discount > 0 ? Model[0].Discount.ToString() : string.Empty, @class = "form-control width30", @id = "Discount" } })
+                        <span class="input-group-btn"><a class="btn btn-success" id="discBtn"><i class=""></i>Apply</a></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div id="headerDivbill"></div>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered" id="ptTable">
+                            <thead>
+                                <tr>
+                                    <th style="width:50%">Test</th>
+                                    <th style="width:50%">Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var p in Model)
+                                {
+                                    <tr>
+                                        <td style="display:none">@p.ScanID</td>
+                                        <td>@p.ScanName</td>
+                                        <td class="price">@p.ScanCost.ToString("0.##")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td align="right">Total:</td>
+                                    <td align="left" id="grandTotal">@Model.Sum(i => i.ScanCost).ToString("0.##")</td>
+                                </tr>
+                                <tr>
+                                    <td align="right">Discount(-):</td>
+                                    <td align="left" id="discountAmount">0.00</td>
+                                </tr>
+                                <tr>
+                                    <td align="right">Amount To be Paid:</td>
+                                    <td align="left" id="paidAmount">@Model.Sum(i => i.ScanCost).ToString("0.##")</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-md-3 col-md-offset-5">
+                            <input type="submit" value="Pay & Print" id="btnSubmit" class="btn btn-primary" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <span style="color:red; font-weight:bold;">No Pending Scans found for the bill payment of this Patient. Please contact your physician!!</span>
+        }
+    </div>
+}
+
+<script type="text/javascript">
+    $('#discBtn').click(function () {
+        var disPercent = $('#Discount').val();
+        var grandTotal = $('#grandTotal').html();
+        var discAmount = grandTotal * (disPercent / 100);
+        $('#discountAmount').html(discAmount.toFixed(2));
+        $('#paidAmount').html((grandTotal - discAmount).toFixed(2));
+    });
+
+    $('#btnSubmit').click(function () {
+        if (confirm('Hope you applied discount?')) {
+            return true;
+        }
+        return false;
+    });
+
+    function calculateTotal() {
+        $('.price').each(function () {
+            sum += parseFloat($(this).text());
+        });
+        $('#grandTotal').html(sum.toFixed(2))
+        $('#paidAmount').html(sum.toFixed(2))
+    }
+</script>

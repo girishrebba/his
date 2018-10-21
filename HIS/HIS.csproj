@@ -1001,7 +1001,9 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <None Include="Scripts\_references.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
@@ -1142,12 +1144,12 @@
     <Compile Include="Models\MasterBillPayModel.cs" />
     <Compile Include="Models\MDRModel.cs" />
     <Compile Include="Models\MedicineMaster.cs" />
-    <Compile Include="Models\OrderRequest.cs" />
     <Compile Include="Models\OutPatient.cs" />
     <Compile Include="Models\PatientHistory.cs" />
     <Compile Include="Models\PatientPrescription.cs" />
     <Compile Include="Models\PatientPrescriptionHistory.cs" />
     <Compile Include="Models\PatientRoomAllocation.cs" />
+    <Compile Include="Models\PatientScan.cs" />
     <Compile Include="Models\PatientTest.cs" />
     <Compile Include="Models\PatientTestFile.cs" />
     <Compile Include="Models\PatientVisitHistory.cs" />
@@ -1175,6 +1177,9 @@
       <DependentUpon>HISDBModel.tt</DependentUpon>
     </Compile>
     <Compile Include="PatientRoomAllocation.cs">
+      <DependentUpon>HISDBModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PatientScan.cs">
       <DependentUpon>HISDBModel.tt</DependentUpon>
     </Compile>
     <Compile Include="PatientTest.cs">
@@ -1209,6 +1214,9 @@
       <DependentUpon>HISDBModel.tt</DependentUpon>
     </Compile>
     <Compile Include="ScanCategory.cs">
+      <DependentUpon>HISDBModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ScanTestMaster.cs">
       <DependentUpon>HISDBModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Specialization.cs">
@@ -1424,13 +1432,16 @@
     <Content Include="Views\InPatient\LabTestBillPay.cshtml" />
     <Content Include="Views\InPatient\DeliverPrescription.cshtml" />
     <Content Include="Views\OutPatient\PrintHistory.cshtml" />
-    <Content Include="Views\PurchaseOrder\PlaceOrder.cshtml" />
+    <Content Include="Views\InventoryRpt\Index.cshtml" />
+    <Content Include="Views\Revenuerpt\Index.cshtml" />
     <Content Include="Views\Revenuerpt\Index.cshtml" />
     <Content Include="Views\InventoryRpt\Index.cshtml" />
     <Content Include="Views\Scan\Index.cshtml" />
     <Content Include="Views\Scan\AddModify.cshtml" />
     <Content Include="Views\ScanCategory\Index.cshtml" />
     <Content Include="Views\ScanCategory\AddModify.cshtml" />
+    <Content Include="Views\InPatient\PatientScans.cshtml" />
+    <Content Include="Views\InPatient\ScanTestBillPay.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -269,9 +269,9 @@ public static List<User> GetDoctors()
             using (HISDBEntities dc = new HISDBEntities())
             {
                 var scans = (from s in dc.Scans
-                              select new { s.ScanID, s.ScanName })
+                              select new { s.ScanID, s.ScanName, s.ScanCost })
                               .OrderBy(b => b.ScanName).AsEnumerable()
-                              .Select(x => new Scan { ScanID = x.ScanID, ScanName = x.ScanName }).ToList();
+                              .Select(x => new Scan { ScanID = x.ScanID, ScanName = x.ScanName, ScanCost = x.ScanCost }).ToList();
                 return scans;
             }
         }
@@ -526,6 +526,41 @@ public static List<User> GetDoctors()
                                  }).ToList();
 
                 return patientTests;
+            }
+        }
+
+        public static List<PatientScan> GetInPatientScans(string enmrNo)
+        {
+            using (HISDBEntities hs = new HISDBEntities())
+            {
+
+                var patientScans = (from pt in hs.PatientScans
+                                    join ltm in hs.ScanTestMasters on pt.STMID equals ltm.STMID
+                                    join tt in hs.Scans on pt.ScanID equals tt.ScanID
+                                    join u in hs.Users on ltm.PrescribedBy equals u.UserID
+                                    join ut in hs.UserTypes on u.UserTypeID equals ut.UserTypeID
+                                    where ltm.ENMRNO == enmrNo && ltm.VisitID == 0
+                                    && ltm.IsDelivered == true
+                                    select new
+                                    {
+                                        pt,
+                                        u,
+                                        tt
+                                    })
+                                  .OrderByDescending(b => b.pt.PSID)
+                                  .AsEnumerable()
+                                 .Select(x => new PatientScan
+                                 {
+                                     ENMRNO = enmrNo,
+                                     ScanName = x.tt.ScanName,
+                                     DateDisplay = DateFormat(x.pt.ScanDate),
+                                     DoctorName = GetFullName(x.u.FirstName, x.u.MiddleName, x.u.LastName),
+                                     RecordedValues = x.pt.RecordedValues,
+                                     TestImpression = x.pt.TestImpression,
+                                     ReportPath = x.pt.ReportPath
+                                 }).ToList();
+
+                return patientScans;
             }
         }
 

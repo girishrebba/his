@@ -461,7 +461,6 @@
         </ComplexTypeMapping>
       </ResultMapping>
     </FunctionImportMapping>
-    <FunctionImportMapping FunctionImportName="CreateMasterOrder" FunctionName="HISDBModel.Store.CreateMasterOrder" />
     <EntitySetMapping Name="ScanCategories">
       <EntityTypeMapping TypeName="HISDBModel.ScanCategory">
         <MappingFragment StoreEntitySet="ScanCategories">
@@ -474,10 +473,42 @@
     <EntitySetMapping Name="Scans">
       <EntityTypeMapping TypeName="HISDBModel.Scan">
         <MappingFragment StoreEntitySet="Scans">
+          <ScalarProperty Name="ScanCost" ColumnName="ScanCost" />
           <ScalarProperty Name="ScanName" ColumnName="ScanName" />
           <ScalarProperty Name="ScanID" ColumnName="ScanID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="PatientScans">
+      <EntityTypeMapping TypeName="HISDBModel.PatientScan">
+        <MappingFragment StoreEntitySet="PatientScans">
+          <ScalarProperty Name="ReportPath" ColumnName="ReportPath" />
+          <ScalarProperty Name="TestImpression" ColumnName="TestImpression" />
+          <ScalarProperty Name="RecordedValues" ColumnName="RecordedValues" />
+          <ScalarProperty Name="ScanDate" ColumnName="ScanDate" />
+          <ScalarProperty Name="ScanID" ColumnName="ScanID" />
+          <ScalarProperty Name="STMID" ColumnName="STMID" />
+          <ScalarProperty Name="PSID" ColumnName="PSID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ScanTestMasters">
+      <EntityTypeMapping TypeName="HISDBModel.ScanTestMaster">
+        <MappingFragment StoreEntitySet="ScanTestMaster">
+          <ScalarProperty Name="ISIP" ColumnName="ISIP" />
+          <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
+          <ScalarProperty Name="PaidAmount" ColumnName="PaidAmount" />
+          <ScalarProperty Name="Discount" ColumnName="Discount" />
+          <ScalarProperty Name="IsDelivered" ColumnName="IsDelivered" />
+          <ScalarProperty Name="IsBillPaid" ColumnName="IsBillPaid" />
+          <ScalarProperty Name="VisitID" ColumnName="VisitID" />
+          <ScalarProperty Name="DatePrescribed" ColumnName="DatePrescribed" />
+          <ScalarProperty Name="PrescribedBy" ColumnName="PrescribedBy" />
+          <ScalarProperty Name="ENMRNO" ColumnName="ENMRNO" />
+          <ScalarProperty Name="STMID" ColumnName="STMID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="CreateMasterScanTest" FunctionName="HISDBModel.Store.CreateMasterScanTest" />
   </EntityContainerMapping>
 </Mapping>

@@ -21,7 +21,7 @@
     }
 </style>
 @using HIS.HtmlHelpers
-@using (Html.BeginForm("LabTestBillPay", "OutPatient", FormMethod.Post, new { id = "billPayForm", onsubmit = "return SubmitLabTestBillPayForm(this)" }))
+@using (Html.BeginForm("LabTestBillPay", "InPatient", FormMethod.Post, new { id = "billPayForm", onsubmit = "return SubmitLabTestBillPayForm(this)" }))
 {
 <div class="form-horizontal">
     @if (Model != null && Model.Count > 0)

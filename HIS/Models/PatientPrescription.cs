@@ -19,7 +19,9 @@ namespace HIS
         public decimal ItemCost { get; set; }
         public decimal TotalCost { get; set; }
         public List<TestType> TestTypes { get; set; }
+        public List<Scan> Scans { get; set; }
         public string[] TestIds { get; set; }
+        public string[] ScanIds { get; set; }
         public decimal Discount { get; set; }
         public decimal PaidAmount { get; set; }
         public decimal TotalAmount { get; set; }

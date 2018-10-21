@@ -12,22 +12,28 @@ namespace HIS
     using System;
     using System.Collections.Generic;
     
-    public partial class Scan
+    public partial class ScanTestMaster
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Scan()
+        public ScanTestMaster()
         {
-            this.ScanCategories = new HashSet<ScanCategory>();
             this.PatientScans = new HashSet<PatientScan>();
         }
     
-        public int ScanID { get; set; }
-        public string ScanName { get; set; }
-        public Nullable<decimal> ScanCost { get; set; }
+        public int STMID { get; set; }
+        public string ENMRNO { get; set; }
+        public int PrescribedBy { get; set; }
+        public Nullable<System.DateTime> DatePrescribed { get; set; }
+        public Nullable<int> VisitID { get; set; }
+        public Nullable<bool> IsBillPaid { get; set; }
+        public Nullable<bool> IsDelivered { get; set; }
+        public Nullable<decimal> Discount { get; set; }
+        public Nullable<decimal> PaidAmount { get; set; }
+        public Nullable<decimal> TotalAmount { get; set; }
+        public Nullable<bool> ISIP { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ScanCategory> ScanCategories { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PatientScan> PatientScans { get; set; }
+        public virtual User User { get; set; }
     }
 }
