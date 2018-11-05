@@ -21,6 +21,7 @@ namespace HIS
             this.PurchaseOrders = new HashSet<PurchaseOrder>();
             this.PatientPrescriptions = new HashSet<PatientPrescription>();
             this.OrderRequests = new HashSet<OrderRequest>();
+            this.PharmaKitItems = new HashSet<PharmaKitItem>();
         }
     
         public int MMID { get; set; }
@@ -40,5 +41,7 @@ namespace HIS
         public virtual ICollection<PatientPrescription> PatientPrescriptions { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OrderRequest> OrderRequests { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PharmaKitItem> PharmaKitItems { get; set; }
     }
 }

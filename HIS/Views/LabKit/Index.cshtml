@@ -1,0 +1,107 @@
+﻿@{
+    ViewBag.Title = "Lab Kits";
+}
+
+<!-- Breadcrumb -->
+<ol class="breadcrumb breadcrumb-2">
+    <li><a href="index.html"><i class="glyphicon-cog"></i>Admin</a></li>
+    <li class="active"><strong>Lab Kits</strong></li>
+</ol>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="panel panel-default">
+            <div class="panel-heading clearfix">
+                <a class="btn btn-success" style="margin-bottom:10px" onclick="PopupLabKitForm('@Url.Action("AddModify","LabKit")')"><i class="fa fa-plus"></i> Add New</a>
+            </div>
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table id="labKitTable" class="table table-striped table-bordered" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Kit Name</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        var Popup, dataTable;
+        $(document).ready(function () {
+            dataTable = $("#labKitTable").DataTable({
+                "ajax": {
+                    "url": "/LabKit/GetLabKits",
+                    "type": "GET",
+                    "datatype": "json"
+                },
+                "columns": [
+                    { "data": "LKitName" },
+                    { "data":"LKitID", "render" : function (data) {
+                        return "<a class='btn btn-default btn-sm' onclick=PopupLabKitForm('@Url.Action("AddModify", "LabKit")/" + data + "')><i class='fa fa-pencil-alt'></i> Edit</a><a class='btn btn-danger btn-sm' style='margin-left:5px' onclick=Delete("+data+")><i class='fa fa-trash'></i> Delete</a>";
+                    },
+                        "orderable": false,
+                        "searchable":false,
+                        "width":"25%"
+                    }
+                ],
+                "language": {
+                    "emptyTable" : "No data found, Please click on <b>Add New</b> Button"
+                }
+            });
+        });
+
+        function PopupLabKitForm(url) {
+        $('body').loadingModal({ text: 'Loading...' });
+            var formDiv = $('<div/>');
+            $.get(url)
+            .done(function (response) {
+                formDiv.html(response);
+                Popup = formDiv.dialog({
+                    autoOpen: true,
+                    resizable: true,
+                    modal:true,
+                    title: 'Add Modify Lab Kit',
+                    width: '55%',
+                    close: function () {
+                        Popup.dialog('destroy').remove();
+                    },
+                    open: function () {
+                        $('body').loadingModal('destroy');
+                    }
+                });
+            });
+        }
+
+        function SubmitLabKitForm(form) {
+            $.validator.unobtrusive.parse(form);
+            if ($(form).valid()) {
+                $('body').loadingModal({ text: 'Processing...' });
+                $.ajax({
+                    type : "POST",
+                    url : form.action,
+                    data : $(form).serialize(),
+                    success : function (data) {
+                        if(data.success)
+                        {
+                            Popup.dialog('close');
+                            dataTable.ajax.reload();
+                            $.notify(data.message,{
+                                globalPosition :"top center",
+                                className : "success"
+                            })
+                        }
+                        $('body').loadingModal('destroy');
+                    }
+                });
+            }
+            return false;
+        }
+    </script>
+}
+

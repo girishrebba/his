@@ -19,6 +19,7 @@ namespace HIS
         {
             this.PatientTests = new HashSet<PatientTest>();
             this.PatientScans = new HashSet<PatientScan>();
+            this.LabKitItems = new HashSet<LabKitItem>();
         }
     
         public int TestID { get; set; }
@@ -29,5 +30,7 @@ namespace HIS
         public virtual ICollection<PatientTest> PatientTests { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PatientScan> PatientScans { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<LabKitItem> LabKitItems { get; set; }
     }
 }

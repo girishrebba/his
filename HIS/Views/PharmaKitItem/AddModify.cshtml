@@ -1,0 +1,22 @@
+﻿@model HIS.PharmaKitItem
+@{
+    Layout = null;
+}
+<style>
+    .ui-widget-content a {
+        color: #fff !important
+    }
+
+    .table > thead > tr > th {
+        text-transform: none;
+        font-weight: bold;
+    }
+
+    .ui-dialog {
+        top: 60px !important;
+    }
+</style>
+@using HIS.HtmlHelpers
+@using (Html.BeginForm("AddModify", "PharmaKitItem", FormMethod.Post, new { id = "editPharmaKitForm", onsubmit = "return SubmitPharmaKitForm(this)" }))
+{
+}

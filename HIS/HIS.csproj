@@ -1050,6 +1050,9 @@
     <Compile Include="BrandCategory.cs">
       <DependentUpon>HISDBModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Consultant.cs">
+      <DependentUpon>HISDBModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="ConsultationFee.cs">
       <DependentUpon>HISDBModel.tt</DependentUpon>
     </Compile>
@@ -1111,10 +1114,19 @@
     <Compile Include="InPatientHistory.cs">
       <DependentUpon>HISDBModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="InsuranceProvider.cs">
+      <DependentUpon>HISDBModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="IntakeFrequency.cs">
       <DependentUpon>HISDBModel.tt</DependentUpon>
     </Compile>
     <Compile Include="InventoryReport_Result.cs">
+      <DependentUpon>HISDBModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LabKit.cs">
+      <DependentUpon>HISDBModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LabKitItem.cs">
       <DependentUpon>HISDBModel.tt</DependentUpon>
     </Compile>
     <Compile Include="LabTestMaster.cs">
@@ -1140,10 +1152,14 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\InPatient.cs" />
     <Compile Include="Models\InPatientHistory.cs" />
+    <Compile Include="Models\InsuranceProvider.cs" />
     <Compile Include="Models\IntakeFrequency.cs" />
+    <Compile Include="Models\LabKit.cs" />
+    <Compile Include="Models\LabKitItem.cs" />
     <Compile Include="Models\MasterBillPayModel.cs" />
     <Compile Include="Models\MDRModel.cs" />
     <Compile Include="Models\MedicineMaster.cs" />
+    <Compile Include="Models\OrderRequest.cs" />
     <Compile Include="Models\OutPatient.cs" />
     <Compile Include="Models\PatientHistory.cs" />
     <Compile Include="Models\PatientPrescription.cs" />
@@ -1154,7 +1170,11 @@
     <Compile Include="Models\PatientTestFile.cs" />
     <Compile Include="Models\PatientVisitHistory.cs" />
     <Compile Include="Models\Permissions.cs" />
+    <Compile Include="Models\PharmaKit.cs" />
+    <Compile Include="Models\PharmaKitItem.cs" />
     <Compile Include="Models\PurchaseOrder.cs" />
+    <Compile Include="Models\Purpose.cs" />
+    <Compile Include="Models\Revenuerpt.cs" />
     <Compile Include="Models\RolePermissions.cs" />
     <Compile Include="Models\Room.cs" />
     <Compile Include="Models\RoomBilling.cs" />
@@ -1173,7 +1193,13 @@
     <Compile Include="OutPatient.cs">
       <DependentUpon>HISDBModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="PatientInsurance.cs">
+      <DependentUpon>HISDBModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="PatientPrescription.cs">
+      <DependentUpon>HISDBModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PatientPurpose.cs">
       <DependentUpon>HISDBModel.tt</DependentUpon>
     </Compile>
     <Compile Include="PatientRoomAllocation.cs">
@@ -1194,11 +1220,20 @@
     <Compile Include="Permission.cs">
       <DependentUpon>HISDBModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="PharmaKit.cs">
+      <DependentUpon>HISDBModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PharmaKitItem.cs">
+      <DependentUpon>HISDBModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="PrescriptionMaster.cs">
       <DependentUpon>HISDBModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PurchaseOrder.cs">
+      <DependentUpon>HISDBModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Purpose.cs">
       <DependentUpon>HISDBModel.tt</DependentUpon>
     </Compile>
     <Compile Include="RevenueReport_Result.cs">
@@ -1442,6 +1477,16 @@
     <Content Include="Views\ScanCategory\AddModify.cshtml" />
     <Content Include="Views\InPatient\PatientScans.cshtml" />
     <Content Include="Views\InPatient\ScanTestBillPay.cshtml" />
+    <Content Include="Views\InsuranceProvider\AddModify.cshtml" />
+    <Content Include="Views\InsuranceProvider\Index.cshtml" />
+    <Content Include="Views\LabKit\AddModify.cshtml" />
+    <Content Include="Views\LabKit\Index.cshtml" />
+    <Content Include="Views\PharmaKit\AddModify.cshtml" />
+    <Content Include="Views\PharmaKit\Index.cshtml" />
+    <Content Include="Views\Purpose\AddModify.cshtml" />
+    <Content Include="Views\Purpose\Index.cshtml" />
+    <Content Include="Views\PharmaKitItem\AddModify.cshtml" />
+    <Content Include="Views\PharmaKitItem\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

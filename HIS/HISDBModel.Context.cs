@@ -60,9 +60,18 @@ namespace HIS
         public virtual DbSet<OrderRequest> OrderRequests { get; set; }
         public virtual DbSet<InPatient> InPatients { get; set; }
         public virtual DbSet<ScanCategory> ScanCategories { get; set; }
-        public virtual DbSet<Scan> Scans { get; set; }
         public virtual DbSet<PatientScan> PatientScans { get; set; }
         public virtual DbSet<ScanTestMaster> ScanTestMasters { get; set; }
+        public virtual DbSet<Consultant> Consultants { get; set; }
+        public virtual DbSet<InsuranceProvider> InsuranceProviders { get; set; }
+        public virtual DbSet<LabKitItem> LabKitItems { get; set; }
+        public virtual DbSet<LabKit> LabKits { get; set; }
+        public virtual DbSet<PatientInsurance> PatientInsurances { get; set; }
+        public virtual DbSet<PatientPurpose> PatientPurposes { get; set; }
+        public virtual DbSet<PharmaKitItem> PharmaKitItems { get; set; }
+        public virtual DbSet<PharmaKit> PharmaKits { get; set; }
+        public virtual DbSet<Purpose> Purposes { get; set; }
+        public virtual DbSet<Scan> Scans { get; set; }
     
         public virtual int ConvertOutPatientToInPatient(string eNMRNO, Nullable<decimal> estAmount, Nullable<decimal> advAmount)
         {
@@ -183,6 +192,15 @@ namespace HIS
                 new ObjectParameter("ISIP", typeof(bool));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("CreateMasterScanTest", eNMRNOParameter, doctorIDParameter, visitIDParameter, iSIPParameter, sTMID);
+        }
+    
+        public virtual int CreateMasterOrder1(string orderNo, ObjectParameter oMID)
+        {
+            var orderNoParameter = orderNo != null ?
+                new ObjectParameter("OrderNo", orderNo) :
+                new ObjectParameter("OrderNo", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("CreateMasterOrder1", orderNoParameter, oMID);
         }
     }
 }

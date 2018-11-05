@@ -12,21 +12,18 @@ namespace HIS
     using System;
     using System.Collections.Generic;
     
-    public partial class Specialization
+    public partial class Purpose
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Specialization()
+        public Purpose()
         {
-            this.Users = new HashSet<User>();
-            this.Consultants = new HashSet<Consultant>();
+            this.PatientPurposes = new HashSet<PatientPurpose>();
         }
     
-        public int SpecializationID { get; set; }
-        public string DoctorType { get; set; }
+        public int PurposeID { get; set; }
+        public string PurposeName { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<User> Users { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Consultant> Consultants { get; set; }
+        public virtual ICollection<PatientPurpose> PatientPurposes { get; set; }
     }
 }

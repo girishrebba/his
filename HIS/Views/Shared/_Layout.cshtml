@@ -191,6 +191,13 @@
     {
                     <li><a href="@Url.Action("Index", "ScanCategory")"><span class="title">Scan Categories</span></a></li>
 }
+                        <li><a href="@Url.Action("Index", "InsuranceProvider")"><span class="title">Insurance Providers</span></a></li>
+                        <li><a href="@Url.Action("Index", "PharmaKit")"><span class="title">Pharma Kit</span></a></li>
+                        <li><a href="@Url.Action("Index", "LabKit")"><span class="title">Lab Kit</span></a></li>
+                        @if (ViewContext.Controller.HasPermission("Purpose-index"))
+                        {
+                    <li><a href="@Url.Action("Index", "Purpose")"><span class="title">Purpose</span></a></li>
+                        }
                     </ul>
                 </li>
             </ul>

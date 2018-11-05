@@ -276,6 +276,48 @@ public static List<User> GetDoctors()
             }
         }
 
+        public static List<PharmaKit> GetPharmaKits()
+        {
+            using (HISDBEntities dc = new HISDBEntities())
+            {
+                var pkits = (from pk in dc.PharmaKits
+                             select new { pk.PKitID, pk.PKitName })
+                              .OrderBy(b => b.PKitName).AsEnumerable()
+                              .Select(x => new PharmaKit { PKitID = x.PKitID,
+                                  PKitName = x.PKitName }).ToList();
+                return pkits;
+            }
+        }
+
+        public static List<LabKit> GetLabKits()
+        {
+            using (HISDBEntities dc = new HISDBEntities())
+            {
+                var lkits = (from lk in dc.LabKits
+                             select new { lk.LKitID, lk.LKitName })
+                              .OrderBy(b => b.LKitName).AsEnumerable()
+                              .Select(x => new LabKit { LKitID = x.LKitID,
+                                  LKitName = x.LKitName }).ToList();
+                return lkits;
+            }
+        }
+
+        public static List<MedicineMaster> GetMedicinesWithDose()
+        {
+            using (HISDBEntities dc = new HISDBEntities())
+            {
+                var lkits = (from mm in dc.MedicineMasters
+                             select new { mm })
+                              .OrderBy(b => b.mm.MedicineName).AsEnumerable()
+                              .Select(x => new MedicineMaster
+                              {
+                                  MMID = x.mm.MMID,
+                                  MedicineDisplay = GetMedicineWithDose(x.mm.MedicineName, x.mm.MedDose)
+                              }).ToList();
+                return lkits;
+            }
+        }
+
         public static string GetSequencedEnmrNo()
         {
             string initial = ConfigurationManager.AppSettings["EnmrNoStartsWith"];

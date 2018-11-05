@@ -17,8 +17,8 @@ namespace HIS
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Scan()
         {
-            this.ScanCategories = new HashSet<ScanCategory>();
             this.PatientScans = new HashSet<PatientScan>();
+            this.ScanCategories = new HashSet<ScanCategory>();
         }
     
         public int ScanID { get; set; }
@@ -26,8 +26,8 @@ namespace HIS
         public Nullable<decimal> ScanCost { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ScanCategory> ScanCategories { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PatientScan> PatientScans { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ScanCategory> ScanCategories { get; set; }
     }
 }

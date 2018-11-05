@@ -1,0 +1,127 @@
+﻿@{
+    ViewBag.Title = "Purpose";
+}
+
+<!-- Breadcrumb -->
+<ol class="breadcrumb breadcrumb-2">
+    <li><a href="index.html"><i class="glyphicon-cog"></i>Admin</a></li>
+    <li class="active"><strong>Purpose</strong></li>
+</ol>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="panel panel-default">
+            <div class="panel-heading clearfix">
+                <a class="btn btn-success" style="margin-bottom:10px" onclick="PopupPurposeForm('@Url.Action("AddModify","Purpose")')"><i class="fa fa-plus"></i> Add New</a>
+            </div>
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table id="purposeTable" class="table table-striped table-bordered" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Purpose</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        var Popup, dataTable;
+        $(document).ready(function () {
+            dataTable = $("#purposeTable").DataTable({
+                "ajax": {
+                    "url": "/Purpose/GetPurpose",
+                    "type": "GET",
+                    "datatype": "json"
+                },
+                "columns": [
+                    { "data": "PurposeName" },
+                    {"data":"PurposeID", "render" : function (data) {
+                        return "<a class='btn btn-default btn-sm' onclick=PopupPurposeForm('@Url.Action("AddModify","Purpose")/" + data + "')><i class='fa fa-pencil-alt'></i> Edit</a><a class='btn btn-danger btn-sm' style='margin-left:5px' onclick=Delete("+data+")><i class='fa fa-trash'></i> Delete</a>";
+                    },
+                        "orderable": false,
+                        "searchable":false,
+                        "width":"25%"
+                    }
+                ],
+                "language": {
+                    "emptyTable" : "No data found, Please click on <b>Add New</b> Button"
+                }
+            });
+        });
+
+    function PopupPurposeForm(url) {
+        $('body').loadingModal({ text: 'Loading...' });
+            var formDiv = $('<div/>');
+            $.get(url)
+            .done(function (response) {
+                formDiv.html(response);
+                Popup = formDiv.dialog({
+                    autoOpen: true,
+                    resizable: true,
+                    modal:true,
+                    title: 'Add Modify Purpose',
+                    width: '45%',
+                    close: function () {
+                        Popup.dialog('destroy').remove();
+                    },
+                    open: function () {
+                        $('body').loadingModal('destroy');
+                    }
+                });
+            });
+        }
+
+        function SubmitPurposeForm(form) {
+            $.validator.unobtrusive.parse(form);
+            if ($(form).valid()) {
+                $('body').loadingModal({ text: 'Processing...' });
+                $.ajax({
+                    type : "POST",
+                    url : form.action,
+                    data : $(form).serialize(),
+                    success : function (data) {
+                        if(data.success)
+                        {
+                            Popup.dialog('close');
+                            dataTable.ajax.reload();
+                            $.notify(data.message,{
+                                globalPosition :"top center",
+                                className : "success"
+                            })
+                        }
+                        $('body').loadingModal('destroy');
+                    }
+                });
+            }
+            return false;
+        }
+
+        function Delete(id) {
+            if(confirm('Are You Sure to Delete this Purpose?'))
+            {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("Delete","Purpose")/' + id,
+                    success: function (data) {
+                        if (data.success)
+                        {
+                            dataTable.ajax.reload();
+                            $.notify(data.message, {
+                                globalPosition: "top center",
+                                className: "success"
+                            })
+                        }
+                    }
+                });
+            }
+        }
+    </script>
+}
+

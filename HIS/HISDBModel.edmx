@@ -47,6 +47,23 @@
           <Property Name="BrandID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="BrandName" Type="varchar" MaxLength="100" Nullable="false" />
         </EntityType>
+        <EntityType Name="Consultants">
+          <Key>
+            <PropertyRef Name="ConsultantID" />
+          </Key>
+          <Property Name="ConsultantID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FirstName" Type="varchar" MaxLength="50" />
+          <Property Name="MiddleName" Type="varchar" MaxLength="30" />
+          <Property Name="LastName" Type="varchar" MaxLength="50" />
+          <Property Name="Gender" Type="int" />
+          <Property Name="Email" Type="varchar" MaxLength="50" />
+          <Property Name="DOB" Type="date" />
+          <Property Name="Phone" Type="varchar" MaxLength="10" />
+          <Property Name="MaritalStatus" Type="int" />
+          <Property Name="Qualification" Type="varchar" MaxLength="20" />
+          <Property Name="SpecializationID" Type="int" Nullable="false" />
+          <Property Name="Fee" Type="money" Nullable="false" />
+        </EntityType>
         <EntityType Name="ConsultationFee">
           <Key>
             <PropertyRef Name="ConsultationID" />
@@ -130,12 +147,36 @@
           <Property Name="AdvAmount" Type="money" />
           <Property Name="DischargeReportpath" Type="nvarchar(max)" />
         </EntityType>
+        <EntityType Name="InsuranceProvider">
+          <Key>
+            <PropertyRef Name="ProviderID" />
+          </Key>
+          <Property Name="ProviderID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProviderName" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Company" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
         <EntityType Name="IntakeFrequency">
           <Key>
             <PropertyRef Name="FrequencyID" />
           </Key>
           <Property Name="FrequencyID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Frequency" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="LabKitItems">
+          <Key>
+            <PropertyRef Name="LKitItemID" />
+          </Key>
+          <Property Name="LKitItemID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LKitID" Type="int" Nullable="false" />
+          <Property Name="TestID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="LabKits">
+          <Key>
+            <PropertyRef Name="LKitID" />
+          </Key>
+          <Property Name="LKitID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LKitName" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="LKitCost" Type="money" />
         </EntityType>
         <EntityType Name="LabTestMaster">
           <Key>
@@ -148,7 +189,7 @@
           <Property Name="VisitID" Type="int" />
           <Property Name="IsBillPaid" Type="bit" />
           <Property Name="IsDelivered" Type="bit" />
-          <Property Name="Discount" Type="decimal" Precision="4" Scale="2" />
+          <Property Name="Discount" Type="decimal" Precision="5" Scale="2" />
           <Property Name="PaidAmount" Type="money" />
           <Property Name="TotalAmount" Type="money" />
           <Property Name="ISIP" Type="bit" />
@@ -230,6 +271,16 @@
           <Property Name="OthContact" Type="varchar" MaxLength="10" />
           <Property Name="PrevENMR" Type="varchar" MaxLength="30" />
         </EntityType>
+        <EntityType Name="PatientInsurance">
+          <Key>
+            <PropertyRef Name="FileID" />
+          </Key>
+          <Property Name="FileID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FileNo" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="ENMRNO" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="QuotedAmount" Type="money" Nullable="false" />
+          <Property Name="GrantedAmount" Type="money" />
+        </EntityType>
         <EntityType Name="PatientPrescription">
           <Key>
             <PropertyRef Name="PTID" />
@@ -243,6 +294,14 @@
           <Property Name="BatchNo" Type="varchar" MaxLength="30" />
           <Property Name="LotNo" Type="varchar" MaxLength="30" />
           <Property Name="DeliverQty" Type="int" />
+        </EntityType>
+        <EntityType Name="PatientPurpose">
+          <Key>
+            <PropertyRef Name="PPID" />
+          </Key>
+          <Property Name="PPID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ENMRNO" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="PurposeID" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="PatientRoomAllocation">
           <Key>
@@ -276,7 +335,7 @@
           <Property Name="LTMID" Type="int" Nullable="false" />
           <Property Name="TestID" Type="int" Nullable="false" />
           <Property Name="TestDate" Type="datetime" />
-          <Property Name="RecordedValues" Type="decimal" Precision="4" Scale="2" />
+          <Property Name="RecordedValues" Type="decimal" Precision="5" Scale="2" />
           <Property Name="TestImpression" Type="nvarchar(max)" />
           <Property Name="ReportPath" Type="nvarchar" MaxLength="200" />
           <Property Name="IsSampleCollected" Type="bit" />
@@ -309,6 +368,23 @@
           <Property Name="PermissionStatus" Type="bit" Nullable="false" />
           <Property Name="Toottip" Type="nvarchar(max)" />
         </EntityType>
+        <EntityType Name="PharmaKitItems">
+          <Key>
+            <PropertyRef Name="PKitItemID" />
+          </Key>
+          <Property Name="PKitItemID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PKitID" Type="int" Nullable="false" />
+          <Property Name="MedicineID" Type="int" Nullable="false" />
+          <Property Name="Quantity" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PharmaKits">
+          <Key>
+            <PropertyRef Name="PKitID" />
+          </Key>
+          <Property Name="PKitID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PKitName" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="PKitCost" Type="money" />
+        </EntityType>
         <EntityType Name="PrescriptionMaster">
           <Key>
             <PropertyRef Name="PMID" />
@@ -339,6 +415,13 @@
           <Property Name="LotNo" Type="varchar" MaxLength="30" />
           <Property Name="ExpiryDate" Type="date" />
           <Property Name="ApprovedStatus" Type="bit" />
+        </EntityType>
+        <EntityType Name="Purpose">
+          <Key>
+            <PropertyRef Name="PurposeID" />
+          </Key>
+          <Property Name="PurposeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PurposeName" Type="varchar" MaxLength="10" Nullable="false" />
         </EntityType>
         <EntityType Name="Rooms">
           <Key>
@@ -466,6 +549,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Consultant_Specialization">
+          <End Role="Specialization" Type="Self.Specialization" Multiplicity="1" />
+          <End Role="Consultants" Type="Self.Consultants" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Specialization">
+              <PropertyRef Name="SpecializationID" />
+            </Principal>
+            <Dependent Role="Consultants">
+              <PropertyRef Name="SpecializationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Consultation_Doctor">
           <End Role="Users" Type="Self.Users" Multiplicity="1" />
           <End Role="ConsultationFee" Type="Self.ConsultationFee" Multiplicity="*" />
@@ -547,6 +642,18 @@
             </Principal>
             <Dependent Role="InPatientHistory">
               <PropertyRef Name="ENMRNO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LKI_TestID">
+          <End Role="TestTypes" Type="Self.TestTypes" Multiplicity="1" />
+          <End Role="LabKitItems" Type="Self.LabKitItems" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TestTypes">
+              <PropertyRef Name="TestID" />
+            </Principal>
+            <Dependent Role="LabKitItems">
+              <PropertyRef Name="TestID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -646,24 +753,24 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_PatientPurpose_PurposeID">
+          <End Role="Purpose" Type="Self.Purpose" Multiplicity="1" />
+          <End Role="PatientPurpose" Type="Self.PatientPurpose" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Purpose">
+              <PropertyRef Name="PurposeID" />
+            </Principal>
+            <Dependent Role="PatientPurpose">
+              <PropertyRef Name="PurposeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_PatientScan_ScanID">
           <End Role="Scans" Type="Self.Scans" Multiplicity="1" />
           <End Role="PatientScans" Type="Self.PatientScans" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Scans">
               <PropertyRef Name="ScanID" />
-            </Principal>
-            <Dependent Role="PatientScans">
-              <PropertyRef Name="ScanID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_PatientScans_ScanID">
-          <End Role="TestTypes" Type="Self.TestTypes" Multiplicity="1" />
-          <End Role="PatientScans" Type="Self.PatientScans" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="TestTypes">
-              <PropertyRef Name="TestID" />
             </Principal>
             <Dependent Role="PatientScans">
               <PropertyRef Name="ScanID" />
@@ -715,6 +822,18 @@
             </Principal>
             <Dependent Role="PatientVisitHistory">
               <PropertyRef Name="DoctorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PKI_MedicineID">
+          <End Role="MedicineMaster" Type="Self.MedicineMaster" Multiplicity="1" />
+          <End Role="PharmaKitItems" Type="Self.PharmaKitItems" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MedicineMaster">
+              <PropertyRef Name="MMID" />
+            </Principal>
+            <Dependent Role="PharmaKitItems">
+              <PropertyRef Name="MedicineID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -886,6 +1005,10 @@
           <Parameter Name="ISIP" Type="bit" Mode="In" />
           <Parameter Name="LTMID" Type="int" Mode="InOut" />
         </Function>
+        <Function Name="CreateMasterOrder" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="OrderNo" Type="varchar" Mode="In" />
+          <Parameter Name="OMID" Type="int" Mode="InOut" />
+        </Function>
         <Function Name="CreateMasterPrescription" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ENMRNO" Type="varchar" Mode="In" />
           <Parameter Name="DoctorID" Type="int" Mode="In" />
@@ -922,27 +1045,36 @@
           <EntitySet Name="BloodGroup" EntityType="Self.BloodGroup" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BrandCategories" EntityType="Self.BrandCategories" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Brands" EntityType="Self.Brands" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Consultants" EntityType="Self.Consultants" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ConsultationFee" EntityType="Self.ConsultationFee" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ConsultationType" EntityType="Self.ConsultationType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FeeCollection" EntityType="Self.FeeCollection" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="InPatientHistory" EntityType="Self.InPatientHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="InPatients" EntityType="Self.InPatients" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="InsuranceProvider" EntityType="Self.InsuranceProvider" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="IntakeFrequency" EntityType="Self.IntakeFrequency" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LabKitItems" EntityType="Self.LabKitItems" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LabKits" EntityType="Self.LabKits" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LabTestMaster" EntityType="Self.LabTestMaster" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MedicineInventory" EntityType="Self.MedicineInventory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MedicineMaster" EntityType="Self.MedicineMaster" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OrderMaster" EntityType="Self.OrderMaster" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OrderRequests" EntityType="Self.OrderRequests" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OutPatients" EntityType="Self.OutPatients" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PatientInsurance" EntityType="Self.PatientInsurance" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PatientPrescription" EntityType="Self.PatientPrescription" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PatientPurpose" EntityType="Self.PatientPurpose" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PatientRoomAllocation" EntityType="Self.PatientRoomAllocation" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PatientScans" EntityType="Self.PatientScans" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PatientTests" EntityType="Self.PatientTests" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PatientVisitHistory" EntityType="Self.PatientVisitHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PaymentModes" EntityType="Self.PaymentModes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Permissions" EntityType="Self.Permissions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PharmaKitItems" EntityType="Self.PharmaKitItems" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PharmaKits" EntityType="Self.PharmaKits" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PrescriptionMaster" EntityType="Self.PrescriptionMaster" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PurchaseOrder" EntityType="Self.PurchaseOrder" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Purpose" EntityType="Self.Purpose" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Rooms" EntityType="Self.Rooms" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RoomType" EntityType="Self.RoomType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ScanCategories" EntityType="Self.ScanCategories" Schema="dbo" store:Type="Tables" />
@@ -960,6 +1092,10 @@
           <AssociationSet Name="FK_BrandCategories_BrandID" Association="Self.FK_BrandCategories_BrandID">
             <End Role="Brands" EntitySet="Brands" />
             <End Role="BrandCategories" EntitySet="BrandCategories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Consultant_Specialization" Association="Self.FK_Consultant_Specialization">
+            <End Role="Specialization" EntitySet="Specialization" />
+            <End Role="Consultants" EntitySet="Consultants" />
           </AssociationSet>
           <AssociationSet Name="FK_Consultation_Doctor" Association="Self.FK_Consultation_Doctor">
             <End Role="Users" EntitySet="Users" />
@@ -988,6 +1124,10 @@
           <AssociationSet Name="FK_IPH_InPatients_ENMRNO" Association="Self.FK_IPH_InPatients_ENMRNO">
             <End Role="InPatients" EntitySet="InPatients" />
             <End Role="InPatientHistory" EntitySet="InPatientHistory" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LKI_TestID" Association="Self.FK_LKI_TestID">
+            <End Role="TestTypes" EntitySet="TestTypes" />
+            <End Role="LabKitItems" EntitySet="LabKitItems" />
           </AssociationSet>
           <AssociationSet Name="FK_LTM_Doctor" Association="Self.FK_LTM_Doctor">
             <End Role="Users" EntitySet="Users" />
@@ -1021,12 +1161,12 @@
             <End Role="Users" EntitySet="Users" />
             <End Role="OutPatients" EntitySet="OutPatients" />
           </AssociationSet>
+          <AssociationSet Name="FK_PatientPurpose_PurposeID" Association="Self.FK_PatientPurpose_PurposeID">
+            <End Role="Purpose" EntitySet="Purpose" />
+            <End Role="PatientPurpose" EntitySet="PatientPurpose" />
+          </AssociationSet>
           <AssociationSet Name="FK_PatientScan_ScanID" Association="Self.FK_PatientScan_ScanID">
             <End Role="Scans" EntitySet="Scans" />
-            <End Role="PatientScans" EntitySet="PatientScans" />
-          </AssociationSet>
-          <AssociationSet Name="FK_PatientScans_ScanID" Association="Self.FK_PatientScans_ScanID">
-            <End Role="TestTypes" EntitySet="TestTypes" />
             <End Role="PatientScans" EntitySet="PatientScans" />
           </AssociationSet>
           <AssociationSet Name="FK_PatientScans_STMID" Association="Self.FK_PatientScans_STMID">
@@ -1044,6 +1184,10 @@
           <AssociationSet Name="FK_PatientVisitHistory_Doctor" Association="Self.FK_PatientVisitHistory_Doctor">
             <End Role="Users" EntitySet="Users" />
             <End Role="PatientVisitHistory" EntitySet="PatientVisitHistory" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PKI_MedicineID" Association="Self.FK_PKI_MedicineID">
+            <End Role="MedicineMaster" EntitySet="MedicineMaster" />
+            <End Role="PharmaKitItems" EntitySet="PharmaKitItems" />
           </AssociationSet>
           <AssociationSet Name="FK_PM_Doctor" Association="Self.FK_PM_Doctor">
             <End Role="Users" EntitySet="Users" />
@@ -1218,6 +1362,7 @@
           <NavigationProperty Name="PatientPrescriptions" Relationship="Self.FK_PP_Medicine" FromRole="MedicineMaster" ToRole="PatientPrescription" />
           <Property Name="TriggerQty" Type="Int32" />
           <NavigationProperty Name="OrderRequests" Relationship="HISDBModel.FK_OR_MedicineID" FromRole="MedicineMaster" ToRole="OrderRequest" />
+          <NavigationProperty Name="PharmaKitItems" Relationship="HISDBModel.FK_PKI_MedicineID" FromRole="MedicineMaster" ToRole="PharmaKitItem" />
         </EntityType>
         <EntityType Name="OutPatient">
           <Key>
@@ -1365,6 +1510,7 @@
           <Property Name="SpecializationID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="DoctorType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="Users" Relationship="Self.FK_User_Specialization" FromRole="Specialization" ToRole="Users" />
+          <NavigationProperty Name="Consultants" Relationship="HISDBModel.FK_Consultant_Specialization" FromRole="Specialization" ToRole="Consultant" />
         </EntityType>
         <EntityType Name="TestType">
           <Key>
@@ -1375,6 +1521,7 @@
           <Property Name="TestCost" Type="Decimal" Precision="19" Scale="4" />
           <NavigationProperty Name="PatientTests" Relationship="HISDBModel.FK_PatientTests_TestID" FromRole="TestType" ToRole="PatientTest" />
           <NavigationProperty Name="PatientScans" Relationship="HISDBModel.FK_PatientScans_ScanID" FromRole="TestType" ToRole="PatientScan" />
+          <NavigationProperty Name="LabKitItems" Relationship="HISDBModel.FK_LKI_TestID" FromRole="TestType" ToRole="LabKitItem" />
         </EntityType>
         <EntityType Name="UserPermission">
           <Key>
@@ -1852,17 +1999,8 @@
             <Parameter Name="OMID" Mode="InOut" Type="Int32" />
           </FunctionImport>
           <EntitySet Name="ScanCategories" EntityType="HISDBModel.ScanCategory" />
-          <EntitySet Name="Scans" EntityType="HISDBModel.Scan" />
-          <AssociationSet Name="FK_ScanCategories_ScanID" Association="HISDBModel.FK_ScanCategories_ScanID">
-            <End Role="Scan" EntitySet="Scans" />
-            <End Role="ScanCategory" EntitySet="ScanCategories" />
-          </AssociationSet>
           <EntitySet Name="PatientScans" EntityType="HISDBModel.PatientScan" />
           <EntitySet Name="ScanTestMasters" EntityType="HISDBModel.ScanTestMaster" />
-          <AssociationSet Name="FK_PatientScan_ScanID" Association="HISDBModel.FK_PatientScan_ScanID">
-            <End Role="Scan" EntitySet="Scans" />
-            <End Role="PatientScan" EntitySet="PatientScans" />
-          </AssociationSet>
           <AssociationSet Name="FK_PatientScans_ScanID" Association="HISDBModel.FK_PatientScans_ScanID">
             <End Role="TestType" EntitySet="TestTypes" />
             <End Role="PatientScan" EntitySet="PatientScans" />
@@ -1882,6 +2020,44 @@
             <Parameter Name="ISIP" Mode="In" Type="Boolean" />
             <Parameter Name="STMID" Mode="InOut" Type="Int32" />
           </FunctionImport>
+          <EntitySet Name="Consultants" EntityType="HISDBModel.Consultant" />
+          <EntitySet Name="InsuranceProviders" EntityType="HISDBModel.InsuranceProvider" />
+          <EntitySet Name="LabKitItems" EntityType="HISDBModel.LabKitItem" />
+          <EntitySet Name="LabKits" EntityType="HISDBModel.LabKit" />
+          <EntitySet Name="PatientInsurances" EntityType="HISDBModel.PatientInsurance" />
+          <EntitySet Name="PatientPurposes" EntityType="HISDBModel.PatientPurpose" />
+          <EntitySet Name="PharmaKitItems" EntityType="HISDBModel.PharmaKitItem" />
+          <EntitySet Name="PharmaKits" EntityType="HISDBModel.PharmaKit" />
+          <EntitySet Name="Purposes" EntityType="HISDBModel.Purpose" />
+          <AssociationSet Name="FK_Consultant_Specialization" Association="HISDBModel.FK_Consultant_Specialization">
+            <End Role="Specialization" EntitySet="Specializations" />
+            <End Role="Consultant" EntitySet="Consultants" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LKI_TestID" Association="HISDBModel.FK_LKI_TestID">
+            <End Role="TestType" EntitySet="TestTypes" />
+            <End Role="LabKitItem" EntitySet="LabKitItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PKI_MedicineID" Association="HISDBModel.FK_PKI_MedicineID">
+            <End Role="MedicineMaster" EntitySet="MedicineMasters" />
+            <End Role="PharmaKitItem" EntitySet="PharmaKitItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PatientPurpose_PurposeID" Association="HISDBModel.FK_PatientPurpose_PurposeID">
+            <End Role="Purpose" EntitySet="Purposes" />
+            <End Role="PatientPurpose" EntitySet="PatientPurposes" />
+          </AssociationSet>
+          <EntitySet Name="Scans" EntityType="HISDBModel.Scan" />
+          <AssociationSet Name="FK_PatientScan_ScanID" Association="HISDBModel.FK_PatientScan_ScanID">
+            <End Role="Scan" EntitySet="Scans" />
+            <End Role="PatientScan" EntitySet="PatientScans" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ScanCategories_ScanID" Association="HISDBModel.FK_ScanCategories_ScanID">
+            <End Role="Scan" EntitySet="Scans" />
+            <End Role="ScanCategory" EntitySet="ScanCategories" />
+          </AssociationSet>
+          <FunctionImport Name="CreateMasterOrder1">
+            <Parameter Name="OrderNo" Mode="In" Type="String" />
+            <Parameter Name="OMID" Mode="InOut" Type="Int32" />
+          </FunctionImport>
           </EntityContainer>
         <EntityType Name="LabTestMaster">
           <Key>
@@ -1894,7 +2070,7 @@
           <Property Name="VisitID" Type="Int32" />
           <Property Name="IsBillPaid" Type="Boolean" />
           <Property Name="IsDelivered" Type="Boolean" />
-          <Property Name="Discount" Type="Decimal" Precision="4" Scale="2" />
+          <Property Name="Discount" Type="Decimal" Precision="5" Scale="2" />
           <Property Name="PaidAmount" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="TotalAmount" Type="Decimal" Precision="19" Scale="4" />
           <NavigationProperty Name="User" Relationship="HISDBModel.FK_LTM_Doctor" FromRole="LabTestMaster" ToRole="User" />
@@ -1909,7 +2085,7 @@
           <Property Name="LTMID" Type="Int32" Nullable="false" />
           <Property Name="TestID" Type="Int32" Nullable="false" />
           <Property Name="TestDate" Type="DateTime" Precision="3" />
-          <Property Name="RecordedValues" Type="Decimal" Precision="4" Scale="2" />
+          <Property Name="RecordedValues" Type="Decimal" Precision="5" Scale="2" />
           <Property Name="TestImpression" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="ReportPath" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="IsSampleCollected" Type="Boolean" />
@@ -2185,28 +2361,6 @@
           <Property Name="ScanID" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Scan" Relationship="HISDBModel.FK_ScanCategories_ScanID" FromRole="ScanCategory" ToRole="Scan" />
         </EntityType>
-        <EntityType Name="Scan">
-          <Key>
-            <PropertyRef Name="ScanID" />
-          </Key>
-          <Property Name="ScanID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ScanName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="ScanCategories" Relationship="HISDBModel.FK_ScanCategories_ScanID" FromRole="Scan" ToRole="ScanCategory" />
-          <Property Name="ScanCost" Type="Decimal" Precision="19" Scale="4" />
-          <NavigationProperty Name="PatientScans" Relationship="HISDBModel.FK_PatientScan_ScanID" FromRole="Scan" ToRole="PatientScan" />
-        </EntityType>
-        <Association Name="FK_ScanCategories_ScanID">
-          <End Type="HISDBModel.Scan" Role="Scan" Multiplicity="1" />
-          <End Type="HISDBModel.ScanCategory" Role="ScanCategory" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Scan">
-              <PropertyRef Name="ScanID" />
-            </Principal>
-            <Dependent Role="ScanCategory">
-              <PropertyRef Name="ScanID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="PatientScan">
           <Key>
             <PropertyRef Name="PSID" />
@@ -2218,9 +2372,9 @@
           <Property Name="RecordedValues" Type="Decimal" Precision="4" Scale="2" />
           <Property Name="TestImpression" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="ReportPath" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Scan" Relationship="HISDBModel.FK_PatientScan_ScanID" FromRole="PatientScan" ToRole="Scan" />
           <NavigationProperty Name="TestType" Relationship="HISDBModel.FK_PatientScans_ScanID" FromRole="PatientScan" ToRole="TestType" />
           <NavigationProperty Name="ScanTestMaster" Relationship="HISDBModel.FK_PatientScans_STMID" FromRole="PatientScan" ToRole="ScanTestMaster" />
+          <NavigationProperty Name="Scan" Relationship="HISDBModel.FK_PatientScan_ScanID" FromRole="PatientScan" ToRole="Scan" />
         </EntityType>
         <EntityType Name="ScanTestMaster">
           <Key>
@@ -2240,18 +2394,6 @@
           <NavigationProperty Name="PatientScans" Relationship="HISDBModel.FK_PatientScans_STMID" FromRole="ScanTestMaster" ToRole="PatientScan" />
           <NavigationProperty Name="User" Relationship="HISDBModel.FK_STM_Doctor" FromRole="ScanTestMaster" ToRole="User" />
         </EntityType>
-        <Association Name="FK_PatientScan_ScanID">
-          <End Type="HISDBModel.Scan" Role="Scan" Multiplicity="1" />
-          <End Type="HISDBModel.PatientScan" Role="PatientScan" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Scan">
-              <PropertyRef Name="ScanID" />
-            </Principal>
-            <Dependent Role="PatientScan">
-              <PropertyRef Name="ScanID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_PatientScans_ScanID">
           <End Type="HISDBModel.TestType" Role="TestType" Multiplicity="1" />
           <End Type="HISDBModel.PatientScan" Role="PatientScan" Multiplicity="*" />
@@ -2285,6 +2427,176 @@
             </Principal>
             <Dependent Role="ScanTestMaster">
               <PropertyRef Name="PrescribedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Consultant">
+          <Key>
+            <PropertyRef Name="ConsultantID" />
+          </Key>
+          <Property Name="ConsultantID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="MiddleName" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Gender" Type="Int32" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DOB" Type="DateTime" Precision="0" />
+          <Property Name="Phone" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="MaritalStatus" Type="Int32" />
+          <Property Name="Qualification" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="SpecializationID" Type="Int32" Nullable="false" />
+          <Property Name="Fee" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <NavigationProperty Name="Specialization" Relationship="HISDBModel.FK_Consultant_Specialization" FromRole="Consultant" ToRole="Specialization" />
+        </EntityType>
+        <EntityType Name="InsuranceProvider">
+          <Key>
+            <PropertyRef Name="ProviderID" />
+          </Key>
+          <Property Name="ProviderID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProviderName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Company" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="LabKitItem">
+          <Key>
+            <PropertyRef Name="LKitItemID" />
+          </Key>
+          <Property Name="LKitItemID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LKitID" Type="Int32" Nullable="false" />
+          <Property Name="TestID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="TestType" Relationship="HISDBModel.FK_LKI_TestID" FromRole="LabKitItem" ToRole="TestType" />
+        </EntityType>
+        <EntityType Name="LabKit">
+          <Key>
+            <PropertyRef Name="LKitID" />
+          </Key>
+          <Property Name="LKitID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LKitName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="LKitCost" Type="Decimal" Precision="19" Scale="4" />
+        </EntityType>
+        <EntityType Name="PatientInsurance">
+          <Key>
+            <PropertyRef Name="FileID" />
+          </Key>
+          <Property Name="FileID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FileNo" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ENMRNO" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="QuotedAmount" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="GrantedAmount" Type="Decimal" Precision="19" Scale="4" />
+        </EntityType>
+        <EntityType Name="PatientPurpose">
+          <Key>
+            <PropertyRef Name="PPID" />
+          </Key>
+          <Property Name="PPID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ENMRNO" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="PurposeID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Purpose" Relationship="HISDBModel.FK_PatientPurpose_PurposeID" FromRole="PatientPurpose" ToRole="Purpose" />
+        </EntityType>
+        <EntityType Name="PharmaKitItem">
+          <Key>
+            <PropertyRef Name="PKitItemID" />
+          </Key>
+          <Property Name="PKitItemID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PKitID" Type="Int32" Nullable="false" />
+          <Property Name="MedicineID" Type="Int32" Nullable="false" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="MedicineMaster" Relationship="HISDBModel.FK_PKI_MedicineID" FromRole="PharmaKitItem" ToRole="MedicineMaster" />
+        </EntityType>
+        <EntityType Name="PharmaKit">
+          <Key>
+            <PropertyRef Name="PKitID" />
+          </Key>
+          <Property Name="PKitID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PKitName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="PKitCost" Type="Decimal" Precision="19" Scale="4" />
+        </EntityType>
+        <EntityType Name="Purpose">
+          <Key>
+            <PropertyRef Name="PurposeID" />
+          </Key>
+          <Property Name="PurposeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PurposeName" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="PatientPurposes" Relationship="HISDBModel.FK_PatientPurpose_PurposeID" FromRole="Purpose" ToRole="PatientPurpose" />
+        </EntityType>
+        <Association Name="FK_Consultant_Specialization">
+          <End Type="HISDBModel.Specialization" Role="Specialization" Multiplicity="1" />
+          <End Type="HISDBModel.Consultant" Role="Consultant" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Specialization">
+              <PropertyRef Name="SpecializationID" />
+            </Principal>
+            <Dependent Role="Consultant">
+              <PropertyRef Name="SpecializationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LKI_TestID">
+          <End Type="HISDBModel.TestType" Role="TestType" Multiplicity="1" />
+          <End Type="HISDBModel.LabKitItem" Role="LabKitItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TestType">
+              <PropertyRef Name="TestID" />
+            </Principal>
+            <Dependent Role="LabKitItem">
+              <PropertyRef Name="TestID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PKI_MedicineID">
+          <End Type="HISDBModel.MedicineMaster" Role="MedicineMaster" Multiplicity="1" />
+          <End Type="HISDBModel.PharmaKitItem" Role="PharmaKitItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MedicineMaster">
+              <PropertyRef Name="MMID" />
+            </Principal>
+            <Dependent Role="PharmaKitItem">
+              <PropertyRef Name="MedicineID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PatientPurpose_PurposeID">
+          <End Type="HISDBModel.Purpose" Role="Purpose" Multiplicity="1" />
+          <End Type="HISDBModel.PatientPurpose" Role="PatientPurpose" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Purpose">
+              <PropertyRef Name="PurposeID" />
+            </Principal>
+            <Dependent Role="PatientPurpose">
+              <PropertyRef Name="PurposeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Scan">
+          <Key>
+            <PropertyRef Name="ScanID" />
+          </Key>
+          <Property Name="ScanID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ScanName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ScanCost" Type="Decimal" Precision="19" Scale="4" />
+          <NavigationProperty Name="PatientScans" Relationship="HISDBModel.FK_PatientScan_ScanID" FromRole="Scan" ToRole="PatientScan" />
+          <NavigationProperty Name="ScanCategories" Relationship="HISDBModel.FK_ScanCategories_ScanID" FromRole="Scan" ToRole="ScanCategory" />
+        </EntityType>
+        <Association Name="FK_PatientScan_ScanID">
+          <End Type="HISDBModel.Scan" Role="Scan" Multiplicity="1" />
+          <End Type="HISDBModel.PatientScan" Role="PatientScan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Scan">
+              <PropertyRef Name="ScanID" />
+            </Principal>
+            <Dependent Role="PatientScan">
+              <PropertyRef Name="ScanID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ScanCategories_ScanID">
+          <End Type="HISDBModel.Scan" Role="Scan" Multiplicity="1" />
+          <End Type="HISDBModel.ScanCategory" Role="ScanCategory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Scan">
+              <PropertyRef Name="ScanID" />
+            </Principal>
+            <Dependent Role="ScanCategory">
+              <PropertyRef Name="ScanID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2763,15 +3075,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Scans">
-            <EntityTypeMapping TypeName="HISDBModel.Scan">
-              <MappingFragment StoreEntitySet="Scans">
-                <ScalarProperty Name="ScanCost" ColumnName="ScanCost" />
-                <ScalarProperty Name="ScanName" ColumnName="ScanName" />
-                <ScalarProperty Name="ScanID" ColumnName="ScanID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="PatientScans">
             <EntityTypeMapping TypeName="HISDBModel.PatientScan">
               <MappingFragment StoreEntitySet="PatientScans">
@@ -2803,6 +3106,108 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="CreateMasterScanTest" FunctionName="HISDBModel.Store.CreateMasterScanTest" />
+          <EntitySetMapping Name="Consultants">
+            <EntityTypeMapping TypeName="HISDBModel.Consultant">
+              <MappingFragment StoreEntitySet="Consultants">
+                <ScalarProperty Name="Fee" ColumnName="Fee" />
+                <ScalarProperty Name="SpecializationID" ColumnName="SpecializationID" />
+                <ScalarProperty Name="Qualification" ColumnName="Qualification" />
+                <ScalarProperty Name="MaritalStatus" ColumnName="MaritalStatus" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="DOB" ColumnName="DOB" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="MiddleName" ColumnName="MiddleName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="ConsultantID" ColumnName="ConsultantID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="InsuranceProviders">
+            <EntityTypeMapping TypeName="HISDBModel.InsuranceProvider">
+              <MappingFragment StoreEntitySet="InsuranceProvider">
+                <ScalarProperty Name="Company" ColumnName="Company" />
+                <ScalarProperty Name="ProviderName" ColumnName="ProviderName" />
+                <ScalarProperty Name="ProviderID" ColumnName="ProviderID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LabKitItems">
+            <EntityTypeMapping TypeName="HISDBModel.LabKitItem">
+              <MappingFragment StoreEntitySet="LabKitItems">
+                <ScalarProperty Name="TestID" ColumnName="TestID" />
+                <ScalarProperty Name="LKitID" ColumnName="LKitID" />
+                <ScalarProperty Name="LKitItemID" ColumnName="LKitItemID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LabKits">
+            <EntityTypeMapping TypeName="HISDBModel.LabKit">
+              <MappingFragment StoreEntitySet="LabKits">
+                <ScalarProperty Name="LKitCost" ColumnName="LKitCost" />
+                <ScalarProperty Name="LKitName" ColumnName="LKitName" />
+                <ScalarProperty Name="LKitID" ColumnName="LKitID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PatientInsurances">
+            <EntityTypeMapping TypeName="HISDBModel.PatientInsurance">
+              <MappingFragment StoreEntitySet="PatientInsurance">
+                <ScalarProperty Name="GrantedAmount" ColumnName="GrantedAmount" />
+                <ScalarProperty Name="QuotedAmount" ColumnName="QuotedAmount" />
+                <ScalarProperty Name="ENMRNO" ColumnName="ENMRNO" />
+                <ScalarProperty Name="FileNo" ColumnName="FileNo" />
+                <ScalarProperty Name="FileID" ColumnName="FileID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PatientPurposes">
+            <EntityTypeMapping TypeName="HISDBModel.PatientPurpose">
+              <MappingFragment StoreEntitySet="PatientPurpose">
+                <ScalarProperty Name="PurposeID" ColumnName="PurposeID" />
+                <ScalarProperty Name="ENMRNO" ColumnName="ENMRNO" />
+                <ScalarProperty Name="PPID" ColumnName="PPID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PharmaKitItems">
+            <EntityTypeMapping TypeName="HISDBModel.PharmaKitItem">
+              <MappingFragment StoreEntitySet="PharmaKitItems">
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="MedicineID" ColumnName="MedicineID" />
+                <ScalarProperty Name="PKitID" ColumnName="PKitID" />
+                <ScalarProperty Name="PKitItemID" ColumnName="PKitItemID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PharmaKits">
+            <EntityTypeMapping TypeName="HISDBModel.PharmaKit">
+              <MappingFragment StoreEntitySet="PharmaKits">
+                <ScalarProperty Name="PKitCost" ColumnName="PKitCost" />
+                <ScalarProperty Name="PKitName" ColumnName="PKitName" />
+                <ScalarProperty Name="PKitID" ColumnName="PKitID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Purposes">
+            <EntityTypeMapping TypeName="HISDBModel.Purpose">
+              <MappingFragment StoreEntitySet="Purpose">
+                <ScalarProperty Name="PurposeName" ColumnName="PurposeName" />
+                <ScalarProperty Name="PurposeID" ColumnName="PurposeID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Scans">
+            <EntityTypeMapping TypeName="HISDBModel.Scan">
+              <MappingFragment StoreEntitySet="Scans">
+                <ScalarProperty Name="ScanCost" ColumnName="ScanCost" />
+                <ScalarProperty Name="ScanName" ColumnName="ScanName" />
+                <ScalarProperty Name="ScanID" ColumnName="ScanID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="CreateMasterOrder1" FunctionName="HISDBModel.Store.CreateMasterOrder" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
