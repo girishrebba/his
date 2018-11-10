@@ -812,6 +812,20 @@
       <End Role="InPatient" EntitySet="InPatients" />
       <End Role="PatientRoomAllocation" EntitySet="PatientRoomAllocations" />
     </AssociationSet>
+    <FunctionImport Name="CreateMasterLabKit">
+      <Parameter Name="LKitName" Mode="In" Type="String" />
+      <Parameter Name="LKitCost" Mode="In" Type="Decimal" />
+      <Parameter Name="LKitID" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="CreateMasterOrder2">
+      <Parameter Name="OrderNo" Mode="In" Type="String" />
+      <Parameter Name="OMID" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="CreateMasterPharmaKit">
+      <Parameter Name="PKitName" Mode="In" Type="String" />
+      <Parameter Name="PKitCost" Mode="In" Type="Decimal" />
+      <Parameter Name="PKitID" Mode="InOut" Type="Int32" />
+    </FunctionImport>
   </EntityContainer>
   <EntityType Name="LabTestMaster">
     <Key>
@@ -824,7 +838,7 @@
     <Property Name="VisitID" Type="Int32" />
     <Property Name="IsBillPaid" Type="Boolean" />
     <Property Name="IsDelivered" Type="Boolean" />
-    <Property Name="Discount" Type="Decimal" Precision="4" Scale="2" />
+    <Property Name="Discount" Type="Decimal" Precision="5" Scale="2" />
     <Property Name="PaidAmount" Type="Decimal" Precision="19" Scale="4" />
     <Property Name="TotalAmount" Type="Decimal" Precision="19" Scale="4" />
     <NavigationProperty Name="User" Relationship="HISDBModel.FK_LTM_Doctor" FromRole="LabTestMaster" ToRole="User" />
@@ -1289,7 +1303,7 @@
     <Property Name="AdvAmount" Type="Decimal" Precision="19" Scale="4" />
     <Property Name="DischargeReportpath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <Property Name="ProviderID" Type="Int32" />
-    <Property Name="InsuranceFileNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="InsuranceFileNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="InsuranceEstAmt" Type="Decimal" Precision="19" Scale="4" />
     <Property Name="InsuranceRecievedAmt" Type="Decimal" Precision="19" Scale="4" />
     <NavigationProperty Name="BloodGroup" Relationship="HISDBModel.FK_InPatients_BloodGroup" FromRole="InPatient" ToRole="BloodGroup" />

@@ -1109,6 +1109,23 @@ namespace HIS.Controllers
             }
         }
 
+        [HttpPost]
+        public JsonResult GetTestNames(string Prefix)
+        {
+            using (HISDBEntities hs = new HISDBEntities())
+            {
+                var tests = (from tt in hs.TestTypes
+                                 where tt.TestName.StartsWith(Prefix)
+                                 select new { tt }).AsEnumerable()
+                                 .Select(m => new TestType
+                                 {
+                                     TestID = m.tt.TestID,
+                                     TestName = m.tt.TestName,
+                                 }).ToList();
+                return Json(tests, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         public ActionResult DischargeFileUpload()
         {
             string FileName = "";

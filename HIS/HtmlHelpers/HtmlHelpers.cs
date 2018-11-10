@@ -39,6 +39,12 @@ namespace HIS.HtmlHelpers
             return string.Format("{0} - {1}(Available - {2})", medicineName, dose, qty);
         }
 
+        public static string GetMedicineCategoryWithDoseAvailableQty(string category,
+            string medicineName, string dose, int qty)
+        {
+            return string.Format("{0} -> {1} - {2} (Available - {3})", category, medicineName, dose, qty);
+        }
+
         public static string Get_IN_ENMR(int id)
         {
             string enmrNo = string.Empty;
@@ -312,6 +318,18 @@ public static List<User> GetDoctors()
                               .Select(x => new LabKit { LKitID = x.LKitID,
                                   LKitName = x.LKitName }).ToList();
                 return lkits;
+            }
+        }
+
+        public static List<Specialization> GetSpecializations()
+        {
+            using (HISDBEntities dc = new HISDBEntities())
+            {
+                var specializations = (from s in dc.Specializations
+                                       select new { s.SpecializationID, s.DoctorType })
+                              .OrderBy(b => b.DoctorType).AsEnumerable()
+                              .Select(x => new Specialization { SpecializationID = x.SpecializationID, DoctorType = x.DoctorType }).ToList();
+                return specializations;
             }
         }
 

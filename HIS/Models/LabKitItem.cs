@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.ComponentModel.DataAnnotations;
 
 namespace HIS
 {
     public partial class LabKitItem
     {
-        public string KitName { get; set; }
     }
+
+    
 }

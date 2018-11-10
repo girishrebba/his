@@ -11,7 +11,6 @@ namespace HIS.Controllers
     [SessionActionFilter]
     public class UserController : Controller
     {
-        // GET: User
         [His]
         public ActionResult Index()
         {
@@ -95,7 +94,6 @@ namespace HIS.Controllers
             }
         }
 
-        //Fetch Specializations from database
         public List<Specialization> GetSpecializations()
         {
             using (HISDBEntities dc = new HISDBEntities())
@@ -108,7 +106,6 @@ namespace HIS.Controllers
             }
         }
 
-        //Fetch User Types from database
         public List<UserType> GetUserTypes()
         {
             using (HISDBEntities dc = new HISDBEntities())

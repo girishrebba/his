@@ -12,7 +12,7 @@
     <div class="col-lg-8">
         <div class="panel panel-default">
             <div class="panel-heading clearfix">
-                <a class="btn btn-success" style="margin-bottom:10px" onclick="PopupLabKitForm('@Url.Action("AddModify","LabKit")')"><i class="fa fa-plus"></i> Add New</a>
+                <a class="btn btn-success" style="margin-bottom:10px" onclick="PopupLabKitForm('@Url.Action("AddLabKits","LabKit")')"><i class="fa fa-plus"></i> Add New</a>
             </div>
             <div class="panel-body">
                 <div class="table-responsive">
@@ -43,7 +43,7 @@
                 "columns": [
                     { "data": "LKitName" },
                     { "data":"LKitID", "render" : function (data) {
-                        return "<a class='btn btn-default btn-sm' onclick=PopupLabKitForm('@Url.Action("AddModify", "LabKit")/" + data + "')><i class='fa fa-pencil-alt'></i> Edit</a><a class='btn btn-danger btn-sm' style='margin-left:5px' onclick=Delete("+data+")><i class='fa fa-trash'></i> Delete</a>";
+                        return "<a class='btn btn-default btn-sm' onclick=PopupLabKitForm('@Url.Action("EditKitItems", "LabKit")/" + data + "')><i class='fa fa-pencil-alt his-fa-size'></i> Edit</a><a class='btn btn-primary btn-sm' style='margin-left:5px' title='View Only' onclick=ViewLabKitForm('@Url.Action("ViewKitItems", "LabKit")/" + data + "')><i class='fa fa-eye his-fa-size'></i></a>";
                     },
                         "orderable": false,
                         "searchable":false,
@@ -66,34 +66,71 @@
                     autoOpen: true,
                     resizable: true,
                     modal:true,
-                    title: 'Add Modify Lab Kit',
+                    title: 'Add Lab Kit',
                     width: '55%',
                     close: function () {
                         Popup.dialog('destroy').remove();
                     },
                     open: function () {
+                        $('.ui-dialog-content').css('overflow', 'hidden');
                         $('body').loadingModal('destroy');
                     }
                 });
             });
         }
 
+        function ViewLabKitForm(url) {
+            $('body').loadingModal({ text: 'Loading...' });
+            var formDiv = $('<div/>');
+            $.get(url)
+                .done(function (response) {
+                    formDiv.html(response);
+                    Popup = formDiv.dialog({
+                        autoOpen: true,
+                        resizable: true,
+                        modal: true,
+                        title: 'View Lab Kit',
+                        width: '55%',
+                        close: function () {
+                            Popup.dialog('destroy').remove();
+                        },
+                        open: function () {
+                            $('.ui-dialog-content').css('overflow', 'hidden');
+                            $('body').loadingModal('destroy');
+                        }
+                    });
+                });
+        }
+        
         function SubmitLabKitForm(form) {
             $.validator.unobtrusive.parse(form);
             if ($(form).valid()) {
                 $('body').loadingModal({ text: 'Processing...' });
+                var kitItems = [];
+                var kitName = $('#LKitName').val();
+                var kitCost = $('#LKitCost').val();
+                var kitId = $('#LKitID').val();
+                $('#itemTable > tbody tr').each(function (index, elem) {
+                    var tbl = {};
+                    tbl.TestID = $($(this).find('td:eq(0)')).html();
+                    tbl.TestName = $($(this).find('td:eq(1)')).html();
+                    tbl.LKitName = kitName;
+                    tbl.LKitCost = kitCost;
+                    tbl.LKitID = kitId;
+                    kitItems.push(tbl);
+                });
                 $.ajax({
-                    type : "POST",
-                    url : form.action,
-                    data : $(form).serialize(),
-                    success : function (data) {
-                        if(data.success)
-                        {
+                    type: "POST",
+                    contentType: "application/json",
+                    url: form.action,
+                    data: JSON.stringify(kitItems),
+                    success: function (data) {
+                        if (data.success) {
                             Popup.dialog('close');
                             dataTable.ajax.reload();
-                            $.notify(data.message,{
-                                globalPosition :"top center",
-                                className : "success"
+                            $.notify(data.message, {
+                                globalPosition: "top center",
+                                className: "success"
                             })
                         }
                         $('body').loadingModal('destroy');

@@ -19,7 +19,7 @@ namespace HIS.Controllers
             return View();
         }
 
-        public ActionResult GetLabKits()
+        public JsonResult GetLabKits()
         {
             using (HISDBEntities hs = new HISDBEntities())
             {
@@ -31,36 +31,101 @@ namespace HIS.Controllers
         }
 
         [HttpGet]
-        [Description(" - Lab Kits Add/Edit page.")]
-        public ActionResult AddModify(int id = 0)
+        [Description(" - Lab Kits Add page.")]
+        public ActionResult AddLabKits(int id = 0)
         {
-            if (id == 0)
-                return View(new LabKit());
-            else
+            return View(new LabKitViewModel());
+        }
+
+        [HttpGet]
+        [Description(" - Lab Kits Edit page.")]
+        public ActionResult EditKitItems(int id = 0)
+        {
+            if (id > 0)
             {
-                using (HISDBEntities db = new HISDBEntities())
-                {
-                    return View(db.LabKits.Where(x => x.LKitID == id).FirstOrDefault<LabKit>());
-                }
+                return View(GetLabKitItems(id));
+            }
+            else return View(new List<LabKitViewModel>());
+        }
+
+        [HttpGet]
+        [Description(" - Lab Kit Items View page.")]
+        public ActionResult ViewKitItems(int id = 0)
+        {
+            return View(GetLabKitItems(id));
+        }
+
+        public List<LabKitViewModel> GetLabKitItems(int lkitId)
+        {
+            using (HISDBEntities hs = new HISDBEntities())
+            {
+                var pKitItems = (from lki in hs.LabKitItems
+                                 join lk in hs.LabKits on lki.LKitID equals lk.LKitID
+                                 join tt in hs.TestTypes on lki.TestID equals tt.TestID
+                                 where lki.LKitID == lkitId
+                                 select new { lk, tt, lki }).AsEnumerable()
+                             .Select(x => new LabKitViewModel
+                             {
+                                 LKitName = x.lk.LKitName,
+                                 LKitID = x.lk.LKitID,
+                                 LKitCost = x.lk.LKitCost,
+                                 TestID = x.tt.TestID,
+                                 TestName = x.tt.TestName
+                             }).ToList();
+                return pKitItems;
             }
         }
 
         [HttpPost]
-        public ActionResult AddModify(LabKit lk)
+        public JsonResult SaveKitItems(List<LabKitViewModel> kitItems)
         {
             using (HISDBEntities db = new HISDBEntities())
             {
-                if (lk.LKitID == 0)
+                if (kitItems != null && kitItems.Count() > 0)
                 {
-                    db.LabKits.Add(lk);
-                    db.SaveChanges();
-                    return Json(new { success = true, message = "Saved Successfully" }, JsonRequestBehavior.AllowGet);
+                    var kitID = kitItems[0].LKitID;
+
+                    if (kitID == 0)
+                    {
+                        System.Data.Entity.Core.Objects.ObjectParameter lkitidOut = new System.Data.Entity.Core.Objects.ObjectParameter("LKitID", typeof(Int32));
+
+                        db.CreateMasterLabKit(kitItems[0].LKitName, kitItems[0].LKitCost, lkitidOut);
+                        kitID = Convert.ToInt32(lkitidOut.Value);
+
+                        foreach (var kit in kitItems)
+                        {
+                            var labKitItem = new LabKitItem {
+                                LKitID = kitID, TestID = kit.TestID
+                            };
+                            db.LabKitItems.Add(labKitItem);
+                        }
+                        db.SaveChanges();
+                        return Json(new { success = true, message = "Lab Package created Successfully" }, JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        var items = db.LabKitItems.Where(x => x.LKitID == kitID).ToList();
+                        db.LabKitItems.RemoveRange(items);
+
+                        foreach (var kit in kitItems)
+                        {
+                            var labKitItem = new LabKitItem {
+                                LKitID = kitID, TestID = kit.TestID
+                            };
+                            db.LabKitItems.Add(labKitItem);
+                        }
+
+                        LabKit lkit = (from x in db.LabKits
+                                          where x.LKitID == kitID
+                                          select x).First();
+                        lkit.LKitCost = kitItems[0].LKitCost;
+                        db.SaveChanges();
+                        return Json(new { success = true, message = "Lab Package Updated Successfully" }, JsonRequestBehavior.AllowGet);
+                    }
                 }
                 else
                 {
-                    db.Entry(lk).State = EntityState.Modified;
-                    db.SaveChanges();
-                    return Json(new { success = true, message = "Updated Successfully" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { success = false, message = "Error Found!!" }, JsonRequestBehavior.AllowGet);
                 }
             }
         }

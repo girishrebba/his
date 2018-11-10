@@ -12,14 +12,15 @@
     <div class="col-lg-8">
         <div class="panel panel-default">
             <div class="panel-heading clearfix">
-                <a class="btn btn-success" style="margin-bottom:10px" onclick="PopupPharmaKitForm('@Url.Action("AddModify","PharmaKit")')"><i class="fa fa-plus"></i> Add New</a>
+                <a class="btn btn-success" style="margin-bottom:10px" onclick="PopupPharmaKitForm('@Url.Action("AddModifyKitItems","PharmaKit")')"><i class="fa fa-plus"></i> Add New</a>
             </div>
             <div class="panel-body">
                 <div class="table-responsive">
                     <table id="pharmaKitTable" class="table table-striped table-bordered" style="width:100%">
                         <thead>
                             <tr>
-                                <th>Kit Name</th>
+                                <th>Package</th>
+                                <th>Cost</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -42,8 +43,9 @@
                 },
                 "columns": [
                     { "data": "PKitName" },
+                    { "data": "PKitCost" },
                     { "data":"PKitID", "render" : function (data) {
-                        return "<a class='btn btn-default btn-sm' onclick=PopupPharmaKitForm('@Url.Action("AddModify", "PharmaKit")/" + data + "')><i class='fa fa-pencil-alt'></i> Edit</a><a class='btn btn-danger btn-sm' style='margin-left:5px' onclick=Delete("+data+")><i class='fa fa-trash'></i> Delete</a>";
+                        return "<a class='btn btn-default btn-sm' onclick=PopupPharmaKitForm('@Url.Action("EditKitItems", "PharmaKit")/" + data + "')><i class='fa fa-pencil-alt his-fa-size'></i> Edit</a><a class='btn btn-primary btn-sm' style='margin-left:5px' title='View Only' onclick=ViewPharmaKitForm('@Url.Action("ViewKitItems", "PharmaKit")/" + data + "')><i class='fa fa-eye his-fa-size'></i></a>";
                     },
                         "orderable": false,
                         "searchable":false,
@@ -66,34 +68,73 @@
                     autoOpen: true,
                     resizable: true,
                     modal:true,
-                    title: 'Add Modify Pharma Kit',
-                    width: '55%',
+                    title: 'Add Pharma Kit Items',
+                    width: '65%',
                     close: function () {
                         Popup.dialog('destroy').remove();
                     },
                     open: function () {
+                        $('.ui-dialog-content').css('overflow', 'hidden');
                         $('body').loadingModal('destroy');
                     }
                 });
             });
         }
 
+        function ViewPharmaKitForm(url) {
+            $('body').loadingModal({ text: 'Loading...' });
+            var formDiv = $('<div/>');
+            $.get(url)
+                .done(function (response) {
+                    formDiv.html(response);
+                    Popup = formDiv.dialog({
+                        autoOpen: true,
+                        resizable: true,
+                        modal: true,
+                        title: 'View Pharma Kit Items',
+                        width: '45%',
+                        close: function () {
+                            Popup.dialog('destroy').remove();
+                        },
+                        open: function () {
+                            $('.ui-dialog-content').css('overflow', 'hidden');
+                            $('.ui-dialog-content').css('overflow', 'hidden');
+                            $('body').loadingModal('destroy');
+                        }
+                    });
+                });
+        }
+
         function SubmitPharmaKitForm(form) {
             $.validator.unobtrusive.parse(form);
             if ($(form).valid()) {
                 $('body').loadingModal({ text: 'Processing...' });
+                var kitItems = [];
+                var kitName = $('#PKitName').val();
+                var kitCost = $('#PKitCost').val();
+                var kitId = $('#PKitID').val();
+                $('#itemTable > tbody tr').each(function (index, elem) {
+                    var tbl = {};
+                    tbl.MedicineID = $($(this).find('td:eq(0)')).html();
+                    tbl.MedicineWithDose = $($(this).find('td:eq(1)')).html();
+                    tbl.Quantity = $($(this).find('td:eq(2)')).find('.orderedQty').val();
+                    tbl.PKitName = kitName;
+                    tbl.PKitCost = kitCost;
+                    tbl.PKitID = kitId;
+                    kitItems.push(tbl);
+                });
                 $.ajax({
-                    type : "POST",
-                    url : form.action,
-                    data : $(form).serialize(),
-                    success : function (data) {
-                        if(data.success)
-                        {
+                    type: "POST",
+                    contentType: "application/json",
+                    url: form.action,
+                    data: JSON.stringify(kitItems),
+                    success: function (data) {
+                        if (data.success) {
                             Popup.dialog('close');
                             dataTable.ajax.reload();
-                            $.notify(data.message,{
-                                globalPosition :"top center",
-                                className : "success"
+                            $.notify(data.message, {
+                                globalPosition: "top center",
+                                className: "success"
                             })
                         }
                         $('body').loadingModal('destroy');

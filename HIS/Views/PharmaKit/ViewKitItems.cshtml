@@ -1,0 +1,63 @@
+﻿@model List<HIS.PharmaKitViewModel>
+@{
+    Layout = null;
+}
+<style>
+    td {
+        padding: 5px;
+    }
+
+    .table {
+        margin-left: 1px;
+        margin-right: 1px;
+    }
+
+        .table > thead > tr > th {
+            text-transform: none;
+            font-weight: bold;
+        }
+
+    .ui-dialog {
+        top: 60px !important;
+    }
+</style>
+@using (Html.BeginForm())
+{
+    <div class="form-horizontal">
+        <div class="astriskNote"><span></span></div>
+        <div class="row">
+            <div class="form-group required">
+                @Html.LabelFor(model => model[0].PKitName, "Package:", new { @class = "control-label col-md-2" })
+                <div class="col-sm-2">
+                    @Html.DisplayFor(model => model[0].PKitName, new { htmlAttributes = new { @id = "PKitName", @class = "form-control" } })
+                </div>
+                @Html.LabelFor(model => model[0].PKitCost, "Cost:", new { @class = "control-label col-md-2" })
+                <div class="col-sm-2">
+                    @Html.DisplayFor(model => model[0].PKitCost, new { htmlAttributes = new { @id = "PKitCost", @class = "form-control" } })
+                </div>
+            </div>
+        </div>
+        <div class="row" style="border: 1px;">
+            <table class="table table-striped table-bordered" id="itemTable">
+                <thead>
+                    <tr>
+                        <th style="width:80%">Medicine</th>
+                        <th style="width:20%">Quantity</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (PharmaKitViewModel p in Model)
+                    {
+                        <tr>
+                            <td>@p.MedicineWithDose</td>
+                            <td>
+                                @Html.DisplayFor(model => p.Quantity, new { htmlAttributes = new { Value = p.Quantity > 0 ? p.Quantity.ToString() : string.Empty, @class = "form-control orderedQty" } })
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}

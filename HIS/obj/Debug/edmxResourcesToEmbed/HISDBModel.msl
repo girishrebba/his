@@ -606,5 +606,8 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="CreateMasterLabKit" FunctionName="HISDBModel.Store.CreateMasterLabKit" />
+    <FunctionImportMapping FunctionImportName="CreateMasterOrder2" FunctionName="HISDBModel.Store.CreateMasterOrder" />
+    <FunctionImportMapping FunctionImportName="CreateMasterPharmaKit" FunctionName="HISDBModel.Store.CreateMasterPharmaKit" />
   </EntityContainerMapping>
 </Mapping>

@@ -1065,6 +1065,7 @@
     <Compile Include="Controllers\BloodGroupController.cs" />
     <Compile Include="Controllers\BrandCategoryController.cs" />
     <Compile Include="Controllers\BrandController.cs" />
+    <Compile Include="Controllers\ConsultantController.cs" />
     <Compile Include="Controllers\ConsultationFeeController.cs" />
     <Compile Include="Controllers\ConsultTypeController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -1079,7 +1080,6 @@
     <Compile Include="Controllers\OutPatientController.cs" />
     <Compile Include="Controllers\PermissionsController.cs" />
     <Compile Include="Controllers\PharmaKitController.cs" />
-    <Compile Include="Controllers\PharmaKitItemController.cs" />
     <Compile Include="Controllers\PurchaseOrderController.cs" />
     <Compile Include="Controllers\PurposeController.cs" />
     <Compile Include="Controllers\RevenuerptController.cs" />
@@ -1150,6 +1150,7 @@
     <Compile Include="Models\BloodGroup.cs" />
     <Compile Include="Models\Brand.cs" />
     <Compile Include="Models\BrandCategory.cs" />
+    <Compile Include="Models\Consultant.cs" />
     <Compile Include="Models\ConsultationFee.cs" />
     <Compile Include="Models\ConsultationType.cs" />
     <Compile Include="Models\DischargeModel.cs" />
@@ -1486,14 +1487,19 @@
     <Content Include="Views\InsuranceProvider\Index.cshtml" />
     <Content Include="Views\LabKit\AddModify.cshtml" />
     <Content Include="Views\LabKit\Index.cshtml" />
-    <Content Include="Views\PharmaKit\AddModify.cshtml" />
     <Content Include="Views\PharmaKit\Index.cshtml" />
     <Content Include="Views\Purpose\AddModify.cshtml" />
     <Content Include="Views\Purpose\Index.cshtml" />
-    <Content Include="Views\PharmaKitItem\AddModify.cshtml" />
-    <Content Include="Views\PharmaKitItem\Index.cshtml" />
     <Content Include="Views\OutPatient\ScanTestBillPay.cshtml" />
     <Content Include="Views\OutPatient\opScanTestBillPay.cshtml" />
+    <Content Include="Views\Consultant\AddModify.cshtml" />
+    <Content Include="Views\Consultant\Index.cshtml" />
+    <Content Include="Views\LabKit\ViewKitItems.cshtml" />
+    <Content Include="Views\LabKit\EditKitItems.cshtml" />
+    <Content Include="Views\LabKit\AddLabKits.cshtml" />
+    <Content Include="Views\PharmaKit\AddModifyKitItems.cshtml" />
+    <Content Include="Views\PharmaKit\EditKitItems.cshtml" />
+    <Content Include="Views\PharmaKit\ViewKitItems.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

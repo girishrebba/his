@@ -758,15 +758,17 @@ namespace HIS.Controllers
         {
             using (HISDBEntities hs = new HISDBEntities())
             {
-                var medicines = (from mm in hs.MedicineMasters
+                var medicines = (from bc in hs.BrandCategories
+                                 join mm in hs.MedicineMasters on bc.CategoryID equals mm.BrandCategoryID
                                  join mi in hs.MedicineInventories on mm.MMID equals mi.MedicineID
-                                 where mm.MedicineName.StartsWith(Prefix)
-                                 select new { mm, mi }).AsEnumerable()
+                                 where (mm.MedicineName.StartsWith(Prefix)|| bc.Category.StartsWith(Prefix))
+                                 select new { bc, mm, mi }).AsEnumerable()
                                  .Select(m => new MedicineMaster
                                  {
                                      MMID = m.mm.MMID,
-                                     MedicineDisplay = HtmlHelpers.HtmlHelpers.GetMedicineWithDoseAvailableQty(m.mm.MedicineName, m.mm.MedDose, m.mi.AvailableQty.Value),
-                                     ItemPrice = m.mi.PricePerItem
+                                     MedicineDisplay = HtmlHelpers.HtmlHelpers.GetMedicineCategoryWithDoseAvailableQty(m.bc.Category, m.mm.MedicineName, m.mm.MedDose, m.mi.AvailableQty.Value),
+                                     ItemPrice = m.mi.PricePerItem,
+                                     SelectDisplay = string.Format("{0} - {1}",m.mm.MedicineName, m.mm.MedDose)
                                  }).ToList();
                 return Json(medicines, JsonRequestBehavior.AllowGet);
             }

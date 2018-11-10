@@ -1,0 +1,59 @@
+﻿
+@model List<HIS.LabKitViewModel>
+@{
+    Layout = null;
+}
+<style>
+    td {
+        padding: 5px;
+    }
+
+    .table {
+        margin-left: 1px;
+        margin-right: 1px;
+    }
+
+        .table > thead > tr > th {
+            text-transform: none;
+            font-weight: bold;
+        }
+
+    .ui-dialog {
+        top: 60px !important;
+    }
+</style>
+@using (Html.BeginForm())
+{
+    <div class="form-horizontal">
+        <div class="astriskNote"><span></span></div>
+        <div class="row">
+            <div class="form-group required">
+                @Html.LabelFor(model => model[0].LKitName, "Package:", new { @class = "control-label col-md-2" })
+                <div class="col-sm-2">
+                    @Html.DisplayFor(model => model[0].LKitName, new { htmlAttributes = new { @id = "LKitName", @class = "form-control" } })
+                </div>
+                @Html.LabelFor(model => model[0].LKitCost, "Cost:", new { @class = "control-label col-md-2" })
+                <div class="col-sm-2">
+                    @Html.DisplayFor(model => model[0].LKitCost, new { htmlAttributes = new { @id = "LKitCost", @class = "form-control" } })
+                </div>
+            </div>
+        </div>
+        <div class="row" style="border: 1px;">
+            <table class="table table-striped table-bordered" id="itemTable">
+                <thead>
+                    <tr>
+                        <th style="width:100%">Test Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (LabKitViewModel p in Model)
+                    {
+                        <tr>
+                            <td>@p.TestName</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}

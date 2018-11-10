@@ -147,7 +147,7 @@
           <Property Name="AdvAmount" Type="money" />
           <Property Name="DischargeReportpath" Type="nvarchar(max)" />
           <Property Name="ProviderID" Type="int" />
-          <Property Name="InsuranceFileNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="InsuranceFileNo" Type="varchar" MaxLength="50" />
           <Property Name="InsuranceEstAmt" Type="money" />
           <Property Name="InsuranceRecievedAmt" Type="money" />
         </EntityType>
@@ -193,7 +193,7 @@
           <Property Name="VisitID" Type="int" />
           <Property Name="IsBillPaid" Type="bit" />
           <Property Name="IsDelivered" Type="bit" />
-          <Property Name="Discount" Type="decimal" Precision="4" Scale="2" />
+          <Property Name="Discount" Type="decimal" Precision="5" Scale="2" />
           <Property Name="PaidAmount" Type="money" />
           <Property Name="TotalAmount" Type="money" />
           <Property Name="ISIP" Type="bit" />
@@ -781,18 +781,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_PatientScans_ScanID">
-          <End Role="TestTypes" Type="Self.TestTypes" Multiplicity="1" />
-          <End Role="PatientScans" Type="Self.PatientScans" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="TestTypes">
-              <PropertyRef Name="TestID" />
-            </Principal>
-            <Dependent Role="PatientScans">
-              <PropertyRef Name="ScanID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_PatientScans_STMID">
           <End Role="ScanTestMaster" Type="Self.ScanTestMaster" Multiplicity="1" />
           <End Role="PatientScans" Type="Self.PatientScans" Multiplicity="*" />
@@ -1014,12 +1002,26 @@
           <Parameter Name="EstAmount" Type="money" Mode="In" />
           <Parameter Name="AdvAmount" Type="money" Mode="In" />
         </Function>
+        <Function Name="CreateMasterLabKit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="LKitName" Type="varchar" Mode="In" />
+          <Parameter Name="LKitCost" Type="money" Mode="In" />
+          <Parameter Name="LKitID" Type="int" Mode="InOut" />
+        </Function>
         <Function Name="CreateMasterLabTest" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ENMRNO" Type="varchar" Mode="In" />
           <Parameter Name="DoctorID" Type="int" Mode="In" />
           <Parameter Name="VisitID" Type="int" Mode="In" />
           <Parameter Name="ISIP" Type="bit" Mode="In" />
           <Parameter Name="LTMID" Type="int" Mode="InOut" />
+        </Function>
+        <Function Name="CreateMasterOrder" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="OrderNo" Type="varchar" Mode="In" />
+          <Parameter Name="OMID" Type="int" Mode="InOut" />
+        </Function>
+        <Function Name="CreateMasterPharmaKit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PKitName" Type="varchar" Mode="In" />
+          <Parameter Name="PKitCost" Type="money" Mode="In" />
+          <Parameter Name="PKitID" Type="int" Mode="InOut" />
         </Function>
         <Function Name="CreateMasterPrescription" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ENMRNO" Type="varchar" Mode="In" />
@@ -1179,10 +1181,6 @@
           </AssociationSet>
           <AssociationSet Name="FK_PatientScan_ScanID" Association="Self.FK_PatientScan_ScanID">
             <End Role="Scans" EntitySet="Scans" />
-            <End Role="PatientScans" EntitySet="PatientScans" />
-          </AssociationSet>
-          <AssociationSet Name="FK_PatientScans_ScanID" Association="Self.FK_PatientScans_ScanID">
-            <End Role="TestTypes" EntitySet="TestTypes" />
             <End Role="PatientScans" EntitySet="PatientScans" />
           </AssociationSet>
           <AssociationSet Name="FK_PatientScans_STMID" Association="Self.FK_PatientScans_STMID">
@@ -2074,6 +2072,20 @@
             <End Role="InPatient" EntitySet="InPatients" />
             <End Role="PatientRoomAllocation" EntitySet="PatientRoomAllocations" />
           </AssociationSet>
+          <FunctionImport Name="CreateMasterLabKit">
+            <Parameter Name="LKitName" Mode="In" Type="String" />
+            <Parameter Name="LKitCost" Mode="In" Type="Decimal" />
+            <Parameter Name="LKitID" Mode="InOut" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="CreateMasterOrder2">
+            <Parameter Name="OrderNo" Mode="In" Type="String" />
+            <Parameter Name="OMID" Mode="InOut" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="CreateMasterPharmaKit">
+            <Parameter Name="PKitName" Mode="In" Type="String" />
+            <Parameter Name="PKitCost" Mode="In" Type="Decimal" />
+            <Parameter Name="PKitID" Mode="InOut" Type="Int32" />
+          </FunctionImport>
           </EntityContainer>
         <EntityType Name="LabTestMaster">
           <Key>
@@ -2086,7 +2098,7 @@
           <Property Name="VisitID" Type="Int32" />
           <Property Name="IsBillPaid" Type="Boolean" />
           <Property Name="IsDelivered" Type="Boolean" />
-          <Property Name="Discount" Type="Decimal" Precision="4" Scale="2" />
+          <Property Name="Discount" Type="Decimal" Precision="5" Scale="2" />
           <Property Name="PaidAmount" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="TotalAmount" Type="Decimal" Precision="19" Scale="4" />
           <NavigationProperty Name="User" Relationship="HISDBModel.FK_LTM_Doctor" FromRole="LabTestMaster" ToRole="User" />
@@ -2551,7 +2563,7 @@
           <Property Name="AdvAmount" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="DischargeReportpath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="ProviderID" Type="Int32" />
-          <Property Name="InsuranceFileNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="InsuranceFileNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="InsuranceEstAmt" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="InsuranceRecievedAmt" Type="Decimal" Precision="19" Scale="4" />
           <NavigationProperty Name="BloodGroup" Relationship="HISDBModel.FK_InPatients_BloodGroup" FromRole="InPatient" ToRole="BloodGroup" />
@@ -3231,6 +3243,9 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="CreateMasterLabKit" FunctionName="HISDBModel.Store.CreateMasterLabKit" />
+          <FunctionImportMapping FunctionImportName="CreateMasterOrder2" FunctionName="HISDBModel.Store.CreateMasterOrder" />
+          <FunctionImportMapping FunctionImportName="CreateMasterPharmaKit" FunctionName="HISDBModel.Store.CreateMasterPharmaKit" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

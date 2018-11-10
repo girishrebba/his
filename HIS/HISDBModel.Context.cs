@@ -202,5 +202,40 @@ namespace HIS
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("CreateMasterOrder1", orderNoParameter, oMID);
         }
+    
+        public virtual int CreateMasterLabKit(string lKitName, Nullable<decimal> lKitCost, ObjectParameter lKitID)
+        {
+            var lKitNameParameter = lKitName != null ?
+                new ObjectParameter("LKitName", lKitName) :
+                new ObjectParameter("LKitName", typeof(string));
+    
+            var lKitCostParameter = lKitCost.HasValue ?
+                new ObjectParameter("LKitCost", lKitCost) :
+                new ObjectParameter("LKitCost", typeof(decimal));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("CreateMasterLabKit", lKitNameParameter, lKitCostParameter, lKitID);
+        }
+    
+        public virtual int CreateMasterOrder2(string orderNo, ObjectParameter oMID)
+        {
+            var orderNoParameter = orderNo != null ?
+                new ObjectParameter("OrderNo", orderNo) :
+                new ObjectParameter("OrderNo", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("CreateMasterOrder2", orderNoParameter, oMID);
+        }
+    
+        public virtual int CreateMasterPharmaKit(string pKitName, Nullable<decimal> pKitCost, ObjectParameter pKitID)
+        {
+            var pKitNameParameter = pKitName != null ?
+                new ObjectParameter("PKitName", pKitName) :
+                new ObjectParameter("PKitName", typeof(string));
+    
+            var pKitCostParameter = pKitCost.HasValue ?
+                new ObjectParameter("PKitCost", pKitCost) :
+                new ObjectParameter("PKitCost", typeof(decimal));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("CreateMasterPharmaKit", pKitNameParameter, pKitCostParameter, pKitID);
+        }
     }
 }

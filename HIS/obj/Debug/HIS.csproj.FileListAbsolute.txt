@@ -408,6 +408,7 @@ D:\HIS\his.git\trunk\HIS\obj\Debug\HIS.csproj.CopyComplete
 D:\HIS\his.git\trunk\HIS\obj\Debug\HIS.dll
 D:\HIS\his.git\trunk\HIS\obj\Debug\HIS.pdb
 D:\HIS\his.git\trunk\HIS\obj\Debug\HIS.csprojResolveAssemblyReference.cache
+F:\Projects\HIS\HIS\obj\Debug\HIS.csprojResolveAssemblyReference.cache
 D:\HIS\trunk\HIS\bin\HIS.dll.config
 D:\HIS\trunk\HIS\bin\HIS.dll
 D:\HIS\trunk\HIS\bin\HIS.pdb
@@ -511,4 +512,3 @@ D:\HIS\trunk\HIS\obj\Debug\HIS.csproj.CopyComplete
 D:\HIS\trunk\HIS\obj\Debug\HIS.dll
 D:\HIS\trunk\HIS\obj\Debug\HIS.pdb
 D:\HIS\trunk\HIS\obj\Debug\HIS.csprojResolveAssemblyReference.cache
-F:\Projects\HIS\HIS\obj\Debug\HIS.csprojResolveAssemblyReference.cache

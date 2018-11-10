@@ -12,6 +12,7 @@ namespace HIS
         public string Category { get; set; }
         public string MedicineDisplay { get; set; }
         public decimal? ItemPrice { get; set; }
+        public string SelectDisplay { get; set; }
     }
 
     public class MedicineMasterMetaData

@@ -19,7 +19,7 @@ namespace HIS.Controllers
             return View();
         }
 
-        public ActionResult GetPharmaKits()
+        public JsonResult GetPharmaKits()
         {
             using (HISDBEntities hs = new HISDBEntities())
             {
@@ -32,35 +32,97 @@ namespace HIS.Controllers
 
         [HttpGet]
         [Description(" - Pharma Kits Add/Edit page.")]
-        public ActionResult AddModify(int id = 0)
+        public ActionResult AddModifyKitItems(int id = 0)
         {
-            if (id == 0)
-                return View(new PharmaKit());
-            else
+           return View(new PharmaKitViewModel()); 
+        }
+
+        [HttpGet]
+        [Description(" - Pharma Kits Add/Edit page.")]
+        public ActionResult EditKitItems(int id = 0)
+        {
+            if (id > 0)
             {
-                using (HISDBEntities db = new HISDBEntities())
-                {
-                    return View(db.PharmaKits.Where(x => x.PKitID == id).FirstOrDefault<PharmaKit>());
-                }
+                return View(GetPharmaKitItems(id));
+            }
+            else return View(new List<PharmaKitViewModel>());       
+        }
+
+        [HttpGet]
+        [Description(" - Pharma Kit Items View page.")]
+        public ActionResult ViewKitItems(int id = 0)
+        { 
+           return View(GetPharmaKitItems(id));   
+        }
+
+        public List<PharmaKitViewModel> GetPharmaKitItems(int pkitId)
+        {
+            using (HISDBEntities hs = new HISDBEntities())
+            {
+                var pKitItems = (from pki in hs.PharmaKitItems
+                                 join pk in hs.PharmaKits on pki.PKitID equals pk.PKitID
+                                 join mi in hs.MedicineMasters on pki.MedicineID equals mi.MMID
+                                 where  pki.PKitID == pkitId
+                                 select new { pk, mi, pki }).AsEnumerable()
+                             .Select(x => new PharmaKitViewModel
+                             {
+                                 PKitName = x.pk.PKitName,
+                                 PKitID = x.pk.PKitID,
+                                 PKitCost = x.pk.PKitCost,
+                                 MedicineID = x.mi.MMID,
+                                 MedicineWithDose = HtmlHelpers.HtmlHelpers.GetMedicineWithDose(x.mi.MedicineName, x.mi.MedDose),
+                                 Quantity = x.pki.Quantity
+                             }).ToList();
+                return pKitItems;
             }
         }
 
         [HttpPost]
-        public ActionResult AddModify(PharmaKit pk)
+        public JsonResult AddModifyKitItems(List<PharmaKitViewModel> kitItems)
         {
             using (HISDBEntities db = new HISDBEntities())
             {
-                if (pk.PKitID == 0)
+                if(kitItems != null && kitItems.Count() > 0)
                 {
-                    db.PharmaKits.Add(pk);
-                    db.SaveChanges();
-                    return Json(new { success = true, message = "Saved Successfully" }, JsonRequestBehavior.AllowGet);
+                    var kitID = kitItems[0].PKitID;
+
+                    if (kitID == 0)
+                    {
+                        System.Data.Entity.Core.Objects.ObjectParameter pkitidOut = new System.Data.Entity.Core.Objects.ObjectParameter("PKitID", typeof(Int32));
+
+                        db.CreateMasterPharmaKit(kitItems[0].PKitName, kitItems[0].PKitCost, pkitidOut);
+                        kitID = Convert.ToInt32(pkitidOut.Value);
+
+                        foreach (var kit in kitItems)
+                        {
+                            var pharmaKitItem = new PharmaKitItem { PKitID = kitID, MedicineID = kit.MedicineID, Quantity = kit.Quantity };
+                            db.PharmaKitItems.Add(pharmaKitItem);
+                        }
+                        db.SaveChanges();
+                        return Json(new { success = true, message = "Pharma Package created Successfully" }, JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        var items = db.PharmaKitItems.Where(x => x.PKitID == kitID).ToList();
+                        db.PharmaKitItems.RemoveRange(items);
+
+                        foreach (var kit in kitItems)
+                        {
+                            var pharmaKitItem = new PharmaKitItem { PKitID = kitID, MedicineID = kit.MedicineID, Quantity = kit.Quantity };
+                            db.PharmaKitItems.Add(pharmaKitItem);
+                        }
+
+                        PharmaKit pkit = (from x in db.PharmaKits
+                                      where x.PKitID == kitID
+                                      select x).First();
+                        pkit.PKitCost = kitItems[0].PKitCost;
+                        db.SaveChanges();
+                        return Json(new { success = true, message = "Pharma Package Updated Successfully" }, JsonRequestBehavior.AllowGet);
+                    }
                 }
                 else
                 {
-                    db.Entry(pk).State = EntityState.Modified;
-                    db.SaveChanges();
-                    return Json(new { success = true, message = "Updated Successfully" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { success = false, message = "Error Found!!" }, JsonRequestBehavior.AllowGet);
                 }
             }
         }
