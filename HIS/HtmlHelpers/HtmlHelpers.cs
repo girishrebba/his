@@ -203,6 +203,19 @@ public static List<User> GetDoctors()
             }
         }
 
+        //Fetch Blood Groups from database
+        public static List<InsuranceProvider> GetInsuranceProviders()
+        {
+            using (HISDBEntities dc = new HISDBEntities())
+            {
+                var InsuranceProvider = (from bg in dc.InsuranceProviders
+                                   select new { bg.ProviderID, bg.ProviderName })
+                              .OrderBy(b => b.ProviderName).AsEnumerable()
+                              .Select(x => new InsuranceProvider { ProviderID = x.ProviderID, ProviderName = x.ProviderName }).ToList();
+                return InsuranceProvider;
+            }
+        }
+
         public static List<ConsultationType> GetConsultationTypes()
         {
             using (HISDBEntities dc = new HISDBEntities())
@@ -606,12 +619,96 @@ public static List<User> GetDoctors()
             }
         }
 
+        public static List<PatientScan> GetPatientVisitScansBillPay(string enmrNo, int visitID)
+        {
+            using (HISDBEntities hs = new HISDBEntities())
+            {
+
+                var patientScans = (from pt in hs.PatientScans
+                                    join ltm in hs.ScanTestMasters on pt.STMID equals ltm.STMID
+                                    join tt in hs.Scans on pt.ScanID equals tt.ScanID
+                                    join u in hs.Users on ltm.PrescribedBy equals u.UserID
+                                    join ut in hs.UserTypes on u.UserTypeID equals ut.UserTypeID
+                                    where ltm.ENMRNO == enmrNo && ltm.VisitID == visitID && ltm.IsBillPaid == false
+                                    select new
+                                    {
+                                        pt,
+                                        u,
+                                        tt,
+                                        ltm
+                                    })
+                                  .OrderByDescending(b => b.pt.PSID)
+                                  .AsEnumerable()
+                                 .Select(x => new PatientScan
+                                 {
+                                     ENMRNO = x.pt.ENMRNO,
+                                     ScanName = x.tt.ScanName,
+                                     DateDisplay = DateFormat(x.ltm.DatePrescribed),
+                                     DoctorName = GetFullName(x.u.FirstName, x.u.MiddleName, x.u.LastName),
+                                     RecordedValues = x.pt.RecordedValues,
+                                     TestImpression = x.pt.TestImpression,
+                                     ReportPath = x.pt.ReportPath,
+                                     STMID = x.pt.STMID,
+                                     ScanID = x.pt.ScanID,
+                                     ScanCost = x.tt.ScanCost.HasValue ? x.tt.ScanCost.Value : 0
+                                 }).ToList();
+
+                return patientScans;
+            }
+        }
+
+
+        public static List<PatientScan> GetOpPatientScans(string enmrNo, int visitID)
+        {
+            using (HISDBEntities hs = new HISDBEntities())
+            {
+
+                var patientScans = (from pt in hs.PatientScans
+                                    join ltm in hs.ScanTestMasters on pt.STMID equals ltm.STMID
+                                    join op in hs.OutPatients on ltm.ENMRNO equals op.ENMRNO
+                                    join tt in hs.Scans on pt.ScanID equals tt.ScanID
+                                    join u in hs.Users on ltm.PrescribedBy equals u.UserID
+                                    join ut in hs.UserTypes on u.UserTypeID equals ut.UserTypeID
+                                    where ltm.ENMRNO == enmrNo && ltm.VisitID == visitID
+                                    && ltm.IsDelivered == true
+                                    select new
+                                    {
+                                        pt,
+                                        u,
+                                        tt
+                                    })
+                                  .OrderByDescending(b => b.pt.PSID)
+                                  .AsEnumerable()
+                                 .Select(x => new PatientScan
+                                 {
+                                     ENMRNO = enmrNo,
+                                     ScanName = x.tt.ScanName,
+                                     DateDisplay = DateFormat(x.pt.ScanDate),
+                                     DoctorName = GetFullName(x.u.FirstName, x.u.MiddleName, x.u.LastName),
+                                     RecordedValues = x.pt.RecordedValues,
+                                     TestImpression = x.pt.TestImpression,
+                                     ReportPath = x.pt.ReportPath
+                                 }).ToList();
+
+                return patientScans;
+            }
+        }
+
         public static bool ISPatientDischrged(string enmrNo)
         {
             using (var db = new HISDBEntities())
             {
                 var flag = db.InPatients.Where(ip => ip.ENMRNO == enmrNo).FirstOrDefault().IsDischarged;
                 return flag.HasValue ? flag.Value : false;
+            }
+        }
+
+        public static decimal InsuranceScantionedAmount(string enmrNo)
+        {
+            using (var db = new HISDBEntities())
+            {
+                var flag = db.InPatients.Where(ip => ip.ENMRNO == enmrNo).FirstOrDefault().InsuranceRecievedAmt;
+                return flag != null ? flag.Value : 0;
             }
         }
 

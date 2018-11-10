@@ -61,6 +61,10 @@ namespace HIS
         public Nullable<decimal> EstAmoount { get; set; }
         public Nullable<decimal> AdvAmount { get; set; }
         public string DischargeReportpath { get; set; }
+        public Nullable<int> ProviderID { get; set; }
+        public string InsuranceFileNo { get; set; }
+        public Nullable<decimal> InsuranceEstAmt { get; set; }
+        public Nullable<decimal> InsuranceRecievedAmt { get; set; }
     
         public virtual BloodGroup BloodGroup { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

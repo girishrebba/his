@@ -42,6 +42,23 @@
     <Property Name="BrandID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="BrandName" Type="varchar" MaxLength="100" Nullable="false" />
   </EntityType>
+  <EntityType Name="Consultants">
+    <Key>
+      <PropertyRef Name="ConsultantID" />
+    </Key>
+    <Property Name="ConsultantID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FirstName" Type="varchar" MaxLength="50" />
+    <Property Name="MiddleName" Type="varchar" MaxLength="30" />
+    <Property Name="LastName" Type="varchar" MaxLength="50" />
+    <Property Name="Gender" Type="int" />
+    <Property Name="Email" Type="varchar" MaxLength="50" />
+    <Property Name="DOB" Type="date" />
+    <Property Name="Phone" Type="varchar" MaxLength="10" />
+    <Property Name="MaritalStatus" Type="int" />
+    <Property Name="Qualification" Type="varchar" MaxLength="20" />
+    <Property Name="SpecializationID" Type="int" Nullable="false" />
+    <Property Name="Fee" Type="money" Nullable="false" />
+  </EntityType>
   <EntityType Name="ConsultationFee">
     <Key>
       <PropertyRef Name="ConsultationID" />
@@ -124,6 +141,18 @@
     <Property Name="EstAmoount" Type="money" />
     <Property Name="AdvAmount" Type="money" />
     <Property Name="DischargeReportpath" Type="nvarchar(max)" />
+    <Property Name="ProviderID" Type="int" />
+    <Property Name="InsuranceFileNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="InsuranceEstAmt" Type="money" />
+    <Property Name="InsuranceRecievedAmt" Type="money" />
+  </EntityType>
+  <EntityType Name="InsuranceProvider">
+    <Key>
+      <PropertyRef Name="ProviderID" />
+    </Key>
+    <Property Name="ProviderID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ProviderName" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="Company" Type="varchar" MaxLength="100" Nullable="false" />
   </EntityType>
   <EntityType Name="IntakeFrequency">
     <Key>
@@ -131,6 +160,22 @@
     </Key>
     <Property Name="FrequencyID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Frequency" Type="varchar" MaxLength="100" Nullable="false" />
+  </EntityType>
+  <EntityType Name="LabKitItems">
+    <Key>
+      <PropertyRef Name="LKitItemID" />
+    </Key>
+    <Property Name="LKitItemID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="LKitID" Type="int" Nullable="false" />
+    <Property Name="TestID" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="LabKits">
+    <Key>
+      <PropertyRef Name="LKitID" />
+    </Key>
+    <Property Name="LKitID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="LKitName" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="LKitCost" Type="money" />
   </EntityType>
   <EntityType Name="LabTestMaster">
     <Key>
@@ -225,6 +270,16 @@
     <Property Name="OthContact" Type="varchar" MaxLength="10" />
     <Property Name="PrevENMR" Type="varchar" MaxLength="30" />
   </EntityType>
+  <EntityType Name="PatientInsurance">
+    <Key>
+      <PropertyRef Name="FileID" />
+    </Key>
+    <Property Name="FileID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FileNo" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="ENMRNO" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="QuotedAmount" Type="money" Nullable="false" />
+    <Property Name="GrantedAmount" Type="money" />
+  </EntityType>
   <EntityType Name="PatientPrescription">
     <Key>
       <PropertyRef Name="PTID" />
@@ -238,6 +293,14 @@
     <Property Name="BatchNo" Type="varchar" MaxLength="30" />
     <Property Name="LotNo" Type="varchar" MaxLength="30" />
     <Property Name="DeliverQty" Type="int" />
+  </EntityType>
+  <EntityType Name="PatientPurpose">
+    <Key>
+      <PropertyRef Name="PPID" />
+    </Key>
+    <Property Name="PPID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ENMRNO" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="PurposeID" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="PatientRoomAllocation">
     <Key>
@@ -271,7 +334,7 @@
     <Property Name="LTMID" Type="int" Nullable="false" />
     <Property Name="TestID" Type="int" Nullable="false" />
     <Property Name="TestDate" Type="datetime" />
-    <Property Name="RecordedValues" Type="decimal" Precision="4" Scale="2" />
+    <Property Name="RecordedValues" Type="decimal" Precision="5" Scale="2" />
     <Property Name="TestImpression" Type="nvarchar(max)" />
     <Property Name="ReportPath" Type="nvarchar" MaxLength="200" />
     <Property Name="IsSampleCollected" Type="bit" />
@@ -304,6 +367,23 @@
     <Property Name="PermissionStatus" Type="bit" Nullable="false" />
     <Property Name="Toottip" Type="nvarchar(max)" />
   </EntityType>
+  <EntityType Name="PharmaKitItems">
+    <Key>
+      <PropertyRef Name="PKitItemID" />
+    </Key>
+    <Property Name="PKitItemID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="PKitID" Type="int" Nullable="false" />
+    <Property Name="MedicineID" Type="int" Nullable="false" />
+    <Property Name="Quantity" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="PharmaKits">
+    <Key>
+      <PropertyRef Name="PKitID" />
+    </Key>
+    <Property Name="PKitID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="PKitName" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="PKitCost" Type="money" />
+  </EntityType>
   <EntityType Name="PrescriptionMaster">
     <Key>
       <PropertyRef Name="PMID" />
@@ -334,6 +414,13 @@
     <Property Name="LotNo" Type="varchar" MaxLength="30" />
     <Property Name="ExpiryDate" Type="date" />
     <Property Name="ApprovedStatus" Type="bit" />
+  </EntityType>
+  <EntityType Name="Purpose">
+    <Key>
+      <PropertyRef Name="PurposeID" />
+    </Key>
+    <Property Name="PurposeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="PurposeName" Type="varchar" MaxLength="10" Nullable="false" />
   </EntityType>
   <EntityType Name="Rooms">
     <Key>
@@ -461,6 +548,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_Consultant_Specialization">
+    <End Role="Specialization" Type="Self.Specialization" Multiplicity="1" />
+    <End Role="Consultants" Type="Self.Consultants" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Specialization">
+        <PropertyRef Name="SpecializationID" />
+      </Principal>
+      <Dependent Role="Consultants">
+        <PropertyRef Name="SpecializationID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_Consultation_Doctor">
     <End Role="Users" Type="Self.Users" Multiplicity="1" />
     <End Role="ConsultationFee" Type="Self.ConsultationFee" Multiplicity="*" />
@@ -542,6 +641,18 @@
       </Principal>
       <Dependent Role="InPatientHistory">
         <PropertyRef Name="ENMRNO" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_LKI_TestID">
+    <End Role="TestTypes" Type="Self.TestTypes" Multiplicity="1" />
+    <End Role="LabKitItems" Type="Self.LabKitItems" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TestTypes">
+        <PropertyRef Name="TestID" />
+      </Principal>
+      <Dependent Role="LabKitItems">
+        <PropertyRef Name="TestID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -641,6 +752,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_PatientPurpose_PurposeID">
+    <End Role="Purpose" Type="Self.Purpose" Multiplicity="1" />
+    <End Role="PatientPurpose" Type="Self.PatientPurpose" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Purpose">
+        <PropertyRef Name="PurposeID" />
+      </Principal>
+      <Dependent Role="PatientPurpose">
+        <PropertyRef Name="PurposeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_PatientScan_ScanID">
     <End Role="Scans" Type="Self.Scans" Multiplicity="1" />
     <End Role="PatientScans" Type="Self.PatientScans" Multiplicity="*" />
@@ -710,6 +833,18 @@
       </Principal>
       <Dependent Role="PatientVisitHistory">
         <PropertyRef Name="DoctorID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PKI_MedicineID">
+    <End Role="MedicineMaster" Type="Self.MedicineMaster" Multiplicity="1" />
+    <End Role="PharmaKitItems" Type="Self.PharmaKitItems" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MedicineMaster">
+        <PropertyRef Name="MMID" />
+      </Principal>
+      <Dependent Role="PharmaKitItems">
+        <PropertyRef Name="MedicineID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -917,27 +1052,36 @@
     <EntitySet Name="BloodGroup" EntityType="Self.BloodGroup" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="BrandCategories" EntityType="Self.BrandCategories" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Brands" EntityType="Self.Brands" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Consultants" EntityType="Self.Consultants" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ConsultationFee" EntityType="Self.ConsultationFee" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ConsultationType" EntityType="Self.ConsultationType" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="FeeCollection" EntityType="Self.FeeCollection" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="InPatientHistory" EntityType="Self.InPatientHistory" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="InPatients" EntityType="Self.InPatients" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="InsuranceProvider" EntityType="Self.InsuranceProvider" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="IntakeFrequency" EntityType="Self.IntakeFrequency" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="LabKitItems" EntityType="Self.LabKitItems" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="LabKits" EntityType="Self.LabKits" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="LabTestMaster" EntityType="Self.LabTestMaster" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="MedicineInventory" EntityType="Self.MedicineInventory" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="MedicineMaster" EntityType="Self.MedicineMaster" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="OrderMaster" EntityType="Self.OrderMaster" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="OrderRequests" EntityType="Self.OrderRequests" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="OutPatients" EntityType="Self.OutPatients" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PatientInsurance" EntityType="Self.PatientInsurance" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PatientPrescription" EntityType="Self.PatientPrescription" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PatientPurpose" EntityType="Self.PatientPurpose" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PatientRoomAllocation" EntityType="Self.PatientRoomAllocation" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PatientScans" EntityType="Self.PatientScans" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PatientTests" EntityType="Self.PatientTests" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PatientVisitHistory" EntityType="Self.PatientVisitHistory" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PaymentModes" EntityType="Self.PaymentModes" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Permissions" EntityType="Self.Permissions" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PharmaKitItems" EntityType="Self.PharmaKitItems" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PharmaKits" EntityType="Self.PharmaKits" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PrescriptionMaster" EntityType="Self.PrescriptionMaster" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PurchaseOrder" EntityType="Self.PurchaseOrder" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Purpose" EntityType="Self.Purpose" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Rooms" EntityType="Self.Rooms" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="RoomType" EntityType="Self.RoomType" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ScanCategories" EntityType="Self.ScanCategories" Schema="dbo" store:Type="Tables" />
@@ -955,6 +1099,10 @@
     <AssociationSet Name="FK_BrandCategories_BrandID" Association="Self.FK_BrandCategories_BrandID">
       <End Role="Brands" EntitySet="Brands" />
       <End Role="BrandCategories" EntitySet="BrandCategories" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Consultant_Specialization" Association="Self.FK_Consultant_Specialization">
+      <End Role="Specialization" EntitySet="Specialization" />
+      <End Role="Consultants" EntitySet="Consultants" />
     </AssociationSet>
     <AssociationSet Name="FK_Consultation_Doctor" Association="Self.FK_Consultation_Doctor">
       <End Role="Users" EntitySet="Users" />
@@ -983,6 +1131,10 @@
     <AssociationSet Name="FK_IPH_InPatients_ENMRNO" Association="Self.FK_IPH_InPatients_ENMRNO">
       <End Role="InPatients" EntitySet="InPatients" />
       <End Role="InPatientHistory" EntitySet="InPatientHistory" />
+    </AssociationSet>
+    <AssociationSet Name="FK_LKI_TestID" Association="Self.FK_LKI_TestID">
+      <End Role="TestTypes" EntitySet="TestTypes" />
+      <End Role="LabKitItems" EntitySet="LabKitItems" />
     </AssociationSet>
     <AssociationSet Name="FK_LTM_Doctor" Association="Self.FK_LTM_Doctor">
       <End Role="Users" EntitySet="Users" />
@@ -1016,6 +1168,10 @@
       <End Role="Users" EntitySet="Users" />
       <End Role="OutPatients" EntitySet="OutPatients" />
     </AssociationSet>
+    <AssociationSet Name="FK_PatientPurpose_PurposeID" Association="Self.FK_PatientPurpose_PurposeID">
+      <End Role="Purpose" EntitySet="Purpose" />
+      <End Role="PatientPurpose" EntitySet="PatientPurpose" />
+    </AssociationSet>
     <AssociationSet Name="FK_PatientScan_ScanID" Association="Self.FK_PatientScan_ScanID">
       <End Role="Scans" EntitySet="Scans" />
       <End Role="PatientScans" EntitySet="PatientScans" />
@@ -1039,6 +1195,10 @@
     <AssociationSet Name="FK_PatientVisitHistory_Doctor" Association="Self.FK_PatientVisitHistory_Doctor">
       <End Role="Users" EntitySet="Users" />
       <End Role="PatientVisitHistory" EntitySet="PatientVisitHistory" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PKI_MedicineID" Association="Self.FK_PKI_MedicineID">
+      <End Role="MedicineMaster" EntitySet="MedicineMaster" />
+      <End Role="PharmaKitItems" EntitySet="PharmaKitItems" />
     </AssociationSet>
     <AssociationSet Name="FK_PM_Doctor" Association="Self.FK_PM_Doctor">
       <End Role="Users" EntitySet="Users" />

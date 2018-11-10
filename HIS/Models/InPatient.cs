@@ -77,5 +77,10 @@ namespace HIS
         public int DoctorID { get; set; }
         [Required(ErrorMessage = "Blood Group is Required", AllowEmptyStrings = false)]
         public int BloodGroupID { get; set; }
+
+        public Nullable<int> ProviderID { get; set; }
+        public string InsuranceFileNo { get; set; }
+        public Nullable<decimal> InsuranceEstAmt { get; set; }
+        public Nullable<decimal> InsuranceRecievedAmt { get; set; }
     }
 }

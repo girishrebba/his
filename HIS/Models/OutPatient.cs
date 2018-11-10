@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace HIS
 {
-    [MetadataType(typeof(InPatientMetaData))]
+    [MetadataType(typeof(OutPatientMetaData))]
     public partial class OutPatient
     {
         public string Name { get; set; }

@@ -55,7 +55,7 @@
 </div>
 
 @section scripts{
-    <script>
+<script>
         var Popup, dataTable, viewPatient, newVisit, prescription, deliverPopUp;
         $(document).ready(function () {
             dataTable = $("#outPatientsTable").DataTable({
@@ -91,6 +91,9 @@
                                     <a class='btn btn-primary btn-sm' title='Manual Drug Request' style='margin-left:5px' onclick=PopupMDRForm('@Url.Action("ManualDrugRequest", "OutPatient")/?enmrNo=" + data + "')><i class='fa fa-capsules his-fa-size'></i></a>}"
                                 + "@if (ViewContext.Controller.HasPermission("OutPatient-PatientTests")){
                                     <a class='btn btn-primary btn-sm' title='Lab' style='margin-left:5px' onclick=PopupPatientTests('@Url.Action("PatientTests", "OutPatient")/?enmrNo=" + data + "')><i class='fa fa-flask his-fa-size'></i></a>}"
+                                + "@if (ViewContext.Controller.HasPermission("OutPatient-LabTestBillPay")){
+                                    <a class='btn btn-primary btn-sm' title='Scan Test Bill Payment' style='margin-left:5px' onclick=PopupScanTestBillPayForm('@Url.Action("opScanTestBillPay", "OutPatient")/?enmrNo=" + data + "')><i class='fa credit-card-alt his-fa-size'></i></a>}"
+
                                 + "@if (ViewContext.Controller.HasPermission("OutPatient-LabTestBillPay")){
                                     <a class='btn btn-primary btn-sm' title='Lab Test Bill Payment' style='margin-left:5px' onclick=PopupLabTestBillPayForm('@Url.Action("LabTestBillPay", "OutPatient")/?enmrNo=" + data + "')><i class='fa fa-credit-card his-fa-size'></i></a>}"
                                 + "@if (ViewContext.Controller.HasPermission("OutPatient-PrintHistory")){
@@ -297,6 +300,29 @@
                 });
         }
 
+        function PopupScanTestBillPayForm(url) {
+            $('body').loadingModal({ text: 'Loading...' });
+            var billPay = $('<div/>');
+            $.get(url)
+                .done(function (response) {
+                    billPay.html(response);
+                    billPayPopUp = billPay.dialog({
+                        autoOpen: true,
+                        resizable: true,
+                        modal: true,
+                        title: 'Scan Test Bill Payment',
+                        width: '70%',
+                        close: function () {
+                            billPayPopUp.dialog('destroy').remove();
+                        },
+                        open: function (event, ui) {
+                            $('.ui-dialog-content').css('overflow', 'hidden');
+                            $('body').loadingModal('destroy');
+                        }
+                    });
+                });
+        }
+
         function PopupAdmissionForm(url) {
             if (confirm('Are You Sure to take Admission?')) {
                 $('body').loadingModal({ text: 'Loading...' });
@@ -322,7 +348,7 @@
             }
         }
 
-        // Submit Print button      
+        // Submit Print button
         function PopupPrint(url) {
             $('body').loadingModal({ text: 'Loading...' });
             var printDiv = $('<div/>');
@@ -418,6 +444,7 @@
                     tbl.IntakeFrequencyID = $($(this).find('td:eq(3)')).html();
                     tbl.Comments = $($(this).find('td:eq(5)')).html();
                     tbl.TestIds = $('#TestIds').val();
+                    tbl.ScanIds = $('#ScanIds').val();
                     tbl.HasPrescription = true;
                     ppItems.push(tbl);
                 });
@@ -430,6 +457,7 @@
                 tbl.ENMRNO = enmrNo;
                 tbl.VisitID = visitID;
                 tbl.TestIds = $('#TestIds').val();
+                tbl.ScanIds = $('#ScanIds').val();
                 tbl.HasPrescription = false;
                 ppItems.push(tbl);
             }
@@ -453,6 +481,24 @@
             }
             tbodyTR +=  tbodtTD;
             $(form).find('#headerDiv').append("</br><table class='table table-striped table-bordered'><thead><tr><td>Test Name</td></tr></thead><tbody>" + tbodyTR + "</tbody></table>");
+
+
+            var option_all1 = $("#ScanIds option:selected").map(function () {
+                return $(this).text();
+            }).get().join(',');
+
+            var str_array1 = option_all1.split(',');
+            var tbodyTR1 = '';
+            var tbodtTD1 = '';
+            for (var i = 0; i < str_array1.length; i++) {
+                tbodtTD1 += '<tr><td>' + str_array1[i].replace(/^\s*/, "").replace(/\s*$/, "") + '</td></tr>'
+            }
+            tbodyTR1 += tbodtTD1;
+            $(form).find('#headerDiv').append("</br><table class='table table-striped table-bordered'><thead><tr><td>Scan Name</td></tr></thead><tbody>" + tbodyTR1 + "</tbody></table>");
+
+
+
+
             $.ajax({
                 type: "POST",
                 contentType: "application/json",
@@ -567,7 +613,7 @@
             $("#ftr tr").each(function () {
                 $(this).find("td").attr('colspan', 3);
             });
-           
+
 
             $.ajax({
                 type: "POST",
@@ -580,13 +626,13 @@
                             header: '<img src="http://localhost:50415/light/images/hms-logo_login.png" style="width:420px;" alt="Mouldifi" title="Sravanthi Hospitals">',
                             footer: false,
                             pageTitle: ""
-                        }); 
+                        });
                         MDRpopup.dialog('close');
                         dataTable.ajax.reload();
                         $.notify(data.message, {
                             globalPosition: "top center",
                             className: "success"
-                        })                       
+                        })
                     }
                     $('body').loadingModal('destroy');
                 }
@@ -618,7 +664,7 @@
                 url: form.action,
                 data: JSON.stringify(patientTests),
                 success: function (data) {
-                    if (data.success) {                       
+                    if (data.success) {
                         newPT.dialog('close');
                         dataTable.ajax.reload();
                         $.notify(data.message, {
@@ -645,7 +691,7 @@
             billPayModel.TotalAmount = totalAmount;
             billPayModel.Discount = discount;
             billPayModel.PaidAmount = amountPaid;
-            
+
             $(form).find('#headerDivbill').append("</br><table><tr><td>ENMRNO: " + $('#ENMRNO').val() + "</td></tr><tr><td >Doctor: " + $('#DoctorName').val() + "</td></tr><tr><td>Visit: " + $('#VisitName').val() + "</td></tr><tr><td>Suggested Date: " + $('#DateDisplay').val() + "</td></tr></table>");
             $(form).find('#headerDivbill').append($(form).find('#ptTable'));
 
@@ -698,7 +744,53 @@
             }
             return false;
         }
-    </script>
+
+
+        function SubmitScanTestBillPayForm(form) {
+            $('body').loadingModal({ text: 'Processing...' });
+            var enmrNo = $(form).find('#ENMRNO').val();
+            var ltmID = $(form).find('#STMID').val();
+            var discount = $(form).find('#Discount').val();
+            var amountPaid = $(form).find('#paidAmount').html();
+            var totalAmount = $(form).find('#grandTotal').html();
+            var billPayModel = {};
+            billPayModel.ID = ltmID;
+            billPayModel.ENMRNO = enmrNo;
+            billPayModel.TotalAmount = totalAmount;
+            billPayModel.Discount = discount;
+            billPayModel.PaidAmount = amountPaid;
+
+            $(form).find('#headerDivbill').append("</br><table><tr><td>ENMRNO: " + $('#ENMRNO').val() + "</td></tr><tr><td >Doctor: " + $('#DoctorName').val() + "</td></tr><tr><td>Visit: " + $('#VisitName').val() + "</td></tr><tr><td>Suggested Date: " + $('#DateDisplay').val() + "</td></tr></table>");
+            $(form).find('#headerDivbill').append($(form).find('#ptTable'));
+            $.ajax({
+                type: "POST",
+                contentType: "application/json",
+                url: form.action,
+                data: JSON.stringify(billPayModel),
+                success: function (data) {
+                    if (data.success) {
+                        $('#headerDivbill').printThis({
+                            header: '<img src="http://localhost:50415/light/images/hms-logo_login.png" style="width:420px;" alt="Mouldifi" title="Sravanthi Hospitals">',
+                            footer: false,
+                            pageTitle: ""
+                        });
+
+                        billPayPopUp.dialog('close');
+                        dataTable.ajax.reload();
+                        $.notify(data.message, {
+                            globalPosition: "top center",
+                            className: "success"
+                        })
+                    }
+                    $('body').loadingModal('destroy');
+                }
+            });
+            return false;
+        }
+
+
+
+</script>
 }
 
 

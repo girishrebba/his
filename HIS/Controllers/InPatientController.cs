@@ -68,10 +68,12 @@ namespace HIS.Controllers
         public ActionResult AddModify(string enmrNo = null)
         {
             List<BloodGroup> BloodGroups = HtmlHelpers.HtmlHelpers.GetBloodGroups();
+            List<InsuranceProvider> Insuranceproviders = HtmlHelpers.HtmlHelpers.GetInsuranceProviders();
             List<User> Users = HtmlHelpers.HtmlHelpers.GetDoctors();
             if (enmrNo == null)
             {
                 ViewBag.BloodGroupsList = new SelectList(BloodGroups, "GroupID", "GroupName");
+                ViewBag.InsuranceprovidersList = new SelectList(Insuranceproviders, "ProviderID", "ProviderName");
                 ViewBag.Users = new SelectList(Users, "UserID", "NameDisplay");
                 InPatient newPatient = new InPatient();
                 newPatient.ENMRNO = HtmlHelpers.HtmlHelpers.GetSequencedEnmrNo();
@@ -84,6 +86,7 @@ namespace HIS.Controllers
                 {
                     ViewBag.BloodGroupsList = new SelectList(BloodGroups, "GroupID", "GroupName", patient.BloodGroupID);
                     ViewBag.Users = new SelectList(Users, "UserID", "NameDisplay", patient.DoctorID);
+                    ViewBag.InsuranceprovidersList = new SelectList(Insuranceproviders, "ProviderID", "ProviderName",patient.ProviderID);
                     return View(patient);
                 }
                 else
@@ -372,7 +375,9 @@ namespace HIS.Controllers
             var dischargeModel = new DischargeModel();
             dischargeModel.ENMRNO = enmrNo;
             dischargeModel.RoomChargeTable = HtmlHelpers.HtmlHelpers.GetRoomBilling(enmrNo);
+            dischargeModel.InsuranceScantionedAmount = HtmlHelpers.HtmlHelpers.InsuranceScantionedAmount(enmrNo);
             dischargeModel.FeeCollectionTable = GetPaymentHistory(enmrNo);
+            
             dischargeModel.CanBeDischarge = false;
             ViewBag.TotalFee = dischargeModel.FeeCollectionTable.Sum(i => i.Amount);
             if (dischargeModel.RoomChargeTable != null)
@@ -380,9 +385,9 @@ namespace HIS.Controllers
                 ViewBag.RoomFee = (dischargeModel.RoomChargeTable.OccupiedDays * dischargeModel.RoomChargeTable.CostPerDay);
             }
             else { ViewBag.RoomFee = 0; }
-            if(ViewBag.TotalFee < ViewBag.RoomFee)
+            if(ViewBag.TotalFee + dischargeModel.InsuranceScantionedAmount < ViewBag.RoomFee)
             {
-                ViewBag.PayAmount = ViewBag.RoomFee - ViewBag.TotalFee;
+                ViewBag.PayAmount = ViewBag.RoomFee - ViewBag.TotalFee - dischargeModel.InsuranceScantionedAmount;
                 ViewBag.Refund = 0;
                     }
             else { ViewBag.PayAmount = 0;
@@ -700,7 +705,7 @@ namespace HIS.Controllers
             var patientScans = new List<PatientScan>();
             using (var hs = new HISDBEntities())
             {
-                patientScans = GetPatientVisitScansBillPay(enmrNo, 0);
+                patientScans = HtmlHelpers.HtmlHelpers.GetPatientVisitScansBillPay(enmrNo, 0);
                 string visitName = "In Patient";
                 if (patientScans.Count() > 0)
                 {
@@ -1084,44 +1089,7 @@ namespace HIS.Controllers
             }
         }
 
-        public List<PatientScan> GetPatientVisitScansBillPay(string enmrNo, int visitID)
-        {
-            using (HISDBEntities hs = new HISDBEntities())
-            {
-
-                var patientScans = (from pt in hs.PatientScans
-                                    join ltm in hs.ScanTestMasters on pt.STMID equals ltm.STMID
-                                    join tt in hs.Scans on pt.ScanID equals tt.ScanID
-                                    join u in hs.Users on ltm.PrescribedBy equals u.UserID
-                                    join ut in hs.UserTypes on u.UserTypeID equals ut.UserTypeID
-                                    where ltm.ENMRNO == enmrNo && ltm.VisitID == visitID && ltm.IsBillPaid == false
-                                    select new
-                                    {
-                                        pt,
-                                        u,
-                                        tt,
-                                        ltm
-                                    })
-                                  .OrderByDescending(b => b.pt.PSID)
-                                  .AsEnumerable()
-                                 .Select(x => new PatientScan
-                                 {
-                                     ENMRNO = x.pt.ENMRNO,
-                                     ScanName = x.tt.ScanName,
-                                     DateDisplay = HtmlHelpers.HtmlHelpers.DateFormat(x.ltm.DatePrescribed),
-                                     DoctorName = HtmlHelpers.HtmlHelpers.GetFullName(x.u.FirstName, x.u.MiddleName, x.u.LastName),
-                                     RecordedValues = x.pt.RecordedValues,
-                                     TestImpression = x.pt.TestImpression,
-                                     ReportPath = x.pt.ReportPath,
-                                     STMID = x.pt.STMID,
-                                     ScanID = x.pt.ScanID,
-                                     ScanCost = x.tt.ScanCost.HasValue ? x.tt.ScanCost.Value : 0
-                                 }).ToList();
-
-                return patientScans;
-            }
-        }
-
+      
         private string VisitNameWithDate(PatientVisitHistory visit)
         {
             using (HISDBEntities db = new HISDBEntities())

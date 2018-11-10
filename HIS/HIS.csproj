@@ -1069,14 +1069,19 @@
     <Compile Include="Controllers\ConsultTypeController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InPatientController.cs" />
+    <Compile Include="Controllers\InsuranceProviderController.cs" />
     <Compile Include="Controllers\IntakesController.cs" />
     <Compile Include="Controllers\InventoryRptController.cs" />
     <Compile Include="Controllers\LabController.cs" />
+    <Compile Include="Controllers\LabKitController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\MedicineMasterController.cs" />
     <Compile Include="Controllers\OutPatientController.cs" />
     <Compile Include="Controllers\PermissionsController.cs" />
+    <Compile Include="Controllers\PharmaKitController.cs" />
+    <Compile Include="Controllers\PharmaKitItemController.cs" />
     <Compile Include="Controllers\PurchaseOrderController.cs" />
+    <Compile Include="Controllers\PurposeController.cs" />
     <Compile Include="Controllers\RevenuerptController.cs" />
     <Compile Include="Controllers\RolePermissionsController.cs" />
     <Compile Include="Controllers\RoomsController.cs" />
@@ -1487,6 +1492,8 @@
     <Content Include="Views\Purpose\Index.cshtml" />
     <Content Include="Views\PharmaKitItem\AddModify.cshtml" />
     <Content Include="Views\PharmaKitItem\Index.cshtml" />
+    <Content Include="Views\OutPatient\ScanTestBillPay.cshtml" />
+    <Content Include="Views\OutPatient\opScanTestBillPay.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

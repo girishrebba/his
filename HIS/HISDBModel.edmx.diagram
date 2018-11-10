@@ -62,12 +62,6 @@
         <EntityTypeShape EntityType="HISDBModel.OrderRequest" Width="1.5" PointX="10.5" PointY="50" />
         <AssociationConnector Association="HISDBModel.FK_OR_MedicineID" />
         <AssociationConnector Association="HISDBModel.FK_OR_OMID" />
-        <EntityTypeShape EntityType="HISDBModel.InPatient" Width="1.5" PointX="16.25" PointY="11.5" />
-        <AssociationConnector Association="HISDBModel.FK_InPatients_BloodGroup" />
-        <AssociationConnector Association="HISDBModel.FK_FeeCollection_ENMRNO" />
-        <AssociationConnector Association="HISDBModel.FK_IPH_InPatients_ENMRNO" />
-        <AssociationConnector Association="HISDBModel.FK_InPatients_Doctor" />
-        <AssociationConnector Association="HISDBModel.FK_PRA_InPatients_ENMRNO" />
         <EntityTypeShape EntityType="HISDBModel.ScanCategory" Width="1.5" PointX="7.625" PointY="3.875" />
         <EntityTypeShape EntityType="HISDBModel.PatientScan" Width="1.5" PointX="11.25" PointY="4.25" />
         <EntityTypeShape EntityType="HISDBModel.ScanTestMaster" Width="1.5" PointX="9" PointY="6.875" />
@@ -90,6 +84,12 @@
         <EntityTypeShape EntityType="HISDBModel.Scan" Width="1.5" PointX="5.375" PointY="3.5" />
         <AssociationConnector Association="HISDBModel.FK_PatientScan_ScanID" />
         <AssociationConnector Association="HISDBModel.FK_ScanCategories_ScanID" />
+        <EntityTypeShape EntityType="HISDBModel.InPatient" Width="1.5" PointX="16.25" PointY="11.25" />
+        <AssociationConnector Association="HISDBModel.FK_InPatients_BloodGroup" />
+        <AssociationConnector Association="HISDBModel.FK_FeeCollection_ENMRNO" />
+        <AssociationConnector Association="HISDBModel.FK_IPH_InPatients_ENMRNO" />
+        <AssociationConnector Association="HISDBModel.FK_InPatients_Doctor" />
+        <AssociationConnector Association="HISDBModel.FK_PRA_InPatients_ENMRNO" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

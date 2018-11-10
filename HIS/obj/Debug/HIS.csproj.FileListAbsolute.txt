@@ -302,7 +302,6 @@ F:\Projects\HIS\HIS\bin\System.Web.Webpages.Razor.xml
 F:\Projects\HIS\HIS\bin\System.Web.Helpers.xml
 F:\Projects\HIS\HIS\bin\System.Web.Mvc.xml
 F:\Projects\HIS\HIS\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
-F:\Projects\HIS\HIS\obj\Debug\HIS.csprojResolveAssemblyReference.cache
 F:\Projects\HIS\HIS\obj\Debug\HIS.csproj.CoreCompileInputs.cache
 F:\Projects\HIS\HIS\obj\Debug\HIS.dll
 F:\Projects\HIS\HIS\obj\Debug\HIS.pdb
@@ -512,3 +511,4 @@ D:\HIS\trunk\HIS\obj\Debug\HIS.csproj.CopyComplete
 D:\HIS\trunk\HIS\obj\Debug\HIS.dll
 D:\HIS\trunk\HIS\obj\Debug\HIS.pdb
 D:\HIS\trunk\HIS\obj\Debug\HIS.csprojResolveAssemblyReference.cache
+F:\Projects\HIS\HIS\obj\Debug\HIS.csprojResolveAssemblyReference.cache

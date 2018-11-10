@@ -42,6 +42,7 @@
             <li><a data-toggle="tab" href="#addressTab">Additional Info</a></li>
             <li><a data-toggle="tab" href="#historyTab">Patient History</a></li>
             <li><a data-toggle="tab" href="#metricsTab">Metrics</a></li>
+            <li><a data-toggle="tab" href="#InsuranceTab">Insurance</a></li>
             @*<li><a data-toggle="tab" href="#dischargeTab">Discharge Summary</a></li>*@
         </ul>
         <div class="tab-content" id="tabContent">
@@ -107,22 +108,22 @@
                         @Html.LabelFor(model => model.Gender, "Gender:", new { @class = "control-label col-sm-2" })
                         <div class="col-sm-4">
                             @Html.DropDownList("Gender", new List<SelectListItem>(){
-                                                   new SelectListItem { Text = "--Select--", Value = "" },
-                                                   new SelectListItem { Text = "Male", Value = "0"  },
-                                                   new SelectListItem { Text = "Female", Value =  "1"},
-                                                   new SelectListItem { Text = "Others", Value =  "2"}
-                                                   },
-                           htmlAttributes: new { @class = "form-control" })
+                                                       new SelectListItem { Text = "--Select--", Value = "" },
+                                                       new SelectListItem { Text = "Male", Value = "0"  },
+                                                       new SelectListItem { Text = "Female", Value =  "1"},
+                                                       new SelectListItem { Text = "Others", Value =  "2"}
+                                                       },
+                        htmlAttributes: new { @class = "form-control" })
                         </div>
                         @Html.LabelFor(model => model.MaritalStatus, "Marital Status:", htmlAttributes: new { @class = "control-label col-sm-2" })
                         <div class="col-sm-4">
                             @Html.DropDownList("MaritalStatus", new List<SelectListItem>(){
-                                                   new SelectListItem { Text = "--Select--", Value = "" },
-                                                   new SelectListItem { Text = "Single", Value = "0"  },
-                                                   new SelectListItem { Text = "Married", Value =  "1"},
-                                                   new SelectListItem { Text = "Others", Value =  "2"}
-                                                   },
-                           htmlAttributes: new { @class = "form-control" })
+                                                       new SelectListItem { Text = "--Select--", Value = "" },
+                                                       new SelectListItem { Text = "Single", Value = "0"  },
+                                                       new SelectListItem { Text = "Married", Value =  "1"},
+                                                       new SelectListItem { Text = "Others", Value =  "2"}
+                                                       },
+                        htmlAttributes: new { @class = "form-control" })
                         </div>
                     </div>
                     <div class="form-group">
@@ -271,6 +272,47 @@
                             @Html.EditorFor(model => model.BMI, new { htmlAttributes = new { @class = "form-control" } })
                         </div>
                     </div>
+                    <div class="form-group">
+                        <div class="col-sm-8 col-sm-offset-4">
+                            @*<a class="btn btn-primary back previoustab">Previous</a>*@
+                            <input type="button" value="Previous" class="btn btn-primary previoustab" />
+                            <input type="button" value="Next" class="btn btn-primary nexttab" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-horizontal" id="errorDiv">
+                    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div id="InsuranceTab" class="tab-pane fade in" role="tabpanel">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ProviderID, "Insurance Provider:", htmlAttributes: new { @class = "control-label col-sm-2 required" })
+                        <div class="col-sm-4">
+                            @Html.DropDownListFor(model => model.ProviderID, ViewBag.InsuranceprovidersList as SelectList, "--Select--", new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.ProviderID)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.InsuranceFileNo, "Insurance File No:", new { @class = "control-label col-sm-2" })
+                        <div class="col-sm-4">
+                            @Html.EditorFor(model => model.InsuranceFileNo, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.InsuranceEstAmt, "Insurance Estimated Amount:", new { @class = "control-label col-sm-2" })
+                        <div class="col-sm-4">
+                            @Html.EditorFor(model => model.InsuranceEstAmt, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>                      
+                    </div>
+                    <div class="form-group">                       
+                        @Html.LabelFor(model => model.InsuranceRecievedAmt, "Insurance Recieved Amount:", new { @class = "control-label col-sm-2" })
+                        <div class="col-sm-4">
+                            @Html.EditorFor(model => model.InsuranceRecievedAmt, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                    </div>
+
                     <div class="form-group">
                         <div class="col-sm-8 col-sm-offset-4">
                             @*<a class="btn btn-primary back previoustab">Previous</a>*@
