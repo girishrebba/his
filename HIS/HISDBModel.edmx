@@ -285,6 +285,24 @@
           <Property Name="QuotedAmount" Type="money" Nullable="false" />
           <Property Name="GrantedAmount" Type="money" />
         </EntityType>
+        <EntityType Name="PatientLabPackages">
+          <Key>
+            <PropertyRef Name="PLabPackID" />
+          </Key>
+          <Property Name="PLabPackID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ENMRNO" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="LkitID" Type="int" Nullable="false" />
+          <Property Name="IsOP" Type="bit" />
+        </EntityType>
+        <EntityType Name="PatientPharmaPackages">
+          <Key>
+            <PropertyRef Name="PPharmaPackID" />
+          </Key>
+          <Property Name="PPharmaPackID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ENMRNO" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="PkitID" Type="int" Nullable="false" />
+          <Property Name="IsOP" Type="bit" />
+        </EntityType>
         <EntityType Name="PatientPrescription">
           <Key>
             <PropertyRef Name="PTID" />
@@ -757,6 +775,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_PatientLabPackages_LKitID">
+          <End Role="LabKits" Type="Self.LabKits" Multiplicity="1" />
+          <End Role="PatientLabPackages" Type="Self.PatientLabPackages" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LabKits">
+              <PropertyRef Name="LKitID" />
+            </Principal>
+            <Dependent Role="PatientLabPackages">
+              <PropertyRef Name="LkitID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PatientPharmaPackages_PKitID">
+          <End Role="PharmaKits" Type="Self.PharmaKits" Multiplicity="1" />
+          <End Role="PatientPharmaPackages" Type="Self.PatientPharmaPackages" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PharmaKits">
+              <PropertyRef Name="PKitID" />
+            </Principal>
+            <Dependent Role="PatientPharmaPackages">
+              <PropertyRef Name="PkitID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_PatientPurpose_PurposeID">
           <End Role="Purpose" Type="Self.Purpose" Multiplicity="1" />
           <End Role="PatientPurpose" Type="Self.PatientPurpose" Multiplicity="*" />
@@ -1076,6 +1118,8 @@
           <EntitySet Name="OrderRequests" EntityType="Self.OrderRequests" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OutPatients" EntityType="Self.OutPatients" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PatientInsurance" EntityType="Self.PatientInsurance" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PatientLabPackages" EntityType="Self.PatientLabPackages" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PatientPharmaPackages" EntityType="Self.PatientPharmaPackages" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PatientPrescription" EntityType="Self.PatientPrescription" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PatientPurpose" EntityType="Self.PatientPurpose" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PatientRoomAllocation" EntityType="Self.PatientRoomAllocation" Schema="dbo" store:Type="Tables" />
@@ -1174,6 +1218,14 @@
           <AssociationSet Name="FK_OutPatients_Doctor" Association="Self.FK_OutPatients_Doctor">
             <End Role="Users" EntitySet="Users" />
             <End Role="OutPatients" EntitySet="OutPatients" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PatientLabPackages_LKitID" Association="Self.FK_PatientLabPackages_LKitID">
+            <End Role="LabKits" EntitySet="LabKits" />
+            <End Role="PatientLabPackages" EntitySet="PatientLabPackages" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PatientPharmaPackages_PKitID" Association="Self.FK_PatientPharmaPackages_PKitID">
+            <End Role="PharmaKits" EntitySet="PharmaKits" />
+            <End Role="PatientPharmaPackages" EntitySet="PatientPharmaPackages" />
           </AssociationSet>
           <AssociationSet Name="FK_PatientPurpose_PurposeID" Association="Self.FK_PatientPurpose_PurposeID">
             <End Role="Purpose" EntitySet="Purpose" />
@@ -2086,6 +2138,16 @@
             <Parameter Name="PKitCost" Mode="In" Type="Decimal" />
             <Parameter Name="PKitID" Mode="InOut" Type="Int32" />
           </FunctionImport>
+          <EntitySet Name="PatientLabPackages" EntityType="HISDBModel.PatientLabPackage" />
+          <EntitySet Name="PatientPharmaPackages" EntityType="HISDBModel.PatientPharmaPackage" />
+          <AssociationSet Name="FK_PatientLabPackages_LKitID" Association="HISDBModel.FK_PatientLabPackages_LKitID">
+            <End Role="LabKit" EntitySet="LabKits" />
+            <End Role="PatientLabPackage" EntitySet="PatientLabPackages" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PatientPharmaPackages_PKitID" Association="HISDBModel.FK_PatientPharmaPackages_PKitID">
+            <End Role="PharmaKit" EntitySet="PharmaKits" />
+            <End Role="PatientPharmaPackage" EntitySet="PatientPharmaPackages" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="LabTestMaster">
           <Key>
@@ -2391,6 +2453,7 @@
           <Property Name="LKitID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="LKitName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="LKitCost" Type="Decimal" Precision="19" Scale="4" />
+          <NavigationProperty Name="PatientLabPackages" Relationship="HISDBModel.FK_PatientLabPackages_LKitID" FromRole="LabKit" ToRole="PatientLabPackage" />
         </EntityType>
         <EntityType Name="PatientInsurance">
           <Key>
@@ -2428,6 +2491,7 @@
           <Property Name="PKitID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="PKitName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="PKitCost" Type="Decimal" Precision="19" Scale="4" />
+          <NavigationProperty Name="PatientPharmaPackages" Relationship="HISDBModel.FK_PatientPharmaPackages_PKitID" FromRole="PharmaKit" ToRole="PatientPharmaPackage" />
         </EntityType>
         <EntityType Name="Purpose">
           <Key>
@@ -2629,6 +2693,50 @@
             </Principal>
             <Dependent Role="PatientRoomAllocation">
               <PropertyRef Name="ENMRNO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="PatientLabPackage">
+          <Key>
+            <PropertyRef Name="PLabPackID" />
+          </Key>
+          <Property Name="PLabPackID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ENMRNO" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="LkitID" Type="Int32" Nullable="false" />
+          <Property Name="IsOP" Type="Boolean" />
+          <NavigationProperty Name="LabKit" Relationship="HISDBModel.FK_PatientLabPackages_LKitID" FromRole="PatientLabPackage" ToRole="LabKit" />
+        </EntityType>
+        <EntityType Name="PatientPharmaPackage">
+          <Key>
+            <PropertyRef Name="PPharmaPackID" />
+          </Key>
+          <Property Name="PPharmaPackID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ENMRNO" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="PkitID" Type="Int32" Nullable="false" />
+          <Property Name="IsOP" Type="Boolean" />
+          <NavigationProperty Name="PharmaKit" Relationship="HISDBModel.FK_PatientPharmaPackages_PKitID" FromRole="PatientPharmaPackage" ToRole="PharmaKit" />
+        </EntityType>
+        <Association Name="FK_PatientLabPackages_LKitID">
+          <End Type="HISDBModel.LabKit" Role="LabKit" Multiplicity="1" />
+          <End Type="HISDBModel.PatientLabPackage" Role="PatientLabPackage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LabKit">
+              <PropertyRef Name="LKitID" />
+            </Principal>
+            <Dependent Role="PatientLabPackage">
+              <PropertyRef Name="LkitID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PatientPharmaPackages_PKitID">
+          <End Type="HISDBModel.PharmaKit" Role="PharmaKit" Multiplicity="1" />
+          <End Type="HISDBModel.PatientPharmaPackage" Role="PatientPharmaPackage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PharmaKit">
+              <PropertyRef Name="PKitID" />
+            </Principal>
+            <Dependent Role="PatientPharmaPackage">
+              <PropertyRef Name="PkitID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -3246,6 +3354,26 @@
           <FunctionImportMapping FunctionImportName="CreateMasterLabKit" FunctionName="HISDBModel.Store.CreateMasterLabKit" />
           <FunctionImportMapping FunctionImportName="CreateMasterOrder2" FunctionName="HISDBModel.Store.CreateMasterOrder" />
           <FunctionImportMapping FunctionImportName="CreateMasterPharmaKit" FunctionName="HISDBModel.Store.CreateMasterPharmaKit" />
+          <EntitySetMapping Name="PatientLabPackages">
+            <EntityTypeMapping TypeName="HISDBModel.PatientLabPackage">
+              <MappingFragment StoreEntitySet="PatientLabPackages">
+                <ScalarProperty Name="IsOP" ColumnName="IsOP" />
+                <ScalarProperty Name="LkitID" ColumnName="LkitID" />
+                <ScalarProperty Name="ENMRNO" ColumnName="ENMRNO" />
+                <ScalarProperty Name="PLabPackID" ColumnName="PLabPackID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PatientPharmaPackages">
+            <EntityTypeMapping TypeName="HISDBModel.PatientPharmaPackage">
+              <MappingFragment StoreEntitySet="PatientPharmaPackages">
+                <ScalarProperty Name="IsOP" ColumnName="IsOP" />
+                <ScalarProperty Name="PkitID" ColumnName="PkitID" />
+                <ScalarProperty Name="ENMRNO" ColumnName="ENMRNO" />
+                <ScalarProperty Name="PPharmaPackID" ColumnName="PPharmaPackID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

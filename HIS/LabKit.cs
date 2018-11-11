@@ -14,8 +14,17 @@ namespace HIS
     
     public partial class LabKit
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public LabKit()
+        {
+            this.PatientLabPackages = new HashSet<PatientLabPackage>();
+        }
+    
         public int LKitID { get; set; }
         public string LKitName { get; set; }
         public Nullable<decimal> LKitCost { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PatientLabPackage> PatientLabPackages { get; set; }
     }
 }

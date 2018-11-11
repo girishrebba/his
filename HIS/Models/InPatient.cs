@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace HIS
@@ -15,6 +16,8 @@ namespace HIS
         public string DOBDisplay { get; set; }
         public string EnrolledDisplay { get; set; }
         public string DischargeDateDisplay { get; set; }
+        public List<Purpose> Purposes { get; set; }
+        public string[] PurposeIds { get; set; }
         public string GetFullName()
         {
             return string.Format("{0} {1} {2}", 

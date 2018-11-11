@@ -14,8 +14,17 @@ namespace HIS
     
     public partial class PharmaKit
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public PharmaKit()
+        {
+            this.PatientPharmaPackages = new HashSet<PatientPharmaPackage>();
+        }
+    
         public int PKitID { get; set; }
         public string PKitName { get; set; }
         public Nullable<decimal> PKitCost { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PatientPharmaPackage> PatientPharmaPackages { get; set; }
     }
 }

@@ -72,6 +72,8 @@ namespace HIS
         public virtual DbSet<Purpose> Purposes { get; set; }
         public virtual DbSet<Scan> Scans { get; set; }
         public virtual DbSet<InPatient> InPatients { get; set; }
+        public virtual DbSet<PatientLabPackage> PatientLabPackages { get; set; }
+        public virtual DbSet<PatientPharmaPackage> PatientPharmaPackages { get; set; }
     
         public virtual int ConvertOutPatientToInPatient(string eNMRNO, Nullable<decimal> estAmount, Nullable<decimal> advAmount)
         {

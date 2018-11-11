@@ -609,5 +609,25 @@
     <FunctionImportMapping FunctionImportName="CreateMasterLabKit" FunctionName="HISDBModel.Store.CreateMasterLabKit" />
     <FunctionImportMapping FunctionImportName="CreateMasterOrder2" FunctionName="HISDBModel.Store.CreateMasterOrder" />
     <FunctionImportMapping FunctionImportName="CreateMasterPharmaKit" FunctionName="HISDBModel.Store.CreateMasterPharmaKit" />
+    <EntitySetMapping Name="PatientLabPackages">
+      <EntityTypeMapping TypeName="HISDBModel.PatientLabPackage">
+        <MappingFragment StoreEntitySet="PatientLabPackages">
+          <ScalarProperty Name="IsOP" ColumnName="IsOP" />
+          <ScalarProperty Name="LkitID" ColumnName="LkitID" />
+          <ScalarProperty Name="ENMRNO" ColumnName="ENMRNO" />
+          <ScalarProperty Name="PLabPackID" ColumnName="PLabPackID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PatientPharmaPackages">
+      <EntityTypeMapping TypeName="HISDBModel.PatientPharmaPackage">
+        <MappingFragment StoreEntitySet="PatientPharmaPackages">
+          <ScalarProperty Name="IsOP" ColumnName="IsOP" />
+          <ScalarProperty Name="PkitID" ColumnName="PkitID" />
+          <ScalarProperty Name="ENMRNO" ColumnName="ENMRNO" />
+          <ScalarProperty Name="PPharmaPackID" ColumnName="PPharmaPackID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

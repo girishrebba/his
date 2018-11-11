@@ -1202,6 +1202,12 @@
     <Compile Include="PatientInsurance.cs">
       <DependentUpon>HISDBModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="PatientLabPackage.cs">
+      <DependentUpon>HISDBModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PatientPharmaPackage.cs">
+      <DependentUpon>HISDBModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="PatientPrescription.cs">
       <DependentUpon>HISDBModel.tt</DependentUpon>
     </Compile>

@@ -280,6 +280,24 @@
     <Property Name="QuotedAmount" Type="money" Nullable="false" />
     <Property Name="GrantedAmount" Type="money" />
   </EntityType>
+  <EntityType Name="PatientLabPackages">
+    <Key>
+      <PropertyRef Name="PLabPackID" />
+    </Key>
+    <Property Name="PLabPackID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ENMRNO" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="LkitID" Type="int" Nullable="false" />
+    <Property Name="IsOP" Type="bit" />
+  </EntityType>
+  <EntityType Name="PatientPharmaPackages">
+    <Key>
+      <PropertyRef Name="PPharmaPackID" />
+    </Key>
+    <Property Name="PPharmaPackID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ENMRNO" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="PkitID" Type="int" Nullable="false" />
+    <Property Name="IsOP" Type="bit" />
+  </EntityType>
   <EntityType Name="PatientPrescription">
     <Key>
       <PropertyRef Name="PTID" />
@@ -752,6 +770,30 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_PatientLabPackages_LKitID">
+    <End Role="LabKits" Type="Self.LabKits" Multiplicity="1" />
+    <End Role="PatientLabPackages" Type="Self.PatientLabPackages" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="LabKits">
+        <PropertyRef Name="LKitID" />
+      </Principal>
+      <Dependent Role="PatientLabPackages">
+        <PropertyRef Name="LkitID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PatientPharmaPackages_PKitID">
+    <End Role="PharmaKits" Type="Self.PharmaKits" Multiplicity="1" />
+    <End Role="PatientPharmaPackages" Type="Self.PatientPharmaPackages" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PharmaKits">
+        <PropertyRef Name="PKitID" />
+      </Principal>
+      <Dependent Role="PatientPharmaPackages">
+        <PropertyRef Name="PkitID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_PatientPurpose_PurposeID">
     <End Role="Purpose" Type="Self.Purpose" Multiplicity="1" />
     <End Role="PatientPurpose" Type="Self.PatientPurpose" Multiplicity="*" />
@@ -1071,6 +1113,8 @@
     <EntitySet Name="OrderRequests" EntityType="Self.OrderRequests" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="OutPatients" EntityType="Self.OutPatients" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PatientInsurance" EntityType="Self.PatientInsurance" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PatientLabPackages" EntityType="Self.PatientLabPackages" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PatientPharmaPackages" EntityType="Self.PatientPharmaPackages" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PatientPrescription" EntityType="Self.PatientPrescription" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PatientPurpose" EntityType="Self.PatientPurpose" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PatientRoomAllocation" EntityType="Self.PatientRoomAllocation" Schema="dbo" store:Type="Tables" />
@@ -1169,6 +1213,14 @@
     <AssociationSet Name="FK_OutPatients_Doctor" Association="Self.FK_OutPatients_Doctor">
       <End Role="Users" EntitySet="Users" />
       <End Role="OutPatients" EntitySet="OutPatients" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PatientLabPackages_LKitID" Association="Self.FK_PatientLabPackages_LKitID">
+      <End Role="LabKits" EntitySet="LabKits" />
+      <End Role="PatientLabPackages" EntitySet="PatientLabPackages" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PatientPharmaPackages_PKitID" Association="Self.FK_PatientPharmaPackages_PKitID">
+      <End Role="PharmaKits" EntitySet="PharmaKits" />
+      <End Role="PatientPharmaPackages" EntitySet="PatientPharmaPackages" />
     </AssociationSet>
     <AssociationSet Name="FK_PatientPurpose_PurposeID" Association="Self.FK_PatientPurpose_PurposeID">
       <End Role="Purpose" EntitySet="Purpose" />

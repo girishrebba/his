@@ -224,6 +224,8 @@ namespace HIS.Controllers
                 ViewBag.Users = new SelectList(Users, "UserID", "NameDisplay");
                 OutPatient newPatient = new OutPatient();
                 newPatient.ENMRNO = HtmlHelpers.HtmlHelpers.GetSequencedEnmrNo();
+                newPatient.Purposes = HtmlHelpers.HtmlHelpers.GetPurposes();
+                newPatient.PurposeIds = null;
                 return View(newPatient);
             }
             else
@@ -233,6 +235,8 @@ namespace HIS.Controllers
                 {
                     ViewBag.BloodGroups = new SelectList(BloodGroups, "GroupID", "GroupName", patient.BloodGroupID);
                     ViewBag.Users = new SelectList(Users, "UserID", "NameDisplay", patient.DoctorID);
+                    patient.Purposes = HtmlHelpers.HtmlHelpers.GetPurposes();
+                    patient.PurposeIds = patient.Purpose.Split(',');
                     return View(patient);
                 }
                 else
@@ -249,6 +253,7 @@ namespace HIS.Controllers
             {
                 if (op.SNO == 0)
                 {
+                    ConstructPurpose(op);
                     db.OutPatients.Add(op);
                     db.SaveChanges();
                     CreateVisit(op);
@@ -257,12 +262,26 @@ namespace HIS.Controllers
                 }
                 else
                 {
+                    ConstructPurpose(op);
                     db.Entry(op).State = EntityState.Modified;
                     db.SaveChanges();
                     return Json(new { success = true, message = string.Format("ENMR - {0} updated Successfully", op.ENMRNO) }, JsonRequestBehavior.AllowGet);
                 }
             }
         }
+
+        private static void ConstructPurpose(OutPatient op)
+        {
+            if (op != null && op.PurposeIds != null)
+            {
+                op.Purpose = string.Join(",", op.PurposeIds);
+            }
+            else
+            {
+                op.Purpose = string.Empty;
+            }
+        }
+
 
         private void CreateVisit(OutPatient op)
         {

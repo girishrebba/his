@@ -255,6 +255,17 @@ public static List<User> GetDoctors()
             }
         }
 
+        public static List<Purpose> GetPurposes()
+        {
+            using (HISDBEntities dc = new HISDBEntities())
+            {
+                var purposes = (from p in dc.Purposes
+                                select new { p.PurposeID, p.PurposeName }).AsEnumerable()
+                             .Select(x => new Purpose { PurposeID = x.PurposeID, PurposeName = x.PurposeName }).ToList();
+                return purposes;
+            }
+        }
+
         public static List<IntakeFrequency> GetIntakes()
         {
             using (HISDBEntities dc = new HISDBEntities())

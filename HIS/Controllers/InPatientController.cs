@@ -77,6 +77,8 @@ namespace HIS.Controllers
                 ViewBag.Users = new SelectList(Users, "UserID", "NameDisplay");
                 InPatient newPatient = new InPatient();
                 newPatient.ENMRNO = HtmlHelpers.HtmlHelpers.GetSequencedEnmrNo();
+                newPatient.Purposes = HtmlHelpers.HtmlHelpers.GetPurposes();
+                newPatient.PurposeIds = null;
                 return View(newPatient);
             }
             else
@@ -87,6 +89,8 @@ namespace HIS.Controllers
                     ViewBag.BloodGroupsList = new SelectList(BloodGroups, "GroupID", "GroupName", patient.BloodGroupID);
                     ViewBag.Users = new SelectList(Users, "UserID", "NameDisplay", patient.DoctorID);
                     ViewBag.InsuranceprovidersList = new SelectList(Insuranceproviders, "ProviderID", "ProviderName",patient.ProviderID);
+                    patient.Purposes = HtmlHelpers.HtmlHelpers.GetPurposes();
+                    patient.PurposeIds = patient.Purpose.Split(',');
                     return View(patient);
                 }
                 else
@@ -104,16 +108,30 @@ namespace HIS.Controllers
             {
                 if (ip.SNO == 0)
                 {
+                    ConstructPurpose(ip);
                     db.InPatients.Add(ip);
                     db.SaveChanges();
                     return Json(new { success = true, message = string.Format("ENMRNO - {0} profile created Successfully", ip.ENMRNO)}, JsonRequestBehavior.AllowGet);
                 }
                 else
                 {
+                    ConstructPurpose(ip);
                     db.Entry(ip).State = EntityState.Modified;
                     db.SaveChanges();
                     return Json(new { success = true, message = string.Format("ENMRNO - {0} {1} Successfully", ip.ENMRNO, message) }, JsonRequestBehavior.AllowGet);
                 }
+            }
+        }
+
+        private static void ConstructPurpose(InPatient ip)
+        {
+            if (ip != null && ip.PurposeIds != null)
+            {
+                ip.Purpose = string.Join(",", ip.PurposeIds);
+            }
+            else
+            {
+                ip.Purpose = string.Empty;
             }
         }
 
