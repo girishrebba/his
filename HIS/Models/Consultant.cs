@@ -11,11 +11,12 @@ namespace HIS
         public string MaritalStatusDisplay { get; set; }
         public string GenderDisplay { get; set; }
         public string DoctorTypeDisplay { get; set; }
+        
     }
 
     public class ConsultantMetaData
     {
-        [Required(ErrorMessage = "Pease enter First Name", AllowEmptyStrings = false)]
+        [Required(ErrorMessage = "Please enter First Name", AllowEmptyStrings = false)]
         [Display(Name = "First Name")]
         public string FirstName { get; set; }
         [Required(ErrorMessage = "Please enter Last Name", AllowEmptyStrings = false)]

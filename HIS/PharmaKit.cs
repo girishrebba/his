@@ -18,6 +18,7 @@ namespace HIS
         public PharmaKit()
         {
             this.PatientPharmaPackages = new HashSet<PatientPharmaPackage>();
+            this.PatientPharmaPackages1 = new HashSet<PatientPharmaPackage1>();
         }
     
         public int PKitID { get; set; }
@@ -26,5 +27,7 @@ namespace HIS
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PatientPharmaPackage> PatientPharmaPackages { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PatientPharmaPackage1> PatientPharmaPackages1 { get; set; }
     }
 }

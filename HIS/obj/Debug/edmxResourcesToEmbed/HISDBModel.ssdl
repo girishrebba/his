@@ -59,6 +59,15 @@
     <Property Name="SpecializationID" Type="int" Nullable="false" />
     <Property Name="Fee" Type="money" Nullable="false" />
   </EntityType>
+  <EntityType Name="ConsultantVisits">
+    <Key>
+      <PropertyRef Name="ConsultantVisitId" />
+    </Key>
+    <Property Name="ConsultantVisitId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ConsultantID" Type="int" Nullable="false" />
+    <Property Name="Consultationdate" Type="date" Nullable="false" />
+    <Property Name="Amount" Type="money" />
+  </EntityType>
   <EntityType Name="ConsultationFee">
     <Key>
       <PropertyRef Name="ConsultationID" />
@@ -142,7 +151,7 @@
     <Property Name="AdvAmount" Type="money" />
     <Property Name="DischargeReportpath" Type="nvarchar(max)" />
     <Property Name="ProviderID" Type="int" />
-    <Property Name="InsuranceFileNo" Type="varchar" MaxLength="50" />
+    <Property Name="InsuranceFileNo" Type="nvarchar" MaxLength="50" />
     <Property Name="InsuranceEstAmt" Type="money" />
     <Property Name="InsuranceRecievedAmt" Type="money" />
   </EntityType>
@@ -188,7 +197,7 @@
     <Property Name="VisitID" Type="int" />
     <Property Name="IsBillPaid" Type="bit" />
     <Property Name="IsDelivered" Type="bit" />
-    <Property Name="Discount" Type="decimal" Precision="5" Scale="2" />
+    <Property Name="Discount" Type="decimal" Precision="4" Scale="2" />
     <Property Name="PaidAmount" Type="money" />
     <Property Name="TotalAmount" Type="money" />
     <Property Name="ISIP" Type="bit" />
@@ -818,6 +827,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_PatientScans_ScanID">
+    <End Role="TestTypes" Type="Self.TestTypes" Multiplicity="1" />
+    <End Role="PatientScans" Type="Self.PatientScans" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TestTypes">
+        <PropertyRef Name="TestID" />
+      </Principal>
+      <Dependent Role="PatientScans">
+        <PropertyRef Name="ScanID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_PatientScans_STMID">
     <End Role="ScanTestMaster" Type="Self.ScanTestMaster" Multiplicity="1" />
     <End Role="PatientScans" Type="Self.PatientScans" Multiplicity="*" />
@@ -1034,6 +1055,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Function Name="BedReport" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
   <Function Name="ConvertOutPatientToInPatient" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="ENMRNO" Type="varchar" Mode="In" />
     <Parameter Name="EstAmount" Type="money" Mode="In" />
@@ -1050,10 +1072,6 @@
     <Parameter Name="VisitID" Type="int" Mode="In" />
     <Parameter Name="ISIP" Type="bit" Mode="In" />
     <Parameter Name="LTMID" Type="int" Mode="InOut" />
-  </Function>
-  <Function Name="CreateMasterOrder" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-    <Parameter Name="OrderNo" Type="varchar" Mode="In" />
-    <Parameter Name="OMID" Type="int" Mode="InOut" />
   </Function>
   <Function Name="CreateMasterPharmaKit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="PKitName" Type="varchar" Mode="In" />
@@ -1085,6 +1103,11 @@
     </ReturnType>
   </Function>
   <Function Name="InventoryReport" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="IpRevenueReport" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Doctors" Type="varchar(max)" Mode="In" />
+    <Parameter Name="Start_Time" Type="datetime" Mode="In" />
+    <Parameter Name="End_Time" Type="datetime" Mode="In" />
+  </Function>
   <Function Name="RevenueReport" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="Doctors" Type="varchar(max)" Mode="In" />
     <Parameter Name="Start_Time" Type="datetime" Mode="In" />
@@ -1097,6 +1120,7 @@
     <EntitySet Name="BrandCategories" EntityType="Self.BrandCategories" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Brands" EntityType="Self.Brands" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Consultants" EntityType="Self.Consultants" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ConsultantVisits" EntityType="Self.ConsultantVisits" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ConsultationFee" EntityType="Self.ConsultationFee" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ConsultationType" EntityType="Self.ConsultationType" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="FeeCollection" EntityType="Self.FeeCollection" Schema="dbo" store:Type="Tables" />
@@ -1228,6 +1252,10 @@
     </AssociationSet>
     <AssociationSet Name="FK_PatientScan_ScanID" Association="Self.FK_PatientScan_ScanID">
       <End Role="Scans" EntitySet="Scans" />
+      <End Role="PatientScans" EntitySet="PatientScans" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PatientScans_ScanID" Association="Self.FK_PatientScans_ScanID">
+      <End Role="TestTypes" EntitySet="TestTypes" />
       <End Role="PatientScans" EntitySet="PatientScans" />
     </AssociationSet>
     <AssociationSet Name="FK_PatientScans_STMID" Association="Self.FK_PatientScans_STMID">

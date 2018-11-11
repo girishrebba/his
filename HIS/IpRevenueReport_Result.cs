@@ -11,7 +11,7 @@ namespace HIS
 {
     using System;
     
-    public partial class RevenueReport_Result
+    public partial class IpRevenueReport_Result
     {
         public string ENMRNO { get; set; }
         public string PatientFirstName { get; set; }
@@ -24,5 +24,8 @@ namespace HIS
         public Nullable<decimal> LabTotalAmount { get; set; }
         public Nullable<decimal> LabTestPaidAmount { get; set; }
         public Nullable<decimal> LabTestDiscount { get; set; }
+        public Nullable<decimal> ScanTotalAmount { get; set; }
+        public Nullable<decimal> ScanTestPaidAmount { get; set; }
+        public Nullable<decimal> ScanTestDiscount { get; set; }
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Data.Entity;
+using System.ComponentModel;
 
 namespace HIS.Controllers
 {
@@ -99,5 +100,47 @@ namespace HIS.Controllers
                 }
             }
         }
+
+        [HttpPost]
+        [Description(" - Consultant Visit payment")]
+        public ActionResult ConsultantVisits()
+        {
+            using (HISDBEntities hs = new HISDBEntities())
+            {
+                var consultants = (from c in hs.Consultants                                   
+                                   select new { c }).AsEnumerable()
+                         .Select(x => new Consultant
+                         {
+                             ConsultantID = x.c.ConsultantID,
+                             NameDisplay = HtmlHelpers.HtmlHelpers.GetFullName(x.c.FirstName, x.c.MiddleName, x.c.LastName)                                                          
+                         }).ToList();
+               // return Json(new { data = consultants }, JsonRequestBehavior.AllowGet);
+                ViewBag.ConsultantsList = new SelectList(consultants, "ConsultantID", "NameDisplay");
+            }
+
+            return View();
+        }
+
+        [HttpPost]
+        [Description(" - Consultant Payment Save")]
+        public ActionResult ConsultantPaymentSave(ConsultantVisit consultant)
+        {
+            using (HISDBEntities db = new HISDBEntities())
+            {
+                if (consultant.ConsultantID == 0)
+                {
+                    db.ConsultantVisits.Add(consultant);
+                    db.SaveChanges();
+                    return Json(new { success = true, message = "Consultant saved Successfully" }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    db.Entry(consultant).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return Json(new { success = true, message = "Consultant updated Successfully" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+        }
+
     }
 }

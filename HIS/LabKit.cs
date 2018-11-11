@@ -18,6 +18,7 @@ namespace HIS
         public LabKit()
         {
             this.PatientLabPackages = new HashSet<PatientLabPackage>();
+            this.PatientLabPackages1 = new HashSet<PatientLabPackage1>();
         }
     
         public int LKitID { get; set; }
@@ -26,5 +27,7 @@ namespace HIS
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PatientLabPackage> PatientLabPackages { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PatientLabPackage1> PatientLabPackages1 { get; set; }
     }
 }

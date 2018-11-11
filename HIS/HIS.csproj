@@ -1038,6 +1038,9 @@
     <Compile Include="Bed.cs">
       <DependentUpon>HISDBModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="BedReport_Result.cs">
+      <DependentUpon>HISDBModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="BedType.cs">
       <DependentUpon>HISDBModel.tt</DependentUpon>
     </Compile>
@@ -1053,6 +1056,9 @@
     <Compile Include="Consultant.cs">
       <DependentUpon>HISDBModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="ConsultantVisit.cs">
+      <DependentUpon>HISDBModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="ConsultationFee.cs">
       <DependentUpon>HISDBModel.tt</DependentUpon>
     </Compile>
@@ -1060,12 +1066,14 @@
       <DependentUpon>HISDBModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\BedrptController.cs" />
     <Compile Include="Controllers\BedsController.cs" />
     <Compile Include="Controllers\BedTypeController.cs" />
     <Compile Include="Controllers\BloodGroupController.cs" />
     <Compile Include="Controllers\BrandCategoryController.cs" />
     <Compile Include="Controllers\BrandController.cs" />
     <Compile Include="Controllers\ConsultantController.cs" />
+    <Compile Include="Controllers\ConsultantVisitsController.cs" />
     <Compile Include="Controllers\ConsultationFeeController.cs" />
     <Compile Include="Controllers\ConsultTypeController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -1073,6 +1081,7 @@
     <Compile Include="Controllers\InsuranceProviderController.cs" />
     <Compile Include="Controllers\IntakesController.cs" />
     <Compile Include="Controllers\InventoryRptController.cs" />
+    <Compile Include="Controllers\IpRevenuerptController.cs" />
     <Compile Include="Controllers\LabController.cs" />
     <Compile Include="Controllers\LabKitController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
@@ -1128,6 +1137,9 @@
     <Compile Include="InventoryReport_Result.cs">
       <DependentUpon>HISDBModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="IpRevenueReport_Result.cs">
+      <DependentUpon>HISDBModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="LabKit.cs">
       <DependentUpon>HISDBModel.tt</DependentUpon>
     </Compile>
@@ -1151,6 +1163,7 @@
     <Compile Include="Models\Brand.cs" />
     <Compile Include="Models\BrandCategory.cs" />
     <Compile Include="Models\Consultant.cs" />
+    <Compile Include="Models\ConsultantVisits.cs" />
     <Compile Include="Models\ConsultationFee.cs" />
     <Compile Include="Models\ConsultationType.cs" />
     <Compile Include="Models\DischargeModel.cs" />
@@ -1205,7 +1218,13 @@
     <Compile Include="PatientLabPackage.cs">
       <DependentUpon>HISDBModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="PatientLabPackage1.cs">
+      <DependentUpon>HISDBModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="PatientPharmaPackage.cs">
+      <DependentUpon>HISDBModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PatientPharmaPackage1.cs">
       <DependentUpon>HISDBModel.tt</DependentUpon>
     </Compile>
     <Compile Include="PatientPrescription.cs">
@@ -1248,7 +1267,7 @@
     <Compile Include="Purpose.cs">
       <DependentUpon>HISDBModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="RevenueReport_Result.cs">
+    <Compile Include="RevenueReport1_Result.cs">
       <DependentUpon>HISDBModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Room.cs">
@@ -1506,6 +1525,12 @@
     <Content Include="Views\PharmaKit\AddModifyKitItems.cshtml" />
     <Content Include="Views\PharmaKit\EditKitItems.cshtml" />
     <Content Include="Views\PharmaKit\ViewKitItems.cshtml" />
+    <Content Include="Views\Consultant\ConsultantPayment.cshtml" />
+    <Content Include="Views\Consultant\ConsultantVisits.cshtml" />
+    <Content Include="Views\ConsultantVisits\Index.cshtml" />
+    <Content Include="Views\ConsultantVisits\AddModify.cshtml" />
+    <Content Include="Views\IpRevenuerpt\Index.cshtml" />
+    <Content Include="Views\Bedrpt\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

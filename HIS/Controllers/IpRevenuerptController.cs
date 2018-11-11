@@ -6,30 +6,29 @@ using System.Web.Mvc;
 
 namespace HIS.Controllers
 {
-    public class RevenuerptController : Controller
+    public class IpRevenuerptController : Controller
     {
-        // GET: Revenuerpt
+        // GET: IpRevenuerpt
         public ActionResult Index()
         {
             return View();
         }
 
-        // GET: Revenuerpt
+        // GET: IpRevenuerpt
         public JsonResult GetDoctors()
         {
-            var data= HtmlHelpers.HtmlHelpers.GetDoctors();
+            var data = HtmlHelpers.HtmlHelpers.GetDoctors();
             return Json(new { data = data }, JsonRequestBehavior.AllowGet);
         }
 
-        // GET: Revenuerpt
+        // GET: IpRevenuerpt
         public JsonResult GetReportdata(string doctors, DateTime stdt, DateTime enddt)
         {
             using (HISDBEntities hs = new HISDBEntities())
             {
-                var data = hs.RevenueReport1(doctors, stdt, enddt).ToList();
+                var data = hs.IpRevenueReport(doctors, stdt, enddt).ToList();
                 return Json(new { data = data }, JsonRequestBehavior.AllowGet);
             }
         }
-      
     }
 }
