@@ -72,11 +72,7 @@ namespace HIS
         public virtual DbSet<Purpose> Purposes { get; set; }
         public virtual DbSet<Scan> Scans { get; set; }
         public virtual DbSet<InPatient> InPatients { get; set; }
-        public virtual DbSet<PatientLabPackage> PatientLabPackages { get; set; }
-        public virtual DbSet<PatientPharmaPackage> PatientPharmaPackages { get; set; }
         public virtual DbSet<ConsultantVisit> ConsultantVisits { get; set; }
-        public virtual DbSet<PatientLabPackage1> PatientLabPackage1 { get; set; }
-        public virtual DbSet<PatientPharmaPackage1> PatientPharmaPackage1 { get; set; }
     
         public virtual int ConvertOutPatientToInPatient(string eNMRNO, Nullable<decimal> estAmount, Nullable<decimal> advAmount)
         {
@@ -280,6 +276,15 @@ namespace HIS
                 new ObjectParameter("End_Time", typeof(System.DateTime));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RevenueReport1_Result>("RevenueReport1", doctorsParameter, start_TimeParameter, end_TimeParameter);
+        }
+    
+        public virtual int CreateMasterOrder3(string orderNo, ObjectParameter oMID)
+        {
+            var orderNoParameter = orderNo != null ?
+                new ObjectParameter("OrderNo", orderNo) :
+                new ObjectParameter("OrderNo", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("CreateMasterOrder3", orderNoParameter, oMID);
         }
     }
 }

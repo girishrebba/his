@@ -65,6 +65,7 @@ namespace HIS
         public string InsuranceFileNo { get; set; }
         public Nullable<decimal> InsuranceEstAmt { get; set; }
         public Nullable<decimal> InsuranceRecievedAmt { get; set; }
+        public Nullable<int> PkitID { get; set; }
     
         public virtual BloodGroup BloodGroup { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -74,5 +75,6 @@ namespace HIS
         public virtual User User { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PatientRoomAllocation> PatientRoomAllocations { get; set; }
+        public virtual PharmaKit PharmaKit { get; set; }
     }
 }

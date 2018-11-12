@@ -7,7 +7,7 @@ namespace HIS
 
     public partial class PharmaKit
     {
-        
+        public string PackDisplay { get; set; }
     }
 
     [MetadataType(typeof(PharmaKitMetaData))]

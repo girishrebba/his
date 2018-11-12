@@ -383,23 +383,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <FunctionImportMapping FunctionImportName="RevenueReport" FunctionName="HISDBModel.Store.RevenueReport">
-      <ResultMapping>
-        <ComplexTypeMapping TypeName="HISDBModel.RevenueReport_Result">
-          <ScalarProperty Name="ENMRNO" ColumnName="ENMRNO" />
-          <ScalarProperty Name="PatientFirstName" ColumnName="PatientFirstName" />
-          <ScalarProperty Name="PatientLasttName" ColumnName="PatientLasttName" />
-          <ScalarProperty Name="DoctorID" ColumnName="DoctorID" />
-          <ScalarProperty Name="DoctorFirstName" ColumnName="DoctorFirstName" />
-          <ScalarProperty Name="DoctorLasttName" ColumnName="DoctorLasttName" />
-          <ScalarProperty Name="consultationFee" ColumnName="consultationFee" />
-          <ScalarProperty Name="feeDiscount" ColumnName="feeDiscount" />
-          <ScalarProperty Name="LabTotalAmount" ColumnName="LabTotalAmount" />
-          <ScalarProperty Name="LabTestPaidAmount" ColumnName="LabTestPaidAmount" />
-          <ScalarProperty Name="LabTestDiscount" ColumnName="LabTestDiscount" />
-        </ComplexTypeMapping>
-      </ResultMapping>
-    </FunctionImportMapping>
     <FunctionImportMapping FunctionImportName="CSVToTable" FunctionName="HISDBModel.Store.CSVToTable" />
     <FunctionImportMapping FunctionImportName="InventoryReport" FunctionName="HISDBModel.Store.InventoryReport">
       <ResultMapping>
@@ -560,6 +543,7 @@
     <EntitySetMapping Name="InPatients">
       <EntityTypeMapping TypeName="HISDBModel.InPatient">
         <MappingFragment StoreEntitySet="InPatients">
+          <ScalarProperty Name="PkitID" ColumnName="PkitID" />
           <ScalarProperty Name="InsuranceRecievedAmt" ColumnName="InsuranceRecievedAmt" />
           <ScalarProperty Name="InsuranceEstAmt" ColumnName="InsuranceEstAmt" />
           <ScalarProperty Name="InsuranceFileNo" ColumnName="InsuranceFileNo" />
@@ -607,25 +591,47 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <FunctionImportMapping FunctionImportName="CreateMasterLabKit" FunctionName="HISDBModel.Store.CreateMasterLabKit" />
-    <FunctionImportMapping FunctionImportName="CreateMasterOrder2" FunctionName="HISDBModel.Store.CreateMasterOrder" />
     <FunctionImportMapping FunctionImportName="CreateMasterPharmaKit" FunctionName="HISDBModel.Store.CreateMasterPharmaKit" />
-    <EntitySetMapping Name="PatientLabPackages">
-      <EntityTypeMapping TypeName="HISDBModel.PatientLabPackage">
-        <MappingFragment StoreEntitySet="PatientLabPackages">
-          <ScalarProperty Name="IsOP" ColumnName="IsOP" />
-          <ScalarProperty Name="LkitID" ColumnName="LkitID" />
+    <FunctionImportMapping FunctionImportName="BedReport" FunctionName="HISDBModel.Store.BedReport">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="HISDBModel.BedReport_Result">
+          <ScalarProperty Name="bedname" ColumnName="bedname" />
+          <ScalarProperty Name="description" ColumnName="description" />
+          <ScalarProperty Name="bedtype" ColumnName="bedtype" />
+          <ScalarProperty Name="roomname" ColumnName="roomname" />
+          <ScalarProperty Name="roomtype" ColumnName="roomtype" />
+          <ScalarProperty Name="bedstatus" ColumnName="bedstatus" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="RevenueReport1" FunctionName="HISDBModel.Store.RevenueReport">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="HISDBModel.RevenueReport1_Result">
           <ScalarProperty Name="ENMRNO" ColumnName="ENMRNO" />
-          <ScalarProperty Name="PLabPackID" ColumnName="PLabPackID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="PatientPharmaPackages">
-      <EntityTypeMapping TypeName="HISDBModel.PatientPharmaPackage">
-        <MappingFragment StoreEntitySet="PatientPharmaPackages">
-          <ScalarProperty Name="IsOP" ColumnName="IsOP" />
-          <ScalarProperty Name="PkitID" ColumnName="PkitID" />
-          <ScalarProperty Name="ENMRNO" ColumnName="ENMRNO" />
-          <ScalarProperty Name="PPharmaPackID" ColumnName="PPharmaPackID" />
+          <ScalarProperty Name="PatientFirstName" ColumnName="PatientFirstName" />
+          <ScalarProperty Name="PatientLasttName" ColumnName="PatientLasttName" />
+          <ScalarProperty Name="DoctorID" ColumnName="DoctorID" />
+          <ScalarProperty Name="DoctorFirstName" ColumnName="DoctorFirstName" />
+          <ScalarProperty Name="DoctorLasttName" ColumnName="DoctorLasttName" />
+          <ScalarProperty Name="consultationFee" ColumnName="consultationFee" />
+          <ScalarProperty Name="feeDiscount" ColumnName="feeDiscount" />
+          <ScalarProperty Name="LabTotalAmount" ColumnName="LabTotalAmount" />
+          <ScalarProperty Name="LabTestPaidAmount" ColumnName="LabTestPaidAmount" />
+          <ScalarProperty Name="LabTestDiscount" ColumnName="LabTestDiscount" />
+          <ScalarProperty Name="ScanTotalAmount" ColumnName="ScanTotalAmount" />
+          <ScalarProperty Name="ScanTestPaidAmount" ColumnName="ScanTestPaidAmount" />
+          <ScalarProperty Name="ScanTestDiscount" ColumnName="ScanTestDiscount" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="CreateMasterOrder3" FunctionName="HISDBModel.Store.CreateMasterOrder" />
+    <EntitySetMapping Name="ConsultantVisits">
+      <EntityTypeMapping TypeName="HISDBModel.ConsultantVisit">
+        <MappingFragment StoreEntitySet="ConsultantVisits">
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="Consultationdate" ColumnName="Consultationdate" />
+          <ScalarProperty Name="ConsultantID" ColumnName="ConsultantID" />
+          <ScalarProperty Name="ConsultantVisitId" ColumnName="ConsultantVisitId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

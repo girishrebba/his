@@ -44,6 +44,7 @@
             <li><a data-toggle="tab" href="#historyTab">Patient History</a></li>
             <li><a data-toggle="tab" href="#metricsTab">Metrics</a></li>
             <li><a data-toggle="tab" href="#InsuranceTab">Insurance</a></li>
+            <li><a data-toggle="tab" href="#PharmaTab">Pharma</a></li>
             @*<li><a data-toggle="tab" href="#dischargeTab">Discharge Summary</a></li>*@
         </ul>
         <div class="tab-content" id="tabContent">
@@ -109,22 +110,22 @@
                         @Html.LabelFor(model => model.Gender, "Gender:", new { @class = "control-label col-sm-2" })
                         <div class="col-sm-4">
                             @Html.DropDownList("Gender", new List<SelectListItem>(){
-                                                       new SelectListItem { Text = "--Select--", Value = "" },
-                                                       new SelectListItem { Text = "Male", Value = "0"  },
-                                                       new SelectListItem { Text = "Female", Value =  "1"},
-                                                       new SelectListItem { Text = "Others", Value =  "2"}
-                                                       },
-                        htmlAttributes: new { @class = "form-control" })
+                                                                       new SelectListItem { Text = "--Select--", Value = "" },
+                                                                       new SelectListItem { Text = "Male", Value = "0"  },
+                                                                       new SelectListItem { Text = "Female", Value =  "1"},
+                                                                       new SelectListItem { Text = "Others", Value =  "2"}
+                                                                       },
+                          htmlAttributes: new { @class = "form-control" })
                         </div>
                         @Html.LabelFor(model => model.MaritalStatus, "Marital Status:", htmlAttributes: new { @class = "control-label col-sm-2" })
                         <div class="col-sm-4">
                             @Html.DropDownList("MaritalStatus", new List<SelectListItem>(){
-                                                       new SelectListItem { Text = "--Select--", Value = "" },
-                                                       new SelectListItem { Text = "Single", Value = "0"  },
-                                                       new SelectListItem { Text = "Married", Value =  "1"},
-                                                       new SelectListItem { Text = "Others", Value =  "2"}
-                                                       },
-                        htmlAttributes: new { @class = "form-control" })
+                                                                       new SelectListItem { Text = "--Select--", Value = "" },
+                                                                       new SelectListItem { Text = "Single", Value = "0"  },
+                                                                       new SelectListItem { Text = "Married", Value =  "1"},
+                                                                       new SelectListItem { Text = "Others", Value =  "2"}
+                                                                       },
+                          htmlAttributes: new { @class = "form-control" })
                         </div>
                     </div>
                     <div class="form-group">
@@ -236,7 +237,7 @@
                 <div class="form-group">
                     <div class="col-sm-8 col-sm-offset-4">
                         @*<a class="btn btn-primary back previoustab">Previous</a>
-                    <a class="btn btn-primary continue nexttab">Next</a>*@
+                            <a class="btn btn-primary continue nexttab">Next</a>*@
                         <input type="button" value="Previous" class="btn btn-primary previoustab" />
                         <input type="button" value="Next" class="btn btn-primary nexttab" />
                     </div>
@@ -306,9 +307,9 @@
                         @Html.LabelFor(model => model.InsuranceEstAmt, "Insurance Estimated Amount:", new { @class = "control-label col-sm-2" })
                         <div class="col-sm-4">
                             @Html.EditorFor(model => model.InsuranceEstAmt, new { htmlAttributes = new { @class = "form-control" } })
-                        </div>                      
+                        </div>
                     </div>
-                    <div class="form-group">                       
+                    <div class="form-group">
                         @Html.LabelFor(model => model.InsuranceRecievedAmt, "Insurance Recieved Amount:", new { @class = "control-label col-sm-2" })
                         <div class="col-sm-4">
                             @Html.EditorFor(model => model.InsuranceRecievedAmt, new { htmlAttributes = new { @class = "form-control" } })
@@ -319,8 +320,40 @@
                         <div class="col-sm-8 col-sm-offset-4">
                             @*<a class="btn btn-primary back previoustab">Previous</a>*@
                             <input type="button" value="Previous" class="btn btn-primary previoustab" />
-                            <input type="submit" value="Submit" class="btn btn-primary" />
+                            <input type="button" value="Next" class="btn btn-primary nexttab" />
+                            @*<input type="submit" value="Submit" class="btn btn-primary" />*@
                         </div>
+                    </div>
+                </div>
+                @*<div class="form-horizontal" id="errorDiv">
+                        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+                    </div>*@
+            </div>
+
+            <div id="PharmaTab" class="tab-pane fade in" role="tabpanel">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.PkitID, "Package:", htmlAttributes: new { @class = "control-label col-sm-2" })
+                        <div class="col-sm-4">
+                            @if (Model.PkitID > 0)
+    {
+                        @Html.DropDownListFor(model => model.PkitID, Model.PharmaKits.Select(x => new SelectListItem { Text = x.PackDisplay, Value = x.PKitID.ToString() }), "--Select--", new { @class = "form-control", @disabled = "diasbled" })
+                        @Html.HiddenFor(model => model.PkitID)
+}
+else
+{
+                        @Html.DropDownListFor(model => model.PkitID, Model.PharmaKits.Select(x => new SelectListItem { Text = x.PackDisplay, Value = x.PKitID.ToString() }), "--Select--", new { @class = "form-control" })
+}
+
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-8 col-sm-offset-4">
+                        @*<a class="btn btn-primary back previoustab">Previous</a>*@
+                        <input type="button" value="Previous" class="btn btn-primary previoustab" />
+                        @*<input type="button" value="Next" class="btn btn-primary nexttab" />*@
+                        <input type="submit" value="Submit" class="btn btn-primary" />
                     </div>
                 </div>
                 <div class="form-horizontal" id="errorDiv">

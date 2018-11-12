@@ -408,12 +408,7 @@ D:\HIS\his.git\trunk\HIS\obj\Debug\HIS.csproj.CopyComplete
 D:\HIS\his.git\trunk\HIS\obj\Debug\HIS.dll
 D:\HIS\his.git\trunk\HIS\obj\Debug\HIS.pdb
 D:\HIS\his.git\trunk\HIS\obj\Debug\HIS.csprojResolveAssemblyReference.cache
-D:\HIS\trunk\HIS\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
-D:\HIS\trunk\HIS\bin\roslyn\Microsoft.CodeAnalysis.dll
-D:\HIS\trunk\HIS\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
-D:\HIS\trunk\HIS\bin\roslyn\Microsoft.DiaSymReader.Native.amd64.dll
-D:\HIS\trunk\HIS\bin\roslyn\System.IO.Compression.dll
-D:\HIS\trunk\HIS\bin\roslyn\VBCSCompiler.exe
+D:\HIS\trunk\HIS\bin\Microsoft.AspNet.Identity.EntityFramework.dll
 D:\HIS\trunk\HIS\bin\HIS.dll.config
 D:\HIS\trunk\HIS\bin\HIS.dll
 D:\HIS\trunk\HIS\bin\HIS.pdb
@@ -424,9 +419,13 @@ D:\HIS\trunk\HIS\bin\roslyn\csi.exe
 D:\HIS\trunk\HIS\bin\roslyn\csi.exe.config
 D:\HIS\trunk\HIS\bin\roslyn\csi.rsp
 D:\HIS\trunk\HIS\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+D:\HIS\trunk\HIS\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
 D:\HIS\trunk\HIS\bin\roslyn\Microsoft.CodeAnalysis.CSharp.Scripting.dll
+D:\HIS\trunk\HIS\bin\roslyn\Microsoft.CodeAnalysis.dll
 D:\HIS\trunk\HIS\bin\roslyn\Microsoft.CodeAnalysis.Scripting.dll
+D:\HIS\trunk\HIS\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
 D:\HIS\trunk\HIS\bin\roslyn\Microsoft.CSharp.Core.targets
+D:\HIS\trunk\HIS\bin\roslyn\Microsoft.DiaSymReader.Native.amd64.dll
 D:\HIS\trunk\HIS\bin\roslyn\Microsoft.DiaSymReader.Native.x86.dll
 D:\HIS\trunk\HIS\bin\roslyn\Microsoft.VisualBasic.Core.targets
 D:\HIS\trunk\HIS\bin\roslyn\Microsoft.Win32.Primitives.dll
@@ -436,6 +435,7 @@ D:\HIS\trunk\HIS\bin\roslyn\System.Console.dll
 D:\HIS\trunk\HIS\bin\roslyn\System.Diagnostics.FileVersionInfo.dll
 D:\HIS\trunk\HIS\bin\roslyn\System.Diagnostics.Process.dll
 D:\HIS\trunk\HIS\bin\roslyn\System.Diagnostics.StackTrace.dll
+D:\HIS\trunk\HIS\bin\roslyn\System.IO.Compression.dll
 D:\HIS\trunk\HIS\bin\roslyn\System.IO.FileSystem.dll
 D:\HIS\trunk\HIS\bin\roslyn\System.IO.FileSystem.DriveInfo.dll
 D:\HIS\trunk\HIS\bin\roslyn\System.IO.FileSystem.Primitives.dll
@@ -458,12 +458,12 @@ D:\HIS\trunk\HIS\bin\roslyn\System.Xml.XPath.XDocument.dll
 D:\HIS\trunk\HIS\bin\roslyn\vbc.exe
 D:\HIS\trunk\HIS\bin\roslyn\vbc.exe.config
 D:\HIS\trunk\HIS\bin\roslyn\vbc.rsp
+D:\HIS\trunk\HIS\bin\roslyn\VBCSCompiler.exe
 D:\HIS\trunk\HIS\bin\roslyn\VBCSCompiler.exe.config
 D:\HIS\trunk\HIS\bin\Antlr3.Runtime.dll
 D:\HIS\trunk\HIS\bin\EntityFramework.dll
 D:\HIS\trunk\HIS\bin\EntityFramework.SqlServer.dll
 D:\HIS\trunk\HIS\bin\Microsoft.AspNet.Identity.Core.dll
-D:\HIS\trunk\HIS\bin\Microsoft.AspNet.Identity.EntityFramework.dll
 D:\HIS\trunk\HIS\bin\Microsoft.AspNet.Identity.Owin.dll
 D:\HIS\trunk\HIS\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
 D:\HIS\trunk\HIS\bin\Microsoft.Owin.dll
@@ -510,4 +510,3 @@ D:\HIS\trunk\HIS\obj\Debug\HIS.csproj.CoreCompileInputs.cache
 D:\HIS\trunk\HIS\obj\Debug\HIS.csproj.CopyComplete
 D:\HIS\trunk\HIS\obj\Debug\HIS.dll
 D:\HIS\trunk\HIS\obj\Debug\HIS.pdb
-D:\HIS\trunk\HIS\obj\Debug\HIS.csprojResolveAssemblyReference.cache

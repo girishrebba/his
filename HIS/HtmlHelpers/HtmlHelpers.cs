@@ -184,11 +184,12 @@ namespace HIS.HtmlHelpers
 
 public static List<User> GetDoctors()
         {
+            string[] fliter = new string[] {"Doctor","Admin" };
             using (HISDBEntities dc = new HISDBEntities())
             {
                 var doctors = (from u in dc.Users
                                join ut in dc.UserTypes on u.UserTypeID equals ut.UserTypeID
-                               where ut.UserTypeName.Equals("Doctor")
+                               where ut.UserTypeName.Contains("Doctor") || ut.UserTypeName.Contains("Admin")
                                select new { u })
                                .OrderBy(b => b.u.UserName).AsEnumerable()
                                .Select(x => new User { UserID = x.u.UserID, NameDisplay = GetFullName(x.u.FirstName,x.u.MiddleName,x.u.LastName) }).ToList();
@@ -311,10 +312,14 @@ public static List<User> GetDoctors()
             using (HISDBEntities dc = new HISDBEntities())
             {
                 var pkits = (from pk in dc.PharmaKits
-                             select new { pk.PKitID, pk.PKitName })
+                             select new { pk.PKitID, pk.PKitName, pk.PKitCost })
                               .OrderBy(b => b.PKitName).AsEnumerable()
-                              .Select(x => new PharmaKit { PKitID = x.PKitID,
-                                  PKitName = x.PKitName }).ToList();
+                              .Select(x => new PharmaKit
+                              {
+                                  PKitID = x.PKitID,
+                                  PKitName = x.PKitName,
+                                  PackDisplay = string.Format("{0}- {1}", x.PKitName, x.PKitCost.HasValue ? x.PKitCost.Value.ToString("F") : string.Empty)
+                              }).ToList();
                 return pkits;
             }
         }
@@ -756,7 +761,7 @@ public static List<User> GetDoctors()
                                           RoomName = string.Format("{0}-{1}", x.pra.RoomNo, x.rt.RoomType1),
                                           BedName = x.b.BedName,
                                           CostPerDay = x.r.CostPerDay,
-                                          OccupiedDays = DateTime.Today.Subtract(x.pra.FromDate).Days,
+                                          OccupiedDays = DateTime.Today > x.pra.FromDate ?  DateTime.Today.Subtract(x.pra.FromDate).Days : 1,
                                       }).FirstOrDefault();
                 return roomBilling;
             }

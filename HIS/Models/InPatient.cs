@@ -18,6 +18,8 @@ namespace HIS
         public string DischargeDateDisplay { get; set; }
         public List<Purpose> Purposes { get; set; }
         public string[] PurposeIds { get; set; }
+        public List<PharmaKit> PharmaKits { get; set; }
+        public bool CanEditPharmaPack { get; set; }
         public string GetFullName()
         {
             return string.Format("{0} {1} {2}", 
@@ -62,6 +64,15 @@ namespace HIS
                 return "Married";
             else return "Others";
         }
+    }
+
+    public class PackageViewModel
+    {
+        public string ENMRNO { get; set; }
+        public List<PharmaKit> PharmaKits { get; set; }
+        public string[] PharmaKitIds { get; set; }
+        public List<LabKit> LabKits { get; set; }
+        public string[] LabKitIds { get; set; }
     }
 
     public class InPatientMetaData

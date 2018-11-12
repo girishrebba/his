@@ -90,15 +90,9 @@
         <AssociationConnector Association="HISDBModel.FK_IPH_InPatients_ENMRNO" />
         <AssociationConnector Association="HISDBModel.FK_InPatients_Doctor" />
         <AssociationConnector Association="HISDBModel.FK_PRA_InPatients_ENMRNO" />
-        <EntityTypeShape EntityType="HISDBModel.PatientLabPackage" Width="1.5" PointX="5" PointY="30.625" />
-        <EntityTypeShape EntityType="HISDBModel.PatientPharmaPackage" Width="1.5" PointX="3" PointY="27.625" />
-        <AssociationConnector Association="HISDBModel.FK_PatientLabPackages_LKitID" />
-        <AssociationConnector Association="HISDBModel.FK_PatientPharmaPackages_PKitID" />
+        <AssociationConnector Association="HISDBModel.FK_INPatients_PKitID" />
         <EntityTypeShape EntityType="HISDBModel.ConsultantVisit" Width="1.5" PointX="13.375" PointY="3.75" />
-        <EntityTypeShape EntityType="HISDBModel.PatientLabPackage1" Width="1.5" PointX="5" PointY="36.75" />
-        <EntityTypeShape EntityType="HISDBModel.PatientPharmaPackage1" Width="1.5" PointX="3" PointY="33.75" />
-        <AssociationConnector Association="HISDBModel.FK_PatientLabPackages_LKitID1" />
-        <AssociationConnector Association="HISDBModel.FK_PatientPharmaPackages_PKitID1" />
+        <AssociationConnector Association="HISDBModel.FK_ConsultantVisits_ConsultantID" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

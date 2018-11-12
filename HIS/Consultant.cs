@@ -14,6 +14,12 @@ namespace HIS
     
     public partial class Consultant
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Consultant()
+        {
+            this.ConsultantVisits = new HashSet<ConsultantVisit>();
+        }
+    
         public int ConsultantID { get; set; }
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
@@ -28,5 +34,7 @@ namespace HIS
         public decimal Fee { get; set; }
     
         public virtual Specialization Specialization { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ConsultantVisit> ConsultantVisits { get; set; }
     }
 }

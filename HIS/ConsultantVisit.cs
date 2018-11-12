@@ -18,5 +18,7 @@ namespace HIS
         public int ConsultantID { get; set; }
         public System.DateTime Consultationdate { get; set; }
         public Nullable<decimal> Amount { get; set; }
+    
+        public virtual Consultant Consultant { get; set; }
     }
 }

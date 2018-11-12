@@ -78,7 +78,9 @@ namespace HIS.Controllers
                 InPatient newPatient = new InPatient();
                 newPatient.ENMRNO = HtmlHelpers.HtmlHelpers.GetSequencedEnmrNo();
                 newPatient.Purposes = HtmlHelpers.HtmlHelpers.GetPurposes();
+                newPatient.PharmaKits = HtmlHelpers.HtmlHelpers.GetPharmaKits();
                 newPatient.PurposeIds = null;
+                newPatient.CanEditPharmaPack = true;
                 return View(newPatient);
             }
             else
@@ -90,7 +92,8 @@ namespace HIS.Controllers
                     ViewBag.Users = new SelectList(Users, "UserID", "NameDisplay", patient.DoctorID);
                     ViewBag.InsuranceprovidersList = new SelectList(Insuranceproviders, "ProviderID", "ProviderName",patient.ProviderID);
                     patient.Purposes = HtmlHelpers.HtmlHelpers.GetPurposes();
-                    patient.PurposeIds = patient.Purpose.Split(',');
+                    patient.PurposeIds = !string.IsNullOrEmpty(patient.Purpose)?patient.Purpose.Split(',') : null;
+                    patient.PharmaKits = HtmlHelpers.HtmlHelpers.GetPharmaKits();
                     return View(patient);
                 }
                 else
@@ -116,6 +119,7 @@ namespace HIS.Controllers
                 else
                 {
                     ConstructPurpose(ip);
+                    db.SaveChanges();
                     db.Entry(ip).State = EntityState.Modified;
                     db.SaveChanges();
                     return Json(new { success = true, message = string.Format("ENMRNO - {0} {1} Successfully", ip.ENMRNO, message) }, JsonRequestBehavior.AllowGet);
@@ -157,7 +161,9 @@ namespace HIS.Controllers
                     inPatient.DOBDisplay = inpatient.ip.GetDOBFormat();
                     inPatient.EnrolledDisplay = inpatient.ip.GetEnrolledFormat();
                     inPatient.DischargeDateDisplay = HtmlHelpers.HtmlHelpers.DateFormat(inpatient.ip.DischargedOn);
+                    inPatient.CanEditPharmaPack = inPatient.PkitID > 0 ? false : true;
                 }
+
                 return inPatient;
             }
         }
@@ -1187,6 +1193,13 @@ namespace HIS.Controllers
                 db.SaveChanges();
             }
             return Json(FileName, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public ActionResult PackagesAllocation(string enmrNo)
+        {
+            PackageViewModel pvm = new PackageViewModel();
+            return View(pvm);
         }
     }
 }
