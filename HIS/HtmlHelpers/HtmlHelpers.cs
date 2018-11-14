@@ -82,8 +82,8 @@ namespace HIS.HtmlHelpers
         {
             return string.Format("{0} {1} {2} {3} {4}",
                 string.IsNullOrEmpty(address1) ? string.Empty : address1 + ",",
-                string.IsNullOrEmpty(address1) ? string.Empty : ","+address2,
-                string.IsNullOrEmpty(city) ? string.Empty : ","+city,
+                string.IsNullOrEmpty(address2) ? string.Empty : address2+ ",",
+                string.IsNullOrEmpty(city) ? string.Empty : city + ",",
                 string.IsNullOrEmpty(state) ? string.Empty : state,
                 string.IsNullOrEmpty(zip) ? string.Empty : "- " + zip);
         }
@@ -239,8 +239,12 @@ public static List<User> GetDoctors()
             using (HISDBEntities dc = new HISDBEntities())
             {
                 var testTypes = (from tt in dc.TestTypes
-                                    select new { tt.TestID, tt.TestName }).AsEnumerable()
-                             .Select(x => new TestType { TestID = x.TestID, TestName = x.TestName }).ToList();
+                                    select new { tt.TestID, tt.TestName,tt.IsKit }).AsEnumerable()
+                             .Select(x => new TestType {
+                                 TestID = x.TestID,
+                                 TestName = x.TestName,
+                                 IsKit = x.IsKit
+                             }).ToList();
                 return testTypes;
             }
         }

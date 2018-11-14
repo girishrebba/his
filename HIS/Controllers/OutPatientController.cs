@@ -52,7 +52,8 @@ namespace HIS.Controllers
                                          x.user.MiddleName,
                                          x.user.LastName),
                                      Purpose = x.op.Purpose,
-                                     EnrolledDisplay = HtmlHelpers.HtmlHelpers.DateFormat(x.op.Enrolled)
+                                     EnrolledDisplay = HtmlHelpers.HtmlHelpers.DateFormat(x.op.Enrolled),
+                                     PrevENMR = x.op.PrevENMR
                                  }).ToList();
 
                 // Bind the Valid till date
@@ -677,7 +678,6 @@ namespace HIS.Controllers
         public ActionResult OPPrescription(IList<PatientPrescription> prescriptions)
         {
             int pmid = 0;
-            int ltmid = 0;
             int stmid = 0;
             using (HISDBEntities db = new HISDBEntities())
             {
@@ -712,26 +712,18 @@ namespace HIS.Controllers
                     //Save Tests
                     if (suggestedTestsIfAny.TestIds != null)
                     {
-                        lastVisitID = suggestedTestsIfAny.VisitID;
-                        var lMaster = db.LabTestMasters.Where(pm => pm.VisitID == lastVisitID && pm.IsDelivered == false).FirstOrDefault();
-                        if (lMaster != null)
-                        {
-                            ltmid = lMaster.LTMID;
-                        }
-                        else
-                        {
-                            System.Data.Entity.Core.Objects.ObjectParameter ltmidOut = new System.Data.Entity.Core.Objects.ObjectParameter("LTMID", typeof(Int32));
-                            db.CreateMasterLabTest(prescriptions[0].ENMRNO, Convert.ToInt32(System.Web.HttpContext.Current.Session["UserID"]), prescriptions[0].VisitID, false, ltmidOut);
-                            ltmid = Convert.ToInt32(ltmidOut.Value);
-                        }
-                        foreach (var id in suggestedTestsIfAny.TestIds)
-                        {
-                            var patientTest = new PatientTest {
-                                TestID = Convert.ToInt32(id),
-                                LTMID = ltmid
-                            };
-                            db.PatientTests.Add(patientTest);
-                        }
+                        SaveLabTestOrPackage(
+                            prescriptions,
+                            db, 
+                            suggestedTestsIfAny.VisitID, suggestedTestsIfAny.TestIds);
+                    }
+                    //Save Packages
+                    if (suggestedTestsIfAny.KitIds != null)
+                    {
+                        SaveLabTestOrPackage(
+                            prescriptions,
+                            db,
+                            suggestedTestsIfAny.VisitID, suggestedTestsIfAny.KitIds);
                     }
 
                     //Save Scans
@@ -770,6 +762,31 @@ namespace HIS.Controllers
                 }
             }
 
+        }
+
+        private static void SaveLabTestOrPackage(IList<PatientPrescription> prescriptions, HISDBEntities db, int visitId, string[] tests)
+        {
+            int ltmid = 0;
+            var lMaster = db.LabTestMasters.Where(pm => pm.VisitID == visitId && pm.IsDelivered == false).FirstOrDefault();
+            if (lMaster != null)
+            {
+                ltmid = lMaster.LTMID;
+            }
+            else
+            {
+                System.Data.Entity.Core.Objects.ObjectParameter ltmidOut = new System.Data.Entity.Core.Objects.ObjectParameter("LTMID", typeof(Int32));
+                db.CreateMasterLabTest(prescriptions[0].ENMRNO, Convert.ToInt32(System.Web.HttpContext.Current.Session["UserID"]), prescriptions[0].VisitID, false, ltmidOut);
+                ltmid = Convert.ToInt32(ltmidOut.Value);
+            }
+            foreach (var id in tests)
+            {
+                var patientTest = new PatientTest
+                {
+                    TestID = Convert.ToInt32(id),
+                    LTMID = ltmid
+                };
+                db.PatientTests.Add(patientTest);
+            }
         }
 
         [HttpPost]

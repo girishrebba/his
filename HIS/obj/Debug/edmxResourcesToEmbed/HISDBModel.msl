@@ -252,6 +252,7 @@
     <EntitySetMapping Name="TestTypes">
       <EntityTypeMapping TypeName="HISDBModel.TestType">
         <MappingFragment StoreEntitySet="TestTypes">
+          <ScalarProperty Name="IsKit" ColumnName="IsKit" />
           <ScalarProperty Name="TestID" ColumnName="TestID" />
           <ScalarProperty Name="TestName" ColumnName="TestName" />
           <ScalarProperty Name="TestCost" ColumnName="TestCost" />
@@ -466,15 +467,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="LabKitItems">
-      <EntityTypeMapping TypeName="HISDBModel.LabKitItem">
-        <MappingFragment StoreEntitySet="LabKitItems">
-          <ScalarProperty Name="TestID" ColumnName="TestID" />
-          <ScalarProperty Name="LKitID" ColumnName="LKitID" />
-          <ScalarProperty Name="LKitItemID" ColumnName="LKitItemID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="LabKits">
       <EntityTypeMapping TypeName="HISDBModel.LabKit">
         <MappingFragment StoreEntitySet="LabKits">
@@ -632,6 +624,15 @@
           <ScalarProperty Name="Consultationdate" ColumnName="Consultationdate" />
           <ScalarProperty Name="ConsultantID" ColumnName="ConsultantID" />
           <ScalarProperty Name="ConsultantVisitId" ColumnName="ConsultantVisitId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="LabKitItems">
+      <EntityTypeMapping TypeName="HISDBModel.LabKitItem">
+        <MappingFragment StoreEntitySet="LabKitItems">
+          <ScalarProperty Name="TestID" ColumnName="TestID" />
+          <ScalarProperty Name="LKitID" ColumnName="LKitID" />
+          <ScalarProperty Name="LKitItemID" ColumnName="LKitItemID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

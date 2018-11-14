@@ -50,6 +50,21 @@
             border-top: 3px solid #029b17;
             border-bottom-color: #f9f9f9;
         }
+
+    input[type="checkbox"] {
+        transform: scale(1.3, 1.3);
+    }
+
+    .checkbox .btn,
+    .checkbox-inline .btn {
+        padding-left: 2em;
+        min-width: 7em;
+    }
+
+    .checkbox label,
+    .checkbox-inline label {
+        text-align: left;
+    }
 </style>
 @using HIS.HtmlHelpers
 @using (Html.BeginForm("Prescription", "InPatient", FormMethod.Post, new { id = "ppForm", onsubmit = "return SubmitPrescriptionForm(this)" }))
@@ -296,10 +311,9 @@
                                         <span class="lableDisplay">Tests:</span>
                                     </div>
                                     <div class="panel-body">
-                                        
-                                            <div class="panel-body">
-                                                @if (ViewBag.InpatientTests != null && ViewBag.InpatientTests.Count > 0)
-            {
+                                        <div class="panel-body">
+                                            @if (ViewBag.InpatientTests != null && ViewBag.InpatientTests.Count > 0)
+        {
                                     <div class="table-responsive">
                                         <table class="table table-striped table-bordered" style="width:100%">
                                             <thead>
@@ -328,16 +342,25 @@
                                         </table>
                                     </div>
 }
-                                            </div>
+                                        </div>
 
                                         @if (!HtmlHelpers.ISPatientDischrged(Model.ENMRNO))
-                                        {
-                                        <div class="col-sm-10">
-                                            <span class="lableDisplay">Add Tests:</span>
-                                            @Html.DropDownListFor(model => model.TestIds, Model.TestTypes.Select(x => new SelectListItem { Text = x.TestName, Value = x.TestID.ToString() }), new { @placeholder = "Select", @class = "form-control chosen-group-select", @multiple = "true", style = "width:350px;" })
-                                        </div>
-                                        }
-
+    {
+                                    <div class="checkbox" style="padding:0px 0px 10px;">
+                                        <label class="btn btn-white" style="text-transform:capitalize">
+                                            <input type="checkbox" id="IsTestOrPack" />
+                                            Do you want to add Package?
+                                        </label>
+                                    </div>
+                                    <div class="col-sm-10" id="divTests">
+                                        <span class="lableDisplay">Tests:</span>
+                                        @Html.DropDownListFor(model => model.TestIds, Model.TestTypes.Where(t => t.IsKit == false).Select(x => new SelectListItem { Text = x.TestName, Value = x.TestID.ToString() }), new { @placeholder = "Select", @class = "form-control chosen-group-select", @multiple = "true", style = "width:350px;" })
+                                    </div>
+                                    <div class="col-sm-10 hidden" id="divPackage">
+                                        <span class="lableDisplay">Package:</span>
+                                        @Html.DropDownListFor(model => model.KitIds, Model.TestTypes.Where(t => t.IsKit == true).Select(x => new SelectListItem { Text = x.TestName, Value = x.TestID.ToString() }), new { @placeholder = "Select", @class = "form-control chosen-group-select", @multiple = "true", style = "width:350px;" })
+                                    </div>
+}
                                     </div>
                                 </div>
                             </div>
@@ -413,6 +436,17 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
+        $('#IsTestOrPack').change(function () {
+            if ($(this).is(":checked")) {
+                $("#divTests").addClass("hidden");
+                $("#divPackage").removeClass("hidden");
+            }
+            else {
+                $("#divPackage").addClass("hidden");
+                $("#divTests").removeClass("hidden");
+            }
+        });
+
 
         $('.nexttab').click(function () {
             $('.nav-tabs > .active').next('li').find('a').trigger('click');
@@ -431,10 +465,15 @@
         $('#ScanIds').chosen();
         $('#ScanIds_chosen').css({ "width": "350px" });
 
+        $('#KitIds').trigger('chosen:updated');
+        $('#KitIds').chosen();
+        $('#KitIds_chosen').css({ "width": "350px" });
     });
 
     $('#btnSubmit').click(function () {
-        if (($(form).find('table#ppTable tr').length < 3) && $('#TestIds').val() === null) {
+        if (($(form).find('table#ppTable tr').length < 3)
+            && $('#TestIds').val() === null
+            && $('#KitIds').val() === null) {
             alert("Please suggest some prescrition or Test");
             return false;
         }

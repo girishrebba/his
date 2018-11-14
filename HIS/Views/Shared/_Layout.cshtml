@@ -200,11 +200,11 @@
                         }
                         @if (ViewContext.Controller.HasPermission("PharmaKit-index"))
                         {
-                            <li><a href="@Url.Action("Index", "PharmaKit")"><span class="title">Pharma Kit</span></a></li>
+                            <li><a href="@Url.Action("Index", "PharmaKit")"><span class="title">Pharma Packages</span></a></li>
                         }
                         @if (ViewContext.Controller.HasPermission("LabKit-index"))
                         {
-                            <li><a href="@Url.Action("Index", "LabKit")"><span class="title">Lab Kit</span></a></li>
+                            <li><a href="@Url.Action("Index", "LabKit")"><span class="title">Lab Packages</span></a></li>
                         }
                         @if (ViewContext.Controller.HasPermission("Purpose-index"))
                         {

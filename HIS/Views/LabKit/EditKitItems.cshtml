@@ -24,38 +24,40 @@
 @using (Html.BeginForm("SaveKitItems", "LabKit", FormMethod.Post, new { id = "kitForm", onsubmit = "return SubmitLabKitForm(this);" }))
 {
     @Html.HiddenFor(model => model[0].LKitID, new { @id = "LKitID" })
-    <div class="form-horizontal">
-        <div class="astriskNote"><span></span></div>
-        <div class="row">
-            <div class="form-group required">
-                @Html.LabelFor(model => model[0].LKitName, "Package:", new { @class = "control-label col-md-2" })
-                <div class="col-sm-2">
-                    @Html.EditorFor(model => model[0].LKitName, new { htmlAttributes = new { @id = "LKitName", @class = "form-control" } })
-                </div>
-                @Html.LabelFor(model => model[0].LKitCost, "Cost:", new { @class = "control-label col-md-2" })
-                <div class="col-sm-2">
-                    @Html.EditorFor(model => model[0].LKitCost, new { htmlAttributes = new { @id = "LKitCost", @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model[0].LKitCost)
-                </div>
+<div class="form-horizontal">
+    <div class="astriskNote"><span></span></div>
+    <div class="row">
+        <div class="form-group required">
+            @Html.LabelFor(model => model[0].LKitName, "Package:", new { @class = "control-label col-md-2" })
+            <div class="col-sm-4 lableDisplay">
+                @Html.DisplayFor(model => model[0].LKitName, new { htmlAttributes = new { @id = "LKitName", @class = "form-control" } })
+            </div>
+            @Html.LabelFor(model => model[0].LKitCost, "Cost:", new { @class = "control-label col-md-2" })
+            <div class="col-sm-2">
+                @Html.EditorFor(model => model[0].LKitCost, new { htmlAttributes = new { @id = "LKitCost", @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model[0].LKitCost)
             </div>
         </div>
-        <div class="row" style="border: 1px;">
-            <table class="table table-striped table-bordered" id="itemTable">
-                <thead>
-                    <tr>
-                        <th style="width:100%">Test Name</th>
-                        <th></th>
-                    </tr>
-                    <tr>
-                        <td>
-                            @Html.EditorFor(model => model[0].InputTest, new { htmlAttributes = new { @id = "TestName", @class = "form-control" } })
-                            @Html.HiddenFor(model => model[0].TestID, new { @id = "TestID" })
-                        </td>
-                        <td><span class="btn btn-success fa fa-plus-circle" style="padding: 0px 3px" id="btnAdd"></span></td>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (LabKitViewModel p in Model)
+    </div>
+    <div class="row" style="border: 1px;">
+        <table class="table table-striped table-bordered" id="itemTable">
+            <thead>
+                <tr>
+                    <th style="width:100%">Test Name</th>
+                    <th></th>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.EditorFor(model => model[0].InputTest, new { htmlAttributes = new { @id = "TestName", @class = "form-control" } })
+                        @Html.HiddenFor(model => model[0].TestID, new { @id = "TestID" })
+                    </td>
+                    <td><span class="btn btn-success fa fa-plus-circle" style="padding: 0px 3px" id="btnAdd"></span></td>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Count > 0 && Model[0].TestID != 0)
+                {
+                    foreach (LabKitViewModel p in Model)
                     {
                         <tr>
                             <td style="display:none">@p.TestID</td>
@@ -63,10 +65,13 @@
                             <td><span class="btn btn-danger fa fa-trash" style="padding: 0px 3px" onclick="remove(this)"></span></td>
                         </tr>
                     }
-                </tbody>
-            </table>
-        </div>
-        <div class="row">
+                }
+            </tbody>
+        </table>
+    </div>
+    @if (Model.Count > 0 && Model[0].TestID != 0)
+    {
+        <div class="row" id="btnDiv">
             <div class="form-group">
                 <div class="col-md-3 col-md-offset-5">
                     <input type="submit" value="Submit" id="btnSubmit" class="btn btn-primary" />
@@ -74,17 +79,31 @@
                 </div>
             </div>
         </div>
-    </div>
+    }
+    else
+    {
+         <div class="row hidden" id="btnDiv">
+            <div class="form-group">
+                <div class="col-md-3 col-md-offset-5">
+                    <input type="submit" value="Submit" id="btnSubmit" class="btn btn-primary" />
+                    <input type="reset" value="Reset" class="btn" />
+                </div>
+            </div>
+        </div>
+    }
+
+</div>
 }
 <script type="text/javascript">
             $(function () {
                 $('#btnAdd').click(function () {
+                    $('#btnDiv').removeClass("hidden");
                     var form = $("#kitForm")
                     $.validator.unobtrusive.parse(form);
                     if ($(form).valid()) {
                         $('table#itemTable > tbody').append('<tr>' +
                             '<td style="display:none">' + $('#TestID').val() + '</td>' + // MedicineID
-                            '<td>' + $('#InputTest').val() + '</td>' + // medicine
+                            '<td>' + $('#TestName').val() + '</td>' + // medicine
                             '<td><span class="btn btn-danger fa fa-trash" style="padding: 0px 3px" onclick = "remove(this)"></span></td>' +
                             '</tr>');
                         clearInputs();
@@ -131,12 +150,12 @@
 
             function remove(e) {
                 $(e).closest('tr').remove();
-                if ($('#kitForm tr').length < 3)
-                    $('#btnSubmit').addClass('disabled');
+                if ($('#kitForm').find('table#itemTable > tbody tr').length < 1) {
+                    $('#btnDiv').addClass("hidden");
+                }
             }
 
             function clearInputs() {
-                $('#InputTest').val('');
-                $('#btnSubmit').removeClass('disabled');
+                $('#TestName').val('');
             }
 </script>

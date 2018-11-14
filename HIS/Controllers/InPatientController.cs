@@ -48,7 +48,8 @@ namespace HIS.Controllers
                                      Purpose = x.ip.Purpose,
                                      EnrolledDisplay = x.ip.GetEnrolledFormat(),
                                      IsDischarged = x.ip.IsDischarged.HasValue ? x.ip.IsDischarged : false,
-                                     DischargeDateDisplay = HtmlHelpers.HtmlHelpers.DateFormat(x.ip.DischargedOn)
+                                     DischargeDateDisplay = HtmlHelpers.HtmlHelpers.DateFormat(x.ip.DischargedOn),
+                                     PrevENMR = x.ip.PrevENMR
                                      
                                      
                                  }).ToList();
@@ -80,7 +81,6 @@ namespace HIS.Controllers
                 newPatient.Purposes = HtmlHelpers.HtmlHelpers.GetPurposes();
                 newPatient.PharmaKits = HtmlHelpers.HtmlHelpers.GetPharmaKits();
                 newPatient.PurposeIds = null;
-                newPatient.CanEditPharmaPack = true;
                 return View(newPatient);
             }
             else
@@ -161,7 +161,6 @@ namespace HIS.Controllers
                     inPatient.DOBDisplay = inpatient.ip.GetDOBFormat();
                     inPatient.EnrolledDisplay = inpatient.ip.GetEnrolledFormat();
                     inPatient.DischargeDateDisplay = HtmlHelpers.HtmlHelpers.DateFormat(inpatient.ip.DischargedOn);
-                    inPatient.CanEditPharmaPack = inPatient.PkitID > 0 ? false : true;
                 }
 
                 return inPatient;
@@ -486,7 +485,6 @@ namespace HIS.Controllers
         public ActionResult Prescription(IList<PatientPrescription> prescriptions)
         {
             int pmid = 0;
-            int ltmid = 0;
             int stmid = 0;
             string enmrNo = string.Empty;
             using (HISDBEntities db = new HISDBEntities())
@@ -520,28 +518,13 @@ namespace HIS.Controllers
                     //Save Tests
                     if (suggestedTestsIfAny.TestIds != null)
                     {
-                        var lMaster = db.LabTestMasters.Where(pm => pm.ENMRNO == enmrNo && pm.VisitID == 0 && pm.IsDelivered == false).FirstOrDefault();
-                        if (lMaster != null)
-                        {
-                            ltmid = lMaster.LTMID;
-                        }
-                        else
-                        {
-                            System.Data.Entity.Core.Objects.ObjectParameter ltmidOut = new System.Data.Entity.Core.Objects.ObjectParameter("LTMID", typeof(Int32));
-                            db.CreateMasterLabTest(prescriptions[0].ENMRNO, Convert.ToInt32(System.Web.HttpContext.Current.Session["UserID"]), prescriptions[0].VisitID, true, ltmidOut);
-                            ltmid = Convert.ToInt32(ltmidOut.Value);
-                        }
-                        foreach (var id in suggestedTestsIfAny.TestIds)
-                        {
-                            var patientTest = new PatientTest
-                            {
-                                TestID = Convert.ToInt32(id),
-                                LTMID = ltmid
-                            };
-                            db.PatientTests.Add(patientTest);
-                        }
+                        SaveLabTestOrPackage(prescriptions, enmrNo, db, suggestedTestsIfAny.TestIds);
                     }
-
+                    // Save Package
+                    if (suggestedTestsIfAny.KitIds != null)
+                    {
+                        SaveLabTestOrPackage(prescriptions, enmrNo, db, suggestedTestsIfAny.KitIds);
+                    }
                     //Save Scans
                     if (suggestedTestsIfAny.ScanIds != null)
                     {
@@ -575,6 +558,31 @@ namespace HIS.Controllers
                 }
             }
 
+        }
+
+        private static void SaveLabTestOrPackage(IList<PatientPrescription> prescriptions, string enmrNo, HISDBEntities db, string[] tests)
+        {
+            int ltmid;
+            var lMaster = db.LabTestMasters.Where(pm => pm.ENMRNO == enmrNo && pm.VisitID == 0 && pm.IsDelivered == false).FirstOrDefault();
+            if (lMaster != null)
+            {
+                ltmid = lMaster.LTMID;
+            }
+            else
+            {
+                System.Data.Entity.Core.Objects.ObjectParameter ltmidOut = new System.Data.Entity.Core.Objects.ObjectParameter("LTMID", typeof(Int32));
+                db.CreateMasterLabTest(prescriptions[0].ENMRNO, Convert.ToInt32(System.Web.HttpContext.Current.Session["UserID"]), prescriptions[0].VisitID, true, ltmidOut);
+                ltmid = Convert.ToInt32(ltmidOut.Value);
+            }
+            foreach (var id in tests)
+            {
+                var patientTest = new PatientTest
+                {
+                    TestID = Convert.ToInt32(id),
+                    LTMID = ltmid
+                };
+                db.PatientTests.Add(patientTest);
+            }
         }
 
         [HttpGet]
@@ -1139,7 +1147,8 @@ namespace HIS.Controllers
             using (HISDBEntities hs = new HISDBEntities())
             {
                 var tests = (from tt in hs.TestTypes
-                                 where tt.TestName.StartsWith(Prefix)
+                                 where tt.IsKit == false 
+                                 && tt.TestName.StartsWith(Prefix)
                                  select new { tt }).AsEnumerable()
                                  .Select(m => new TestType
                                  {

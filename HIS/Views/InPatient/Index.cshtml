@@ -30,12 +30,13 @@
                                 <th>ENMRNO</th>
                                 <th>Name</th>
                                 @*<th>DOB</th>*@
-                                <th>Gender</th>
+                                @*<th>Gender</th>*@
                                 @*<th>Address</th>*@
                                 <th>Phone</th>
                                 <th>Doctor</th>
                                 <th>Enrolled</th>
                                 <th>Discharged</th>
+                                <th>Prev ENMR</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -60,12 +61,13 @@
                     { "data": "ENMRNO" },
                     { "data": "Name" },
                     //{ "data": "DOBDisplay" },
-                    { "data": "GenderDisplay" },
+                    //{ "data": "GenderDisplay" },
                     //{ "data": "Address" },
                     { "data": "Phone" },
                     { "data": "DoctorName" },
                     { "data": "EnrolledDisplay" },
-                    { "data": "DischargeDateDisplay"},
+                    { "data": "DischargeDateDisplay" },
+                    { "data":"PrevENMR"},
                     {
                         "data": null, "render": function (data) {
                             var disabled = 'disabled btn-success';
@@ -625,6 +627,7 @@
                 tbl.Comments = $($(this).find('td:eq(5)')).html();
                 tbl.TestIds = $('#TestIds').val();
                 tbl.ScanIds = $('#ScanIds').val();
+                tbl.KitIds = $('#KitIds').val();
                 tbl.HasPrescription = true;
                 ppItems.push(tbl);
             });
@@ -637,6 +640,8 @@
             tbl.ENMRNO = enmrNo;
             tbl.VisitID = visitID;
             tbl.TestIds = $('#TestIds').val();
+            tbl.ScanIds = $('#ScanIds').val();
+            tbl.KitIds = $('#KitIds').val();
             tbl.HasPrescription = false;
             ppItems.push(tbl);
         }
@@ -648,9 +653,19 @@
         $("#tbd tr").each(function () {
             $(this).find('td:last').remove();
         });
-        var option_all = $("#TestIds option:selected").map(function () {
-            return $(this).text();
-        }).get().join(',');
+
+        var option_all = '';
+        if ($('#TestIds').val() != null) {
+            option_all = $("#TestIds option:selected").map(function () {
+                return $(this).text();
+            }).get().join(',');
+        }
+
+        if ($('#KitIds').val() != null) {
+            option_all = $("#KitIds option:selected").map(function () {
+                return $(this).text();
+            }).get().join(',');
+        }
 
         var str_array = option_all.split(',');
         var tbodyTR = '';

@@ -70,7 +70,6 @@
         <AssociationConnector Association="HISDBModel.FK_STM_Doctor" />
         <EntityTypeShape EntityType="HISDBModel.Consultant" Width="1.5" PointX="3.375" PointY="22.625" />
         <EntityTypeShape EntityType="HISDBModel.InsuranceProvider" Width="1.5" PointX="0.75" PointY="6.75" />
-        <EntityTypeShape EntityType="HISDBModel.LabKitItem" Width="1.5" PointX="11.625" PointY="20.625" />
         <EntityTypeShape EntityType="HISDBModel.LabKit" Width="1.5" PointX="2.75" PointY="6.75" />
         <EntityTypeShape EntityType="HISDBModel.PatientInsurance" Width="1.5" PointX="12.75" PointY="0.75" />
         <EntityTypeShape EntityType="HISDBModel.PatientPurpose" Width="1.5" PointX="10" PointY="0.875" />
@@ -78,7 +77,6 @@
         <EntityTypeShape EntityType="HISDBModel.PharmaKit" Width="1.5" PointX="0.75" PointY="9.75" />
         <EntityTypeShape EntityType="HISDBModel.Purpose" Width="1.5" PointX="7.75" PointY="1" />
         <AssociationConnector Association="HISDBModel.FK_Consultant_Specialization" />
-        <AssociationConnector Association="HISDBModel.FK_LKI_TestID" />
         <AssociationConnector Association="HISDBModel.FK_PKI_MedicineID" />
         <AssociationConnector Association="HISDBModel.FK_PatientPurpose_PurposeID" />
         <EntityTypeShape EntityType="HISDBModel.Scan" Width="1.5" PointX="5.375" PointY="3.5" />
@@ -93,6 +91,9 @@
         <AssociationConnector Association="HISDBModel.FK_INPatients_PKitID" />
         <EntityTypeShape EntityType="HISDBModel.ConsultantVisit" Width="1.5" PointX="13.375" PointY="3.75" />
         <AssociationConnector Association="HISDBModel.FK_ConsultantVisits_ConsultantID" />
+        <EntityTypeShape EntityType="HISDBModel.LabKitItem" Width="1.5" PointX="11.25" PointY="20.625" />
+        <AssociationConnector Association="HISDBModel.FK_LKI_LKitID" />
+        <AssociationConnector Association="HISDBModel.FK_LKI_TestID" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

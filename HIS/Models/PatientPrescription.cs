@@ -21,6 +21,7 @@ namespace HIS
         public List<TestType> TestTypes { get; set; }
         public List<Scan> Scans { get; set; }
         public string[] TestIds { get; set; }
+        public string[] KitIds { get; set; }
         public string[] ScanIds { get; set; }
         public decimal Discount { get; set; }
         public decimal PaidAmount { get; set; }

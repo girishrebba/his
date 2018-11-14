@@ -275,7 +275,8 @@
     <Property Name="TestCost" Type="Decimal" Precision="19" Scale="4" />
     <NavigationProperty Name="PatientTests" Relationship="HISDBModel.FK_PatientTests_TestID" FromRole="TestType" ToRole="PatientTest" />
     <NavigationProperty Name="PatientScans" Relationship="HISDBModel.FK_PatientScans_ScanID" FromRole="TestType" ToRole="PatientScan" />
-    <NavigationProperty Name="LabKitItems" Relationship="HISDBModel.FK_LKI_TestID" FromRole="TestType" ToRole="LabKitItem" />
+    <Property Name="IsKit" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="LabKitItems" Relationship="HISDBModel.FK_LKI_LKitID" FromRole="TestType" ToRole="LabKitItem" />
   </EntityType>
   <EntityType Name="UserPermission">
     <Key>
@@ -755,7 +756,6 @@
     </FunctionImport>
     <EntitySet Name="Consultants" EntityType="HISDBModel.Consultant" />
     <EntitySet Name="InsuranceProviders" EntityType="HISDBModel.InsuranceProvider" />
-    <EntitySet Name="LabKitItems" EntityType="HISDBModel.LabKitItem" />
     <EntitySet Name="LabKits" EntityType="HISDBModel.LabKit" />
     <EntitySet Name="PatientInsurances" EntityType="HISDBModel.PatientInsurance" />
     <EntitySet Name="PatientPurposes" EntityType="HISDBModel.PatientPurpose" />
@@ -765,10 +765,6 @@
     <AssociationSet Name="FK_Consultant_Specialization" Association="HISDBModel.FK_Consultant_Specialization">
       <End Role="Specialization" EntitySet="Specializations" />
       <End Role="Consultant" EntitySet="Consultants" />
-    </AssociationSet>
-    <AssociationSet Name="FK_LKI_TestID" Association="HISDBModel.FK_LKI_TestID">
-      <End Role="TestType" EntitySet="TestTypes" />
-      <End Role="LabKitItem" EntitySet="LabKitItems" />
     </AssociationSet>
     <AssociationSet Name="FK_PKI_MedicineID" Association="HISDBModel.FK_PKI_MedicineID">
       <End Role="MedicineMaster" EntitySet="MedicineMasters" />
@@ -849,6 +845,15 @@
     <AssociationSet Name="FK_ConsultantVisits_ConsultantID" Association="HISDBModel.FK_ConsultantVisits_ConsultantID">
       <End Role="Consultant" EntitySet="Consultants" />
       <End Role="ConsultantVisit" EntitySet="ConsultantVisits" />
+    </AssociationSet>
+    <EntitySet Name="LabKitItems" EntityType="HISDBModel.LabKitItem" />
+    <AssociationSet Name="FK_LKI_LKitID" Association="HISDBModel.FK_LKI_LKitID">
+      <End Role="TestType" EntitySet="TestTypes" />
+      <End Role="LabKitItem" EntitySet="LabKitItems" />
+    </AssociationSet>
+    <AssociationSet Name="FK_LKI_TestID" Association="HISDBModel.FK_LKI_TestID">
+      <End Role="TestType" EntitySet="TestTypes" />
+      <End Role="LabKitItem" EntitySet="LabKitItems" />
     </AssociationSet>
   </EntityContainer>
   <EntityType Name="LabTestMaster">
@@ -1127,15 +1132,6 @@
     <Property Name="ProviderName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
     <Property Name="Company" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
   </EntityType>
-  <EntityType Name="LabKitItem">
-    <Key>
-      <PropertyRef Name="LKitItemID" />
-    </Key>
-    <Property Name="LKitItemID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="LKitID" Type="Int32" Nullable="false" />
-    <Property Name="TestID" Type="Int32" Nullable="false" />
-    <NavigationProperty Name="TestType" Relationship="HISDBModel.FK_LKI_TestID" FromRole="LabKitItem" ToRole="TestType" />
-  </EntityType>
   <EntityType Name="LabKit">
     <Key>
       <PropertyRef Name="LKitID" />
@@ -1199,18 +1195,6 @@
       </Principal>
       <Dependent Role="Consultant">
         <PropertyRef Name="SpecializationID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_LKI_TestID">
-    <End Type="HISDBModel.TestType" Role="TestType" Multiplicity="1" />
-    <End Type="HISDBModel.LabKitItem" Role="LabKitItem" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="TestType">
-        <PropertyRef Name="TestID" />
-      </Principal>
-      <Dependent Role="LabKitItem">
-        <PropertyRef Name="TestID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -1458,6 +1442,39 @@
       </Principal>
       <Dependent Role="ConsultantVisit">
         <PropertyRef Name="ConsultantID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="LabKitItem">
+    <Key>
+      <PropertyRef Name="LKitItemID" />
+    </Key>
+    <Property Name="LKitItemID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="LKitID" Type="Int32" Nullable="false" />
+    <Property Name="TestID" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="TestType" Relationship="HISDBModel.FK_LKI_LKitID" FromRole="LabKitItem" ToRole="TestType" />
+  </EntityType>
+  <Association Name="FK_LKI_LKitID">
+    <End Type="HISDBModel.TestType" Role="TestType" Multiplicity="1" />
+    <End Type="HISDBModel.LabKitItem" Role="LabKitItem" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TestType">
+        <PropertyRef Name="TestID" />
+      </Principal>
+      <Dependent Role="LabKitItem">
+        <PropertyRef Name="LKitID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_LKI_TestID">
+    <End Type="HISDBModel.TestType" Role="TestType" Multiplicity="1" />
+    <End Type="HISDBModel.LabKitItem" Role="LabKitItem" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TestType">
+        <PropertyRef Name="TestID" />
+      </Principal>
+      <Dependent Role="LabKitItem">
+        <PropertyRef Name="TestID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

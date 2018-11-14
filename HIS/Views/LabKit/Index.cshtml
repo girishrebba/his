@@ -1,7 +1,13 @@
 ﻿@{
     ViewBag.Title = "Lab Kits";
 }
-
+<style type="text/css">
+    .lableDisplay {
+        padding-top: 8px;
+        color: #32CD32;
+        font-weight: bold;
+    }
+</style>
 <!-- Breadcrumb -->
 <ol class="breadcrumb breadcrumb-2">
     <li><a href="index.html"><i class="glyphicon-cog"></i>Admin</a></li>
@@ -11,15 +17,16 @@
 <div class="row">
     <div class="col-lg-8">
         <div class="panel panel-default">
-            <div class="panel-heading clearfix">
+            @*<div class="panel-heading clearfix">
                 <a class="btn btn-success" style="margin-bottom:10px" onclick="PopupLabKitForm('@Url.Action("AddLabKits","LabKit")')"><i class="fa fa-plus"></i> Add New</a>
-            </div>
+            </div>*@
             <div class="panel-body">
                 <div class="table-responsive">
                     <table id="labKitTable" class="table table-striped table-bordered" style="width:100%">
                         <thead>
                             <tr>
                                 <th>Kit Name</th>
+                                <th>Cost</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -41,8 +48,9 @@
                     "datatype": "json"
                 },
                 "columns": [
-                    { "data": "LKitName" },
-                    { "data":"LKitID", "render" : function (data) {
+                    { "data": "TestName" },
+                    { "data":"TestCost"},
+                    { "data":"TestID", "render" : function (data) {
                         return "<a class='btn btn-default btn-sm' onclick=PopupLabKitForm('@Url.Action("EditKitItems", "LabKit")/" + data + "')><i class='fa fa-pencil-alt his-fa-size'></i> Edit</a><a class='btn btn-primary btn-sm' style='margin-left:5px' title='View Only' onclick=ViewLabKitForm('@Url.Action("ViewKitItems", "LabKit")/" + data + "')><i class='fa fa-eye his-fa-size'></i></a>";
                     },
                         "orderable": false,
@@ -67,7 +75,7 @@
                     resizable: true,
                     modal:true,
                     title: 'Add Lab Kit',
-                    width: '55%',
+                    width: '65%',
                     close: function () {
                         Popup.dialog('destroy').remove();
                     },
@@ -90,7 +98,7 @@
                         resizable: true,
                         modal: true,
                         title: 'View Lab Kit',
-                        width: '55%',
+                        width: '65%',
                         close: function () {
                             Popup.dialog('destroy').remove();
                         },

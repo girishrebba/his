@@ -73,12 +73,14 @@ namespace HIS.Controllers
                          select new
                          {
                              cf.TestName,
-                             cf.TestCost
+                             cf.TestCost,
+                             cf.IsKit
                          }).FirstOrDefault();
                 if (v != null)
                 {
                     testType.TestName = v.TestName;
                     testType.TestCost = v.TestCost;
+                    testType.IsKit = v.IsKit;
                 }
                 return testType;
             }

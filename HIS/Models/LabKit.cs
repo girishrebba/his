@@ -7,13 +7,13 @@ namespace HIS
     {
     }
 
-    [MetadataType(typeof(LabKitMetaData))]
-    public class LabKitViewModel : LabKit
-    {
-        public int TestID { get; set; }
-        public string TestName { get; set; }
-        public string InputTest { get; set; }
-    }
+    //[MetadataType(typeof(LabKitMetaData))]
+    //public class LabKitViewModel : LabKit
+    //{
+    //    public int TestID { get; set; }
+    //    public string TestName { get; set; }
+    //    public string InputTest { get; set; }
+    //}
         public class LabKitMetaData
     {
         [Required(ErrorMessage = "Please enter Kit Name", AllowEmptyStrings = false)]

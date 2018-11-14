@@ -498,6 +498,7 @@
     <Property Name="TestID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="TestName" Type="nvarchar(max)" Nullable="false" />
     <Property Name="TestCost" Type="money" />
+    <Property Name="IsKit" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="UserPermission">
     <Key>
@@ -675,6 +676,18 @@
       </Principal>
       <Dependent Role="InPatientHistory">
         <PropertyRef Name="ENMRNO" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_LKI_LKitID">
+    <End Role="TestTypes" Type="Self.TestTypes" Multiplicity="1" />
+    <End Role="LabKitItems" Type="Self.LabKitItems" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TestTypes">
+        <PropertyRef Name="TestID" />
+      </Principal>
+      <Dependent Role="LabKitItems">
+        <PropertyRef Name="LKitID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -1177,6 +1190,10 @@
     <AssociationSet Name="FK_IPH_InPatients_ENMRNO" Association="Self.FK_IPH_InPatients_ENMRNO">
       <End Role="InPatients" EntitySet="InPatients" />
       <End Role="InPatientHistory" EntitySet="InPatientHistory" />
+    </AssociationSet>
+    <AssociationSet Name="FK_LKI_LKitID" Association="Self.FK_LKI_LKitID">
+      <End Role="TestTypes" EntitySet="TestTypes" />
+      <End Role="LabKitItems" EntitySet="LabKitItems" />
     </AssociationSet>
     <AssociationSet Name="FK_LKI_TestID" Association="Self.FK_LKI_TestID">
       <End Role="TestTypes" EntitySet="TestTypes" />

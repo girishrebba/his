@@ -25,6 +25,7 @@ namespace HIS
         public int TestID { get; set; }
         public string TestName { get; set; }
         public Nullable<decimal> TestCost { get; set; }
+        public bool IsKit { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PatientTest> PatientTests { get; set; }

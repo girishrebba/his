@@ -19,7 +19,6 @@ namespace HIS
         public List<Purpose> Purposes { get; set; }
         public string[] PurposeIds { get; set; }
         public List<PharmaKit> PharmaKits { get; set; }
-        public bool CanEditPharmaPack { get; set; }
         public string GetFullName()
         {
             return string.Format("{0} {1} {2}", 
