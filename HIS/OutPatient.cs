@@ -31,7 +31,7 @@ namespace HIS
         public string Profession { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
-        public int BloodGroupID { get; set; }
+        public Nullable<int> BloodGroupID { get; set; }
         public Nullable<int> MaritalStatus { get; set; }
         public string ReferredBy { get; set; }
         public string RefPhone { get; set; }

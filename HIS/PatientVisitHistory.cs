@@ -21,9 +21,16 @@ namespace HIS
         public decimal Fee { get; set; }
         public Nullable<decimal> Discount { get; set; }
         public int DoctorID { get; set; }
+        public string Purpose { get; set; }
+        public Nullable<int> HeartBeat { get; set; }
+        public string BMI { get; set; }
+        public Nullable<decimal> Weight { get; set; }
+        public string BP { get; set; }
+        public Nullable<decimal> Temperature { get; set; }
+        public Nullable<int> NurseID { get; set; }
     
         public virtual ConsultationType ConsultationType { get; set; }
-        public virtual OutPatient OutPatient { get; set; }
         public virtual User User { get; set; }
+        public virtual OutPatient OutPatient { get; set; }
     }
 }

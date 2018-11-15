@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="2bf858b1757c4db693e7cfcb81ba70bd" Name="Diagram1" ZoomLevel="89">
+      <Diagram DiagramId="2bf858b1757c4db693e7cfcb81ba70bd" Name="Diagram1" ZoomLevel="51">
         <EntityTypeShape EntityType="HISDBModel.Bed" Width="1.5" PointX="13.5" PointY="13" IsExpanded="true" />
         <EntityTypeShape EntityType="HISDBModel.BedType" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="HISDBModel.BloodGroup" Width="1.5" PointX="6" PointY="11.375" IsExpanded="true" />
@@ -16,7 +16,6 @@
         <EntityTypeShape EntityType="HISDBModel.IntakeFrequency" Width="1.5" PointX="5.25" PointY="42.125" IsExpanded="true" />
         <EntityTypeShape EntityType="HISDBModel.MedicineInventory" Width="1.5" PointX="7.5" PointY="49.875" IsExpanded="true" />
         <EntityTypeShape EntityType="HISDBModel.MedicineMaster" Width="1.5" PointX="5.25" PointY="49.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="HISDBModel.OutPatient" Width="1.5" PointX="5.25" PointY="20.25" IsExpanded="true" />
         <EntityTypeShape EntityType="HISDBModel.PatientPrescription" Width="1.5" PointX="7.5" PointY="45.125" IsExpanded="true" />
         <EntityTypeShape EntityType="HISDBModel.PatientVisitHistory" Width="1.5" PointX="7.5" PointY="23.5" IsExpanded="true" />
         <EntityTypeShape EntityType="HISDBModel.Permission" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
@@ -30,7 +29,6 @@
         <EntityTypeShape EntityType="HISDBModel.User" Width="1.5" PointX="3" PointY="15.5" IsExpanded="true" />
         <EntityTypeShape EntityType="HISDBModel.UserType" Width="1.5" PointX="0.75" PointY="14.5" IsExpanded="true" />
         <AssociationConnector Association="HISDBModel.FK_Beds_RoomNo" ManuallyRouted="false" />
-        <AssociationConnector Association="HISDBModel.FK_OutPatients_BloodGroup" ManuallyRouted="false" />
         <AssociationConnector Association="HISDBModel.FK_BrandCategories_BrandID" ManuallyRouted="false" />
         <AssociationConnector Association="HISDBModel.FK_MM_CategoryID" ManuallyRouted="false" />
         <AssociationConnector Association="HISDBModel.FK_MM_BrandID" ManuallyRouted="false" />
@@ -42,8 +40,6 @@
         <AssociationConnector Association="HISDBModel.FK_MI_MedicineID" ManuallyRouted="false" />
         <AssociationConnector Association="HISDBModel.FK_PO_MedicineID" ManuallyRouted="false" />
         <AssociationConnector Association="HISDBModel.FK_PP_Medicine" ManuallyRouted="false" />
-        <AssociationConnector Association="HISDBModel.FK_OutPatients_Doctor" ManuallyRouted="false" />
-        <AssociationConnector Association="HISDBModel.FK_PVH_OutPatient_ENMRNO" ManuallyRouted="false" />
         <AssociationConnector Association="HISDBModel.FK_PP_PMID" ManuallyRouted="false" />
         <AssociationConnector Association="HISDBModel.FK_PatientVisitHistory_Doctor" ManuallyRouted="false" />
         <AssociationConnector Association="HISDBModel.FK_PM_Doctor" ManuallyRouted="false" />
@@ -94,6 +90,10 @@
         <EntityTypeShape EntityType="HISDBModel.LabKitItem" Width="1.5" PointX="11.25" PointY="20.625" />
         <AssociationConnector Association="HISDBModel.FK_LKI_LKitID" />
         <AssociationConnector Association="HISDBModel.FK_LKI_TestID" />
+        <EntityTypeShape EntityType="HISDBModel.OutPatient" Width="1.5" PointX="16.25" PointY="2.25" />
+        <AssociationConnector Association="HISDBModel.FK_OutPatients_BloodGroup" />
+        <AssociationConnector Association="HISDBModel.FK_OutPatients_Doctor" />
+        <AssociationConnector Association="HISDBModel.FK_PVH_OutPatient_ENMRNO" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
