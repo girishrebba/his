@@ -34,6 +34,13 @@ namespace HIS.Controllers
             using (HISDBEntities hs = new HISDBEntities())
             {
                 var data = hs.ConsutantPayReport(doctors, stdt, enddt).ToList();
+                if(data != null && data.Count() > 0)
+                {
+                    foreach(var res in data)
+                    {
+                        res.DateDisplay = HtmlHelpers.HtmlHelpers.DateFormat(res.Consultationdate);
+                    }
+                }
                 return Json(new { data = data }, JsonRequestBehavior.AllowGet);
             }
         }

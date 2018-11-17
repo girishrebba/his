@@ -399,6 +399,7 @@ namespace HIS.Controllers
             dischargeModel.ENMRNO = enmrNo;
             dischargeModel.RoomChargeTable = HtmlHelpers.HtmlHelpers.GetRoomBilling(enmrNo);
             dischargeModel.InsuranceScantionedAmount = HtmlHelpers.HtmlHelpers.InsuranceScantionedAmount(enmrNo);
+            dischargeModel.PharmaPackageAmount = HtmlHelpers.HtmlHelpers.PharmaPackAmount(enmrNo);
             dischargeModel.FeeCollectionTable = GetPaymentHistory(enmrNo);
             
             dischargeModel.CanBeDischarge = false;
@@ -408,13 +409,13 @@ namespace HIS.Controllers
                 ViewBag.RoomFee = (dischargeModel.RoomChargeTable.OccupiedDays * dischargeModel.RoomChargeTable.CostPerDay);
             }
             else { ViewBag.RoomFee = 0; }
-            if(ViewBag.TotalFee + dischargeModel.InsuranceScantionedAmount < ViewBag.RoomFee)
+            if(ViewBag.TotalFee + dischargeModel.InsuranceScantionedAmount < ViewBag.RoomFee + dischargeModel.PharmaPackageAmount)
             {
-                ViewBag.PayAmount = ViewBag.RoomFee - ViewBag.TotalFee - dischargeModel.InsuranceScantionedAmount;
+                ViewBag.PayAmount = ViewBag.RoomFee + dischargeModel.PharmaPackageAmount - ViewBag.TotalFee - dischargeModel.InsuranceScantionedAmount;
                 ViewBag.Refund = 0;
                     }
             else { ViewBag.PayAmount = 0;
-                ViewBag.Refund = ViewBag.TotalFee - ViewBag.RoomFee;
+                ViewBag.Refund = (ViewBag.TotalFee + dischargeModel.InsuranceScantionedAmount) - (ViewBag.RoomFee + dischargeModel.PharmaPackageAmount);
             }
 
             if (ViewBag.TotalFee == ViewBag.RoomFee)

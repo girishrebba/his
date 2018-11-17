@@ -1041,6 +1041,9 @@
     <Compile Include="BedReport_Result.cs">
       <DependentUpon>HISDBModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="BedReport_Result1.cs">
+      <DependentUpon>HISDBModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="BedType.cs">
       <DependentUpon>HISDBModel.tt</DependentUpon>
     </Compile>
@@ -1065,6 +1068,9 @@
     <Compile Include="ConsultationType.cs">
       <DependentUpon>HISDBModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="ConsutantPayReport_Result.cs">
+      <DependentUpon>HISDBModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BedrptController.cs" />
     <Compile Include="Controllers\BedsController.cs" />
@@ -1073,6 +1079,7 @@
     <Compile Include="Controllers\BrandCategoryController.cs" />
     <Compile Include="Controllers\BrandController.cs" />
     <Compile Include="Controllers\ConsultantController.cs" />
+    <Compile Include="Controllers\ConsultantpayrptController.cs" />
     <Compile Include="Controllers\ConsultantVisitsController.cs" />
     <Compile Include="Controllers\ConsultationFeeController.cs" />
     <Compile Include="Controllers\ConsultTypeController.cs" />
@@ -1137,6 +1144,9 @@
     <Compile Include="InventoryReport_Result.cs">
       <DependentUpon>HISDBModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="IpRevenueReport1_Result.cs">
+      <DependentUpon>HISDBModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="IpRevenueReport_Result.cs">
       <DependentUpon>HISDBModel.tt</DependentUpon>
     </Compile>
@@ -1166,6 +1176,7 @@
     <Compile Include="Models\ConsultantVisits.cs" />
     <Compile Include="Models\ConsultationFee.cs" />
     <Compile Include="Models\ConsultationType.cs" />
+    <Compile Include="Models\ConsutantPayReport_Result.cs" />
     <Compile Include="Models\DischargeModel.cs" />
     <Compile Include="Models\FeeCollection.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -1520,6 +1531,8 @@
     <Content Include="Views\ConsultantVisits\AddModify.cshtml" />
     <Content Include="Views\IpRevenuerpt\Index.cshtml" />
     <Content Include="Views\Bedrpt\Index.cshtml" />
+    <Content Include="Views\Consultantpayrpt\Index.cshtml" />
+    <Content Include="Views\PurchaseOrder\PlaceOrder.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

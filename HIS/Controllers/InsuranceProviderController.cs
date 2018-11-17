@@ -24,7 +24,7 @@ namespace HIS.Controllers
             using (HISDBEntities hs = new HISDBEntities())
             {
                 var insProviders = (from ip in hs.InsuranceProviders
-                                   select new { ip.ProviderID, ip.ProviderName }).ToList();
+                                   select new { ip.ProviderID, ip.ProviderName,ip.Company }).ToList();
 
                 return Json(new { data = insProviders }, JsonRequestBehavior.AllowGet);
             }

@@ -122,7 +122,7 @@
     <Property Name="Profession" Type="varchar" MaxLength="50" />
     <Property Name="Email" Type="varchar" MaxLength="50" />
     <Property Name="Phone" Type="varchar" MaxLength="10" />
-    <Property Name="BloodGroupID" Type="int" Nullable="false" />
+    <Property Name="BloodGroupID" Type="int" />
     <Property Name="MaritalStatus" Type="int" />
     <Property Name="ReferredBy" Type="varchar" MaxLength="50" />
     <Property Name="RefPhone" Type="varchar" MaxLength="10" />
@@ -138,9 +138,9 @@
     <Property Name="PatientHistory" Type="varchar(max)" />
     <Property Name="Height" Type="decimal" Precision="6" Scale="2" />
     <Property Name="Weight" Type="decimal" Precision="6" Scale="2" />
-    <Property Name="BMI" Type="decimal" Precision="10" Scale="4" />
+    <Property Name="BMI" Type="nvarchar" MaxLength="50" />
     <Property Name="HeartBeat" Type="int" />
-    <Property Name="BP" Type="decimal" Precision="10" Scale="4" />
+    <Property Name="BP" Type="varchar" MaxLength="20" />
     <Property Name="Temperature" Type="decimal" Precision="10" Scale="4" />
     <Property Name="OthContact" Type="varchar" MaxLength="10" />
     <Property Name="PrevENMR" Type="varchar" MaxLength="30" />
@@ -219,8 +219,8 @@
     <Property Name="MMID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="BrandID" Type="int" Nullable="false" />
     <Property Name="BrandCategoryID" Type="int" Nullable="false" />
-    <Property Name="MedicineName" Type="varchar" MaxLength="100" Nullable="false" />
-    <Property Name="MedDose" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="MedicineName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="MedDose" Type="nvarchar(max)" Nullable="false" />
     <Property Name="TriggerQty" Type="int" />
   </EntityType>
   <EntityType Name="OrderMaster">
@@ -256,7 +256,7 @@
     <Property Name="Profession" Type="varchar" MaxLength="50" />
     <Property Name="Email" Type="varchar" MaxLength="50" />
     <Property Name="Phone" Type="varchar" MaxLength="10" />
-    <Property Name="BloodGroupID" Type="int" Nullable="false" />
+    <Property Name="BloodGroupID" Type="int" />
     <Property Name="MaritalStatus" Type="int" />
     <Property Name="ReferredBy" Type="varchar" MaxLength="50" />
     <Property Name="RefPhone" Type="varchar" MaxLength="10" />
@@ -266,16 +266,16 @@
     <Property Name="State" Type="varchar" MaxLength="50" />
     <Property Name="PinCode" Type="varchar" MaxLength="6" />
     <Property Name="Enrolled" Type="datetime" />
-    <Property Name="Purpose" Type="varchar" MaxLength="100" />
+    <Property Name="Purpose" Type="varchar" MaxLength="500" />
     <Property Name="DoctorID" Type="int" Nullable="false" />
     <Property Name="Mask" Type="bit" />
     <Property Name="PatientHistory" Type="varchar(max)" />
     <Property Name="Status" Type="bit" />
     <Property Name="Height" Type="decimal" Precision="6" Scale="2" />
     <Property Name="Weight" Type="decimal" Precision="6" Scale="2" />
-    <Property Name="BMI" Type="decimal" Precision="10" Scale="4" />
+    <Property Name="BMI" Type="nvarchar" MaxLength="50" />
     <Property Name="HeartBeat" Type="int" />
-    <Property Name="BP" Type="decimal" Precision="10" Scale="4" />
+    <Property Name="BP" Type="varchar" MaxLength="20" />
     <Property Name="Temperature" Type="decimal" Precision="10" Scale="4" />
     <Property Name="OthContact" Type="varchar" MaxLength="10" />
     <Property Name="PrevENMR" Type="varchar" MaxLength="30" />
@@ -360,6 +360,13 @@
     <Property Name="Fee" Type="money" Nullable="false" />
     <Property Name="Discount" Type="decimal" Precision="5" Scale="2" />
     <Property Name="DoctorID" Type="int" Nullable="false" />
+    <Property Name="Purpose" Type="nvarchar" MaxLength="100" />
+    <Property Name="HeartBeat" Type="int" />
+    <Property Name="BMI" Type="nvarchar" MaxLength="50" />
+    <Property Name="Weight" Type="decimal" Precision="6" Scale="2" />
+    <Property Name="BP" Type="nvarchar" MaxLength="20" />
+    <Property Name="Temperature" Type="decimal" Precision="10" Scale="2" />
+    <Property Name="NurseID" Type="int" />
   </EntityType>
   <EntityType Name="PaymentModes">
     <Key>
@@ -430,7 +437,7 @@
       <PropertyRef Name="PurposeID" />
     </Key>
     <Property Name="PurposeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="PurposeName" Type="varchar" MaxLength="10" Nullable="false" />
+    <Property Name="PurposeName" Type="varchar" MaxLength="100" Nullable="false" />
   </EntityType>
   <EntityType Name="Rooms">
     <Key>
@@ -632,7 +639,7 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_InPatients_BloodGroup">
-    <End Role="BloodGroup" Type="Self.BloodGroup" Multiplicity="1" />
+    <End Role="BloodGroup" Type="Self.BloodGroup" Multiplicity="0..1" />
     <End Role="InPatients" Type="Self.InPatients" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="BloodGroup">
@@ -776,7 +783,7 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_OutPatients_BloodGroup">
-    <End Role="BloodGroup" Type="Self.BloodGroup" Multiplicity="1" />
+    <End Role="BloodGroup" Type="Self.BloodGroup" Multiplicity="0..1" />
     <End Role="OutPatients" Type="Self.OutPatients" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="BloodGroup">
@@ -1040,6 +1047,11 @@
     </ReferentialConstraint>
   </Association>
   <Function Name="BedReport" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="ConsutantPayReport" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Doctors" Type="varchar(max)" Mode="In" />
+    <Parameter Name="Start_Time" Type="datetime" Mode="In" />
+    <Parameter Name="End_Time" Type="datetime" Mode="In" />
+  </Function>
   <Function Name="ConvertOutPatientToInPatient" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="ENMRNO" Type="varchar" Mode="In" />
     <Parameter Name="EstAmount" Type="money" Mode="In" />
@@ -1091,6 +1103,11 @@
     </ReturnType>
   </Function>
   <Function Name="InventoryReport" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="IpRevenueReport" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Doctors" Type="varchar(max)" Mode="In" />
+    <Parameter Name="Start_Time" Type="datetime" Mode="In" />
+    <Parameter Name="End_Time" Type="datetime" Mode="In" />
+  </Function>
   <Function Name="RevenueReport" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="Doctors" Type="varchar(max)" Mode="In" />
     <Parameter Name="Start_Time" Type="datetime" Mode="In" />

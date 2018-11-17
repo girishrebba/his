@@ -300,7 +300,12 @@ namespace HIS.Controllers
                     ENMRNO = op.ENMRNO,
                     ConsultTypeID = 1,
                     Fee = fee,
-                    DateOfVisit = op.Enrolled.Value
+                    DateOfVisit = op.Enrolled.Value,
+                    Weight = op.Weight,
+                    Temperature = op.Temperature,
+                    BP = op.BP,
+                    Purpose = op.Purpose,
+                    BMI = op.BMI
                 };
 
                 db.PatientVisitHistories.Add(pvh);
@@ -355,6 +360,10 @@ namespace HIS.Controllers
         {
             using (HISDBEntities hs = new HISDBEntities())
             {
+                if (pvh != null && pvh.PurposeIds != null)
+                {
+                    pvh.Purpose = string.Join(",", pvh.PurposeIds);
+                }
                 hs.PatientVisitHistories.Add(pvh);
                 hs.SaveChanges();
                 return Json(new { success = true, message = string.Format("Consultation created Successfully for ENMRNO: {0}", pvh.ENMRNO) }, JsonRequestBehavior.AllowGet);

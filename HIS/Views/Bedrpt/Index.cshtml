@@ -1,12 +1,8 @@
-﻿
-
-
-@{
-    ViewBag.Title = "Invetory Report";
+﻿@{
+    ViewBag.Title = "Bed Report";
 }
 
 <script src="~/Scripts/jquery-1.12.4.min.js"></script>
-
 <div class="form-horizontal">
     <table>
         <tr>
@@ -36,7 +32,6 @@
                                     <th>Bed Type</th>
                                     <th>Room</th>
                                     <th>Room Type</th>
-                                    <th>Amount</th>
                                     <th>Status</th>
                                 </tr>
                             </thead>
@@ -53,8 +48,6 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
-
-
         $('#btnPrint').click(function () {
             $('#dynamicTable').printThis({
                 header: '<img src="http://localhost:50415/light/images/hms-logo_login.png" style="width:420px;" alt="Mouldifi" title="Sravanthi Hospitals">',
@@ -78,15 +71,15 @@
                         { "data": "bedtype" },
                         { "data": "roomname" },
                         { "data": "roomtype" },
-                        { "data": "bedstatus" },
+                        { "data": "bedstatus" }
                     @*{
                     "data": "ConsultantVisitId", "render": function (data) {
                         return "<a class='btn btn-default btn-sm' onclick=PopupForm('@Url.Action("AddModify", "ConsultantVisits")/" + data + "')><i class='fa fa-user-edit'></i> Edit</a>";
-                    }, *@
+                    },
                         {
                             "orderable": false,
                             "searchable": false
-                        }
+                        } *@
                     ],
                     "language": {
                         "emptyTable": "No data found, Please click on <b>Add New</b> Button"

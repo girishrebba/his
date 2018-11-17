@@ -141,6 +141,7 @@ namespace HIS.Controllers
                                           where x.TestID == kitID
                                           select x).First();
                         type.TestCost = kitItems[0].LKitCost;
+                        db.Entry(type).State = EntityState.Modified;
                         db.SaveChanges();
                         return Json(new { success = true, message = "Lab Package Updated Successfully" }, JsonRequestBehavior.AllowGet);
                     }

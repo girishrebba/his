@@ -33,7 +33,7 @@ namespace HIS
         public string Profession { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
-        public int BloodGroupID { get; set; }
+        public Nullable<int> BloodGroupID { get; set; }
         public Nullable<int> MaritalStatus { get; set; }
         public string ReferredBy { get; set; }
         public string RefPhone { get; set; }
@@ -49,9 +49,9 @@ namespace HIS
         public string PatientHistory { get; set; }
         public Nullable<decimal> Height { get; set; }
         public Nullable<decimal> Weight { get; set; }
-        public Nullable<decimal> BMI { get; set; }
+        public string BMI { get; set; }
         public Nullable<int> HeartBeat { get; set; }
-        public Nullable<decimal> BP { get; set; }
+        public string BP { get; set; }
         public Nullable<decimal> Temperature { get; set; }
         public string OthContact { get; set; }
         public string PrevENMR { get; set; }
@@ -73,8 +73,8 @@ namespace HIS
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<InPatientHistory> InPatientHistories { get; set; }
         public virtual User User { get; set; }
+        public virtual PharmaKit PharmaKit { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PatientRoomAllocation> PatientRoomAllocations { get; set; }
-        public virtual PharmaKit PharmaKit { get; set; }
     }
 }

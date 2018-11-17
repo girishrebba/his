@@ -48,9 +48,9 @@ namespace HIS
         public Nullable<bool> Status { get; set; }
         public Nullable<decimal> Height { get; set; }
         public Nullable<decimal> Weight { get; set; }
-        public Nullable<decimal> BMI { get; set; }
+        public string BMI { get; set; }
         public Nullable<int> HeartBeat { get; set; }
-        public Nullable<decimal> BP { get; set; }
+        public string BP { get; set; }
         public Nullable<decimal> Temperature { get; set; }
         public string OthContact { get; set; }
         public string PrevENMR { get; set; }

@@ -163,6 +163,10 @@
     {
                     <li><a href="@Url.Action("Index", "BrandCategory")"><span class="title">Brand Categories</span></a></li>
 }
+                        @if (ViewContext.Controller.HasPermission("Beds-index"))
+    {
+                    <li><a href="@Url.Action("Index", "Beds")"><span class="title">Beds</span></a></li>
+}
                         @if (ViewContext.Controller.HasPermission("BedType-index"))
     {
                     <li><a href="@Url.Action("Index", "BedType")"><span class="title">Bed Type</span></a></li>

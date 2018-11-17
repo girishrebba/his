@@ -29,6 +29,7 @@
                                     <th>Fee</th>
                                     <th>Discount</th>
                                     <th>Expiry Date</th>
+                                    <th>Purpose</th>
                                 </tr>
                             </thead>
                         </table>
@@ -72,6 +73,42 @@
                             <div class="col-sm-4">
                                 @Html.EditorFor(model => model.Discount, new { htmlAttributes = new { Value = Model.Discount > 0 ? Model.Discount.ToString() : string.Empty, @class = "form-control" } })
                             </div>
+                            @Html.LabelFor(model => model.NurseID, "Nurse:", htmlAttributes: new { @class = "control-label col-sm-2" })
+                            <div class="col-sm-4">
+                                @Html.DropDownListFor(model => model.NurseID, HtmlHelpers.GetNurses().Select(x => new SelectListItem { Text = x.NameDisplay, Value = x.UserID.ToString() }), "--Select--", new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.HeartBeat, "Heart Beat:", new { @class = "control-label col-sm-2" })
+                            <div class="col-sm-4">
+                                @Html.EditorFor(model => model.HeartBeat, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                            @Html.LabelFor(model => model.BP, "BP:", new { @class = "control-label col-sm-2" })
+                            <div class="col-sm-4">
+                                @Html.EditorFor(model => model.BP, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Temperature, "Temperature:", new { @class = "control-label col-sm-2" })
+                            <div class="col-sm-4">
+                                @Html.EditorFor(model => model.Temperature, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                            @Html.LabelFor(model => model.Weight, "Weight:", new { @class = "control-label col-sm-2" })
+                            <div class="col-sm-4">
+                                @Html.EditorFor(model => model.Weight, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.BMI, "BMI:", new { @class = "control-label col-sm-2" })
+                            <div class="col-sm-4">
+                                @Html.EditorFor(model => model.BMI, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Purpose, "Purpose:", new { @class = "control-label col-sm-2" })
+                            <div class="col-sm-10">
+                                @Html.DropDownListFor(model => model.PurposeIds, HtmlHelpers.GetPurposes().Select(x => new SelectListItem { Text = x.PurposeName, Value = x.PurposeID.ToString() }), new { @placeholder = "Select", @class = "form-control chosen-group-select", @multiple = "true" })
+                            </div>
                         </div>
                         <div class="form-group">
                             <div class="col-md-3 col-md-offset-5">
@@ -80,7 +117,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                    </div>
             </div>
         </div>
 
@@ -89,6 +126,9 @@
 
 <script type="text/javascript">
     var myJsVariable = @Html.Raw(Json.Encode(Model.ENMRNO));
+    $('#PurposeIds').trigger('chosen:updated');
+    $('#PurposeIds').chosen();
+    $('#PurposeIds_chosen').css({ "width": "450px" });
     $("#outPatientHistoryTable").DataTable({
         "ajax": {
             "url": '/OutPatient/GetPatientVisits',
@@ -102,7 +142,13 @@
             { "data": "DoctorName" },
             { "data": "Fee" },
             { "data": "Discount" },
-            { "data": "ValidDate" }
+            { "data": "ValidDate" },
+            { "data": "Purpose" },
+            //{
+            //    "data": null, "render": function (data) {
+            //        return "<span title=" + data.Purpose + ">...</span>";
+            //    }
+            //}
         ],
         "language": {
             "emptyTable": "No Visits found"

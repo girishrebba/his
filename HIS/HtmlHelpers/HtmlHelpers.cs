@@ -169,14 +169,24 @@ namespace HIS.HtmlHelpers
                    .Select(grp => grp.First())
                    .ToList();
 
-                foreach (var b in bedsList)
+                if (bedsList.Count() > 0)
                 {
-                    var room = hs.Rooms.Where(r => r.RoomNo == b.RoomNo).FirstOrDefault();
-                    roomsList.Add(new Room
+                    foreach (var b in bedsList)
                     {
-                        RoomNo = room.RoomNo,
-                        RoomName = room.RoomName
-                    });
+                        var room = hs.Rooms.Where(r => r.RoomNo == b.RoomNo).FirstOrDefault();
+                        roomsList.Add(new Room
+                        {
+                            RoomNo = room.RoomNo,
+                            RoomName = room.RoomName
+                        });
+                    }
+                }
+                else
+                {
+                    roomsList = (from u in hs.Rooms
+                                       select new { u })
+                              .OrderBy(b => b.u.RoomNo).AsEnumerable()
+                              .Select(x => new Room { RoomNo = x.u.RoomNo, RoomName = x.u.RoomName }).ToList();
                 }
             }
             return roomsList;
@@ -196,7 +206,20 @@ public static List<User> GetDoctors()
                 return doctors;
             }
         }
-
+        public static List<User> GetNurses()
+        {
+            string[] fliter = new string[] { "Nurse"};
+            using (HISDBEntities dc = new HISDBEntities())
+            {
+                var doctors = (from u in dc.Users
+                               join ut in dc.UserTypes on u.UserTypeID equals ut.UserTypeID
+                               where ut.UserTypeName.Contains("Nurse") 
+                               select new { u })
+                               .OrderBy(b => b.u.UserName).AsEnumerable()
+                               .Select(x => new User { UserID = x.u.UserID, NameDisplay = GetFullName(x.u.FirstName, x.u.MiddleName, x.u.LastName) }).ToList();
+                return doctors;
+            }
+        }
         //Fetch Blood Groups from database
         public static List<BloodGroup> GetBloodGroups()
         {
@@ -434,13 +457,15 @@ public static List<User> GetDoctors()
                                          DoctorID = x.pv.DoctorID,
                                          ConsultTypeID = x.pv.ConsultTypeID,
                                          DateOfVisit = x.pv.DateOfVisit,
-                                         DoctorName = GetFullName(x.u.FirstName, x.u.MiddleName, x.u.LastName)  
+                                         DoctorName = GetFullName(x.u.FirstName, x.u.MiddleName, x.u.LastName),
+                                         Purpose = x.pv.Purpose
                                      }).ToList();
                 }
 
                 // Bind the Valid till date
                 if (patientVisits != null && patientVisits.Count() > 0)
                 {
+                    var purposeList = GetPurposes();
                     foreach (PatientVisitHistory pv in patientVisits)
                     {
                         var cfee = hs.ConsultationFees.Where(cf => cf.DoctorID == pv.DoctorID && cf.ConsultTypeID == pv.ConsultTypeID).FirstOrDefault();
@@ -453,13 +478,30 @@ public static List<User> GetDoctors()
                         {
                             pv.ValidDate = pv.DOVDisplay;
                         }
-                        
-
+                        pv.Purpose = GetPurpose(pv.Purpose, purposeList);
                     }
                 }
 
                 return patientVisits;
             }
+        }
+
+        private static string GetPurpose(string purposes, List<Purpose> purposeList)
+        {
+
+            if (!string.IsNullOrEmpty(purposes))
+            {
+                List<string> purposeNames = new List<string>();
+
+                foreach (var id in purposes.Split(',').ToArray())
+                {
+                    purposeNames.Add(purposeList.Where(p => p.PurposeID == Convert.ToInt32
+                    (id)).FirstOrDefault().PurposeName);
+
+                }
+                return string.Join(",", purposeNames);
+            }
+            else return string.Empty;
         }
 
         private static int ValidDays(int? days)
@@ -747,6 +789,19 @@ public static List<User> GetDoctors()
             {
                 var flag = db.InPatients.Where(ip => ip.ENMRNO == enmrNo).FirstOrDefault().InsuranceRecievedAmt;
                 return flag != null ? flag.Value : 0;
+            }
+        }
+
+        public static decimal PharmaPackAmount(string enmrNo)
+        {
+            using (var db = new HISDBEntities())
+            {
+                var flag = db.InPatients.Where(ip => ip.ENMRNO == enmrNo).FirstOrDefault().PkitID;
+                if (flag != null && flag >= 1)
+                {
+                    return db.PharmaKits.Where(pk => pk.PKitID == flag).FirstOrDefault().PKitCost.Value;
+                }
+                else return 0;
             }
         }
 

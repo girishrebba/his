@@ -13,6 +13,7 @@ namespace HIS
         public string ConsultType { get; set; }
         public string DoctorName { get; set; }
         public string ValidDate { get; set; }
+        public string[] PurposeIds { get; set; }
     }
 
     public class PatientVisitHistoryMetaData

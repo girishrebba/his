@@ -38,7 +38,6 @@ namespace HIS
         public virtual DbSet<IntakeFrequency> IntakeFrequencies { get; set; }
         public virtual DbSet<MedicineInventory> MedicineInventories { get; set; }
         public virtual DbSet<MedicineMaster> MedicineMasters { get; set; }
-        public virtual DbSet<OutPatient> OutPatients { get; set; }
         public virtual DbSet<PatientPrescription> PatientPrescriptions { get; set; }
         public virtual DbSet<PatientVisitHistory> PatientVisitHistories { get; set; }
         public virtual DbSet<Permission> Permissions { get; set; }
@@ -68,11 +67,12 @@ namespace HIS
         public virtual DbSet<PatientPurpose> PatientPurposes { get; set; }
         public virtual DbSet<PharmaKitItem> PharmaKitItems { get; set; }
         public virtual DbSet<PharmaKit> PharmaKits { get; set; }
-        public virtual DbSet<Purpose> Purposes { get; set; }
         public virtual DbSet<Scan> Scans { get; set; }
-        public virtual DbSet<InPatient> InPatients { get; set; }
         public virtual DbSet<ConsultantVisit> ConsultantVisits { get; set; }
         public virtual DbSet<LabKitItem> LabKitItems { get; set; }
+        public virtual DbSet<InPatient> InPatients { get; set; }
+        public virtual DbSet<OutPatient> OutPatients { get; set; }
+        public virtual DbSet<Purpose> Purposes { get; set; }
     
         public virtual int ConvertOutPatientToInPatient(string eNMRNO, Nullable<decimal> estAmount, Nullable<decimal> advAmount)
         {
@@ -165,15 +165,6 @@ namespace HIS
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<InventoryReport_Result>("InventoryReport");
         }
     
-        public virtual int CreateMasterOrder(string orderNo, ObjectParameter oMID)
-        {
-            var orderNoParameter = orderNo != null ?
-                new ObjectParameter("OrderNo", orderNo) :
-                new ObjectParameter("OrderNo", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("CreateMasterOrder", orderNoParameter, oMID);
-        }
-    
         public virtual int CreateMasterScanTest(string eNMRNO, Nullable<int> doctorID, Nullable<int> visitID, Nullable<bool> iSIP, ObjectParameter sTMID)
         {
             var eNMRNOParameter = eNMRNO != null ?
@@ -195,15 +186,6 @@ namespace HIS
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("CreateMasterScanTest", eNMRNOParameter, doctorIDParameter, visitIDParameter, iSIPParameter, sTMID);
         }
     
-        public virtual int CreateMasterOrder1(string orderNo, ObjectParameter oMID)
-        {
-            var orderNoParameter = orderNo != null ?
-                new ObjectParameter("OrderNo", orderNo) :
-                new ObjectParameter("OrderNo", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("CreateMasterOrder1", orderNoParameter, oMID);
-        }
-    
         public virtual int CreateMasterLabKit(string lKitName, Nullable<decimal> lKitCost, ObjectParameter lKitID)
         {
             var lKitNameParameter = lKitName != null ?
@@ -217,15 +199,6 @@ namespace HIS
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("CreateMasterLabKit", lKitNameParameter, lKitCostParameter, lKitID);
         }
     
-        public virtual int CreateMasterOrder2(string orderNo, ObjectParameter oMID)
-        {
-            var orderNoParameter = orderNo != null ?
-                new ObjectParameter("OrderNo", orderNo) :
-                new ObjectParameter("OrderNo", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("CreateMasterOrder2", orderNoParameter, oMID);
-        }
-    
         public virtual int CreateMasterPharmaKit(string pKitName, Nullable<decimal> pKitCost, ObjectParameter pKitID)
         {
             var pKitNameParameter = pKitName != null ?
@@ -237,11 +210,6 @@ namespace HIS
                 new ObjectParameter("PKitCost", typeof(decimal));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("CreateMasterPharmaKit", pKitNameParameter, pKitCostParameter, pKitID);
-        }
-    
-        public virtual ObjectResult<BedReport_Result> BedReport()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<BedReport_Result>("BedReport");
         }
     
         public virtual ObjectResult<IpRevenueReport_Result> IpRevenueReport(string doctors, Nullable<System.DateTime> start_Time, Nullable<System.DateTime> end_Time)
@@ -278,13 +246,52 @@ namespace HIS
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RevenueReport1_Result>("RevenueReport1", doctorsParameter, start_TimeParameter, end_TimeParameter);
         }
     
-        public virtual int CreateMasterOrder3(string orderNo, ObjectParameter oMID)
+        public virtual ObjectResult<ConsutantPayReport_Result> ConsutantPayReport(string doctors, Nullable<System.DateTime> start_Time, Nullable<System.DateTime> end_Time)
+        {
+            var doctorsParameter = doctors != null ?
+                new ObjectParameter("Doctors", doctors) :
+                new ObjectParameter("Doctors", typeof(string));
+    
+            var start_TimeParameter = start_Time.HasValue ?
+                new ObjectParameter("Start_Time", start_Time) :
+                new ObjectParameter("Start_Time", typeof(System.DateTime));
+    
+            var end_TimeParameter = end_Time.HasValue ?
+                new ObjectParameter("End_Time", end_Time) :
+                new ObjectParameter("End_Time", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ConsutantPayReport_Result>("ConsutantPayReport", doctorsParameter, start_TimeParameter, end_TimeParameter);
+        }
+    
+        public virtual ObjectResult<IpRevenueReport1_Result> IpRevenueReport1(string doctors, Nullable<System.DateTime> start_Time, Nullable<System.DateTime> end_Time)
+        {
+            var doctorsParameter = doctors != null ?
+                new ObjectParameter("Doctors", doctors) :
+                new ObjectParameter("Doctors", typeof(string));
+    
+            var start_TimeParameter = start_Time.HasValue ?
+                new ObjectParameter("Start_Time", start_Time) :
+                new ObjectParameter("Start_Time", typeof(System.DateTime));
+    
+            var end_TimeParameter = end_Time.HasValue ?
+                new ObjectParameter("End_Time", end_Time) :
+                new ObjectParameter("End_Time", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<IpRevenueReport1_Result>("IpRevenueReport1", doctorsParameter, start_TimeParameter, end_TimeParameter);
+        }
+    
+        public virtual int CreateMasterOrder(string orderNo, ObjectParameter oMID)
         {
             var orderNoParameter = orderNo != null ?
                 new ObjectParameter("OrderNo", orderNo) :
                 new ObjectParameter("OrderNo", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("CreateMasterOrder3", orderNoParameter, oMID);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("CreateMasterOrder", orderNoParameter, oMID);
+        }
+    
+        public virtual ObjectResult<BedReport_Result> BedReport()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<BedReport_Result>("BedReport");
         }
     }
 }
