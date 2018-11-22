@@ -263,6 +263,7 @@
     <Content Include="light\images\alex-dolgove.png" />
     <Content Include="light\images\annual-book.jpg" />
     <Content Include="light\images\bar-chart-icon.png" />
+    <Content Include="light\images\bg-his_logo.png" />
     <Content Include="light\images\bg_3.jpg" />
     <Content Include="light\images\bg_5.jpg" />
     <Content Include="light\images\Bld.png" />
@@ -293,6 +294,9 @@
     <Content Include="light\images\gray.png" />
     <Content Include="light\images\Green.png" />
     <Content Include="light\images\headphone.jpg" />
+    <Content Include="light\images\HIS_Logo.JPG" />
+    <Content Include="light\images\hms-logo.png" />
+    <Content Include="light\images\hms-logo_login.png" />
     <Content Include="light\images\hms_logo_menu.png" />
     <Content Include="light\images\icon-close.png" />
     <Content Include="light\images\imac-40.jpg" />
@@ -375,7 +379,6 @@
     <Content Include="light\js\plugins\datatables\dataTables.foundation.min.js" />
     <Content Include="light\js\plugins\datatables\dataTables.jqueryui.js" />
     <Content Include="light\js\plugins\datatables\dataTables.jqueryui.min.js" />
-    <Content Include="light\js\plugins\datatables\dataTables.responsive.min.js" />
     <Content Include="light\js\plugins\datatables\dataTables.semanticui.js" />
     <Content Include="light\js\plugins\datatables\dataTables.semanticui.min.js" />
     <Content Include="light\js\plugins\datatables\extensions\AutoFill\css\autoFill.bootstrap.css" />
@@ -897,7 +900,6 @@
     <Content Include="light\js\plugins\datatables\jszip.min.js" />
     <Content Include="light\js\plugins\datatables\license.txt" />
     <Content Include="light\js\plugins\datatables\pdfmake.min.js" />
-    <Content Include="light\js\plugins\datatables\responsive.dataTables.min.css" />
     <Content Include="light\js\plugins\datatables\vfs_fonts.js" />
     <Content Include="light\js\plugins\datepicker\bootstrap-datepicker.js" />
     <Content Include="light\js\plugins\dropzone\dropzone.js" />
@@ -942,6 +944,7 @@
     <Content Include="light\js\plugins\summernote\summernote.min.js" />
     <Content Include="light\js\plugins\wizard\jquery.bootstrap.wizard.min.js" />
     <Content Include="light\js\plugins\wizard\MIT-LICENSE.txt" />
+    <Content Include="light\js\printThis.js" />
     <Content Include="light\js\respond.min.js" />
     <Content Include="light\lockscreen.html" />
     <Content Include="light\login.html" />
@@ -973,6 +976,7 @@
     <Content Include="Scripts\gridmvc.min.js" />
     <Content Include="light\js\jquery-1.12.4.min.map" />
     <None Include="Properties\PublishProfiles\HisApp - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\sravanthihospital.in - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -1533,6 +1537,7 @@
     <Content Include="Views\Bedrpt\Index.cshtml" />
     <Content Include="Views\Consultantpayrpt\Index.cshtml" />
     <Content Include="Views\PurchaseOrder\PlaceOrder.cshtml" />
+    <Content Include="Views\OutPatient\PatientScans.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

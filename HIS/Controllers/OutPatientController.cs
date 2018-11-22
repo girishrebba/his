@@ -494,6 +494,11 @@ namespace HIS.Controllers
             return PatientNotDeliverVisitTests(enmrNo, visitID);
         }
 
+        public List<PatientScan> GetPatientNotDeliverVisitScans(string enmrNo, int visitID)
+        {
+            return PatientNotDeliverVisitScans(enmrNo, visitID);
+        }
+
         private static List<PatientTest> PatientVisitTests(string enmrNo, int visitID)
         {
             using (HISDBEntities hs = new HISDBEntities())
@@ -562,6 +567,43 @@ namespace HIS.Controllers
                                      ReportPath = x.pt.ReportPath,
                                      LTMID = x.pt.LTMID,
                                      TestID = x.pt.TestID
+                                 }).ToList();
+
+                return patientTests;
+            }
+        }
+
+        private static List<PatientScan> PatientNotDeliverVisitScans(string enmrNo, int visitID)
+        {
+            using (HISDBEntities hs = new HISDBEntities())
+            {
+
+                var patientTests = (from pt in hs.PatientTests
+                                    join ltm in hs.ScanTestMasters on pt.LTMID equals ltm.STMID
+                                    join op in hs.OutPatients on ltm.ENMRNO equals op.ENMRNO
+                                    join tt in hs.TestTypes on pt.TestID equals tt.TestID
+                                    join u in hs.Users on ltm.PrescribedBy equals u.UserID
+                                    join ut in hs.UserTypes on u.UserTypeID equals ut.UserTypeID
+                                    where ltm.ENMRNO == enmrNo && ltm.VisitID == visitID && ltm.IsDelivered == false
+                                    select new
+                                    {
+                                        pt,
+                                        u,
+                                        tt
+                                    })
+                                  .OrderByDescending(b => b.pt.PTID)
+                                  .AsEnumerable()
+                                 .Select(x => new PatientScan
+                                 {
+                                     ENMRNO = x.pt.ENMRNO,
+                                     ScanName = x.tt.TestName,
+                                     DateDisplay = HtmlHelpers.HtmlHelpers.DateFormat(x.pt.TestDate),
+                                     DoctorName = HtmlHelpers.HtmlHelpers.GetFullName(x.u.FirstName, x.u.MiddleName, x.u.LastName),
+                                     RecordedValues = x.pt.RecordedValues,
+                                     TestImpression = x.pt.TestImpression,
+                                     ReportPath = x.pt.ReportPath,
+                                     STMID = x.pt.LTMID,
+                                     ScanID = x.pt.TestID
                                  }).ToList();
 
                 return patientTests;
@@ -872,6 +914,56 @@ namespace HIS.Controllers
                 }
             }
         }
+
+        [HttpGet]
+        public ActionResult PatientScans(string enmrNo)
+        {
+            ViewBag.ENMRNO = enmrNo;
+            var PatientScans = new List<PatientScan>();
+            using (var hs = new HISDBEntities())
+            {
+                PatientScans = GetPatientNotDeliverVisitScans(enmrNo, 0);
+                if (PatientScans.Count() > 0)
+                {
+                    PatientScans[0].ENMRNO = enmrNo;
+                    PatientScans[0].VisitName = "In Patient";
+                }
+            }
+            return View(PatientScans);
+        }
+
+        [HttpPost]
+        public ActionResult PatientScans(List<PatientScan> ptItems)
+        {
+            using (HISDBEntities db = new HISDBEntities())
+            {
+                if (ptItems != null && ptItems.Count() > 0)
+                {
+                    int ltmid = ptItems[0].STMID;
+                    var masterTest = db.ScanTestMasters.Where(ltm => ltm.STMID == ltmid).FirstOrDefault();
+                    masterTest.IsDelivered = true;
+                    db.Entry(masterTest).State = EntityState.Modified;
+                    foreach (PatientScan pt in ptItems)
+                    {
+                        var test = db.PatientScans.Where(p => p.STMID == pt.STMID && p.ScanID == pt.ScanID).FirstOrDefault();
+                        if (test != null)
+                        {
+                            test.RecordedValues = pt.RecordedValues;
+                            test.ScanDate = pt.ScanDate;
+                            test.TestImpression = pt.TestImpression;
+                            db.Entry(test).State = EntityState.Modified;
+                        }
+                    }
+                    db.SaveChanges();
+                    return Json(new { success = true, message = string.Format("Scan Tests for ENMRNO - {0} updated Successfully", ptItems[0].ENMRNO) }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Error occured" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+        }
+
 
         [HttpGet]
         [Description(" - OutPatient Lab Test Bill Payment Form.")]
