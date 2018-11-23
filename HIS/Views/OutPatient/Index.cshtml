@@ -92,9 +92,9 @@
                                 + "@if (ViewContext.Controller.HasPermission("OutPatient-ManualDrugRequest")){
                                     <a class='btn btn-primary btn-sm' title='Manual Drug Request' style='margin-left:5px' onclick=PopupMDRForm('@Url.Action("ManualDrugRequest", "OutPatient")/?enmrNo=" + data + "')><i class='fa fa-capsules his-fa-size'></i></a>}"
                                 + "@if (ViewContext.Controller.HasPermission("OutPatient-PatientTests")){
-                                    <a class='btn btn-primary btn-sm' title='Lab' style='margin-left:5px' onclick=PopupPatientTests('@Url.Action("PatientTests", "OutPatient")/?enmrNo=" + data + "')><i class='fa fa-flask his-fa-size'></i></a>}"
+                                    <a class='btn btn-primary btn-sm' title='Lab Test Upload' style='margin-left:5px' onclick=PopupPatientTests('@Url.Action("PatientTests", "OutPatient")/?enmrNo=" + data + "')><i class='fa fa-flask his-fa-size'></i></a>}"
                                 + "@if (ViewContext.Controller.HasPermission("OutPatient-PatientScans")){
-                                    <a class='btn btn-primary btn-sm' title='Lab' style='margin-left:5px' onclick=PopupPatientScans('@Url.Action("PatientScans", "OutPatient")/?enmrNo=" + data + "')><i class='fa fa-tv his-fa-size'></i></a>}"
+                                    <a class='btn btn-primary btn-sm' title='Scan Upload' style='margin-left:5px' onclick=PopupPatientScans('@Url.Action("PatientScans", "OutPatient")/?enmrNo=" + data + "')><i class='fa fa-tv his-fa-size'></i></a>}"
 
                                 + "@if (ViewContext.Controller.HasPermission("OutPatient-LabTestBillPay")){
                                     <a class='btn btn-primary btn-sm' title='Scan Test Bill Payment' style='margin-left:5px' onclick=PopupScanTestBillPayForm('@Url.Action("opScanTestBillPay", "OutPatient")/?enmrNo=" + data + "')><i class='fab fa-cc-visa his-fa-size'></i></a>}"

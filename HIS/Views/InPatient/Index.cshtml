@@ -86,9 +86,9 @@
                                 + "@if (ViewContext.Controller.HasPermission("InPatient-DeliverPrescription")){
                                     <a class='btn btn-primary btn-sm " + disabled + "' title='Deliver Prescription' style='margin-left:5px' onclick=PopupDeliverPrescription('@Url.Action("DeliverPrescription", "InPatient")/?enmrNo=" + data.ENMRNO + "')><i class='fa fa-prescription-bottle-alt his-fa-size'></i></a>}"
                                 + "@if (ViewContext.Controller.HasPermission("InPatient-PatientTests")){
-                                    <a class='btn btn-primary btn-sm' title='Lab' style='margin-left:5px' onclick=PopupPatientTests('@Url.Action("PatientTests", "InPatient")/?enmrNo=" + data.ENMRNO + "')><i class='fa fa-flask his-fa-size'></i></a>}"
+                                    <a class='btn btn-primary btn-sm' title='Lab Test Upload' style='margin-left:5px' onclick=PopupPatientTests('@Url.Action("PatientTests", "InPatient")/?enmrNo=" + data.ENMRNO + "')><i class='fa fa-flask his-fa-size'></i></a>}"
                                 + "@if (ViewContext.Controller.HasPermission("InPatient-PatientScans")){
-                                    <a class='btn btn-primary btn-sm' title='Scans' style='margin-left:5px' onclick=PopupPatientScans('@Url.Action("PatientScans", "InPatient")/?enmrNo=" + data.ENMRNO + "')><i class='fa fa-tv his-fa-size'></i></a>}"
+                                    <a class='btn btn-primary btn-sm' title='Scan Upload' style='margin-left:5px' onclick=PopupPatientScans('@Url.Action("PatientScans", "InPatient")/?enmrNo=" + data.ENMRNO + "')><i class='fa fa-tv his-fa-size'></i></a>}"
                                 + "@if (ViewContext.Controller.HasPermission("InPatient-LabTestBillPay")){
                                     <a class='btn btn-primary btn-sm " + disabled + "' title='Lab Test Bill Payment' style='margin-left:5px' onclick=PopupLabTestBillPayForm('@Url.Action("LabTestBillPay", "InPatient")/?enmrNo=" + data.ENMRNO + "')><i class='fa fa-credit-card his-fa-size'></i></a>}"
                                 + "@if (ViewContext.Controller.HasPermission("InPatient-LabTestBillPay")){
