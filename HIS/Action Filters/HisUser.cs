@@ -11,7 +11,8 @@ public class HisUser
     public int UserTypeid { get; set; }
     public string Username { get; set; }
     private UserPermission _UserPermissions { get; set; }
-    private List<Permission> permissionList = new List<Permission>();
+    Dictionary<int, string> permissionList = new Dictionary<int, string>();
+    //private List<Permission> permissionList = new List<Permission>();
     //public bool isSuperAdmin
     //{
     //    get { return this.UserType.ToLower() == "s"; }
@@ -20,7 +21,10 @@ public class HisUser
     public HisUser(decimal _userId)
     {
         this.User_Id = _userId;
-        GetUserDetails();
+        if (this.permissionList == null)
+        {
+            GetUserDetails();
+        }
     }
 
     private void GetUserDetails()
@@ -42,6 +46,7 @@ public class HisUser
 
     private void GetUserPermissions()
     {
+        
         using (HISDBEntities _data = new HISDBEntities())
         {
             var _perList = _data.UserPermissions.Where(u => u.UserTypeID == this.UserTypeid).ToList();
@@ -51,8 +56,9 @@ public class HisUser
                     foreach (var _permissionid in _perList)
                     {
                     var _permission = _data.Permissions.Where(u => u.Permission_Id == _permissionid.PermissionID).FirstOrDefault();
-                    this.permissionList.Add(new Permission { Permission_Id = _permission.Permission_Id, PermissionDescription = _permission.PermissionDescription });
-                    }                  
+                    //this.permissionList.Add(new Permission { Permission_Id = _permission.Permission_Id, PermissionDescription = _permission.PermissionDescription });
+                    this.permissionList.Add( _permission.Permission_Id, _permission.PermissionDescription);
+                }                  
                 
             }
         }
@@ -62,9 +68,9 @@ public class HisUser
     public bool HasPermission(string requiredPermission)
     {
         bool bFound = false;
-        foreach (Permission role in this.permissionList)
+        foreach (KeyValuePair<int,string> role in this.permissionList)
         {
-            if (role.PermissionDescription.ToLower() == requiredPermission.ToLower())
+            if (role.Value.ToLower() == requiredPermission.ToLower())
             {
                 bFound = true;
                 break;

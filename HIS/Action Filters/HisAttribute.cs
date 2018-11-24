@@ -29,5 +29,9 @@ public class HisAttribute : AuthorizeAttribute
             //If the user has the permission to run the controller's action, then filterContext.Result will be uninitialized and
             //executing the controller's action is dependant on whether filterContext.Result is uninitialized.
         }
+        else {
+            
+            filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary { { "action", "LogOut" }, { "controller", "Login" } });
+        }
     }
 }
