@@ -11,21 +11,28 @@ public class HisUser
     public int UserTypeid { get; set; }
     public string Username { get; set; }
     private UserPermission _UserPermissions { get; set; }
-    Dictionary<int, string> permissionList = new Dictionary<int, string>();
-    //private List<Permission> permissionList = new List<Permission>();
-    //public bool isSuperAdmin
-    //{
-    //    get { return this.UserType.ToLower() == "s"; }
-    //}
+    private List<Permission> permissionList=new List<Permission>();
+
+
 
     public HisUser(decimal _userId)
     {
         this.User_Id = _userId;
-        if (this.permissionList == null)
-        {
-            GetUserDetails();
-        }
     }
+
+    public HisUser(decimal _userId, bool st)
+    {
+        this.User_Id = _userId;
+        GetUserDetails();
+    }
+
+    //public static HisUser userslist
+    //{
+    //    get { return permissionList; }
+    //}
+
+
+
 
     private void GetUserDetails()
     {
@@ -38,7 +45,7 @@ public class HisUser
                 this.Username = _user.UserName;
                 this.UserTypeid = _user.UserTypeID;
                
-                    GetUserPermissions();
+                  //  GetUserPermissions();
              
             }
         }
@@ -51,26 +58,46 @@ public class HisUser
         {
             var _perList = _data.UserPermissions.Where(u => u.UserTypeID == this.UserTypeid).ToList();
             if (_perList != null)
-            {
-              
+            {              
                     foreach (var _permissionid in _perList)
                     {
                     var _permission = _data.Permissions.Where(u => u.Permission_Id == _permissionid.PermissionID).FirstOrDefault();
-                    //this.permissionList.Add(new Permission { Permission_Id = _permission.Permission_Id, PermissionDescription = _permission.PermissionDescription });
-                    this.permissionList.Add( _permission.Permission_Id, _permission.PermissionDescription);
+                    permissionList.Add(new Permission { Permission_Id = _permission.Permission_Id, PermissionDescription = _permission.PermissionDescription });
+                    //this.permissionList.Add( _permission.Permission_Id, _permission.PermissionDescription);
                 }                  
                 
             }
         }
     }
 
+    public List<Permission> GetUserPermissions(bool st)
+    {
+
+        using (HISDBEntities _data = new HISDBEntities())
+        {
+            var _perList = _data.UserPermissions.Where(u => u.UserTypeID == this.UserTypeid).ToList();
+            if (_perList != null)
+            {
+
+                foreach (var _permissionid in _perList)
+                {
+                    var _permission = _data.Permissions.Where(u => u.Permission_Id == _permissionid.PermissionID).FirstOrDefault();
+                    permissionList.Add(new Permission { Permission_Id = _permission.Permission_Id, PermissionDescription = _permission.PermissionDescription });                    
+                }
+
+            }
+        }
+        return permissionList;
+    }
+
 
     public bool HasPermission(string requiredPermission)
     {
         bool bFound = false;
-        foreach (KeyValuePair<int,string> role in this.permissionList)
+        //foreach (KeyValuePair<int,string> role in this.permissionList)
+        foreach (Permission role in permissionList)
         {
-            if (role.Value.ToLower() == requiredPermission.ToLower())
+            if (role.PermissionDescription.ToLower() == requiredPermission.ToLower())
             {
                 bFound = true;
                 break;
@@ -78,6 +105,37 @@ public class HisUser
         }
         return bFound;
     }
+
+    public bool HasPermission(string requiredPermission, List<Permission> permissiontempList)
+    {
+        bool bFound = false;
+        //foreach (KeyValuePair<int,string> role in this.permissionList)
+        foreach (Permission role in permissiontempList)
+        {
+            if (role.PermissionDescription.ToLower() == requiredPermission.ToLower())
+            {
+                bFound = true;
+                break;
+            }
+        }
+        return bFound;
+    }
+
+    public bool HasPermission(string controller, string requiredPermission, List<Permission> permissiontempList)
+    {
+        bool bFound = false;
+        //foreach (KeyValuePair<int,string> role in this.permissionList)
+        foreach (Permission role in permissiontempList)
+        {
+            if (role.PermissionDescription.ToLower() == requiredPermission.ToLower() && role.PermissionDescription.ToLower() == requiredPermission.ToLower())
+            {
+                bFound = true;
+                break;
+            }
+        }
+        return bFound;
+    }
+
 }
 
 

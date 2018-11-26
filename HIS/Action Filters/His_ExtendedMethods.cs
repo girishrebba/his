@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Web;
 using System.Web.Mvc;
+using HIS;
 
 //Get requesting user's roles/permissions from database tables...      
 public static class His_ExtendedMethods
 {
+    public static List<Permission> permissionList;
     public static bool HasRole(this ControllerBase controller, string role)
     {
         bool bFound = false;
@@ -51,11 +53,21 @@ public static class His_ExtendedMethods
         {
             if(decimal.TryParse(HttpContext.Current.Session["UserID"].ToString(), out result))
             {
-                HisUser user = new HisUser(result);
-                if(user != null)
+                if (permissionList == null)
                 {
-                    bFound = user.HasPermission(permission);
+                    HisUser user = new HisUser(result, true);
+                    permissionList = user.GetUserPermissions(true);
+                    bFound = user.HasPermission(permission, permissionList);
                 }
+                else {
+                    HisUser user = new HisUser(result);
+                    bFound = user.HasPermission(permission, permissionList);
+                }
+                //HisUser user = new HisUser(result,true);
+                //if(user != null)
+                //{
+                //    bFound = user.HasPermission(permission);
+                //}
             }
             //Check if the requesting user has the specified application permission...
         }
@@ -63,6 +75,37 @@ public static class His_ExtendedMethods
         return bFound;
     }
 
+
+    public static bool HasPermission(string permission)
+    {
+        bool bFound = false;
+        decimal result;
+        try
+        {
+            if (decimal.TryParse(HttpContext.Current.Session["UserID"].ToString(), out result))
+            {
+                if (permissionList == null)
+                {
+                    HisUser user = new HisUser(result, true);
+                    permissionList = user.GetUserPermissions(true);
+                    bFound = user.HasPermission(permission, permissionList);
+                }
+                else
+                {
+                    HisUser user = new HisUser(result);
+                    bFound = user.HasPermission(permission, permissionList);
+                }
+                //HisUser user = new HisUser(result,true);
+                //if(user != null)
+                //{
+                //    bFound = user.HasPermission(permission);
+                //}
+            }
+            //Check if the requesting user has the specified application permission...
+        }
+        catch { }
+        return bFound;
+    }
 
     //public static bool IsSysAdmin(this ControllerBase controller)
     //{        
