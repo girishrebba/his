@@ -61,14 +61,10 @@
         var Popup, dataTable, viewPatient, newVisit, prescription, deliverPopUp;
         $(document).ready(function () {
             dataTable = $("#outPatientsTable").DataTable({
-                "bPaginate": true,
-                "processing": true,
-                "serverSide": true,
                 "ajax": {
                     "url": "/OutPatient/GetOutPatients",
                     "type": "GET",
-                    "datatype": "json",
-                    "deferLoading": "[10, 100]"
+                    "datatype": "json"
                 },
                 "columns": [
                     { "data": "ENMRNO" },
@@ -116,11 +112,10 @@
 
                     }
                 ],
-                "deferRender": true,
                 "order": [[0, "desc"]],
                 "language": {
                     "emptyTable" : "No data found, Please click on <b>Add New</b> Button"
-                },
+                }
             });
         });
 
