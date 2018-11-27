@@ -81,6 +81,9 @@ namespace HIS
         [Required(ErrorMessage = "Last Name is Required", AllowEmptyStrings = false)]
         public string LastName { get; set; }
         [Required(ErrorMessage = "Phone is Required", AllowEmptyStrings = false)]
+        [MaxLength(10)]
+        [DataType(DataType.PhoneNumber)]
+        [RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "Not a valid phone number")]
         public string Phone { get; set; }
         [Required(ErrorMessage = "Address is Required", AllowEmptyStrings = false)]
         public string Address1 { get; set; }
