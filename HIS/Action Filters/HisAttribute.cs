@@ -36,7 +36,7 @@ public class HisAttribute : AuthorizeAttribute
             //    menupermission = requestingUser.HasPermission(requiredPermission, permissionList);
             //}
             //Check if the requesting user has the permission to run the controller's action
-            if (!His_ExtendedMethods.HasPermission(requiredPermission))
+            if (!His_ExtendedMethods.HasPermissionpage(requiredPermission))
             {
                 //User doesn't have the required permission and is not a SysAdmin, return our custom “401 Unauthorized” access error
                 //Since we are setting filterContext.Result to contain an ActionResult page, the controller's action will not be run.

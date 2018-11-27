@@ -76,7 +76,7 @@ public static class His_ExtendedMethods
     }
 
 
-    public static bool HasPermission(string permission)
+    public static bool HasPermissionpage(string permission)
     {
         bool bFound = false;
         decimal result;
@@ -94,12 +94,7 @@ public static class His_ExtendedMethods
                 {
                     HisUser user = new HisUser(result);
                     bFound = user.HasPermission(permission, permissionList);
-                }
-                //HisUser user = new HisUser(result,true);
-                //if(user != null)
-                //{
-                //    bFound = user.HasPermission(permission);
-                //}
+                }                
             }
             //Check if the requesting user has the specified application permission...
         }

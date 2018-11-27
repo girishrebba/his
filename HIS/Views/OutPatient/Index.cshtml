@@ -78,31 +78,31 @@
                     //{ "data": "ValidDateDisplay" },
                     {
                         "data": "ENMRNO", "render": function (data) {
-                            return "@if (ViewContext.Controller.HasPermission("OutPatient-AddModify"))
+                            return "@if (His_ExtendedMethods.HasPermissionpage("OutPatient-AddModify"))
                             {<a class='btn btn-default btn-sm' title='Edit' onclick=PopupForm('@Url.Action("AddModify","OutPatient")/?enmrNo=" + data + "',1)><i class='fa fa-user-edit his-fa-size'></i></a>}"
-                                + "@if (ViewContext.Controller.HasPermission("OutPatient-ViewPatient")){
+                                + "@if (His_ExtendedMethods.HasPermissionpage("OutPatient-ViewPatient")){
                                     <a class='btn btn-info btn-sm' title = 'View Patient' style = 'margin-left:5px' onclick = PopupViewPatient('@Url.Action("ViewPatient", "OutPatient")/?enmrNo=" + data + "')><i class='fa fa-info-circle his-fa-size'></i></a>}"
-                                + "@if (ViewContext.Controller.HasPermission("OutPatient-NewVisit")){
+                                + "@if (His_ExtendedMethods.HasPermissionpage("OutPatient-NewVisit")){
                                     <a class='btn btn-primary btn-sm' title='Consultation' style='margin-left:5px' onclick=PopupNewVisit('@Url.Action("NewVisit", "OutPatient")/?enmrNo=" + data + "')> <i class='fa fa-calendar his-fa-size'></i></a>}"
-                                + "@if (ViewContext.Controller.HasPermission("OutPatient-OPPrescription")){
+                                + "@if (His_ExtendedMethods.HasPermissionpage("OutPatient-OPPrescription")){
                                     <a class='btn btn-primary btn-sm' title='Prescription' style='margin-left:5px' onclick=PopupPrescription('@Url.Action("OPPrescription", "OutPatient")/?enmrNo=" + data + "')><i class='fa fa-prescription his-fa-size'></i></a>}"
-                                + "@if (ViewContext.Controller.HasPermission("OutPatient-DeliverPrescription")){
+                                + "@if (His_ExtendedMethods.HasPermissionpage("OutPatient-DeliverPrescription")){
                                     <a class='btn btn-primary btn-sm' title='Deliver Prescription' style='margin-left:5px' onclick=PopupDeliverPrescription('@Url.Action("DeliverPrescription", "OutPatient")/?enmrNo=" + data + "')><i class='fa fa-prescription-bottle-alt his-fa-size'></i></a>}"
-                                + "@if (ViewContext.Controller.HasPermission("OutPatient-Admission")){
+                                + "@if (His_ExtendedMethods.HasPermissionpage("OutPatient-Admission")){
                                     <a class='btn btn-primary btn-sm' title='Admit as IP' style='margin-left:5px' onclick=PopupAdmissionForm('@Url.Action("Admission", "OutPatient")/?enmrNo=" + data + "')><i class='fa fa-hospital his-fa-size'></i></a>}"
-                                + "@if (ViewContext.Controller.HasPermission("OutPatient-ManualDrugRequest")){
+                                + "@if (His_ExtendedMethods.HasPermissionpage("OutPatient-ManualDrugRequest")){
                                     <a class='btn btn-primary btn-sm' title='Manual Drug Request' style='margin-left:5px' onclick=PopupMDRForm('@Url.Action("ManualDrugRequest", "OutPatient")/?enmrNo=" + data + "')><i class='fa fa-capsules his-fa-size'></i></a>}"
-                                + "@if (ViewContext.Controller.HasPermission("OutPatient-PatientTests")){
+                                + "@if (His_ExtendedMethods.HasPermissionpage("OutPatient-PatientTests")){
                                     <a class='btn btn-primary btn-sm' title='Lab Test Upload' style='margin-left:5px' onclick=PopupPatientTests('@Url.Action("PatientTests", "OutPatient")/?enmrNo=" + data + "')><i class='fa fa-flask his-fa-size'></i></a>}"
-                                + "@if (ViewContext.Controller.HasPermission("OutPatient-PatientScans")){
+                                + "@if (His_ExtendedMethods.HasPermissionpage("OutPatient-PatientScans")){
                                     <a class='btn btn-primary btn-sm' title='Scan Upload' style='margin-left:5px' onclick=PopupPatientScans('@Url.Action("PatientScans", "OutPatient")/?enmrNo=" + data + "')><i class='fa fa-tv his-fa-size'></i></a>}"
 
-                                + "@if (ViewContext.Controller.HasPermission("OutPatient-LabTestBillPay")){
+                                + "@if (His_ExtendedMethods.HasPermissionpage("OutPatient-LabTestBillPay")){
                                     <a class='btn btn-primary btn-sm' title='Scan Test Bill Payment' style='margin-left:5px' onclick=PopupScanTestBillPayForm('@Url.Action("opScanTestBillPay", "OutPatient")/?enmrNo=" + data + "')><i class='fab fa-cc-visa his-fa-size'></i></a>}"
 
-                                + "@if (ViewContext.Controller.HasPermission("OutPatient-LabTestBillPay")){
+                                + "@if (His_ExtendedMethods.HasPermissionpage("OutPatient-LabTestBillPay")){
                                     <a class='btn btn-primary btn-sm' title='Lab Test Bill Payment' style='margin-left:5px' onclick=PopupLabTestBillPayForm('@Url.Action("LabTestBillPay", "OutPatient")/?enmrNo=" + data + "')><i class='fa fa-credit-card his-fa-size'></i></a>}"
-                                + "@if (ViewContext.Controller.HasPermission("OutPatient-PrintHistory")){
+                                + "@if (His_ExtendedMethods.HasPermissionpage("OutPatient-PrintHistory")){
                                         <a class='btn btn-primary btn-sm' title='View & Print' style='margin-left:5px' onclick=PopupPrint('@Url.Action("PrintHistory", "OutPatient")/?enmrNo=" + data + "')><i class='fa fa-print his-fa-size'></i></a>}";
 
                         },
