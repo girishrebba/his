@@ -96,12 +96,12 @@ namespace HIS.Controllers
                                                         .AsEnumerable().
                                                            Select(x => new OrderRequest
                                                            {
-                                                              // OrderNo = x.om.OrderNO,
+                                                              OrderNo = x.om.OrderNO,
                                                                MedicineID = x.or.MedicineID,
-                                                               //MedicineWithDose = HtmlHelpers.HtmlHelpers.GetMedicineWithDose(x.MedicineName, x.MedDose),
+                                                               MedicineWithDose = HtmlHelpers.HtmlHelpers.GetMedicineWithDose(x.MedicineName, x.MedDose),
                                                                Quantity = x.or.Quantity,
                                                                PlacedQty = x.or.Quantity,
-                                                              // OrderDate = DateTime.Now.ToString("MM/dd/yyyy") 
+                                                              OrderDate = DateTime.Now.ToString("MM/dd/yyyy") 
 
                                                            }).ToList();
                 }
@@ -351,7 +351,7 @@ namespace HIS.Controllers
             {
                 if (items != null && items.Count() > 0)
                 {
-                   // orderNo = items[0].OrderNo;
+                    orderNo = items[0].OrderNo;
                     if(items.Count() == 1 && items[0].MedicineID == 0)
                     {
                         hasItems = false;
@@ -363,7 +363,7 @@ namespace HIS.Controllers
                         {
                             var po = new PurchaseOrder()
                             {
-                               // PONumber = or.OrderNo,
+                                PONumber = or.OrderNo,
                                 OrderedDate = DateTime.Now,
                                 OrderedQty = or.PlacedQty.HasValue ? or.PlacedQty.Value : 0,
                                 MedicineID = or.MedicineID

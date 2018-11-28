@@ -69,7 +69,7 @@
                             {
                                 "data": null, "render": function (data) {
                                     if (data.ApprovedStatus === null || data.ApprovedStatus === 0) {
-                                        return "@if (His_ExtendedMethods.HasPermissionPage("PurchaseOrder-Approve")){<a class='btn btn-success btn-sm' title='Approve' onclick=PopupApprovalForm('@Url.Action("Approve","PurchaseOrder")/?poNumber=" + data.PONumber + "')><i class='fa fa-thumbs-up his-fa-size'></i></a>} @if (His_ExtendedMethods.HasPermissionPage("PurchaseOrder-EditPO"))
+                                        return "@if (His_ExtendedMethods.HasPermissionPage("PurchaseOrder-Approve")){<a class='btn btn-success btn-sm' title='Review' onclick=PopupApprovalForm('@Url.Action("Approve","PurchaseOrder")/?poNumber=" + data.PONumber + "')><i class='fas fa-search his-fa-size'></i></a>} @if (His_ExtendedMethods.HasPermissionPage("PurchaseOrder-EditPO"))
                                         {<a class='btn btn-primary btn-sm' title='Edit' style='margin-left:5px' onclick=PopupAdjustForm('@Url.Action("EditPO", "PurchaseOrder")/?poNumber=" + data.PONumber + "')><i class='fa fa-pencil-alt his-fa-size'></i></a>}";
                                     }
                                     else {
