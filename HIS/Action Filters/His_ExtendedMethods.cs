@@ -76,7 +76,7 @@ public static class His_ExtendedMethods
     }
 
 
-    public static bool HasPermissionpage(string permission)
+    public static bool HasPermissionPage(string permission)
     {
         bool bFound = false;
         decimal result;

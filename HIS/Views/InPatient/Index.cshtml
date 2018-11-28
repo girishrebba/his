@@ -73,30 +73,30 @@
                         "data": null, "render": function (data) {
                             var disabled = 'disabled btn-success';
                             if (!data.IsDischarged) { disabled = '' }
-                            return "@if (His_ExtendedMethods.HasPermissionpage("InPatient-AddModify")){<a class='btn btn-default btn-sm " + disabled + "' title='Edit' onclick=PopupPatient('@Url.Action("AddModify","InPatient")/?enmrNo=" + data.ENMRNO + "',1)><i class='fa fa-user-edit his-fa-size'></i>"
-                                + "</a>}@if (His_ExtendedMethods.HasPermissionpage("InPatient-ViewPatient"))
+                            return "@if (His_ExtendedMethods.HasPermissionPage("InPatient-AddModify")){<a class='btn btn-default btn-sm " + disabled + "' title='Edit' onclick=PopupPatient('@Url.Action("AddModify","InPatient")/?enmrNo=" + data.ENMRNO + "',1)><i class='fa fa-user-edit his-fa-size'></i>"
+                                + "</a>}@if (His_ExtendedMethods.HasPermissionPage("InPatient-ViewPatient"))
                                 {<a class='btn btn-info btn-sm' title='View Patient' style='margin-left:5px' onclick=PopupViewPatient('@Url.Action("ViewPatient", "InPatient")/?enmrNo=" + data.ENMRNO + "')><i class='fa fa-info-circle his-fa-size'></i></a>}"
-                                + "@if (His_ExtendedMethods.HasPermissionpage("InPatient-BedAllocation")){
+                                + "@if (His_ExtendedMethods.HasPermissionPage("InPatient-BedAllocation")){
                                     <a class='btn btn-primary btn-sm " + disabled + "' title='Bed' style='margin-left:5px' onclick=PopupPatientAllocationView('@Url.Action("BedAllocation", "InPatient")/?enmrNo=" + data.ENMRNO + "')><i class='fa fa-bed his-fa-size'></i></a>}"
-                                + "@if (His_ExtendedMethods.HasPermissionpage("InPatient-Fee")){
+                                + "@if (His_ExtendedMethods.HasPermissionPage("InPatient-Fee")){
                                         <a class='btn btn-primary btn-sm' title='Fee' style='margin-left:5px' onclick=PopupFee('@Url.Action("Fee", "InPatient")/?enmrNo=" + data.ENMRNO + "')><i class='fa fa-rupee-sign his-fa-size'></i></a>}"
-                                + "@if (His_ExtendedMethods.HasPermissionpage("InPatient-Observations")){
+                                + "@if (His_ExtendedMethods.HasPermissionPage("InPatient-Observations")){
                                         <a class='btn btn-primary btn-sm' title='Observation' style='margin-left:5px' onclick=PopupObservations('@Url.Action("Observations", "InPatient")/?enmrNo=" + data.ENMRNO + "')><i class='fa fa-briefcase-medical his-fa-size'></i></a>}"
-                                + "@if (His_ExtendedMethods.HasPermissionpage("InPatient-Prescription")){
+                                + "@if (His_ExtendedMethods.HasPermissionPage("InPatient-Prescription")){
                                     <a class='btn btn-primary btn-sm' title='Prescription' style='margin-left:5px' onclick=PopupPrescription('@Url.Action("Prescription", "InPatient")/?enmrNo=" + data.ENMRNO + "')><i class='fa fa-prescription his-fa-size'></i></a>}"
-                                + "@if (His_ExtendedMethods.HasPermissionpage("InPatient-DeliverPrescription")){
+                                + "@if (His_ExtendedMethods.HasPermissionPage("InPatient-DeliverPrescription")){
                                     <a class='btn btn-primary btn-sm " + disabled + "' title='Deliver Prescription' style='margin-left:5px' onclick=PopupDeliverPrescription('@Url.Action("DeliverPrescription", "InPatient")/?enmrNo=" + data.ENMRNO + "')><i class='fa fa-prescription-bottle-alt his-fa-size'></i></a>}"
-                                + "@if (His_ExtendedMethods.HasPermissionpage("InPatient-PatientTests")){
+                                + "@if (His_ExtendedMethods.HasPermissionPage("InPatient-PatientTests")){
                                     <a class='btn btn-primary btn-sm' title='Lab Test Upload' style='margin-left:5px' onclick=PopupPatientTests('@Url.Action("PatientTests", "InPatient")/?enmrNo=" + data.ENMRNO + "')><i class='fa fa-flask his-fa-size'></i></a>}"
-                                + "@if (His_ExtendedMethods.HasPermissionpage("InPatient-PatientScans")){
+                                + "@if (His_ExtendedMethods.HasPermissionPage("InPatient-PatientScans")){
                                     <a class='btn btn-primary btn-sm' title='Scan Upload' style='margin-left:5px' onclick=PopupPatientScans('@Url.Action("PatientScans", "InPatient")/?enmrNo=" + data.ENMRNO + "')><i class='fa fa-tv his-fa-size'></i></a>}"
-                                + "@if (His_ExtendedMethods.HasPermissionpage("InPatient-LabTestBillPay")){
+                                + "@if (His_ExtendedMethods.HasPermissionPage("InPatient-LabTestBillPay")){
                                     <a class='btn btn-primary btn-sm " + disabled + "' title='Lab Test Bill Payment' style='margin-left:5px' onclick=PopupLabTestBillPayForm('@Url.Action("LabTestBillPay", "InPatient")/?enmrNo=" + data.ENMRNO + "')><i class='fa fa-credit-card his-fa-size'></i></a>}"
-                                + "@if (His_ExtendedMethods.HasPermissionpage("InPatient-LabTestBillPay")){
+                                + "@if (His_ExtendedMethods.HasPermissionPage("InPatient-LabTestBillPay")){
                                     <a class='btn btn-primary btn-sm " + disabled + "' title='Scan Test Bill Payment' style='margin-left:5px' onclick=PopupScanTestBillPayForm('@Url.Action("ScanTestBillPay", "InPatient")/?enmrNo=" + data.ENMRNO + "')><i class='fab fa-cc-visa his-fa-size'></i></a>}"
-                                + "@if (His_ExtendedMethods.HasPermissionpage("InPatient-PrintHistory")){
+                                + "@if (His_ExtendedMethods.HasPermissionPage("InPatient-PrintHistory")){
                                         <a class='btn btn-primary btn-sm' title='View & Print' style='margin-left:5px' onclick=PopupPrint('@Url.Action("PrintHistory", "InPatient")/?enmrNo=" + data.ENMRNO + "')><i class='fa fa-print his-fa-size'></i></a>}"
-                                + "@if (His_ExtendedMethods.HasPermissionpage("InPatient-AddModify")){
+                                + "@if (His_ExtendedMethods.HasPermissionPage("InPatient-AddModify")){
                                     <a class='btn btn-default btn-sm " + disabled + "' title='Discharge' style='margin-left:5px' onclick=PopupDischargeForm('@Url.Action("Discharge","InPatient")/?enmrNo=" + data.ENMRNO + "'," + JSON.stringify(data.ENMRNO) +")><i class='fa fa-sign-out-alt his-fa-size'></i></a>}";
                             },
                         "orderable": false,
