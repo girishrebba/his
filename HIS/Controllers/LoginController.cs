@@ -45,6 +45,7 @@ namespace HIS.Controllers
         {
             Session["UserID"] = null;
             Session["UserName"] = null;
+            HIS.MvcApplication.Global.permissionList = null;
             return RedirectToAction("../Login");
         }
 

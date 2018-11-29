@@ -10,6 +10,10 @@ namespace HIS
 {
     public class MvcApplication : System.Web.HttpApplication
     {
+        public class Global : System.Web.HttpApplication
+        {
+            public static List<Permission> permissionList;
+        }
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
@@ -17,5 +21,17 @@ namespace HIS
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
         }
+
+        protected void Session_Start(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void Session_End(object sender, EventArgs e)
+        {
+           Global.permissionList = null;
+        }
+
+        
     }
 }
