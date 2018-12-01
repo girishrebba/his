@@ -30,6 +30,8 @@ namespace HIS
         public string MedicineName { get; set; }
         public string MedDose { get; set; }
         public Nullable<int> TriggerQty { get; set; }
+        public int SubCategoryID { get; set; }
+        public int SupplierID { get; set; }
     
         public virtual BrandCategory BrandCategory { get; set; }
         public virtual Brand Brand { get; set; }

@@ -73,6 +73,8 @@ namespace HIS
         public virtual DbSet<InPatient> InPatients { get; set; }
         public virtual DbSet<OutPatient> OutPatients { get; set; }
         public virtual DbSet<Purpose> Purposes { get; set; }
+        public virtual DbSet<BrandSubCategory> BrandSubCategories { get; set; }
+        public virtual DbSet<Supplier> Suppliers { get; set; }
     
         public virtual int ConvertOutPatientToInPatient(string eNMRNO, Nullable<decimal> estAmount, Nullable<decimal> advAmount)
         {
@@ -292,6 +294,24 @@ namespace HIS
         public virtual ObjectResult<BedReport_Result> BedReport()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<BedReport_Result>("BedReport");
+        }
+    
+        public virtual int AddSubCategory(string name, ObjectParameter subCategoryID)
+        {
+            var nameParameter = name != null ?
+                new ObjectParameter("Name", name) :
+                new ObjectParameter("Name", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddSubCategory", nameParameter, subCategoryID);
+        }
+    
+        public virtual int AddSupplier(string name, ObjectParameter supplierID)
+        {
+            var nameParameter = name != null ?
+                new ObjectParameter("Name", name) :
+                new ObjectParameter("Name", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddSupplier", nameParameter, supplierID);
         }
     }
 }

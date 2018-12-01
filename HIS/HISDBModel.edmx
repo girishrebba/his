@@ -47,6 +47,13 @@
           <Property Name="BrandID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="BrandName" Type="varchar" MaxLength="100" Nullable="false" />
         </EntityType>
+        <EntityType Name="BrandSubCategories">
+          <Key>
+            <PropertyRef Name="SubCategoryID" />
+          </Key>
+          <Property Name="SubCategoryID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SubCategory" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
         <EntityType Name="Consultants">
           <Key>
             <PropertyRef Name="ConsultantID" />
@@ -227,6 +234,8 @@
           <Property Name="MedicineName" Type="nvarchar(max)" Nullable="false" />
           <Property Name="MedDose" Type="nvarchar(max)" Nullable="false" />
           <Property Name="TriggerQty" Type="int" />
+          <Property Name="SubCategoryID" Type="int" Nullable="false" />
+          <Property Name="SupplierID" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="OrderMaster">
           <Key>
@@ -436,6 +445,8 @@
           <Property Name="LotNo" Type="varchar" MaxLength="30" />
           <Property Name="ExpiryDate" Type="date" />
           <Property Name="ApprovedStatus" Type="bit" />
+          <Property Name="MfgDate" Type="date" />
+          <Property Name="HospitalPrice" Type="decimal" Precision="6" Scale="2" />
         </EntityType>
         <EntityType Name="Purpose">
           <Key>
@@ -502,6 +513,13 @@
           </Key>
           <Property Name="SpecializationID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="DoctorType" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Suppliers">
+          <Key>
+            <PropertyRef Name="SupplierID" />
+          </Key>
+          <Property Name="SupplierID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SupplierName" Type="varchar" MaxLength="100" Nullable="false" />
         </EntityType>
         <EntityType Name="TestTypes">
           <Key>
@@ -1051,6 +1069,14 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="AddSubCategory" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Name" Type="varchar" Mode="In" />
+          <Parameter Name="SubCategoryID" Type="int" Mode="InOut" />
+        </Function>
+        <Function Name="AddSupplier" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Name" Type="varchar" Mode="In" />
+          <Parameter Name="SupplierID" Type="int" Mode="InOut" />
+        </Function>
         <Function Name="BedReport" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="ConsutantPayReport" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Doctors" Type="varchar(max)" Mode="In" />
@@ -1124,6 +1150,7 @@
           <EntitySet Name="BloodGroup" EntityType="Self.BloodGroup" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BrandCategories" EntityType="Self.BrandCategories" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Brands" EntityType="Self.Brands" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BrandSubCategories" EntityType="Self.BrandSubCategories" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Consultants" EntityType="Self.Consultants" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ConsultantVisits" EntityType="Self.ConsultantVisits" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ConsultationFee" EntityType="Self.ConsultationFee" Schema="dbo" store:Type="Tables" />
@@ -1161,6 +1188,7 @@
           <EntitySet Name="Scans" EntityType="Self.Scans" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ScanTestMaster" EntityType="Self.ScanTestMaster" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Specialization" EntityType="Self.Specialization" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Suppliers" EntityType="Self.Suppliers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TestTypes" EntityType="Self.TestTypes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserPermission" EntityType="Self.UserPermission" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
@@ -1455,6 +1483,8 @@
           <Property Name="TriggerQty" Type="Int32" />
           <NavigationProperty Name="OrderRequests" Relationship="HISDBModel.FK_OR_MedicineID" FromRole="MedicineMaster" ToRole="OrderRequest" />
           <NavigationProperty Name="PharmaKitItems" Relationship="HISDBModel.FK_PKI_MedicineID" FromRole="MedicineMaster" ToRole="PharmaKitItem" />
+          <Property Name="SubCategoryID" Type="Int32" Nullable="false" />
+          <Property Name="SupplierID" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="PatientPrescription">
           <Key>
@@ -1537,6 +1567,8 @@
           <Property Name="ExpiryDate" Type="DateTime" Precision="0" />
           <Property Name="ApprovedStatus" Type="Boolean" />
           <NavigationProperty Name="MedicineMaster" Relationship="Self.FK_PO_MedicineID" FromRole="PurchaseOrder" ToRole="MedicineMaster" />
+          <Property Name="MfgDate" Type="DateTime" Precision="0" />
+          <Property Name="HospitalPrice" Type="Decimal" Precision="6" Scale="2" />
         </EntityType>
         <EntityType Name="Room">
           <Key>
@@ -2120,6 +2152,16 @@
             <Parameter Name="OMID" Mode="InOut" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="BedReport" ReturnType="Collection(HISDBModel.BedReport_Result)" />
+          <EntitySet Name="BrandSubCategories" EntityType="HISDBModel.BrandSubCategory" />
+          <EntitySet Name="Suppliers" EntityType="HISDBModel.Supplier" />
+          <FunctionImport Name="AddSubCategory">
+            <Parameter Name="Name" Mode="In" Type="String" />
+            <Parameter Name="SubCategoryID" Mode="InOut" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="AddSupplier">
+            <Parameter Name="Name" Mode="In" Type="String" />
+            <Parameter Name="SupplierID" Mode="InOut" Type="Int32" />
+          </FunctionImport>
           </EntityContainer>
         <EntityType Name="LabTestMaster">
           <Key>
@@ -2851,6 +2893,20 @@
           <Property Type="String" Name="roomtype" Nullable="true" MaxLength="50" />
           <Property Type="String" Name="bedstatus" Nullable="false" MaxLength="9" />
         </ComplexType>
+        <EntityType Name="BrandSubCategory">
+          <Key>
+            <PropertyRef Name="SubCategoryID" />
+          </Key>
+          <Property Name="SubCategoryID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SubCategory" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="Supplier">
+          <Key>
+            <PropertyRef Name="SupplierID" />
+          </Key>
+          <Property Name="SupplierID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SupplierName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2955,6 +3011,8 @@
           <EntitySetMapping Name="MedicineMasters">
             <EntityTypeMapping TypeName="HISDBModel.MedicineMaster">
               <MappingFragment StoreEntitySet="MedicineMaster">
+                <ScalarProperty Name="SupplierID" ColumnName="SupplierID" />
+                <ScalarProperty Name="SubCategoryID" ColumnName="SubCategoryID" />
                 <ScalarProperty Name="TriggerQty" ColumnName="TriggerQty" />
                 <ScalarProperty Name="MMID" ColumnName="MMID" />
                 <ScalarProperty Name="BrandID" ColumnName="BrandID" />
@@ -3028,6 +3086,8 @@
           <EntitySetMapping Name="PurchaseOrders">
             <EntityTypeMapping TypeName="HISDBModel.PurchaseOrder">
               <MappingFragment StoreEntitySet="PurchaseOrder">
+                <ScalarProperty Name="HospitalPrice" ColumnName="HospitalPrice" />
+                <ScalarProperty Name="MfgDate" ColumnName="MfgDate" />
                 <ScalarProperty Name="OrderID" ColumnName="OrderID" />
                 <ScalarProperty Name="PONumber" ColumnName="PONumber" />
                 <ScalarProperty Name="MedicineID" ColumnName="MedicineID" />
@@ -3529,6 +3589,24 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="BrandSubCategories">
+            <EntityTypeMapping TypeName="HISDBModel.BrandSubCategory">
+              <MappingFragment StoreEntitySet="BrandSubCategories">
+                <ScalarProperty Name="SubCategory" ColumnName="SubCategory" />
+                <ScalarProperty Name="SubCategoryID" ColumnName="SubCategoryID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Suppliers">
+            <EntityTypeMapping TypeName="HISDBModel.Supplier">
+              <MappingFragment StoreEntitySet="Suppliers">
+                <ScalarProperty Name="SupplierName" ColumnName="SupplierName" />
+                <ScalarProperty Name="SupplierID" ColumnName="SupplierID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="AddSubCategory" FunctionName="HISDBModel.Store.AddSubCategory" />
+          <FunctionImportMapping FunctionImportName="AddSupplier" FunctionName="HISDBModel.Store.AddSupplier" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

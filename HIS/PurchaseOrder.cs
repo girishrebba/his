@@ -25,6 +25,8 @@ namespace HIS
         public string LotNo { get; set; }
         public Nullable<System.DateTime> ExpiryDate { get; set; }
         public Nullable<bool> ApprovedStatus { get; set; }
+        public Nullable<System.DateTime> MfgDate { get; set; }
+        public Nullable<decimal> HospitalPrice { get; set; }
     
         public virtual MedicineMaster MedicineMaster { get; set; }
     }
