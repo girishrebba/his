@@ -887,15 +887,7 @@ public static List<User> GetDoctors()
                     }
                     else
                     {
-                        var lastOrder = db.OrderMasters.OrderByDescending(o => o.OMID).FirstOrDefault();
-                        if (lastOrder != null)
-                        {
-                            orderNo = (Convert.ToInt32(lastOrder.OrderNO) + 1).ToString().PadLeft(5, '0');
-                        }
-                        else
-                        {
-                            orderNo = (Convert.ToInt32(orderNo) + 1).ToString().PadLeft(5, '0');
-                        }
+                        orderNo = GeneratePONumber();
                         System.Data.Entity.Core.Objects.ObjectParameter omidOut = new System.Data.Entity.Core.Objects.ObjectParameter("OMID", typeof(Int32));
                         db.CreateMasterOrder(orderNo, omidOut);
                         omid = Convert.ToInt32(omidOut.Value);
@@ -916,6 +908,24 @@ public static List<User> GetDoctors()
                     db.SaveChanges();
                 }     
             }
+        }
+
+        public static string GeneratePONumber()
+        {
+            string orderNo = string.Empty;
+            using (var db = new HISDBEntities())
+            {
+                var lastOrder = db.PurchaseOrders.OrderByDescending(o => o.OrderID).FirstOrDefault();
+                if (lastOrder != null)
+                {
+                    orderNo = (Convert.ToInt32(lastOrder.PONumber) + 1).ToString().PadLeft(5, '0');
+                }
+                else
+                {
+                    orderNo = (Convert.ToInt32(orderNo) + 1).ToString().PadLeft(5, '0');
+                }
+            }
+            return orderNo;
         }
 
         public static string LoginUserName()

@@ -9,6 +9,7 @@ namespace HIS
         public string MedicineWithDose { get; set; }
         public string OrderDateDisplay { get; set; }
         public string ExpiryDateDisplay { get; set; }
+        public string MfgDateDisplay { get; set; }
     }
 
     [MetadataType(typeof(PurchaseOrderMetaData))]
@@ -41,5 +42,7 @@ namespace HIS
         [Display(Name = "Expiry Date:")]
         [Required(ErrorMessage = "Please enter expiry date", AllowEmptyStrings = false)]
         public Nullable<System.DateTime> ExpiryDate { get; set; }
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:#.#}")]
+        public Nullable<decimal> HospitalPrice { get; set; }
     }
 }

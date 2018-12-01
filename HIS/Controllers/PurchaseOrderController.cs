@@ -62,6 +62,7 @@ namespace HIS.Controllers
                                                            MedicineWithDose = HtmlHelpers.HtmlHelpers.GetMedicineWithDose(x.MedicineName, x.MedDose),
                                                            OrderedQty = x.po.OrderedQty,
                                                            OrderDateDisplay = HtmlHelpers.HtmlHelpers.DateFormat(x.po.OrderedDate),
+                                                           MfgDateDisplay = HtmlHelpers.HtmlHelpers.DateFormat(x.po.MfgDate),
                                                            OrderedDate = x.po.OrderedDate,
                                                            ExpiryDateDisplay = HtmlHelpers.HtmlHelpers.DateFormat(x.po.ExpiryDate),
                                                            ExpiryDate = x.po.ExpiryDate,
@@ -69,7 +70,10 @@ namespace HIS.Controllers
                                                            PricePerItem = x.po.PricePerItem,
                                                            PricePerSheet = x.po.PricePerSheet,
                                                            BatchNo = x.po.BatchNo,
-                                                           LotNo = x.po.LotNo
+                                                           LotNo = x.po.LotNo,
+                                                           MfgDate = x.po.MfgDate,
+                                                           HospitalPrice = x.po.HospitalPrice
+
                                                        }).ToList();
             }
         }
@@ -315,7 +319,7 @@ namespace HIS.Controllers
         {
             return View(new PurchaseOrderViewModel
             {
-                PONumber = string.Empty,
+                PONumber = HtmlHelpers.HtmlHelpers.GeneratePONumber(),
                 MedicineID = 0,
                 OrderedQty = 0,
                 OrderedDate = DateTime.MinValue,
