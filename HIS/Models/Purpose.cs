@@ -6,7 +6,6 @@ namespace HIS
     [MetadataType(typeof(PurposeMetaData))]
     public partial class Purpose
     {
-
     }
 
     public class PurposeMetaData

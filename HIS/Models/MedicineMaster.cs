@@ -13,6 +13,10 @@ namespace HIS
         public string MedicineDisplay { get; set; }
         public decimal? ItemPrice { get; set; }
         public string SelectDisplay { get; set; }
+        public string SubCategory { get; set; }
+        public string SupplierName { get; set; }
+        public List<BrandSubCategory> SubCategories { get; set; }
+        public List<Supplier> Suppliers { get; set; }
     }
 
     public class MedicineMasterMetaData
@@ -32,5 +36,9 @@ namespace HIS
         [Display(Name = "Trigger Quantity:")]
         [Required(ErrorMessage = "Please enter Trigger Quantity", AllowEmptyStrings = false)]
         public int TriggerQty { get; set; }
+        [Required(ErrorMessage = "Please choose Sub-Category", AllowEmptyStrings = false)]
+        public int SubCategoryID { get; set; }
+        [Required(ErrorMessage = "Please choose Supplier", AllowEmptyStrings = false)]
+        public int SupplierID { get; set; }
     }
 }

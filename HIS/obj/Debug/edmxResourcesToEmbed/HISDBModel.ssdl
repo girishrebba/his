@@ -42,6 +42,13 @@
     <Property Name="BrandID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="BrandName" Type="varchar" MaxLength="100" Nullable="false" />
   </EntityType>
+  <EntityType Name="BrandSubCategories">
+    <Key>
+      <PropertyRef Name="SubCategoryID" />
+    </Key>
+    <Property Name="SubCategoryID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="SubCategory" Type="varchar" MaxLength="100" Nullable="false" />
+  </EntityType>
   <EntityType Name="Consultants">
     <Key>
       <PropertyRef Name="ConsultantID" />
@@ -222,6 +229,8 @@
     <Property Name="MedicineName" Type="nvarchar(max)" Nullable="false" />
     <Property Name="MedDose" Type="nvarchar(max)" Nullable="false" />
     <Property Name="TriggerQty" Type="int" />
+    <Property Name="SubCategoryID" Type="int" Nullable="false" />
+    <Property Name="SupplierID" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="OrderMaster">
     <Key>
@@ -431,6 +440,8 @@
     <Property Name="LotNo" Type="varchar" MaxLength="30" />
     <Property Name="ExpiryDate" Type="date" />
     <Property Name="ApprovedStatus" Type="bit" />
+    <Property Name="MfgDate" Type="date" />
+    <Property Name="HospitalPrice" Type="decimal" Precision="6" Scale="2" />
   </EntityType>
   <EntityType Name="Purpose">
     <Key>
@@ -497,6 +508,13 @@
     </Key>
     <Property Name="SpecializationID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="DoctorType" Type="varchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Suppliers">
+    <Key>
+      <PropertyRef Name="SupplierID" />
+    </Key>
+    <Property Name="SupplierID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="SupplierName" Type="varchar" MaxLength="100" Nullable="false" />
   </EntityType>
   <EntityType Name="TestTypes">
     <Key>
@@ -1046,6 +1064,14 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Function Name="AddSubCategory" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Name" Type="varchar" Mode="In" />
+    <Parameter Name="SubCategoryID" Type="int" Mode="InOut" />
+  </Function>
+  <Function Name="AddSupplier" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Name" Type="varchar" Mode="In" />
+    <Parameter Name="SupplierID" Type="int" Mode="InOut" />
+  </Function>
   <Function Name="BedReport" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
   <Function Name="ConsutantPayReport" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="Doctors" Type="varchar(max)" Mode="In" />
@@ -1119,6 +1145,7 @@
     <EntitySet Name="BloodGroup" EntityType="Self.BloodGroup" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="BrandCategories" EntityType="Self.BrandCategories" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Brands" EntityType="Self.Brands" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="BrandSubCategories" EntityType="Self.BrandSubCategories" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Consultants" EntityType="Self.Consultants" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ConsultantVisits" EntityType="Self.ConsultantVisits" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ConsultationFee" EntityType="Self.ConsultationFee" Schema="dbo" store:Type="Tables" />
@@ -1156,6 +1183,7 @@
     <EntitySet Name="Scans" EntityType="Self.Scans" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ScanTestMaster" EntityType="Self.ScanTestMaster" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Specialization" EntityType="Self.Specialization" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Suppliers" EntityType="Self.Suppliers" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="TestTypes" EntityType="Self.TestTypes" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="UserPermission" EntityType="Self.UserPermission" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />

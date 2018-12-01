@@ -117,6 +117,8 @@
     <Property Name="TriggerQty" Type="Int32" />
     <NavigationProperty Name="OrderRequests" Relationship="HISDBModel.FK_OR_MedicineID" FromRole="MedicineMaster" ToRole="OrderRequest" />
     <NavigationProperty Name="PharmaKitItems" Relationship="HISDBModel.FK_PKI_MedicineID" FromRole="MedicineMaster" ToRole="PharmaKitItem" />
+    <Property Name="SubCategoryID" Type="Int32" Nullable="false" />
+    <Property Name="SupplierID" Type="Int32" Nullable="false" />
   </EntityType>
   <EntityType Name="PatientPrescription">
     <Key>
@@ -199,6 +201,8 @@
     <Property Name="ExpiryDate" Type="DateTime" Precision="0" />
     <Property Name="ApprovedStatus" Type="Boolean" />
     <NavigationProperty Name="MedicineMaster" Relationship="Self.FK_PO_MedicineID" FromRole="PurchaseOrder" ToRole="MedicineMaster" />
+    <Property Name="MfgDate" Type="DateTime" Precision="0" />
+    <Property Name="HospitalPrice" Type="Decimal" Precision="6" Scale="2" />
   </EntityType>
   <EntityType Name="Room">
     <Key>
@@ -782,6 +786,16 @@
       <Parameter Name="OMID" Mode="InOut" Type="Int32" />
     </FunctionImport>
     <FunctionImport Name="BedReport" ReturnType="Collection(HISDBModel.BedReport_Result)" />
+    <EntitySet Name="BrandSubCategories" EntityType="HISDBModel.BrandSubCategory" />
+    <EntitySet Name="Suppliers" EntityType="HISDBModel.Supplier" />
+    <FunctionImport Name="AddSubCategory">
+      <Parameter Name="Name" Mode="In" Type="String" />
+      <Parameter Name="SubCategoryID" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="AddSupplier">
+      <Parameter Name="Name" Mode="In" Type="String" />
+      <Parameter Name="SupplierID" Mode="InOut" Type="Int32" />
+    </FunctionImport>
   </EntityContainer>
   <EntityType Name="LabTestMaster">
     <Key>
@@ -1513,4 +1527,18 @@
     <Property Type="String" Name="roomtype" Nullable="true" MaxLength="50" />
     <Property Type="String" Name="bedstatus" Nullable="false" MaxLength="9" />
   </ComplexType>
+  <EntityType Name="BrandSubCategory">
+    <Key>
+      <PropertyRef Name="SubCategoryID" />
+    </Key>
+    <Property Name="SubCategoryID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="SubCategory" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="Supplier">
+    <Key>
+      <PropertyRef Name="SupplierID" />
+    </Key>
+    <Property Name="SupplierID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="SupplierName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+  </EntityType>
 </Schema>

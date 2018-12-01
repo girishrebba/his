@@ -1,0 +1,19 @@
+﻿
+@model HIS.Supplier
+@{
+    Layout = null;
+}
+@using (Html.BeginForm("AddModify", "Suppliers", FormMethod.Post, new { onsubmit = "return SubmitSupplierForm(this)" }))
+{
+    @Html.HiddenFor(model => model.SupplierID)
+    <div class="astriskNote"><span></span></div>
+    <div class="form-group required">
+        @Html.LabelFor(model => model.SupplierName, "Supplier:", new { @class = "control-label" })
+        @Html.EditorFor(model => model.SupplierName, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.SupplierName)
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Submit" class="btn btn-primary" />
+        <input type="reset" value="Reset" class="btn" />
+    </div>
+}

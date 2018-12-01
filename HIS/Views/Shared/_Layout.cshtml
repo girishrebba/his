@@ -167,6 +167,10 @@
     {
                     <li><a href="@Url.Action("Index", "BrandCategory")"><span class="title">Brand Categories</span></a></li>
 }
+                        @if (ViewContext.Controller.HasPermission("BrandSubCategories-index"))
+    {
+                    <li><a href="@Url.Action("Index", "BrandSubCategories")"><span class="title">Sub Categories</span></a></li>
+}
                         @if (ViewContext.Controller.HasPermission("Beds-index"))
     {
                     <li><a href="@Url.Action("Index", "Beds")"><span class="title">Beds</span></a></li>
@@ -235,6 +239,11 @@
     {
                     <li><a href="@Url.Action("Index", "Purpose")"><span class="title">Purpose</span></a></li>
 }
+                        @if (ViewContext.Controller.HasPermission("Suppliers-index"))
+    {
+                    <li><a href="@Url.Action("Index", "Suppliers")"><span class="title">Suppliers</span></a></li>
+}
+
                     </ul>
                 </li>
             </ul>

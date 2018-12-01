@@ -99,6 +99,8 @@
     <EntitySetMapping Name="MedicineMasters">
       <EntityTypeMapping TypeName="HISDBModel.MedicineMaster">
         <MappingFragment StoreEntitySet="MedicineMaster">
+          <ScalarProperty Name="SupplierID" ColumnName="SupplierID" />
+          <ScalarProperty Name="SubCategoryID" ColumnName="SubCategoryID" />
           <ScalarProperty Name="TriggerQty" ColumnName="TriggerQty" />
           <ScalarProperty Name="MMID" ColumnName="MMID" />
           <ScalarProperty Name="BrandID" ColumnName="BrandID" />
@@ -172,6 +174,8 @@
     <EntitySetMapping Name="PurchaseOrders">
       <EntityTypeMapping TypeName="HISDBModel.PurchaseOrder">
         <MappingFragment StoreEntitySet="PurchaseOrder">
+          <ScalarProperty Name="HospitalPrice" ColumnName="HospitalPrice" />
+          <ScalarProperty Name="MfgDate" ColumnName="MfgDate" />
           <ScalarProperty Name="OrderID" ColumnName="OrderID" />
           <ScalarProperty Name="PONumber" ColumnName="PONumber" />
           <ScalarProperty Name="MedicineID" ColumnName="MedicineID" />
@@ -673,5 +677,23 @@
         </ComplexTypeMapping>
       </ResultMapping>
     </FunctionImportMapping>
+    <EntitySetMapping Name="BrandSubCategories">
+      <EntityTypeMapping TypeName="HISDBModel.BrandSubCategory">
+        <MappingFragment StoreEntitySet="BrandSubCategories">
+          <ScalarProperty Name="SubCategory" ColumnName="SubCategory" />
+          <ScalarProperty Name="SubCategoryID" ColumnName="SubCategoryID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Suppliers">
+      <EntityTypeMapping TypeName="HISDBModel.Supplier">
+        <MappingFragment StoreEntitySet="Suppliers">
+          <ScalarProperty Name="SupplierName" ColumnName="SupplierName" />
+          <ScalarProperty Name="SupplierID" ColumnName="SupplierID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="AddSubCategory" FunctionName="HISDBModel.Store.AddSubCategory" />
+    <FunctionImportMapping FunctionImportName="AddSupplier" FunctionName="HISDBModel.Store.AddSupplier" />
   </EntityContainerMapping>
 </Mapping>

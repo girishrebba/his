@@ -10,50 +10,44 @@ using System.ComponentModel;
 namespace HIS.Controllers
 {
     [SessionActionFilter]
-    public class PurposeController : Controller
+    public class SuppliersController : Controller
     {
-        // GET: Purpose
         [His]
-        [Description(" - Purpose view page.")]
+        [Description(" - Suppliers view page.")]
         public ActionResult Index()
         {
             return View();
         }
 
-        public JsonResult GetPurpose()
+        public JsonResult GetSuppliers()
         {
-            using (HISDBEntities hs = new HISDBEntities())
-            {
-                var purpose = (from p in hs.Purposes
-                                   select new { p.PurposeID, p.PurposeName }).ToList();
-
-                return Json(new { data = purpose }, JsonRequestBehavior.AllowGet);
-            }
+            return Json(new { data = HtmlHelpers.HtmlHelpers.GetSuppliers() }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
-        [Description(" - Purpose Add/Edit page.")]
+        [Description(" - Suppliers Add/Edit page.")]
         public ActionResult AddModify(int id = 0)
         {
             if (id == 0)
-                return View(new Purpose());
+                return View(new Supplier());
             else
             {
                 using (HISDBEntities db = new HISDBEntities())
                 {
-                    return View(db.Purposes.Where(x => x.PurposeID == id).FirstOrDefault<Purpose>());
+                    return View(db.Suppliers.Where(x => x.SupplierID == id).FirstOrDefault<Supplier>());
                 }
             }
         }
 
         [HttpPost]
-        public ActionResult AddModify(Purpose p)
+        [Description(" - Suppliers Add/Edit page.")]
+        public ActionResult AddModify(Supplier p)
         {
             using (HISDBEntities db = new HISDBEntities())
             {
-                if (p.PurposeID == 0)
+                if (p.SupplierID == 0)
                 {
-                    db.Purposes.Add(p);
+                    db.Suppliers.Add(p);
                     db.SaveChanges();
                     return Json(new { success = true, message = "Saved Successfully" }, JsonRequestBehavior.AllowGet);
                 }
@@ -67,17 +61,16 @@ namespace HIS.Controllers
         }
 
         [HttpPost]
-        [Description(" - Purpose Delete page.")]
+        [Description(" - Supplier Delete page.")]
         public ActionResult Delete(int id)
         {
             using (HISDBEntities db = new HISDBEntities())
             {
-                Purpose prpse = db.Purposes.Where(x => x.PurposeID == id).FirstOrDefault<Purpose>();
-                db.Purposes.Remove(prpse);
+                Supplier splr = db.Suppliers.Where(x => x.SupplierID == id).FirstOrDefault<Supplier>();
+                db.Suppliers.Remove(splr);
                 db.SaveChanges();
                 return Json(new { success = true, message = "Deleted Successfully" }, JsonRequestBehavior.AllowGet);
             }
         }
-
     }
 }

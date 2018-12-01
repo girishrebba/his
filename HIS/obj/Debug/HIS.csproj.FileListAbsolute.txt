@@ -607,6 +607,7 @@ D:\HIS\trunk\HIS\bin\System.Web.Webpages.Razor.xml
 D:\HIS\trunk\HIS\bin\System.Web.Helpers.xml
 D:\HIS\trunk\HIS\bin\System.Web.Mvc.xml
 D:\HIS\trunk\HIS\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+D:\HIS\trunk\HIS\obj\Debug\HIS.csprojResolveAssemblyReference.cache
 D:\HIS\trunk\HIS\obj\Debug\HIS.csproj.CoreCompileInputs.cache
 D:\HIS\trunk\HIS\obj\Debug\HIS.csproj.CopyComplete
 D:\HIS\trunk\HIS\obj\Debug\HIS.dll

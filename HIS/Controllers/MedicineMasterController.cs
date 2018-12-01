@@ -25,11 +25,17 @@ namespace HIS.Controllers
                 var medicines = (from med in hs.MedicineMasters
                                  join b in hs.Brands on med.BrandID equals b.BrandID
                                  join bc in hs.BrandCategories on med.BrandCategoryID equals bc.CategoryID
+                                 join sp in hs.Suppliers on med.SupplierID equals sp.SupplierID into sup
+                                 from sp in sup.DefaultIfEmpty()
+                                 join bsc in hs.BrandSubCategories on med.SubCategoryID equals bsc.SubCategoryID into subcat
+                                 from bsc in subcat.DefaultIfEmpty()
                                  select new
                                  {
                                      med,
                                      b.BrandName,
-                                     bc.Category
+                                     bc.Category,
+                                     sp.SupplierName,
+                                     bsc.SubCategory
                                  }).AsEnumerable().
                                            Select(x => new MedicineMaster
                                            {
@@ -38,6 +44,8 @@ namespace HIS.Controllers
                                                Category = x.Category,
                                                MedicineName = x.med.MedicineName,
                                                MedDose = x.med.MedDose,
+                                               SubCategory = x.SubCategory,
+                                               SupplierName = x.SupplierName,
                                                TriggerQty = x.med.TriggerQty
                                            }).ToList();
 
@@ -55,7 +63,11 @@ namespace HIS.Controllers
             {
                 ViewBag.Brands = new SelectList(Brands, "BrandID", "BrandName");
                 ViewBag.BrandCategories = new SelectList(BrandCategories, "CategoryID", "Category");
-                return View(new MedicineMaster());
+                return View(new MedicineMaster { 
+                    
+                    SubCategories = HtmlHelpers.HtmlHelpers.GetSubCategories(),
+                    Suppliers = HtmlHelpers.HtmlHelpers.GetSuppliers()
+                });
             }
             else
             {
@@ -64,12 +76,50 @@ namespace HIS.Controllers
                 {
                     ViewBag.Brands = new SelectList(Brands, "BrandID", "BrandName", medicineInventory.BrandID);
                     ViewBag.BrandCategories = new SelectList(BrandCategories, "CategoryID", "Category", medicineInventory.BrandCategoryID);
+                    medicineInventory.SubCategories = HtmlHelpers.HtmlHelpers.GetSubCategories();
+                    medicineInventory.Suppliers = HtmlHelpers.HtmlHelpers.GetSuppliers();
                     return View(medicineInventory);
                 }
                 else
                 {
                     return HttpNotFound();
                 }
+            }
+        }
+
+        [HttpPost]
+        public JsonResult GetSubCategories(string Prefix)
+        {
+            using (HISDBEntities hs = new HISDBEntities())
+            {
+                var subcategories = (from bsc in hs.BrandSubCategories
+                                 join mm in hs.MedicineMasters on bsc.SubCategoryID equals mm.SubCategoryID
+                                 where (bsc.SubCategory.StartsWith(Prefix))
+                                 select new { bsc }).AsEnumerable()
+                                 .Select(m => new MedicineMaster
+                                 {
+                                     SubCategoryID = m.bsc.SubCategoryID,
+                                     SubCategory = m.bsc.SubCategory
+                                 }).ToList();
+                return Json(subcategories, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
+        public JsonResult GetSuppliers(string Prefix)
+        {
+            using (HISDBEntities hs = new HISDBEntities())
+            {
+                var suppliers = (from sp in hs.Suppliers
+                                     join mm in hs.MedicineMasters on sp.SupplierID equals mm.SupplierID
+                                     where (sp.SupplierName.StartsWith(Prefix))
+                                     select new { sp }).AsEnumerable()
+                                 .Select(m => new MedicineMaster
+                                 {
+                                     SupplierID = m.sp.SupplierID,
+                                     SupplierName = m.sp.SupplierName
+                                 }).ToList();
+                return Json(suppliers, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -93,18 +143,26 @@ namespace HIS.Controllers
                 var v = (from med in dc.MedicineMasters
                          join b in dc.Brands on med.BrandID equals b.BrandID
                          join bc in dc.BrandCategories on med.BrandCategoryID equals bc.CategoryID
+                         join sp in dc.Suppliers on med.SupplierID equals sp.SupplierID into sup
+                         from sp in sup.DefaultIfEmpty()
+                         join bsc in dc.BrandSubCategories on med.SubCategoryID equals bsc.SubCategoryID into subcat
+                         from bsc in subcat.DefaultIfEmpty()
                          where med.MMID.Equals(mmID)
                          select new
                          {
                              med,
                              b.BrandName,
-                             bc.Category
+                             bc.Category,
+                             sp.SupplierName,
+                             bsc.SubCategory
                          }).FirstOrDefault();
                 if (v != null)
                 {
                     medicineMaster = v.med;
                     medicineMaster.BrandName = v.BrandName;
                     medicineMaster.Category = v.Category;
+                    medicineMaster.SubCategory = v.SubCategory;
+                    medicineMaster.SupplierName = v.SupplierName;
                 }
                 return medicineMaster;
             }
@@ -117,6 +175,7 @@ namespace HIS.Controllers
             {
                 if (mm.MMID == 0)
                 {
+                    //AddSupplierCategories(mm);
                     db.MedicineMasters.Add(mm);
                     MedicineInventory mi = new MedicineInventory();
                     mi.MedicineID = mm.MMID;
@@ -127,12 +186,50 @@ namespace HIS.Controllers
                 }
                 else
                 {
+                    //AddSupplierCategories(mm);
                     db.Entry(mm).State = EntityState.Modified;
                     db.SaveChanges();
                     return Json(new { success = true, message = "Updated Successfully" }, JsonRequestBehavior.AllowGet);
                 }
             }
         }
+
+        private void AddSupplierCategories(MedicineMaster mm)
+        {
+            if (mm != null && mm.SupplierID == 0 && !string.IsNullOrEmpty(mm.SupplierName))
+            {
+                mm.SupplierID = AddSuppliers(mm.SupplierName);
+            }
+
+            if (mm.SubCategoryID == 0 && !string.IsNullOrEmpty(mm.SubCategory))
+            {
+                mm.SubCategoryID = AddSubCategories(mm.SubCategory);
+            }
+        }
+
+        private int AddSubCategories(string subCategory)
+        {
+            using (HISDBEntities db = new HISDBEntities())
+            {
+                System.Data.Entity.Core.Objects.ObjectParameter subcatOut = new System.Data.Entity.Core.Objects.ObjectParameter("SubCategoryID", typeof(Int32));
+
+                db.AddSubCategory(subCategory, subcatOut);
+                return Convert.ToInt32(subcatOut.Value);
+            }
+        }
+
+        private int AddSuppliers(string supplierName)
+        {
+            using (HISDBEntities db = new HISDBEntities())
+            {
+                System.Data.Entity.Core.Objects.ObjectParameter supplierOut = new System.Data.Entity.Core.Objects.ObjectParameter("SupplierID", typeof(Int32));
+
+                db.AddSupplier(supplierName, supplierOut);
+                return Convert.ToInt32(supplierOut.Value);
+            }
+        }
+
+        
 
         private void UpdateMedInventory(MedicineMaster mm)
         {

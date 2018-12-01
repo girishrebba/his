@@ -848,12 +848,19 @@ namespace HIS.Controllers
                 var medicines = (from bc in hs.BrandCategories
                                  join mm in hs.MedicineMasters on bc.CategoryID equals mm.BrandCategoryID
                                  join mi in hs.MedicineInventories on mm.MMID equals mi.MedicineID
-                                 where (mm.MedicineName.StartsWith(Prefix)|| bc.Category.StartsWith(Prefix))
-                                 select new { bc, mm, mi }).AsEnumerable()
+                                 join bsc in hs.BrandSubCategories on mm.SubCategoryID equals bsc.SubCategoryID 
+                                 //into subcat
+                                 //from bsc in subcat.DefaultIfEmpty()
+                                 where 
+                                 (mm.MedicineName.StartsWith(Prefix)
+                                 || bc.Category.StartsWith(Prefix)
+                                 || bsc.SubCategory.StartsWith(Prefix)
+                                 || mm.MedDose.StartsWith(Prefix))
+                                 select new { bc, mm, mi,bsc.SubCategory }).AsEnumerable()
                                  .Select(m => new MedicineMaster
                                  {
                                      MMID = m.mm.MMID,
-                                     MedicineDisplay = HtmlHelpers.HtmlHelpers.GetMedicineCategoryWithDoseAvailableQty(m.bc.Category, m.mm.MedicineName, m.mm.MedDose, m.mi.AvailableQty.Value),
+                                     MedicineDisplay = HtmlHelpers.HtmlHelpers.GetMedicineCategoryWithDoseAvailableQty(m.SubCategory,m.bc.Category, m.mm.MedicineName, m.mm.MedDose, m.mi.AvailableQty.Value),
                                      ItemPrice = m.mi.PricePerItem,
                                      SelectDisplay = string.Format("{0} - {1}",m.mm.MedicineName, m.mm.MedDose)
                                  }).ToList();

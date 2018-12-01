@@ -977,6 +977,7 @@
     <Content Include="light\js\jquery-1.12.4.min.map" />
     <None Include="Properties\PublishProfiles\HisApp - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\sravanthihospital.in - Web Deploy.pubxml" />
+    <Content Include="RandP\permissions.json" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -1005,6 +1006,7 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <None Include="Scripts\_references.js" />
+    <Content Include="Scripts\userpermissions.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -1060,6 +1062,9 @@
     <Compile Include="BrandCategory.cs">
       <DependentUpon>HISDBModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="BrandSubCategory.cs">
+      <DependentUpon>HISDBModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Consultant.cs">
       <DependentUpon>HISDBModel.tt</DependentUpon>
     </Compile>
@@ -1082,6 +1087,7 @@
     <Compile Include="Controllers\BloodGroupController.cs" />
     <Compile Include="Controllers\BrandCategoryController.cs" />
     <Compile Include="Controllers\BrandController.cs" />
+    <Compile Include="Controllers\BrandSubCategoriesController.cs" />
     <Compile Include="Controllers\ConsultantController.cs" />
     <Compile Include="Controllers\ConsultantpayrptController.cs" />
     <Compile Include="Controllers\ConsultantVisitsController.cs" />
@@ -1109,6 +1115,7 @@
     <Compile Include="Controllers\ScanCategoryController.cs" />
     <Compile Include="Controllers\ScanController.cs" />
     <Compile Include="Controllers\SpecializationController.cs" />
+    <Compile Include="Controllers\SuppliersController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\UserTypeController.cs" />
     <Compile Include="FeeCollection.cs">
@@ -1176,6 +1183,7 @@
     <Compile Include="Models\BloodGroup.cs" />
     <Compile Include="Models\Brand.cs" />
     <Compile Include="Models\BrandCategory.cs" />
+    <Compile Include="Models\BrandSubCategory.cs" />
     <Compile Include="Models\Consultant.cs" />
     <Compile Include="Models\ConsultantVisits.cs" />
     <Compile Include="Models\ConsultationFee.cs" />
@@ -1216,6 +1224,7 @@
     <Compile Include="Models\Scan.cs" />
     <Compile Include="Models\ScanCategory.cs" />
     <Compile Include="Models\Specialization.cs" />
+    <Compile Include="Models\Supplier.cs" />
     <Compile Include="Models\TestType.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserType.cs" />
@@ -1293,6 +1302,9 @@
       <DependentUpon>HISDBModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Startup.cs" />
+    <Compile Include="Supplier.cs">
+      <DependentUpon>HISDBModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="TestType.cs">
       <DependentUpon>HISDBModel.tt</DependentUpon>
     </Compile>
@@ -1538,6 +1550,10 @@
     <Content Include="Views\Consultantpayrpt\Index.cshtml" />
     <Content Include="Views\PurchaseOrder\PlaceOrder.cshtml" />
     <Content Include="Views\OutPatient\PatientScans.cshtml" />
+    <Content Include="Views\Suppliers\Index.cshtml" />
+    <Content Include="Views\BrandSubCategories\Index.cshtml" />
+    <Content Include="Views\BrandSubCategories\AddModify.cshtml" />
+    <Content Include="Views\Suppliers\AddModify.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -39,10 +39,10 @@ namespace HIS.HtmlHelpers
             return string.Format("{0} - {1}(Available - {2})", medicineName, dose, qty);
         }
 
-        public static string GetMedicineCategoryWithDoseAvailableQty(string category,
+        public static string GetMedicineCategoryWithDoseAvailableQty(string subCategory, string category,
             string medicineName, string dose, int qty)
         {
-            return string.Format("{0} -> {1} - {2} (Available - {3})", category, medicineName, dose, qty);
+            return string.Format("{0} -> {1} -> {2} - {3} (Available - {4})", category, !(string.IsNullOrEmpty(subCategory)) ? subCategory : "N/A", medicineName, dose, qty);
         }
 
         public static string Get_IN_ENMR(int id)
@@ -199,7 +199,7 @@ public static List<User> GetDoctors()
             {
                 var doctors = (from u in dc.Users
                                join ut in dc.UserTypes on u.UserTypeID equals ut.UserTypeID
-                               where ut.UserTypeName.Contains("Doctor") || ut.UserTypeName.Contains("Admin")
+                               where ut.UserTypeName.Contains("Doctor")
                                select new { u })
                                .OrderBy(b => b.u.UserName).AsEnumerable()
                                .Select(x => new User { UserID = x.u.UserID, NameDisplay = GetFullName(x.u.FirstName,x.u.MiddleName,x.u.LastName) }).ToList();
@@ -291,6 +291,28 @@ public static List<User> GetDoctors()
                                 select new { p.PurposeID, p.PurposeName }).AsEnumerable()
                              .Select(x => new Purpose { PurposeID = x.PurposeID, PurposeName = x.PurposeName }).ToList();
                 return purposes;
+            }
+        }
+
+        public static List<Supplier> GetSuppliers()
+        {
+            using (HISDBEntities dc = new HISDBEntities())
+            {
+                var suppliers = (from s in dc.Suppliers
+                                select new { s.SupplierID, s.SupplierName }).AsEnumerable()
+                             .Select(x => new Supplier { SupplierID = x.SupplierID, SupplierName = x.SupplierName }).ToList();
+                return suppliers;
+            }
+        }
+
+        public static List<BrandSubCategory> GetSubCategories()
+        {
+            using (HISDBEntities dc = new HISDBEntities())
+            {
+                var subCats = (from bsc in dc.BrandSubCategories
+                                 select new { bsc.SubCategoryID, bsc.SubCategory }).AsEnumerable()
+                             .Select(x => new BrandSubCategory { SubCategoryID = x.SubCategoryID, SubCategory = x.SubCategory }).ToList();
+                return subCats;
             }
         }
 
