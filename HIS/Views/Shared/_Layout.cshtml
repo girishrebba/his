@@ -107,11 +107,11 @@
                     <ul class="nav">
                         @if (ViewContext.Controller.HasPermission("Revenuerpt-index"))
     {
-                    <li class="active"><a href="@Url.Action("Index", "Revenuerpt")"><span class="title">OP Revenue Report</span></a></li>
+                    <li> <a href="@Url.Action("Index", "Revenuerpt")"><span class="title">OP Revenue Report</span></a></li>
 }
                         @if (ViewContext.Controller.HasPermission("IpRevenuerpt-index"))
     {
-                    <li class="active"><a href="@Url.Action("Index", "IpRevenuerpt")"><span class="title">IP Revenue Report</span></a></li>
+                    <li ><a href="@Url.Action("Index", "IpRevenuerpt")"><span class="title">IP Revenue Report</span></a></li>
 }
                         @if (ViewContext.Controller.HasPermission("InventoryRpt-index"))
     {
@@ -251,7 +251,7 @@
         </div>
         <!-- /page sidebar -->
         <!-- Main container -->
-        <div class="main-container" style="background:url(../light/images/bg-his_logo.png);background-size:cover;background-repeat:no-repeat;background-position:center center;">
+        <div class="main-container" style="background:url(../light/images/bg1-his_logo.png);background-size:cover;background-repeat:no-repeat;background-position:center center;">
             <!-- Main header -->
             <div class="main-header row">
                 <div class="col-sm-6 col-xs-7">

@@ -113,8 +113,12 @@
                             type: "POST",
                             data: data1,
                             url: '/Consultantpayrpt/GetReportdata',
+                            beforeSend: function () {
+                                $('body').loadingModal({ text: 'Loading...' });
+                            },
                             success: function (data) {
-                                if (data != null) {
+                                $('body').loadingModal('destroy');
+                                if (data != null && data.data.length > 0) {
                                     var str = "";
                                     str += "<table id='mytab' class='table table-striped table-bordered'><tr>"
                                   
@@ -138,6 +142,10 @@
 
                                     str += "</table>";
                                     $("#dynamicTable").append(str);
+                                }
+                                else {
+                                    var str1 = "<table><tr><td align='center'>No records found</td></tr></table>";
+                                    $("#dynamicTable").append(str1);
                                 }
                             }
                         });

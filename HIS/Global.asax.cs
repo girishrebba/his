@@ -30,6 +30,7 @@ namespace HIS
         protected void Session_End(object sender, EventArgs e)
         {
            Global.permissionList = null;
+            Response.RedirectToRoute("../Login/index");
         }
 
         

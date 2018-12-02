@@ -104,6 +104,7 @@
                     var eddt = $("#enddt").val();
                     var doctors = "";
                     $("#mytab").remove();
+                    $("#dynamicTable").empty(); 
                     $('#dynamicdpd input:checked').each(function () {
                         doctors += $(this).attr('id') + ",";
                     });
@@ -114,8 +115,12 @@
                             type: "POST",
                             data: data1,
                             url: '/IpRevenuerpt/GetReportdata',
+                            beforeSend: function () {
+                                $('body').loadingModal({ text: 'Loading...' });
+                            },
                             success: function (data) {
-                                if (data != null) {
+                                $('body').loadingModal('destroy');
+                                if (data != null && data.data.length > 0) {
                                     var str = "";
                                     str += "<table id='mytab' class='table table-striped table-bordered'><tr><td  colspan='2'></td><td  colspan='2'>Consultation</td><td  colspan='3'>Lab Tests</td><td  colspan='3'>Scan Tests</td><td>Packages</td><td></td></tr><tr>"
                                     str += "<td  colspan='2'></td>";
@@ -138,6 +143,7 @@
                                     var scanTotalAmountsum = 0;
                                     var scanTestPaidAmountsum = 0;
                                     var scanTestDiscountsum = 0;
+                                    var packagecost = 0;
                                     var RowSum = 0;
                                     for (var i = 0; i < data.data.length; i++) {
                                         if (i == 0) {
@@ -217,33 +223,55 @@
                                         else {
                                             str += "<td>0</td>";
                                         }
-                                        str += "<td>" + data.data[i]["packageCost"] + "</td>";
+
+                                        if (data.data[i]["packageCost"] != null) {
+                                            packagecost += data.data[i]["packageCost"];
+                                            RowSum += data.data[i]["packageCost"];
+                                            str += "<td>" + data.data[i]["packageCost"] + "</td>";
+                                        }
+                                        else {
+                                            str += "<td>0</td>";
+                                        }
+
+                                        
                                         str += "<td>" + RowSum + "</td>";
 
                                         str += "</tr >";
                                         if (i == data.data.length - 1) {
                                             var tot = consultationFeesum - feeDiscountsum + LabTestPaidAmountsum;
-                                            str += "<tr><td colspan='2' style='font- size:x - large;'><b>Total: </b></td><td><b>" + consultationFeesum + "</b></td><td><b>" + feeDiscountsum + "</b></td><td><b>" + LabTotalAmountsum + "</b></td><td><b>" + LabTestPaidAmountsum + "</b></td><td><b>" + LabTestDiscountsum + "</b></td><td><b>" + scanTotalAmountsum + "</b></td><td><b>" + scanTestPaidAmountsum + "</b></td><td><b>" + scanTestDiscountsum + "</b></td><td></td><td><b>" + tot + "</b></td></tr >";
+                                            str += "<tr><td colspan='2' style='font- size:x - large;'><b>Total: </b></td><td><b>" + consultationFeesum + "</b></td><td><b>" + feeDiscountsum + "</b></td><td><b>" + LabTotalAmountsum + "</b></td><td><b>" + LabTestPaidAmountsum + "</b></td><td><b>" + LabTestDiscountsum + "</b></td><td><b>" + scanTotalAmountsum + "</b></td><td><b>" + scanTestPaidAmountsum + "</b></td><td><b>" + scanTestDiscountsum + "</b></td><td><b>" + packagecost + "</b></td><td><b>" + tot + "</b></td></tr >";
                                             consultationFeesum = 0;
                                             feeDiscountsum = 0;
                                             LabTotalAmountsum = 0;
                                             LabTestPaidAmountsum = 0;
                                             LabTestDiscountsum = 0;
+                                            scanTotalAmountsum = 0;
+                                            scanTestPaidAmountsum = 0;
+                                            scanTestDiscountsum = 0;
+                                            packagecost = 0;
                                         }
                                         else if (data.data[i]["DoctorID"] != data.data[i + 1]["DoctorID"]) {
                                             var tot = consultationFeesum - feeDiscountsum + LabTestPaidAmountsum;
-                                            str += "<tr><td colspan='2' style='font- size:x - large;'><b>Total: </b></td><td><b>" + consultationFeesum + "</b></td><td><b>" + feeDiscountsum + "</b></td><td><b>" + LabTotalAmountsum + "</b></td><td><b>" + LabTestPaidAmountsum + "</b></td><td><b>" + LabTestDiscountsum + "</b></td><td><b>" + scanTotalAmountsum + "</b></td><td><b>" + scanTestPaidAmountsum + "</b></td><td><b>" + scanTestDiscountsum + "</b></td><td></td><td><b>" + tot + "</b></td></tr >";
+                                            str += "<tr><td colspan='2' style='font- size:x - large;'><b>Total: </b></td><td><b>" + consultationFeesum + "</b></td><td><b>" + feeDiscountsum + "</b></td><td><b>" + LabTotalAmountsum + "</b></td><td><b>" + LabTestPaidAmountsum + "</b></td><td><b>" + LabTestDiscountsum + "</b></td><td><b>" + scanTotalAmountsum + "</b></td><td><b>" + scanTestPaidAmountsum + "</b></td><td><b>" + scanTestDiscountsum + "</b></td><td><b>" + packagecost + "</b></td><td><b>" + tot + "</b></td></tr >";
                                             consultationFeesum = 0;
                                             feeDiscountsum = 0;
                                             LabTotalAmountsum = 0;
                                             LabTestPaidAmountsum = 0;
                                             LabTestDiscountsum = 0;
+                                            scanTotalAmountsum = 0;
+                                            scanTestPaidAmountsum = 0;
+                                            scanTestDiscountsum = 0;
+                                            packagecost = 0;
                                         }
                                         RowSum = 0;
                                     }
 
                                     str += "</table>";
                                     $("#dynamicTable").append(str);
+                                }
+                                else {
+                                    var str1 = "<table><tr><td align='center'>No records found</td></tr></table>";
+                                    $("#dynamicTable").append(str1);
                                 }
                             }
                         });
