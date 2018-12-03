@@ -912,7 +912,7 @@ public static List<User> GetDoctors()
 
         public static string GeneratePONumber()
         {
-            string orderNo = string.Empty;
+            string orderNo = "0";
             using (var db = new HISDBEntities())
             {
                 var lastOrder = db.PurchaseOrders.OrderByDescending(o => o.OrderID).FirstOrDefault();
