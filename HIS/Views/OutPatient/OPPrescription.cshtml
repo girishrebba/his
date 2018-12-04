@@ -394,8 +394,11 @@
     $('#btnSubmit').click(function () {
         if (($('table#ppTable tr').length < 3)
             && $('#TestIds').val() === null
-            && $('#KitIds').val() === null) {
-            alert("Please suggest some prescrition or Test");
+            && $('#KitIds').val() === null
+           && $('#ScanIds').val() === null)
+            
+        {
+            alert("Please suggest some prescrition or Test or Scan");
             return false;
         }
     });

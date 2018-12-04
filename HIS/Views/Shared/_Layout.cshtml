@@ -47,6 +47,10 @@
                 font-size: x-small;
             }
 
+            .labelBold{
+               font-weight:bold;
+            }
+
     </style>
 </head>
 <body>
@@ -261,7 +265,7 @@
                             <a data-toggle="dropdown" class="dropdown-toggle" href="#" aria-expanded="false">@Session["UserName"]<span class="caret"></span></a>
                             <!-- User action menu -->
                             <ul class="dropdown-menu">
-                                <li><a href="#/"><i class="icon-user"></i>My profile</a></li>
+                                @*<li><a href="#/"><i class="icon-user"></i>My profile</a></li>*@
                                 <li><a href="../../Login/LogOut"><i class="icon-logout"></i>Logout</a></li>
                             </ul>
                             <!-- /user action menu -->

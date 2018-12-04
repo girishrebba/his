@@ -29,6 +29,11 @@
             border-top: 3px solid #029b17;
             border-bottom-color: #f9f9f9;
         }
+
+    .chosen-results
+    {
+        height: 65px !important;
+    }
 </style>
 @using (Html.BeginForm("AddModify", "OutPatient", FormMethod.Post, new { id = "outPatientForm", onsubmit = "return SubmitForm(this)" }))
 {
@@ -242,11 +247,11 @@
             <div id="metricsTab" class="tab-pane fade in" role="tabpanel">
                 <div class="form-horizontal">
                     <div class="form-group">
-                        @Html.LabelFor(model => model.Height, "Height:", new { @class = "control-label col-sm-2" })
+                        @Html.LabelFor(model => model.Height, "Height(CM):", new { @class = "control-label col-sm-2" })
                         <div class="col-sm-4">
                             @Html.EditorFor(model => model.Height, new { htmlAttributes = new { @class = "form-control" } })
                         </div>
-                        @Html.LabelFor(model => model.Weight, "Weight:", new { @class = "control-label col-sm-2" })
+                        @Html.LabelFor(model => model.Weight, "Weight(KG):", new { @class = "control-label col-sm-2" })
                         <div class="col-sm-4">
                             @Html.EditorFor(model => model.Weight, new { htmlAttributes = new { @class = "form-control" } })
                         </div>
