@@ -202,8 +202,12 @@ public static List<User> GetDoctors()
                                where ut.UserTypeName.Contains("Doctor")
                                select new { u })
                                .OrderBy(b => b.u.UserName).AsEnumerable()
-                               .Select(x => new User { UserID = x.u.UserID, NameDisplay = GetFullName(x.u.FirstName,x.u.MiddleName,x.u.LastName) }).ToList();
-                return doctors;
+                               .Select(x => new User { UserID = x.u.UserID,
+                                   NameDisplay = GetFullName(x.u.FirstName,x.u.MiddleName,x.u.LastName)
+                               ,
+                                   UserStatus = x.u.UserStatus.HasValue ? x.u.UserStatus.Value : false
+                               }).ToList();
+                return doctors.Where(x => x.UserStatus == true).ToList();
             }
         }
         public static List<User> GetNurses()
@@ -213,11 +217,12 @@ public static List<User> GetDoctors()
             {
                 var doctors = (from u in dc.Users
                                join ut in dc.UserTypes on u.UserTypeID equals ut.UserTypeID
-                               where ut.UserTypeName.Contains("Nurse") 
+                               where ut.UserTypeName.Contains("Nurse")
                                select new { u })
                                .OrderBy(b => b.u.UserName).AsEnumerable()
-                               .Select(x => new User { UserID = x.u.UserID, NameDisplay = GetFullName(x.u.FirstName, x.u.MiddleName, x.u.LastName) }).ToList();
-                return doctors;
+                               .Select(x => new User { UserID = x.u.UserID, NameDisplay = GetFullName(x.u.FirstName, x.u.MiddleName, x.u.LastName),
+                               UserStatus = x.u.UserStatus.HasValue ? x.u.UserStatus.Value : false}).ToList();
+                return doctors.Where(x=>x.UserStatus == true).ToList();
             }
         }
         //Fetch Blood Groups from database
@@ -632,7 +637,8 @@ public static List<User> GetDoctors()
                                     {
                                         pt,
                                         u,
-                                        tt
+                                        tt,
+                                        ltm
                                     })
                                   .OrderByDescending(b => b.pt.PTID)
                                   .AsEnumerable()
@@ -644,10 +650,48 @@ public static List<User> GetDoctors()
                                      DoctorName = GetFullName(x.u.FirstName, x.u.MiddleName, x.u.LastName),
                                      RecordedValues = x.pt.RecordedValues,
                                      TestImpression = x.pt.TestImpression,
-                                     ReportPath = x.pt.ReportPath
+                                     ReportPath = x.pt.ReportPath,
+                                     TestCost = x.ltm.PaidAmount != null ? x.ltm.PaidAmount.Value : 0
                                  }).ToList();
 
                 return patientTests;
+            }
+        }
+
+        public static List<PatientScan> GetPatientScans(string enmrNo)
+        {
+            using (HISDBEntities hs = new HISDBEntities())
+            {
+
+                var patientScans = (from pt in hs.PatientScans
+                                    join ltm in hs.ScanTestMasters on pt.STMID equals ltm.STMID
+                                    join op in hs.OutPatients on ltm.ENMRNO equals op.ENMRNO
+                                    join tt in hs.Scans on pt.ScanID equals tt.ScanID
+                                    join u in hs.Users on ltm.PrescribedBy equals u.UserID
+                                    join ut in hs.UserTypes on u.UserTypeID equals ut.UserTypeID
+                                    where ltm.ENMRNO == enmrNo
+                                    select new
+                                    {
+                                        pt,
+                                        u,
+                                        tt,
+                                        ltm
+                                    })
+                                  .OrderByDescending(b => b.pt.PSID)
+                                  .AsEnumerable()
+                                 .Select(x => new PatientScan
+                                 {
+                                     ENMRNO = enmrNo,
+                                     ScanName = x.tt.ScanName,
+                                     DateDisplay = DateFormat(x.pt.ScanDate),
+                                     DoctorName = GetFullName(x.u.FirstName, x.u.MiddleName, x.u.LastName),
+                                     RecordedValues = x.pt.RecordedValues,
+                                     TestImpression = x.pt.TestImpression,
+                                     ReportPath = x.pt.ReportPath,
+                                     ScanCost = x.ltm.PaidAmount != null ? x.ltm.PaidAmount.Value : 0
+                                 }).ToList();
+
+                return patientScans;
             }
         }
 
@@ -662,12 +706,12 @@ public static List<User> GetDoctors()
                                     join u in hs.Users on ltm.PrescribedBy equals u.UserID
                                     join ut in hs.UserTypes on u.UserTypeID equals ut.UserTypeID
                                     where ltm.ENMRNO == enmrNo && ltm.VisitID==0
-                                    && ltm.IsDelivered== true
                                     select new
                                     {
                                         pt,
                                         u,
-                                        tt
+                                        tt,
+                                        ltm
                                     })
                                   .OrderByDescending(b => b.pt.PTID)
                                   .AsEnumerable()
@@ -679,7 +723,8 @@ public static List<User> GetDoctors()
                                      DoctorName = GetFullName(x.u.FirstName, x.u.MiddleName, x.u.LastName),
                                      RecordedValues = x.pt.RecordedValues,
                                      TestImpression = x.pt.TestImpression,
-                                     ReportPath = x.pt.ReportPath
+                                     ReportPath = x.pt.ReportPath,
+                                     TestCost = x.ltm.PaidAmount != null ? x.ltm.PaidAmount.Value : 0
                                  }).ToList();
 
                 return patientTests;
@@ -697,12 +742,12 @@ public static List<User> GetDoctors()
                                     join u in hs.Users on ltm.PrescribedBy equals u.UserID
                                     join ut in hs.UserTypes on u.UserTypeID equals ut.UserTypeID
                                     where ltm.ENMRNO == enmrNo && ltm.VisitID == 0
-                                    && ltm.IsDelivered == true
                                     select new
                                     {
                                         pt,
                                         u,
-                                        tt
+                                        tt,
+                                        ltm
                                     })
                                   .OrderByDescending(b => b.pt.PSID)
                                   .AsEnumerable()
@@ -714,7 +759,8 @@ public static List<User> GetDoctors()
                                      DoctorName = GetFullName(x.u.FirstName, x.u.MiddleName, x.u.LastName),
                                      RecordedValues = x.pt.RecordedValues,
                                      TestImpression = x.pt.TestImpression,
-                                     ReportPath = x.pt.ReportPath
+                                     ReportPath = x.pt.ReportPath,
+                                     ScanCost = x.ltm.PaidAmount != null ? x.ltm.PaidAmount.Value : 0
                                  }).ToList();
 
                 return patientScans;
@@ -853,6 +899,7 @@ public static List<User> GetDoctors()
             bool result = true;
             bool hasPrescriptionForLastVisit = false;
             bool hasTestForLastVisit = false;
+            bool hasScanForLastVisit = false;
             using (var hs = new HISDBEntities())
             {
                 var latestVisit = hs.PatientVisitHistories.Where(pvh => pvh.ENMRNO == enmrNo).OrderByDescending(pvh => pvh.SNO).FirstOrDefault();
@@ -862,10 +909,18 @@ public static List<User> GetDoctors()
 
                     hasTestForLastVisit = hs.LabTestMasters.Where(p => p.VisitID == latestVisit.SNO).Any();
 
-                    if(hasPrescriptionForLastVisit && hasTestForLastVisit)
+                    hasScanForLastVisit = hs.ScanTestMasters.Where(p => p.VisitID == latestVisit.SNO).Any();
+
+                    if (hasPrescriptionForLastVisit 
+                        && hasTestForLastVisit 
+                        && hasScanForLastVisit)
                     {
                         result = false;
                     }
+                }
+                else
+                {
+                    result = false;
                 }
                 
             }

@@ -374,7 +374,8 @@ namespace HIS.Controllers
                 Visits = HtmlHelpers.HtmlHelpers.GetOutPatientVisits(enmrNo),
                 Prescriptions = HtmlHelpers.HtmlHelpers.GetPatientPrescriptions(enmrNo),
                 Tests = HtmlHelpers.HtmlHelpers.GetPatientTests(enmrNo),
-                Observations = GetObservationHistory(enmrNo),
+                Scans = HtmlHelpers.HtmlHelpers.GetPatientScans(enmrNo),
+            Observations = GetObservationHistory(enmrNo),
                 DischargeNote = DischargeSummaryNote(enmrNo)
             };
             return Json(new { data = history }, JsonRequestBehavior.AllowGet);
@@ -386,6 +387,7 @@ namespace HIS.Controllers
             ViewBag.Prescriptions = HtmlHelpers.HtmlHelpers.GetPatientPrescriptions(enmrNo);
             ViewBag.InPateintPrescriptions = HtmlHelpers.HtmlHelpers.InPatientPrescriptions(enmrNo);
             ViewBag.Tests = HtmlHelpers.HtmlHelpers.GetPatientTests(enmrNo);
+            ViewBag.Scans = HtmlHelpers.HtmlHelpers.GetPatientScans(enmrNo);
             ViewBag.InpatientTests = HtmlHelpers.HtmlHelpers.GetInPatientTests(enmrNo);
             ViewBag.InpatientScans = HtmlHelpers.HtmlHelpers.GetInPatientScans(enmrNo);
             ViewBag.Visits = HtmlHelpers.HtmlHelpers.GetOutPatientVisits(enmrNo);
@@ -398,6 +400,8 @@ namespace HIS.Controllers
             var dischargeModel = new DischargeModel();
             dischargeModel.ENMRNO = enmrNo;
             dischargeModel.RoomChargeTable = HtmlHelpers.HtmlHelpers.GetRoomBilling(enmrNo);
+            dischargeModel.Tests = HtmlHelpers.HtmlHelpers.GetInPatientTests(enmrNo);
+            dischargeModel.Scans = HtmlHelpers.HtmlHelpers.GetInPatientScans(enmrNo);
             dischargeModel.InsuranceScantionedAmount = HtmlHelpers.HtmlHelpers.InsuranceScantionedAmount(enmrNo);
             dischargeModel.PharmaPackageAmount = HtmlHelpers.HtmlHelpers.PharmaPackAmount(enmrNo);
             dischargeModel.FeeCollectionTable = GetPaymentHistory(enmrNo);

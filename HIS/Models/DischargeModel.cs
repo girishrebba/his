@@ -16,6 +16,8 @@ namespace HIS
         public decimal PharmaPackageAmount { get; set; }
         public string DischargeSummary { get; set; }
         public bool CanBeDischarge { get; set; }
+        public List<PatientTest> Tests { get; set; }
+        public List<PatientScan> Scans { get; set; }
     }
 
     public class DischargeModelMetaData
