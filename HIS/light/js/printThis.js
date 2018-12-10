@@ -276,11 +276,18 @@
                     $head.append("<script>  window.print(); </s" + "cript>");
                 } else {
                     // proper method
-                    if (document.queryCommandSupported("print")) {
-                        $iframe[0].contentWindow.document.execCommand("print", false, null);
+                    //if (document.queryCommandSupported("print")) {
+                    //    $iframe[0].contentWindow.document.execCommand("print", false, null);
+                    //} else {
+                    //    $iframe[0].contentWindow.focus();
+                    //    $iframe[0].contentWindow.print();
+                    //}
+                    if (!$iframe[0].contentWindow.document.execCommand("print", false, null))
+                    {
+                    $iframe[0].print();
                     } else {
-                        $iframe[0].contentWindow.focus();
-                        $iframe[0].contentWindow.print();
+                    $iframe[0].contentWindow.focus();
+                    $iframe[0].contentWindow.print();
                     }
                 }
 
