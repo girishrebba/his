@@ -31,6 +31,15 @@
                             <th>Expiry Date</th>
                         </tr>
                     </thead>
+                    <tfoot>
+                        <tr>
+                            <td align="right"><strong>Totals:</strong></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td colspan="3"></td>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
         </div>
@@ -62,6 +71,45 @@
         "info": false,
         "searching": false,
         "order": [[0, "desc"]],
+        "footerCallback": function (row, data, start, end, display) {
+            var api = this.api();
+            // Remove the formatting to get integer data for summation
+            var intVal = function (i) {
+                return typeof i === 'string' ?
+                    i.replace(/[\$,]/g, '') * 1 :
+                    typeof i === 'number' ?
+                        i : 0;
+            };
+
+            // Total quantity
+            qtyTotal = api
+                .column(1)
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0);
+
+            // Total item
+            itemTotal = api
+                .column(2)
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0).toFixed(2);
+
+            // Total sheet
+            sheetTotal = api
+                .column(3)
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0).toFixed(2);
+
+            // Update footer
+            $(api.column(1).footer()).html(qtyTotal);
+            $(api.column(2).footer()).html(itemTotal);
+            $(api.column(3).footer()).html(sheetTotal);
+        }
     });
 </script>
 
