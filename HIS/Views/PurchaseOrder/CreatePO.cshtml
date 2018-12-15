@@ -100,14 +100,27 @@
                     <td><span class="btn btn-success fa fa-plus-circle" style="padding: 0px 3px" id="btnAdd"></span></td>
                 </tr>
             </tbody>
+            <tfoot>
+                <tr>
+                    <td align="right">Total:</td>
+                    <td align="left" id="grandQuantity"></td>
+                    <td align="left" id="grandItemPrice"></td>
+                    <td colspan="5" align="left" id="grandSheetPrice"></td>
+                    <td colspan="4" align="left" id="grandHospitalPrice"></td>
+                </tr>
+            </tfoot>
         </table>
     </div>
     <div class="row">
         <div class="form-group">
             <div class="col-md-3 col-md-offset-5">
-                <input type="submit" value="Submit" id="btnSubmit" class="btn btn-primary disabled" />
+                <input type="submit" value="Submit" id="btnSubmit" class="btn btn-primary hidden" />
+                <input type="button" id="btnReset" value="Reset" class="btn btn-primary" />
             </div>
         </div>
+    </div>
+    <div class="form-horizontal" id="errorDiv">
+        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
     </div>
 </div>
             @*</div>
@@ -119,26 +132,34 @@
         $('#btnAdd').click(function () {
             var form = $("#poForm")
             $.validator.unobtrusive.parse(form);
+            $('#errorDiv').removeClass('hidden');
             if ($(form).valid()) {
                 $('table#poTable > tbody').append('<tr>' +
                     '<td style="display:none">' + $('#MedicineID').val()+'</td>'+ // MedicineID
                     '<td>' + $('#MedicineWithDose').val() + '</td>' + // medicine
-                    '<td>' + $('#OrderedQty').val() + '</td>' + // order qty
-                    '<td>' + $('#PricePerItem').val() + '</td>' + // item cost
-                    '<td>' + $('#PricePerSheet').val() + '</td>' + // sheet cost
+                    '<td class="orderedQty">' + $('#OrderedQty').val() + '</td>' + // order qty
+                    '<td class="pricePerItem">' + $('#PricePerItem').val() + '</td>' + // item cost
+                    '<td class="pricePerSheet">' + $('#PricePerSheet').val() + '</td>' + // sheet cost
                     '<td>' + $('#BatchNo').val() + '</td>' + // batch no
                     '<td>' + $('#LotNo').val() + '</td>' + // lot no
                     '<td>' + $('#ExpiryDate').val() + '</td>' + // expirty date
                     '<td>' + $('#MfgDate').val() + '</td>' + // mfg date
-                    '<td>' + $('#HospitalPrice').val() + '</td>' + // Hospital Price
+                    '<td class="hospPrice">' + $('#HospitalPrice').val() + '</td>' + // Hospital Price
                     '<td><span class="btn btn-danger fa fa-trash" style="padding: 0px 3px" onclick = "remove(this)"></span></td>' +
                     '</tr>');
 
+                calculateTotals();
                 clearInputs();
+                $('#btnSubmit').removeClass('hidden');
+                //$('.validation-summary-errors').remove();
+                $('#errorDiv').addClass('hidden');
             }
             return false;
         });
 
+        $('#btnReset').click(function () {
+            clearFormInputs();
+        });
         $('#OrderedDate').datepicker({
             keyboardNavigation: false,
             forceParse: false,
@@ -212,8 +233,9 @@
 
     function remove(e) {
         $(e).closest('tr').remove();
+        calculateTotals();
         if ($('#poForm tr').length < 3)
-            $('#btnSubmit').addClass('disabled');
+            $('#btnSubmit').addClass('hidden');
     }
 
     function clearInputs() {
@@ -224,6 +246,66 @@
         $('#BatchNo').val('');
         $('#LotNo').val('');
         $('#ExpiryDate').val('');
+        $('#HospitalPrice').val('');
         $('#btnSubmit').removeClass('disabled');
+    }
+
+    function clearFormInputs() {
+        $('#MedicineWithDose').val('').removeClass('input-validation-error').addClass('valid');
+        $('#OrderedQty').val('').removeClass('input-validation-error').addClass('valid');
+        $('#PricePerItem').val('').removeClass('input-validation-error').addClass('valid');
+        $('#PricePerSheet').val('').removeClass('input-validation-error').addClass('valid');
+        $('#BatchNo').val('');
+        $('#LotNo').val('');
+        $('#ExpiryDate').val('').removeClass('input-validation-error').addClass('valid');
+        $('#HospitalPrice').val('');
+        $('#errorDiv').addClass('hidden');
+    }
+
+    function calculateTotals() {
+        calculateQty();
+        calculateItemPrice();
+        calculateSheetCost();
+        calculateHospitalPrice();
+    }
+
+    function calculateQty() {
+        var qtySum = 0;
+        var value = 0;
+        $('.orderedQty').each(function () {
+            value = parseFloat($(this).html());
+            qtySum += isNaN(value) ? 0 : value;
+        });
+        $('#grandQuantity').html(qtySum);
+    }
+
+    function calculateItemPrice() {
+        var itemSum = 0;
+        var value = 0;
+        $('.pricePerItem').each(function () {
+            value = parseFloat($(this).html());
+            itemSum += isNaN(value) ? 0 : value;
+        });
+        $('#grandItemPrice').html(itemSum.toFixed(2));
+    }
+
+    function calculateSheetCost() {
+        var sheetSum = 0;
+        var value = 0;
+        $('.pricePerSheet').each(function () {
+            value = parseFloat($(this).html());
+            sheetSum += isNaN(value) ? 0 : value;
+        });
+        $('#grandSheetPrice').html(sheetSum.toFixed(2));
+    }
+
+    function calculateHospitalPrice() {
+        var sheetSum = 0;
+        var value = 0;
+        $('.hospPrice').each(function () {
+            value = parseFloat($(this).html());
+            sheetSum += isNaN(value) ? 0 : value;
+        });
+        $('#grandHospitalPrice').html(sheetSum.toFixed(2));
     }
 </script>

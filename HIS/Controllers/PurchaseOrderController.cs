@@ -224,7 +224,9 @@ namespace HIS.Controllers
                                                PricePerItem = x.po.PricePerItem,
                                                PricePerSheet = x.po.PricePerSheet,
                                                BatchNo = x.po.BatchNo,
-                                               LotNo = x.po.LotNo
+                                               LotNo = x.po.LotNo,
+                                               MfgDateDisplay = HtmlHelpers.HtmlHelpers.DateFormat(x.po.MfgDate),
+                                               HospitalPrice = x.po.HospitalPrice
                                            }).ToList();
 
                 return Json(new { data = shippedMedicines }, JsonRequestBehavior.AllowGet);

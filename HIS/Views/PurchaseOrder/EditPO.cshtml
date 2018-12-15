@@ -129,13 +129,13 @@
                                     <input type="hidden" id="MedicineID" />
                                 </td>
                                 <td>
-                                    <input type="text" id="OrderedQty" class="form-control newItem" />
+                                    <input type="text" id="OrderedQty" class="form-control newItem numericonly" />
                                 </td>
                                 <td>
-                                    <input type="text" id="PricePerItem" class="form-control newItem" />
+                                    <input type="text" id="PricePerItem" class="form-control newItem numericdecimal" />
                                 </td>
                                 <td>
-                                    <input type="text" id="PricePerSheet" class="form-control newItem" />
+                                    <input type="text" id="PricePerSheet" class="form-control newItem numericdecimal" />
                                 </td>
                                 <td>
                                     <input type="text" id="BatchNo" class="form-control" />
@@ -156,7 +156,7 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <input type="text" id="HospitalPrice" class="form-control" />
+                                    <input type="text" id="HospitalPrice" class="form-control numericdecimal" />
                                 </td>
                                 <td><span class="btn btn-success fa fa-plus-circle" style="padding: 0px 3px" id="btnAdd"></span></td>
                             </tr>
@@ -278,6 +278,34 @@
         $('#divNewItem').removeClass('hidden');
     });
 
+    $(".numericdecimal").keydown(function (event) {
+
+        if (event.shiftKey == true) {
+            event.preventDefault();
+        }
+
+        if ((event.keyCode >= 48 && event.keyCode <= 57) ||
+            (event.keyCode >= 96 && event.keyCode <= 105) ||
+            event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 37 ||
+            event.keyCode == 39 || event.keyCode == 46 || event.keyCode == 190) {
+
+        } else {
+            event.preventDefault();
+        }
+
+        if ($(this).val().indexOf('.') !== -1 && event.keyCode == 190)
+            event.preventDefault();
+        //if a decimal has been added, disable the "."-button
+
+    });
+
+    $(".numericonly").keypress(function (e) {
+        //if the letter is not digit then display error and don't type anything
+        if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+            return false;
+        }
+    });
+
     $('#btnAdd').click(function () {
         if (isValid()) {
             $('table#poTable > tbody').append('<tr>' +
@@ -290,7 +318,7 @@
                 '<td><input class="form-control batchNo text-box single-line" id="p_BatchNo" name="p.BatchNo" type="text" value="' + $('#BatchNo').val() + '"></input></td>' + // batch no
                 '<td><input class="form-control lotNo text-box single-line" id="p_LotNo" name="p.LotNo" type="text" value="' + $('#LotNo').val() + '"></input></td>' + // lot no
                 '<td><div id="date-popup" class="input-group date"><input value = "' + $('#ExpiryDateAdd').val() + '" class= "expirypicker form-control text-box single-line"  id = "p_ExpiryDate" name = "p.ExpiryDate" placeholder = "" type = "datetime"><span class="btnexpirypicker input-group-addon"><i class="fa fa-calendar"></i></span></div></td>' + // expirty date
-                '<td><div id="date-popup" class="input-group date"><input value = "' + $('#ExpiryDateAdd').val() + '" class= "mfgpicker form-control text-box single-line"  id = "p_MfgDate" name = "p.MfgDate" placeholder = "" type = "datetime"><span class="btnmfgpicker input-group-addon"><i class="fa fa-calendar"></i></span></div></td>' + // mfg date
+                '<td><div id="date-popup" class="input-group date"><input value = "' + $('#MfgDateAdd').val() + '" class= "mfgpicker form-control text-box single-line"  id = "p_MfgDate" name = "p.MfgDate" placeholder = "" type = "datetime"><span class="btnmfgpicker input-group-addon"><i class="fa fa-calendar"></i></span></div></td>' + // mfg date
                 '<td><input class="form-control hospPrice text-box single-line" id="p_HospitalPrice" name="p.HospitalPrice" type="text" value="' + $('#HospitalPrice').val() + '"></input></td>' + // Hospital cost
                 '<td><span class="btn btn-danger fa fa-trash" style="padding: 0px 3px" onclick = "remove(this)"></span></td>' +
                 '</tr>');
@@ -340,32 +368,40 @@
 
     function calculateQty() {
         var qtySum = 0;
+        var value = 0;
         $('.orderedQty').each(function () {
-            qtySum += parseFloat($(this).val());
+            value = parseFloat($(this).val());
+            qtySum += isNaN(value) ? 0 : value;
         });
         $('#grandQuantity').html(qtySum);
     }
 
     function calculateItemPrice() {
         var itemSum = 0;
+        var value = 0;
         $('.pricePerItem').each(function () {
-            itemSum += parseFloat($(this).val());
+            value = parseFloat($(this).val());
+            itemSum += isNaN(value) ? 0 : value;
         });
         $('#grandItemPrice').html(itemSum.toFixed(2));
     }
 
     function calculateSheetCost() {
         var sheetSum = 0;
+        var value = 0;
         $('.pricePerSheet').each(function () {
-            sheetSum += parseFloat($(this).val());
+            value = parseFloat($(this).val());
+            sheetSum += isNaN(value) ? 0 : value;
         });
         $('#grandSheetPrice').html(sheetSum.toFixed(2));
     }
 
     function calculateHospitalPrice() {
         var sheetSum = 0;
+        var value = 0;
         $('.hospPrice').each(function () {
-            sheetSum += parseFloat($(this).val());
+            value = parseFloat($(this).val());
+            sheetSum += isNaN(value) ? 0 : value;
         });
         $('#grandHospitalPrice').html(sheetSum.toFixed(2));
     }
