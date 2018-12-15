@@ -59,9 +59,9 @@
                             <td style="display:none">@p.OrderID</td>
                             <td style="display:none">@p.MedicineID</td>
                             <td>@p.MedicineWithDose</td>
-                            <td>@Html.EditorFor(model => p.OrderedQty, new { htmlAttributes = new { @class = "form-control orderedQty" } })</td>
-                            <td>@Html.EditorFor(model => p.PricePerItem, new { htmlAttributes = new { @class = "form-control pricePerItem" } })</td>
-                            <td>@Html.EditorFor(model => p.PricePerSheet, new { htmlAttributes = new { @class = "form-control pricePerSheet" } })</td>
+                            <td>@Html.EditorFor(model => p.OrderedQty, new { htmlAttributes = new { @class = "form-control orderedQty numericonly" } })</td>
+                            <td>@Html.EditorFor(model => p.PricePerItem, new { htmlAttributes = new { @class = "form-control pricePerItem numericdecimal" } })</td>
+                            <td>@Html.EditorFor(model => p.PricePerSheet, new { htmlAttributes = new { @class = "form-control pricePerSheet numericdecimal" } })</td>
                             <td>@Html.EditorFor(model => p.BatchNo, new { htmlAttributes = new { @class = "form-control batchNo" } })</td>
                             <td>@Html.EditorFor(model => p.LotNo, new { htmlAttributes = new { @class = "form-control lotNo" } })</td>
                             <td>
@@ -76,7 +76,7 @@
                                     <span class="btnmfgpicker input-group-addon"><i class="fa fa-calendar"></i></span>
                                 </div>
                             </td>
-                            <td>@Html.EditorFor(model => p.HospitalPrice, new { htmlAttributes = new { @class = "form-control hospPrice" } })</td>
+                            <td>@Html.EditorFor(model => p.HospitalPrice, new { htmlAttributes = new { @class = "form-control hospPrice numericdecimal" } })</td>
                             <td><span class="btn btn-danger fa fa-trash" style="padding: 0px 3px" onclick="remove(this)"></span></td>
                         </tr>
             }
