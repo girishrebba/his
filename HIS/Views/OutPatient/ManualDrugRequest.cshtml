@@ -47,7 +47,7 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.Discount, "Discount:", new { @class = "control-label col-md-2" })
                 <div class="input-group col-sm-2">
-                    @Html.EditorFor(model => model.Discount, new { htmlAttributes = new { @class = "form-control width30", @id = "Discount" } })
+                    @Html.EditorFor(model => model.Discount, new { htmlAttributes = new { Value = Model.Discount > 0 ? Model.Discount.ToString() : string.Empty, @class = "form-control width30 numericdecimal", @id = "Discount" } })
                     <span class="input-group-btn"><a class="btn btn-success" id="discBtn"><i class=""></i>Apply</a></span>
                 </div>
             </div>
@@ -75,7 +75,7 @@
                                 @Html.HiddenFor(model => model.ItemPrice)
                             </td>
                             <td>
-                                @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { Value = Model.Quantity > 0 ? Model.Quantity.ToString() : string.Empty, @class = "form-control quantity" } })
+                                @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { Value = Model.Quantity > 0 ? Model.Quantity.ToString() : string.Empty, @class = "form-control quantity numericonly" } })
                             </td>
                             <td>
                                 @Html.DropDownListFor(model => model.IntakeFrequencyID, ViewBag.Intakes as SelectList, "--Select--", new { @class = "form-control" })
@@ -87,7 +87,7 @@
                                 @Html.EditorFor(model => model.LotNo, new { htmlAttributes = new { @class = "form-control" } })
                             </td>
                             <td>
-                                @Html.EditorFor(model => model.TotalCost, new { htmlAttributes = new { @class = "form-control totalCost" } })
+                                @Html.EditorFor(model => model.TotalCost, new { htmlAttributes = new { @class = "form-control totalCost numericdecimal" } })
                             </td>
                             <td><span class="btn btn-success fa fa-plus-circle" style="padding: 0px 3px" id="btnAdd"></span></td>
                         </tr>
@@ -119,8 +119,8 @@
 
     </div>
 }
+<script src="~/Scripts/jquery.validate-his.js"></script>
 <script type="text/javascript">
-    
     $(function () {     
         
         $('#discBtn').click(function () {
@@ -156,7 +156,11 @@
        
 
         $('#btnSubmit').click(function () {
-                     
+            if ($('table#mdrTable > tbody tr').length <= 1) {
+                alert("Please enter Medicine details");
+                return false;
+            }
+
             $('#MedicineWithDose').rules('remove', 'required');
             if (confirm('Hope discount has been applied')) {
                
