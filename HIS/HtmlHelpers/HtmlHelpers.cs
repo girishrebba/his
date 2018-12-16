@@ -513,6 +513,67 @@ public static List<User> GetDoctors()
             }
         }
 
+        public static List<PatientVisitHistory> GetOutPatientVisit(string enmrNo,int visitid)
+        {
+            var patientVisits = new List<PatientVisitHistory>();
+            using (HISDBEntities hs = new HISDBEntities())
+            {
+                if (hs.OutPatients.Where(op => op.ENMRNO == enmrNo).Any())
+                {
+                    patientVisits = (from pv in hs.PatientVisitHistories
+                                     join op in hs.OutPatients on pv.ENMRNO equals op.ENMRNO
+                                     join ct in hs.ConsultationTypes on pv.ConsultTypeID equals ct.ConsultTypeID
+                                     join u in hs.Users on pv.DoctorID equals u.UserID
+                                     join ut in hs.UserTypes on u.UserTypeID equals ut.UserTypeID
+                                     where pv.ENMRNO.Equals(enmrNo) && pv.SNO==visitid
+                                     select new
+                                     {
+                                         pv,
+                                         u,
+                                         ct.ConsultType
+                                     })
+                                      .OrderByDescending(b => b.pv.DateOfVisit)
+                                      .AsEnumerable()
+                                     .Select(x => new PatientVisitHistory
+                                     {
+                                         DOVDisplay = DateFormat(x.pv.DateOfVisit),
+                                         ENMRNO = x.pv.ENMRNO,
+                                         ConsultType = x.ConsultType,
+                                         Fee = x.pv.Fee,
+                                         Discount = x.pv.Discount,
+                                         DoctorID = x.pv.DoctorID,
+                                         ConsultTypeID = x.pv.ConsultTypeID,
+                                         DateOfVisit = x.pv.DateOfVisit,
+                                         DoctorName = GetFullName(x.u.FirstName, x.u.MiddleName, x.u.LastName),
+                                         Purpose = x.pv.Purpose
+                                     }).ToList();
+                }
+
+                // Bind the Valid till date
+                if (patientVisits != null && patientVisits.Count() > 0)
+                {
+                    var purposeList = GetPurposes();
+                    foreach (PatientVisitHistory pv in patientVisits)
+                    {
+                        var cfee = hs.ConsultationFees.Where(cf => cf.DoctorID == pv.DoctorID && cf.ConsultTypeID == pv.ConsultTypeID).FirstOrDefault();
+                        if (cfee != null)
+                        {
+                            int days = cfee.ValidDays.HasValue ? cfee.ValidDays.Value : 0;
+                            pv.ValidDate = DateFormat(pv.DateOfVisit.AddDays(days));
+                        }
+                        else
+                        {
+                            pv.ValidDate = pv.DOVDisplay;
+                        }
+                        pv.Purpose = GetPurpose(pv.Purpose, purposeList);
+                    }
+                }
+
+                return patientVisits;
+            }
+        }
+
+
         private static string GetPurpose(string purposes, List<Purpose> purposeList)
         {
 
@@ -552,6 +613,50 @@ public static List<User> GetDoctors()
                                             join pv in hs.PatientVisitHistories on pm.VisitID equals pv.SNO
                                             join ct in hs.ConsultationTypes on pv.ConsultTypeID equals ct.ConsultTypeID
                                             where pm.ENMRNO.Equals(enmrNo)
+                                            select new
+                                            {
+                                                pp,
+                                                pm,
+                                                u,
+                                                mm,
+                                                ifs.Frequency,
+                                                ct.ConsultType
+                                            })
+                                  .OrderByDescending(b => b.pm.DatePrescribed)
+                                  .AsEnumerable()
+                                 .Select(x => new PatientPrescription
+                                 {
+                                     DateDisplay = DateFormat(x.pm.DatePrescribed),
+                                     ENMRNO = x.pm.ENMRNO,
+                                     VisitID = x.pm.VisitID.Value,
+                                     DoctorName = GetFullName(x.u.FirstName, x.u.MiddleName, x.u.LastName),
+                                     Quantity = x.pp.Quantity,
+                                     MedicineWithDose = GetMedicineWithDose(x.mm.MedicineName, x.mm.MedDose),
+                                     IntakeDisplay = x.Frequency,
+                                     MedicineID = x.pp.MedicineID,
+                                     PMID = x.pm.PMID,
+                                     VisitName = x.ConsultType
+                                 }).ToList();
+
+                return patientPrescriptions;
+            }
+        }
+
+        public static List<PatientPrescription> GetPatientPrescriptionbyVisit(string enmrNo, int visitid)
+        {
+            using (HISDBEntities hs = new HISDBEntities())
+            {
+
+                var patientPrescriptions = (from pp in hs.PatientPrescriptions
+                                            join pm in hs.PrescriptionMasters on pp.PMID equals pm.PMID 
+                                            join op in hs.OutPatients on pm.ENMRNO equals op.ENMRNO
+                                            join mm in hs.MedicineMasters on pp.MedicineID equals mm.MMID
+                                            join ifs in hs.IntakeFrequencies on pp.IntakeFrequencyID equals ifs.FrequencyID
+                                            join u in hs.Users on pm.PrescribedBy equals u.UserID
+                                            join ut in hs.UserTypes on u.UserTypeID equals ut.UserTypeID
+                                            join pv in hs.PatientVisitHistories on pm.VisitID equals pv.SNO
+                                            join ct in hs.ConsultationTypes on pv.ConsultTypeID equals ct.ConsultTypeID
+                                            where  pm.VisitID == visitid && pm.ENMRNO.Equals(enmrNo) 
                                             select new
                                             {
                                                 pp,
@@ -658,6 +763,45 @@ public static List<User> GetDoctors()
             }
         }
 
+        public static List<PatientTest> GetPatientTestbyVisit(string enmrNo, int visitid)
+        {
+            using (HISDBEntities hs = new HISDBEntities())
+            {
+
+                var patientTests = (from pt in hs.PatientTests
+                                    join ltm in hs.LabTestMasters on pt.LTMID equals ltm.LTMID
+                                    join vh in hs.PatientVisitHistories on ltm.VisitID equals vh.SNO
+                                    join op in hs.OutPatients on ltm.ENMRNO equals op.ENMRNO
+                                    join tt in hs.TestTypes on pt.TestID equals tt.TestID
+                                    join u in hs.Users on ltm.PrescribedBy equals u.UserID
+                                    join ut in hs.UserTypes on u.UserTypeID equals ut.UserTypeID
+                                    where ltm.ENMRNO == enmrNo && ltm.VisitID==visitid
+                                    select new
+                                    {
+                                        pt,
+                                        u,
+                                        tt,
+                                        ltm
+                                    })
+                                  .OrderByDescending(b => b.pt.PTID)
+                                  .AsEnumerable()
+                                 .Select(x => new PatientTest
+                                 {
+                                     ENMRNO = enmrNo,
+                                     TestName = x.tt.TestName,
+                                     DateDisplay = DateFormat(x.pt.TestDate),
+                                     DoctorName = GetFullName(x.u.FirstName, x.u.MiddleName, x.u.LastName),
+                                     RecordedValues = x.pt.RecordedValues,
+                                     TestImpression = x.pt.TestImpression,
+                                     ReportPath = x.pt.ReportPath,
+                                     TestCost = x.ltm.PaidAmount != null ? x.ltm.PaidAmount.Value : 0
+                                 }).ToList();
+
+                return patientTests;
+            }
+        }
+
+
         public static List<PatientScan> GetPatientScans(string enmrNo)
         {
             using (HISDBEntities hs = new HISDBEntities())
@@ -694,6 +838,44 @@ public static List<User> GetDoctors()
                 return patientScans;
             }
         }
+
+        public static List<PatientScan> GetPatientScanbyVisit(string enmrNo, int visitid)
+        {
+            using (HISDBEntities hs = new HISDBEntities())
+            {
+
+                var patientScans = (from pt in hs.PatientScans
+                                    join ltm in hs.ScanTestMasters on pt.STMID equals ltm.STMID
+                                    join op in hs.OutPatients on ltm.ENMRNO equals op.ENMRNO
+                                    join tt in hs.Scans on pt.ScanID equals tt.ScanID
+                                    join u in hs.Users on ltm.PrescribedBy equals u.UserID
+                                    join ut in hs.UserTypes on u.UserTypeID equals ut.UserTypeID
+                                    where ltm.ENMRNO == enmrNo && ltm.VisitID == visitid
+                                    select new
+                                    {
+                                        pt,
+                                        u,
+                                        tt,
+                                        ltm
+                                    })
+                                  .OrderByDescending(b => b.pt.PSID)
+                                  .AsEnumerable()
+                                 .Select(x => new PatientScan
+                                 {
+                                     ENMRNO = enmrNo,
+                                     ScanName = x.tt.ScanName,
+                                     DateDisplay = DateFormat(x.pt.ScanDate),
+                                     DoctorName = GetFullName(x.u.FirstName, x.u.MiddleName, x.u.LastName),
+                                     RecordedValues = x.pt.RecordedValues,
+                                     TestImpression = x.pt.TestImpression,
+                                     ReportPath = x.pt.ReportPath,
+                                     ScanCost = x.ltm.PaidAmount != null ? x.ltm.PaidAmount.Value : 0
+                                 }).ToList();
+
+                return patientScans;
+            }
+        }
+
 
         public static List<PatientTest> GetInPatientTests(string enmrNo)
         {
@@ -805,6 +987,44 @@ public static List<User> GetDoctors()
             }
         }
 
+        public static List<PatientScan> GetPatientVisitScansBillPayPrint(string enmrNo, int visitID)
+        {
+            using (HISDBEntities hs = new HISDBEntities())
+            {
+
+                var patientScans = (from pt in hs.PatientScans
+                                    join ltm in hs.ScanTestMasters on pt.STMID equals ltm.STMID
+                                    join tt in hs.Scans on pt.ScanID equals tt.ScanID
+                                    join u in hs.Users on ltm.PrescribedBy equals u.UserID
+                                    join ut in hs.UserTypes on u.UserTypeID equals ut.UserTypeID
+                                    where ltm.ENMRNO == enmrNo && ltm.VisitID == visitID
+                                    select new
+                                    {
+                                        pt,
+                                        u,
+                                        tt,
+                                        ltm
+                                    })
+                                  .OrderByDescending(b => b.pt.PSID)
+                                  .AsEnumerable()
+                                 .Select(x => new PatientScan
+                                 {
+                                     ENMRNO = x.pt.ENMRNO,
+                                     ScanName = x.tt.ScanName,
+                                     DateDisplay = DateFormat(x.ltm.DatePrescribed),
+                                     DoctorName = GetFullName(x.u.FirstName, x.u.MiddleName, x.u.LastName),
+                                     RecordedValues = x.pt.RecordedValues,
+                                     TestImpression = x.pt.TestImpression,
+                                     ReportPath = x.pt.ReportPath,
+                                     STMID = x.pt.STMID,
+                                     ScanID = x.pt.ScanID,
+                                     ScanCost = x.tt.ScanCost.HasValue ? x.tt.ScanCost.Value : 0
+                                 }).ToList();
+
+                return patientScans;
+            }
+        }
+
 
         public static List<PatientScan> GetOpPatientScans(string enmrNo, int visitID)
         {
@@ -818,7 +1038,7 @@ public static List<User> GetDoctors()
                                     join u in hs.Users on ltm.PrescribedBy equals u.UserID
                                     join ut in hs.UserTypes on u.UserTypeID equals ut.UserTypeID
                                     where ltm.ENMRNO == enmrNo && ltm.VisitID == visitID
-                                    && ltm.IsDelivered == true
+                                    //&& ltm.IsDelivered == true
                                     select new
                                     {
                                         pt,

@@ -987,9 +987,6 @@
     <None Include="Scripts\jquery-1.12.4.intellisense.js" />
     <Content Include="Scripts\jquery-1.12.4.js" />
     <Content Include="Scripts\jquery-1.12.4.min.js" />
-    <None Include="Scripts\jquery-1.4.1-vsdoc.js" />
-    <Content Include="Scripts\jquery-1.4.1.js" />
-    <Content Include="Scripts\jquery-1.4.1.min.js" />
     <Content Include="Scripts\jquery-ui-1.12.1.js" />
     <Content Include="Scripts\jquery-ui-1.12.1.min.js" />
     <Content Include="Scripts\jquery.loadingModal.js" />
@@ -1555,6 +1552,14 @@
     <Content Include="Views\BrandSubCategories\Index.cshtml" />
     <Content Include="Views\BrandSubCategories\AddModify.cshtml" />
     <Content Include="Views\Suppliers\AddModify.cshtml" />
+    <Content Include="Views\InPatient\PrintPaymentHistory.cshtml" />
+    <Content Include="Views\OutPatient\PrintPaymentHistory.cshtml" />
+    <Content Include="Views\OutPatient\DeliverPrescriptionPrint.cshtml" />
+    <Content Include="Views\OutPatient\opScanTestBillPayprint.cshtml" />
+    <Content Include="Views\OutPatient\LabTestBillPayPrint.cshtml" />
+    <Content Include="Views\InPatient\DeliverPrescriptionprint.cshtml" />
+    <Content Include="Views\InPatient\LabTestBillPayPrint.cshtml" />
+    <Content Include="Views\InPatient\ScanTestBillPayPrint.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

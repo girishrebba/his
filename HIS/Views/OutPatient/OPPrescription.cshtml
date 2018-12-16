@@ -100,6 +100,8 @@
                                         <div class="panel panel-default">
                                             <div class="panel-heading" style="padding-left:1px;">
                                                 <span class="lableDisplay">@p.VisitName </span>
+                                                <a class="btn btn-primary btn-sm" title="View & Print" style="margin-left:5px" onclick="printbill('@Model.ENMRNO','@p.SNO');"><i class="fa fa-print his-fa-size"></i></a>
+                                                @*<input type="submit" value="View & Print" id="btnSubmit" class="btn btn-primary" />*@
                                             </div>
                                             <div class="panel-body">
                                                 <div class="table-responsive">
@@ -239,6 +241,11 @@
                             <div class="historyGrid">
                                 @foreach (var p in ViewBag.History)
     {
+                            <div class="panel-heading" style="padding-left:1px;">
+                                <span class="lableDisplay">@p.VisitName </span>
+                                <a class="btn btn-primary btn-sm" title="View & Print" style="margin-left:5px" onclick="printTestbill('@Model.ENMRNO','@p.SNO');"><i class="fa fa-print his-fa-size"></i></a>
+                                @*<input type="submit" value="View & Print" id="btnSubmit" class="btn btn-primary" />*@
+                            </div>
                             <div class="panel-body">
                                 @if (p.PatientTests != null && p.PatientTests.Count > 0)
     {
@@ -300,8 +307,13 @@
                         <div class="panel-body">
 
                             @foreach (var p in ViewBag.History)
-                            {
-                            <div class="panel-body">
+    {
+                        <div class="panel-heading" style="padding-left:1px;">
+                            <span class="lableDisplay">@p.VisitName </span>
+                            <a class="btn btn-primary btn-sm" title="View & Print" style="margin-left:5px" onclick="printScanbill('@Model.ENMRNO','@p.SNO');"><i class="fa fa-print his-fa-size"></i></a>
+                            @*<input type="submit" value="View & Print" id="btnSubmit" class="btn btn-primary" />*@
+                        </div>
+                        <div class="panel-body">
                             @if (ViewBag.OppatientScans != null && ViewBag.OppatientScans.Count > 0)
     {
                         <div class="table-responsive">
@@ -333,11 +345,11 @@
                         </div>
 }
                         </div>
-                            }
-                        <div class="col-sm-10">
-                            <span class="lableDisplay">Add Scans:</span>
-                            @Html.DropDownListFor(model => model.ScanIds, Model.Scans.Select(x => new SelectListItem { Text = x.ScanName, Value = x.ScanID.ToString() }), new { @placeholder = "Select", @class = "form-control chosen-group-select", @multiple = "true", style = "width:350px;" })
-                        </div>
+}
+                            <div class="col-sm-10">
+                                <span class="lableDisplay">Add Scans:</span>
+                                @Html.DropDownListFor(model => model.ScanIds, Model.Scans.Select(x => new SelectListItem { Text = x.ScanName, Value = x.ScanID.ToString() }), new { @placeholder = "Select", @class = "form-control chosen-group-select", @multiple = "true", style = "width:350px;" })
+                            </div>
 
                         </div>
                     </div>
@@ -362,7 +374,7 @@
 </div>
             }
 
-            <script type="text/javascript">
+<script type="text/javascript">
     $(document).ready(function () {
         $('#TestIds').trigger('chosen:updated');
         $('#TestIds').chosen();
@@ -375,9 +387,106 @@
 
         $('#KitIds').trigger('chosen:updated');
         $('#KitIds').chosen();
-        $('#KitIds_chosen').css({ "width": "350px" });
+                $('#KitIds_chosen').css({ "width": "350px" });
 
-    });
+
+
+                });
+
+                function printbill(emrno, visitid) {
+
+                             // alert(emrno + ' ' + visitid);
+                             // newPP.dialog('close');
+                       $('body').loadingModal({ text: 'Loading...' });
+                       var formDiv = $('<div/>');
+                       var url = '@Url.Action("DeliverPrescriptionPrint", "OutPatient")/?enmrNo=' + emrno + '&visitid=' + visitid ;
+                       $.get(url)
+                      .done(function (response) {
+                          formDiv.html(response);
+
+                          printdiv = formDiv.dialog({
+                              autoOpen: true,
+                              resizable: true,
+                              modal: true,
+                              title: 'Print Details',
+                              width: 850,
+                              top: 147,
+                              close: function () {
+                                  printdiv.dialog('destroy').remove();
+                              },
+                              open: function (event, ui) {
+                                  $('.ui-dialog-content').css('overflow', 'hidden');
+                                  $('body').loadingModal('destroy');
+                              }
+                          });
+                      });
+                }
+
+
+                function printTestbill(emrno, visitid) {
+
+                             // alert(emrno + ' ' + visitid);
+                             // newPP.dialog('close');
+                       $('body').loadingModal({ text: 'Loading...' });
+                       var formDiv = $('<div/>');
+                       var url = '@Url.Action("LabTestBillPayPrint", "OutPatient")/?enmrNo=' + emrno + '&visitid=' + visitid ;
+                       $.get(url)
+                      .done(function (response) {
+                          formDiv.html(response);
+
+                          printdiv = formDiv.dialog({
+                              autoOpen: true,
+                              resizable: true,
+                              modal: true,
+                              title: 'Print Details',
+                              width: 850,
+                              top: 147,
+                              close: function () {
+                                  printdiv.dialog('destroy').remove();
+                              },
+                              open: function (event, ui) {
+                                  $('.ui-dialog-content').css('overflow', 'hidden');
+                                  $('body').loadingModal('destroy');
+                              }
+                          });
+                      });
+                }
+
+
+
+     function printScanbill(emrno, visitid) {
+
+                             // alert(emrno + ' ' + visitid);
+                             // newPP.dialog('close');
+                       $('body').loadingModal({ text: 'Loading...' });
+                       var formDiv = $('<div/>');
+                       var url = '@Url.Action("opScanTestBillPayprint", "OutPatient")/?enmrNo=' + emrno + '&visitid=' + visitid ;
+                       $.get(url)
+                      .done(function (response) {
+                          formDiv.html(response);
+
+                          printdiv = formDiv.dialog({
+                              autoOpen: true,
+                              resizable: true,
+                              modal: true,
+                              title: 'Print Details',
+                              width: 850,
+                              top: 147,
+                              close: function () {
+                                  printdiv.dialog('destroy').remove();
+                              },
+                              open: function (event, ui) {
+                                  $('.ui-dialog-content').css('overflow', 'hidden');
+                                  $('body').loadingModal('destroy');
+                              }
+                          });
+                      });
+                }
+
+
+
+
+
 
                 $('#IsTestOrPack').change(function () {
                     if ($(this).is(":checked")) {
@@ -396,7 +505,7 @@
             && $('#TestIds').val() === null
             && $('#KitIds').val() === null
            && $('#ScanIds').val() === null)
-            
+
         {
             alert("Please suggest some prescrition or Test or Scan");
             return false;
@@ -486,4 +595,4 @@
             $('#Comments').val('');
             $('#btnSubmit').removeClass('disabled');
         }
-            </script>
+</script>

@@ -394,6 +394,19 @@ namespace HIS.Controllers
             return View(GetPatientDetails(enmrNo));
         }
 
+        public ActionResult PrintPaymentHistory(string enmrNo)
+        {
+            // List<PatientPrescriptionHistory> patientVisitHistory = new OutPatientController.PatientPrescriptionHistory(enmrNo);
+            ViewBag.Prescriptions = HtmlHelpers.HtmlHelpers.GetPatientPrescriptions(enmrNo);
+            ViewBag.InPateintPrescriptions = HtmlHelpers.HtmlHelpers.InPatientPrescriptions(enmrNo);
+            ViewBag.Tests = HtmlHelpers.HtmlHelpers.GetPatientTests(enmrNo);
+            ViewBag.Scans = HtmlHelpers.HtmlHelpers.GetPatientScans(enmrNo);
+            ViewBag.InpatientTests = HtmlHelpers.HtmlHelpers.GetInPatientTests(enmrNo);
+            ViewBag.InpatientScans = HtmlHelpers.HtmlHelpers.GetInPatientScans(enmrNo);
+            ViewBag.Visits = HtmlHelpers.HtmlHelpers.GetOutPatientVisits(enmrNo);
+            return View(GetPatientDetails(enmrNo));
+        }
+
         [HttpGet]
         public ActionResult Discharge(string enmrNo)
         {
@@ -709,6 +722,25 @@ namespace HIS.Controllers
             return View(patientTests);
         }
 
+        [HttpGet]
+        public ActionResult LabTestBillPayPrint(string enmrNo)
+        {
+            var latestVisit = new PatientVisitHistory();
+            var patientTests = new List<PatientTest>();
+            using (var hs = new HISDBEntities())
+            {
+                patientTests = GetPatientVisitTestsBillPayPrint(enmrNo, 0);
+                string visitName = "In Patient";
+                if (patientTests.Count() > 0)
+                {
+                    patientTests[0].ENMRNO = enmrNo;
+                    patientTests[0].VisitName = visitName;
+
+                }
+            }
+            return View(patientTests);
+        }
+
         [HttpPost]
         [Description(" - InPatient Lab Test Bill Payment Form.")]
         public ActionResult LabTestBillPay(MasterBillPayModel masterLab)
@@ -743,6 +775,25 @@ namespace HIS.Controllers
             using (var hs = new HISDBEntities())
             {
                 patientScans = HtmlHelpers.HtmlHelpers.GetPatientVisitScansBillPay(enmrNo, 0);
+                string visitName = "In Patient";
+                if (patientScans.Count() > 0)
+                {
+                    patientScans[0].ENMRNO = enmrNo;
+                    patientScans[0].VisitName = visitName;
+
+                }
+            }
+            return View(patientScans);
+        }
+
+        [HttpGet]
+        public ActionResult ScanTestBillPayPrint(string enmrNo)
+        {
+            var latestVisit = new PatientVisitHistory();
+            var patientScans = new List<PatientScan>();
+            using (var hs = new HISDBEntities())
+            {
+                patientScans = HtmlHelpers.HtmlHelpers.GetPatientVisitScansBillPayPrint(enmrNo, 0);
                 string visitName = "In Patient";
                 if (patientScans.Count() > 0)
                 {
@@ -799,6 +850,31 @@ namespace HIS.Controllers
                         pp.VisitName = visitName;
                         pp.DeliverQty = pp.Quantity;
                         pp.RequestQty = 0;
+                    }
+                }
+            }
+            return View(prescriptions);
+        }
+
+        [HttpGet]
+        public ActionResult DeliverPrescriptionprint(string enmrNo)
+        {
+            int visitID = 0;
+            var prescriptions = new List<PatientPrescription>();
+            using (var hs = new HISDBEntities())
+            {
+                prescriptions = PatientVisitDeliveredPrescriptionsPrint(enmrNo, visitID);
+                string visitName = "In Patient";
+                if (prescriptions.Count() > 0)
+                {
+                    foreach (var pp in prescriptions)
+                    {
+                        var itemCost = hs.MedicineInventories.Where(mi => mi.MedicineID == pp.MedicineID).First().PricePerItem.Value;
+                        pp.ItemCost = itemCost;
+                        pp.TotalCost = pp.Quantity * itemCost;
+                        pp.VisitName = visitName;
+                        pp.DeliverQty = pp.Quantity;
+                        //pp.RequestQty = 0;
                     }
                 }
             }
@@ -936,6 +1012,46 @@ namespace HIS.Controllers
                                             join u in hs.Users on pm.PrescribedBy equals u.UserID
                                             join ut in hs.UserTypes on u.UserTypeID equals ut.UserTypeID
                                             where pm.ENMRNO.Equals(enmrNo) && pm.VisitID == visitID && pm.IsDelivered == false && pm.ISIP == true && pm.PMID == latestPMID
+                                            select new
+                                            {
+                                                pp,
+                                                pm,
+                                                u,
+                                                mm,
+                                                ifs.Frequency
+                                            })
+                                  .OrderByDescending(b => b.pm.DatePrescribed)
+                                  .AsEnumerable()
+                                 .Select(x => new PatientPrescription
+                                 {
+                                     DateDisplay = HtmlHelpers.HtmlHelpers.DateFormat(x.pm.DatePrescribed),
+                                     ENMRNO = x.pm.ENMRNO,
+                                     VisitID = x.pm.VisitID.Value,
+                                     DoctorName = HtmlHelpers.HtmlHelpers.GetFullName(x.u.FirstName, x.u.MiddleName, x.u.LastName),
+                                     Quantity = x.pp.Quantity,
+                                     MedicineWithDose = HtmlHelpers.HtmlHelpers.GetMedicineWithDose(x.mm.MedicineName, x.mm.MedDose),
+                                     IntakeDisplay = x.Frequency,
+                                     MedicineID = x.pp.MedicineID,
+                                     PMID = x.pm.PMID
+                                 }).ToList();
+
+                return patientPrescriptions;
+            }
+        }
+
+        private static List<PatientPrescription> PatientVisitDeliveredPrescriptionsPrint(string enmrNo, int visitID)
+        {
+            using (HISDBEntities hs = new HISDBEntities())
+            {
+
+                var latestPMID = hs.PrescriptionMasters.Where(pms => pms.ENMRNO == enmrNo).OrderByDescending(pms => pms.PMID).FirstOrDefault().PMID;
+                var patientPrescriptions = (from pp in hs.PatientPrescriptions
+                                            join pm in hs.PrescriptionMasters on pp.PMID equals pm.PMID
+                                            join mm in hs.MedicineMasters on pp.MedicineID equals mm.MMID
+                                            join ifs in hs.IntakeFrequencies on pp.IntakeFrequencyID equals ifs.FrequencyID
+                                            join u in hs.Users on pm.PrescribedBy equals u.UserID
+                                            join ut in hs.UserTypes on u.UserTypeID equals ut.UserTypeID
+                                            where pm.ENMRNO.Equals(enmrNo) && pm.VisitID == visitID &&  pm.ISIP == true && pm.PMID == latestPMID
                                             select new
                                             {
                                                 pp,
@@ -1126,7 +1242,45 @@ namespace HIS.Controllers
             }
         }
 
-      
+        public List<PatientTest> GetPatientVisitTestsBillPayPrint(string enmrNo, int visitID)
+        {
+            using (HISDBEntities hs = new HISDBEntities())
+            {
+
+                var patientTests = (from pt in hs.PatientTests
+                                    join ltm in hs.LabTestMasters on pt.LTMID equals ltm.LTMID
+                                    join tt in hs.TestTypes on pt.TestID equals tt.TestID
+                                    join u in hs.Users on ltm.PrescribedBy equals u.UserID
+                                    join ut in hs.UserTypes on u.UserTypeID equals ut.UserTypeID
+                                    where ltm.ENMRNO == enmrNo && ltm.VisitID == visitID
+                                    select new
+                                    {
+                                        pt,
+                                        u,
+                                        tt,
+                                        ltm
+                                    })
+                                  .OrderByDescending(b => b.pt.PTID)
+                                  .AsEnumerable()
+                                 .Select(x => new PatientTest
+                                 {
+                                     ENMRNO = x.pt.ENMRNO,
+                                     TestName = x.tt.TestName,
+                                     DateDisplay = HtmlHelpers.HtmlHelpers.DateFormat(x.ltm.DatePrescribed),
+                                     DoctorName = HtmlHelpers.HtmlHelpers.GetFullName(x.u.FirstName, x.u.MiddleName, x.u.LastName),
+                                     RecordedValues = x.pt.RecordedValues,
+                                     TestImpression = x.pt.TestImpression,
+                                     ReportPath = x.pt.ReportPath,
+                                     LTMID = x.pt.LTMID,
+                                     TestID = x.pt.TestID,
+                                     TestCost = x.tt.TestCost.HasValue ? x.tt.TestCost.Value : 0
+                                 }).ToList();
+
+                return patientTests;
+            }
+        }
+
+
         private string VisitNameWithDate(PatientVisitHistory visit)
         {
             using (HISDBEntities db = new HISDBEntities())

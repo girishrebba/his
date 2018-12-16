@@ -1,0 +1,273 @@
+﻿
+
+@model HIS.OutPatient
+@{
+    Layout = null;
+}
+<title></title>
+<div id="ParentDiv" class="row">
+    <div id="PrintDiv">
+
+
+        @using (Html.BeginForm("ViewPatient", "OutPatient", FormMethod.Get))
+        {
+            @Html.HiddenFor(model => model.ENMRNO)
+            <div class="form-horizontal">
+                <table class="table table-striped">
+                    <tr>
+                        <td class="labelBold">ENMRNO: </td>
+                        <td>   @Html.DisplayFor(model => model.ENMRNO, new { htmlAttributes = new { @class = "form-control" } })  </td>
+                        <td>    </td>
+                        <td>    </td>
+                    </tr>
+                    <tr>
+                        <td class="labelBold"> Patient Name:  </td>
+                        <td> @Html.DisplayFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })  </td>
+                        <td class="labelBold">Enrolled On:  </td>
+                        <td>  @Html.DisplayFor(model => model.EnrolledDisplay, new { htmlAttributes = new { @class = "form-control" } })  </td>
+                    </tr>
+                    <tr>
+                        <td> DOB   </td>
+                        <td> @Html.DisplayFor(model => model.DOBDisplay, new { htmlAttributes = new { @class = "form-control" } })   </td>
+                        <td class="labelBold">Gender: </td>
+                        <td>   @Html.DisplayFor(model => model.GenderDisplay, new { htmlAttributes = new { @class = "form-control" } })  </td>
+                    </tr>
+                    <tr>
+                        <td class="labelBold">Address:  </td>
+                        <td>  @Html.DisplayFor(model => model.Address, new { htmlAttributes = new { @class = "form-control" } })   </td>
+                        <td class="labelBold"> Phone: </td>
+                        <td>  @Html.DisplayFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control" } })  </td>
+                    </tr>
+                    <tr>
+                        <td class="labelBold">  Height: </td>
+                        <td>   @Html.DisplayFor(model => model.Height, new { htmlAttributes = new { @class = "form-control" } })   </td>
+                        <td class="labelBold">  Weight: </td>
+                        <td>   @Html.DisplayFor(model => model.Weight, new { htmlAttributes = new { @class = "form-control" } })  </td>
+                    </tr>
+                    <tr>
+                        <td class="labelBold">  History:  </td>
+                        <td>  @Html.DisplayFor(model => model.PatientHistory, new { htmlAttributes = new { @class = "form-control" } })   </td>
+                        <td class="labelBold">  Purpose:  </td>
+                        <td>  @Html.DisplayFor(model => model.Purpose, new { htmlAttributes = new { @class = "form-control" } })  </td>
+                    </tr>
+                    <tr>
+                        <td class="labelBold">  Doctor:  </td>
+                        <td>  @Html.DisplayFor(model => model.DoctorName, new { htmlAttributes = new { @class = "form-control" } })  </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+
+            </div>
+        }
+        <br />
+
+        @if (ViewBag.Visits != null && ViewBag.Visits.Count > 0)
+        {
+            <h4><strong>Vist Details</strong></h4>
+
+            <table id="outPatientHistoryTable" class="table table-striped table-bordered" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Consultation</th>
+                        <th>Doctor</th>
+                        <th>Fee</th>
+                        <th>Discount</th>
+                        <th>Expiry Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var visit in ViewBag.Visits)
+                    {
+                        <tr>
+                            <td>@visit.DOVDisplay</td>
+                            <td>@visit.ConsultType</td>
+                            <td>@visit.DoctorName</td>
+                            <td>@visit.Fee</td>
+                            <td>@visit.Discount</td>
+                            <td>@visit.ValidDate</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+
+        @if (ViewBag.Prescriptions != null && ViewBag.Prescriptions.Count > 0)
+        {
+
+            <h4><strong>Prescription Details</strong></h4>
+
+            <table class="table table-striped table-bordered" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Medicine</th>
+                        <th>Quantity</th>
+                        <th>Intake</th>
+                        <th>Doctor</th>
+                        <th>Date</th>
+                        <th>Visit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var his in ViewBag.Prescriptions)
+                    {
+                        <tr>
+                            <td>@his.MedicineWithDose</td>
+                            <td>@his.Quantity</td>
+                            <td>@his.IntakeDisplay</td>
+                            <td>@his.DoctorName</td>
+                            <td>@his.DateDisplay</td>
+                            <td>@his.VisitName</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        <br />
+        <h4><strong>Test Details</strong></h4>
+        @if (ViewBag.Tests != null && ViewBag.Tests.Count > 0)
+        {
+            <table class="table table-striped table-bordered" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Test</th>
+                        <th>Doctor</th>
+                        <th>Date</th>
+                        <th>Recorded</th>
+                        <th>Impression</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var test in ViewBag.Tests)
+                    {
+                        <tr>
+                            <td>@test.TestName</td>
+                            <td>@test.DoctorName</td>
+                            <td>@test.DateDisplay</td>
+                            <td>@test.RecordedValues</td>
+                            <td>@test.TestImpression</td>
+                            <td>@test.TestCost.ToString("0.00")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+        }
+        <br />
+        <h4><strong>Scan Details</strong></h4>
+        @if (ViewBag.Scans != null && ViewBag.Scans.Count > 0)
+        {
+            <table class="table table-striped table-bordered" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Scan</th>
+                        <th>Doctor</th>
+                        <th>Date</th>
+                        <th>Recorded</th>
+                        <th>Impression</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var test in ViewBag.Scans)
+                    {
+                        <tr>
+                            <td>@test.ScanName</td>
+                            <td>@test.DoctorName</td>
+                            <td>@test.DateDisplay</td>
+                            <td>@test.RecordedValues</td>
+                            <td>@test.TestImpression</td>
+                            <td>@test.ScanCost.ToString("0.00")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+        }
+        @*<br />
+        <h4><strong>Payment History</strong></h4>
+        <table id="feeHistoryTable" class="table table-striped table-bordered" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Amount</th>
+                    <th>Purpose</th>
+                    <th>Payment Mode</th>
+                </tr>
+            </thead>
+        </table>*@
+
+    </div>
+    <input type="button" value="Print" id="printrpt" class="btn btn-primary" />
+</div>
+
+<script type="text/javascript">
+
+
+        $(document).ready(function () {
+
+     var myJsVariable = @Html.Raw(Json.Encode(Model.ENMRNO));
+     //       $("#obsHisTable").DataTable({
+     //           "ajax": {
+     //               "url": '/InPatient/GetObservations',
+     //               "data": { 'enmrNo': myJsVariable },
+     //               "type": "GET",
+     //               "datatype": "json"
+     //           },
+     //           "columns": [
+     //               { "data": "DateDisplay" },
+     //               { "data": "DoctorName" },
+     //               { "data": "Observations" }
+     //           ],fVist 
+     //           "language": {
+     //               "emptyTable": "No Observations"
+     //           },
+     //           "scrollY": "100px",
+     //           "scrollCollapse": true,
+     //           "paging": false,
+     //           "info": false,
+     //           "searching": false,
+     //           "sorting": false,
+     //           "order": [[0, "desc"]],
+     //});
+
+
+            $("#feeHistoryTable").DataTable({
+                "ajax": {
+                    "url": '/InPatient/GetFeeHistory',
+                    "data": { 'enmrNo': myJsVariable },
+                    "type": "GET",
+                    "datatype": "json"
+                },
+                "columns": [
+                    { "data": "PaidDateDisplay" },
+                    { "data": "Amount" },
+                    { "data": "Purpose" },
+                    { "data": "PayModeDisplay" }
+                ],
+                "language": {
+                    "emptyTable": "No Payment done yet"
+                },
+                "scrollY": "100px",
+                "scrollCollapse": true,
+                "paging": false,
+                "info": false,
+                "searching": false,
+                "order": [[0, "desc"]],
+            });
+
+
+
+              $("#printrpt").click(function () {
+                  $("#PrintDiv").printThis({
+                      header: '<img src="http://sravanthihospital.in/light/images/hms-logo_login.png" style="width:420px;" alt="Mouldifi" title="Sravanthi Hospitals">',
+                      footer: false,
+                      pageTitle: "Page title",
+                      Title: 'Pring page'
+                  });
+              });
+
+        });
+</script>

@@ -8,6 +8,7 @@ namespace HIS
 {
     public class PatientPrescriptionHistory
     {
+        public int SNO { get; set; }
         public string VisitName { get; set; }
         public IList<PatientPrescription> Prescriptions { get; set; }
         public IList<PatientTest> PatientTests { get; set; }

@@ -103,6 +103,8 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading clearfix">
                                         <span class="lableDisplay">Prescriptions:</span>
+                                        @*<input value="View & Print" onclick="precriptionprint();" class="btn btn-primary" style="align-self:flex-end;" />*@
+                                        <a class="btn btn-primary btn-sm" title="View & Print" style="margin-left:5px" onclick="precriptionprint();"><i class="fa fa-print his-fa-size"></i></a>
                                     </div>
                                     <div class="panel-body">
 
@@ -315,6 +317,7 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading clearfix">
                                         <span class="lableDisplay">Tests:</span>
+                                        <a class="btn btn-primary btn-sm" title="View & Print" style="margin-left:5px" onclick="TestBillprint();"><i class="fa fa-print his-fa-size"></i></a>
                                     </div>
                                     <div class="panel-body">
                                         <div class="panel-body">
@@ -379,6 +382,7 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading clearfix">
                                         <span class="lableDisplay">Scans:</span>
+                                        <a class="btn btn-primary btn-sm" title="View & Print" style="margin-left:5px" onclick="Scanbillprint();"><i class="fa fa-print his-fa-size"></i></a>
                                     </div>
                                     <div class="panel-body">
 
@@ -433,6 +437,7 @@
                 <div class="form-group">
                     <div class="col-md-3 col-md-offset-5">
                         <input type="submit" value="Submit" id="btnSubmit" class="btn btn-primary" style="align-self:flex-end;" />
+                        
                     </div>
                 </div>
             </div>
@@ -441,7 +446,90 @@
     </div>
 }
 
-<script type="text/javascript">
+    <script type="text/javascript">
+         function precriptionprint() {
+             $('body').loadingModal({ text: 'Loading...' });
+        var formDiv = $('<div/>');
+        var url = '@Url.Action("DeliverPrescriptionprint", "InPatient")/?enmrNo=' + @Html.Raw(Json.Encode(Model.ENMRNO)) ;
+        $.get(url)
+            .done(function (response) {
+                formDiv.html(response);
+
+                printdiv = formDiv.dialog({
+                    autoOpen: true,
+                    resizable: true,
+                    modal: true,
+                    title: 'Print Details',
+                    width: 850,
+                    top: 147,
+                    close: function () {
+                        printdiv.dialog('destroy').remove();
+                    },
+                    open: function (event, ui) {
+                        $('.ui-dialog-content').css('overflow', 'hidden');
+                        $('body').loadingModal('destroy');
+                    }
+                });
+            });
+
+        }
+
+
+         function TestBillprint() {
+             $('body').loadingModal({ text: 'Loading...' });
+        var formDiv = $('<div/>');
+        var url = '@Url.Action("LabTestBillPayPrint", "InPatient")/?enmrNo=' + @Html.Raw(Json.Encode(Model.ENMRNO)) ;
+        $.get(url)
+            .done(function (response) {
+                formDiv.html(response);
+
+                printdiv = formDiv.dialog({
+                    autoOpen: true,
+                    resizable: true,
+                    modal: true,
+                    title: 'Print Details',
+                    width: 850,
+                    top: 147,
+                    close: function () {
+                        printdiv.dialog('destroy').remove();
+                    },
+                    open: function (event, ui) {
+                        $('.ui-dialog-content').css('overflow', 'hidden');
+                        $('body').loadingModal('destroy');
+                    }
+                });
+            });
+
+         }
+
+
+         function Scanbillprint() {
+             $('body').loadingModal({ text: 'Loading...' });
+        var formDiv = $('<div/>');
+        var url = '@Url.Action("ScanTestBillPayPrint", "InPatient")/?enmrNo=' + @Html.Raw(Json.Encode(Model.ENMRNO)) ;
+        $.get(url)
+            .done(function (response) {
+                formDiv.html(response);
+
+                printdiv = formDiv.dialog({
+                    autoOpen: true,
+                    resizable: true,
+                    modal: true,
+                    title: 'Print Details',
+                    width: 850,
+                    top: 147,
+                    close: function () {
+                        printdiv.dialog('destroy').remove();
+                    },
+                    open: function (event, ui) {
+                        $('.ui-dialog-content').css('overflow', 'hidden');
+                        $('body').loadingModal('destroy');
+                    }
+                });
+            });
+
+        }
+
     $(document).ready(function () {
         $('#IsTestOrPack').change(function () {
             if ($(this).is(":checked")) {
@@ -453,6 +541,8 @@
                 $("#divTests").removeClass("hidden");
             }
         });
+
+
 
 
         $('.nexttab').click(function () {
@@ -487,6 +577,11 @@
             return false;
         }
     });
+
+    //$('#btnprint').click(function () {
+    //    newPP.dialog('close');
+
+    //});
 
     var myJsVariable = @Html.Raw(Json.Encode(Model.ENMRNO));
             $("#ppHistoryTable").DataTable({
@@ -569,4 +664,4 @@
             $('#Comments').val('');
             $('#btnSubmit').removeClass('disabled');
         }
-</script>
+    </script>
