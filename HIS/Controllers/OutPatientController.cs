@@ -768,7 +768,7 @@ namespace HIS.Controllers
             using (var db = new HISDBEntities())
             {
                 var prescribedVisits = (from pv in db.PatientVisitHistories
-                                        join pm in db.PrescriptionMasters on pv.SNO equals pm.VisitID
+                                        //join pm in db.PrescriptionMasters on pv.SNO equals pm.VisitID
                                         //join pp in db.PatientPrescriptions on pm.PMID equals pp.PMID
                                         
                                         where pv.ENMRNO == enmrNo select pv).ToList();
