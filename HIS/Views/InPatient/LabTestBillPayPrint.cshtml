@@ -80,7 +80,7 @@
                             <tfoot>
                                 <tr>
                                     <td align="right">Total:</td>
-                                    <td align="left" id="grandTotal">@Model.Sum(i => i.TestCost).ToString("0.##")</td>
+                                    <td align="left" id="grandTotal">@Model.Sum(i => i.TotalAmount).ToString("0.##")</td>
                                 </tr>
                                 <tr>
                                     <td align="right">Discount(-):</td>
@@ -88,7 +88,7 @@
                                 </tr>
                                 <tr>
                                     <td align="right">Amount To be Paid:</td>
-                                    <td align="left" id="paidAmount">@Model.Sum(i => i.TestCost).ToString("0.##")</td>
+                                    <td align="left" id="paidAmount">@Model.Sum(i => i.PaidAmount).ToString("0.##")</td>
                                 </tr>
                             </tfoot>
                         </table>

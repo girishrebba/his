@@ -1018,7 +1018,10 @@ public static List<User> GetDoctors()
                                      ReportPath = x.pt.ReportPath,
                                      STMID = x.pt.STMID,
                                      ScanID = x.pt.ScanID,
-                                     ScanCost = x.tt.ScanCost.HasValue ? x.tt.ScanCost.Value : 0
+                                     ScanCost = x.tt.ScanCost.HasValue ? x.tt.ScanCost.Value : 0,
+                                     TotalAmount = x.ltm.TotalAmount.HasValue ? x.ltm.TotalAmount.Value : 0,
+                                     Discount = x.ltm.Discount.HasValue ? x.ltm.Discount.Value : 0,
+                                     PaidAmount = x.ltm.PaidAmount.HasValue ? x.ltm.PaidAmount.Value : 0
                                  }).ToList();
 
                 return patientScans;

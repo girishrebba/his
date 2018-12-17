@@ -977,7 +977,6 @@
     <Content Include="light\js\jquery-1.12.4.min.map" />
     <None Include="Properties\PublishProfiles\HisApp - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\sravanthihospital.in - Web Deploy.pubxml" />
-    <Content Include="RandP\permissions.json" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery.validate-his.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
@@ -1004,7 +1003,6 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <None Include="Scripts\_references.js" />
-    <Content Include="Scripts\userpermissions.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -1570,6 +1568,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="PatientRecords\" />
+    <Folder Include="RandP\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

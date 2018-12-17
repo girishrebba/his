@@ -17,6 +17,8 @@ namespace HIS
         public int PrescribedBy { get; set; }
         public decimal TestCost { get; set; }
         public decimal Discount { get; set; }
+        public decimal TotalAmount { get; set; }
+        public decimal PaidAmount { get; set; }
     }
 
     public class PatientTestMetaData

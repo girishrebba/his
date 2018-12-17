@@ -550,7 +550,10 @@ namespace HIS.Controllers
                                      MedicineWithDose = HtmlHelpers.HtmlHelpers.GetMedicineWithDose(x.mm.MedicineName, x.mm.MedDose),
                                      IntakeDisplay = x.Frequency,
                                      MedicineID = x.pp.MedicineID,
-                                     PMID = x.pm.PMID
+                                     PMID = x.pm.PMID,
+                                     PaidAmount =x.pm.PaidAmount.HasValue ? x.pm.PaidAmount.Value : 0,
+                                     Discount= x.pm.Discount.HasValue ? x.pm.Discount.Value :0,
+                                     TotalAmount=x.pm.TotalAmount.HasValue ? x.pm.TotalAmount.Value : 0
                                  }).ToList();
 
                 return patientPrescriptions;
@@ -754,7 +757,11 @@ namespace HIS.Controllers
                                      ReportPath = x.pt.ReportPath,
                                      LTMID = x.pt.LTMID,
                                      TestID = x.pt.TestID,
-                                     TestCost = x.tt.TestCost.HasValue ? x.tt.TestCost.Value : 0
+                                     TestCost = x.tt.TestCost.HasValue ? x.tt.TestCost.Value : 0,
+                                     TotalAmount = x.ltm.TotalAmount.HasValue ? x.ltm.TotalAmount.Value : 0,
+                                     Discount = x.ltm.Discount.HasValue ? x.ltm.Discount.Value : 0,
+                                     PaidAmount = x.ltm.PaidAmount.HasValue ? x.ltm.PaidAmount.Value : 0
+
                                  }).ToList();
 
                 return patientTests;

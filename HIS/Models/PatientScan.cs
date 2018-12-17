@@ -17,6 +17,8 @@ namespace HIS
         public int PrescribedBy { get; set; }
         public decimal ScanCost { get; set; }
         public decimal Discount { get; set; }
+        public decimal TotalAmount { get; set; }
+        public decimal PaidAmount { get; set; }
     }
 
 
