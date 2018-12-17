@@ -780,7 +780,7 @@ namespace HIS.Controllers
                     visitPrescription.SNO = pre.SNO;
                     visitPrescription.Prescriptions = prescriptions;
                     visitPrescription.PatientTests = GetPatientVisitTests(pre.ENMRNO, pre.SNO);
-                    ViewBag.OppatientScans = HtmlHelpers.HtmlHelpers.GetOpPatientScans(enmrNo,pre.SNO);
+                    visitPrescription.PatientScans = HtmlHelpers.HtmlHelpers.GetOpPatientScans(enmrNo,pre.SNO);
                     prescriptionsHistory.Add(visitPrescription);
                 }
                 return prescriptionsHistory;

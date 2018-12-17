@@ -314,7 +314,7 @@
                             @*<input type="submit" value="View & Print" id="btnSubmit" class="btn btn-primary" />*@
                         </div>
                         <div class="panel-body">
-                            @if (ViewBag.OppatientScans != null && ViewBag.OppatientScans.Count > 0)
+                            @if (p.PatientScans != null && p.PatientScans.Count > 0)
     {
                         <div class="table-responsive">
                             <table class="table table-striped table-bordered" style="width:100%">
@@ -329,7 +329,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach (var test in ViewBag.OppatientScans)
+                                    @foreach (var test in p.PatientScans)
             {
                         <tr>
                             <td>@test.ScanName</td>
