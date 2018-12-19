@@ -26,7 +26,7 @@ namespace HIS.Controllers
         {
             using (HISDBEntities hs = new HISDBEntities())
             {
-                var data = hs.IpRevenueReport1(doctors, stdt, enddt).ToList();
+                var data = hs.IpRevenueReport(doctors, stdt, enddt).ToList();
                 return Json(new { data = data }, JsonRequestBehavior.AllowGet);
             }
         }

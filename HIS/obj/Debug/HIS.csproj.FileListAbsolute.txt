@@ -612,3 +612,4 @@ D:\HIS\trunk\HIS\obj\Debug\HIS.csproj.CoreCompileInputs.cache
 D:\HIS\trunk\HIS\obj\Debug\HIS.csproj.CopyComplete
 D:\HIS\trunk\HIS\obj\Debug\HIS.dll
 D:\HIS\trunk\HIS\obj\Debug\HIS.pdb
+F:\Projects\HIS\HIS\obj\Debug\HIS.csprojResolveAssemblyReference.cache

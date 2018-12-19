@@ -497,26 +497,6 @@
     </EntitySetMapping>
     <FunctionImportMapping FunctionImportName="CreateMasterLabKit" FunctionName="HISDBModel.Store.CreateMasterLabKit" />
     <FunctionImportMapping FunctionImportName="CreateMasterPharmaKit" FunctionName="HISDBModel.Store.CreateMasterPharmaKit" />
-    <FunctionImportMapping FunctionImportName="RevenueReport1" FunctionName="HISDBModel.Store.RevenueReport">
-      <ResultMapping>
-        <ComplexTypeMapping TypeName="HISDBModel.RevenueReport1_Result">
-          <ScalarProperty Name="ENMRNO" ColumnName="ENMRNO" />
-          <ScalarProperty Name="PatientFirstName" ColumnName="PatientFirstName" />
-          <ScalarProperty Name="PatientLasttName" ColumnName="PatientLasttName" />
-          <ScalarProperty Name="DoctorID" ColumnName="DoctorID" />
-          <ScalarProperty Name="DoctorFirstName" ColumnName="DoctorFirstName" />
-          <ScalarProperty Name="DoctorLasttName" ColumnName="DoctorLasttName" />
-          <ScalarProperty Name="consultationFee" ColumnName="consultationFee" />
-          <ScalarProperty Name="feeDiscount" ColumnName="feeDiscount" />
-          <ScalarProperty Name="LabTotalAmount" ColumnName="LabTotalAmount" />
-          <ScalarProperty Name="LabTestPaidAmount" ColumnName="LabTestPaidAmount" />
-          <ScalarProperty Name="LabTestDiscount" ColumnName="LabTestDiscount" />
-          <ScalarProperty Name="ScanTotalAmount" ColumnName="ScanTotalAmount" />
-          <ScalarProperty Name="ScanTestPaidAmount" ColumnName="ScanTestPaidAmount" />
-          <ScalarProperty Name="ScanTestDiscount" ColumnName="ScanTestDiscount" />
-        </ComplexTypeMapping>
-      </ResultMapping>
-    </FunctionImportMapping>
     <EntitySetMapping Name="ConsultantVisits">
       <EntityTypeMapping TypeName="HISDBModel.ConsultantVisit">
         <MappingFragment StoreEntitySet="ConsultantVisits">
@@ -542,27 +522,6 @@
           <ScalarProperty Name="consultantname" ColumnName="consultantname" />
           <ScalarProperty Name="Consultationdate" ColumnName="Consultationdate" />
           <ScalarProperty Name="Amount" ColumnName="Amount" />
-        </ComplexTypeMapping>
-      </ResultMapping>
-    </FunctionImportMapping>
-    <FunctionImportMapping FunctionImportName="IpRevenueReport1" FunctionName="HISDBModel.Store.IpRevenueReport">
-      <ResultMapping>
-        <ComplexTypeMapping TypeName="HISDBModel.IpRevenueReport1_Result">
-          <ScalarProperty Name="ENMRNO" ColumnName="ENMRNO" />
-          <ScalarProperty Name="PatientFirstName" ColumnName="PatientFirstName" />
-          <ScalarProperty Name="PatientLasttName" ColumnName="PatientLasttName" />
-          <ScalarProperty Name="DoctorID" ColumnName="DoctorID" />
-          <ScalarProperty Name="DoctorFirstName" ColumnName="DoctorFirstName" />
-          <ScalarProperty Name="DoctorLasttName" ColumnName="DoctorLasttName" />
-          <ScalarProperty Name="consultationFee" ColumnName="consultationFee" />
-          <ScalarProperty Name="feeDiscount" ColumnName="feeDiscount" />
-          <ScalarProperty Name="LabTotalAmount" ColumnName="LabTotalAmount" />
-          <ScalarProperty Name="LabTestPaidAmount" ColumnName="LabTestPaidAmount" />
-          <ScalarProperty Name="LabTestDiscount" ColumnName="LabTestDiscount" />
-          <ScalarProperty Name="ScanTotalAmount" ColumnName="ScanTotalAmount" />
-          <ScalarProperty Name="ScanTestPaidAmount" ColumnName="ScanTestPaidAmount" />
-          <ScalarProperty Name="ScanTestDiscount" ColumnName="ScanTestDiscount" />
-          <ScalarProperty Name="packageCost" ColumnName="packageCost" />
         </ComplexTypeMapping>
       </ResultMapping>
     </FunctionImportMapping>
@@ -695,5 +654,46 @@
     </EntitySetMapping>
     <FunctionImportMapping FunctionImportName="AddSubCategory" FunctionName="HISDBModel.Store.AddSubCategory" />
     <FunctionImportMapping FunctionImportName="AddSupplier" FunctionName="HISDBModel.Store.AddSupplier" />
+    <FunctionImportMapping FunctionImportName="IpRevenueReport" FunctionName="HISDBModel.Store.IpRevenueReport">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="HISDBModel.IpRevenueReport_Result">
+          <ScalarProperty Name="ENMRNO" ColumnName="ENMRNO" />
+          <ScalarProperty Name="PatientFirstName" ColumnName="PatientFirstName" />
+          <ScalarProperty Name="PatientLasttName" ColumnName="PatientLasttName" />
+          <ScalarProperty Name="DoctorID" ColumnName="DoctorID" />
+          <ScalarProperty Name="DoctorFirstName" ColumnName="DoctorFirstName" />
+          <ScalarProperty Name="DoctorLasttName" ColumnName="DoctorLasttName" />
+          <ScalarProperty Name="consultationFee" ColumnName="consultationFee" />
+          <ScalarProperty Name="feeDiscount" ColumnName="feeDiscount" />
+          <ScalarProperty Name="LabTotalAmount" ColumnName="LabTotalAmount" />
+          <ScalarProperty Name="LabTestPaidAmount" ColumnName="LabTestPaidAmount" />
+          <ScalarProperty Name="LabTestDiscount" ColumnName="LabTestDiscount" />
+          <ScalarProperty Name="ScanTotalAmount" ColumnName="ScanTotalAmount" />
+          <ScalarProperty Name="ScanTestPaidAmount" ColumnName="ScanTestPaidAmount" />
+          <ScalarProperty Name="ScanTestDiscount" ColumnName="ScanTestDiscount" />
+          <ScalarProperty Name="packageCost" ColumnName="packageCost" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="RevenueReport" FunctionName="HISDBModel.Store.RevenueReport">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="HISDBModel.RevenueReport_Result">
+          <ScalarProperty Name="ENMRNO" ColumnName="ENMRNO" />
+          <ScalarProperty Name="PatientFirstName" ColumnName="PatientFirstName" />
+          <ScalarProperty Name="PatientLasttName" ColumnName="PatientLasttName" />
+          <ScalarProperty Name="DoctorID" ColumnName="DoctorID" />
+          <ScalarProperty Name="DoctorFirstName" ColumnName="DoctorFirstName" />
+          <ScalarProperty Name="DoctorLasttName" ColumnName="DoctorLasttName" />
+          <ScalarProperty Name="consultationFee" ColumnName="consultationFee" />
+          <ScalarProperty Name="feeDiscount" ColumnName="feeDiscount" />
+          <ScalarProperty Name="LabTotalAmount" ColumnName="LabTotalAmount" />
+          <ScalarProperty Name="LabTestPaidAmount" ColumnName="LabTestPaidAmount" />
+          <ScalarProperty Name="LabTestDiscount" ColumnName="LabTestDiscount" />
+          <ScalarProperty Name="ScanTotalAmount" ColumnName="ScanTotalAmount" />
+          <ScalarProperty Name="ScanTestPaidAmount" ColumnName="ScanTestPaidAmount" />
+          <ScalarProperty Name="ScanTestDiscount" ColumnName="ScanTestDiscount" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
   </EntityContainerMapping>
 </Mapping>

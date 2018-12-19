@@ -127,18 +127,21 @@
                                 $('body').loadingModal('destroy');
                                 if (data != null && data.data.length > 0) {
                                     var str = "";
-                                    str += "<table id='mytab' class='table table-striped table-bordered'><tr><td  colspan='2'></td><td  colspan='2'><b>Consultation</b></td><td  colspan='3'><b>Lab Tests</b></td><td  colspan='3'><b>Scan Tests</b></td><td><b>Packages</b></td><td></td></tr><tr>"
+                                    str += "<table id='mytab' class='table table-striped table-bordered'><tr><td  colspan='2'></td><td  colspan='2'>Consultation</td><td  colspan='3'>Lab Tests Amount</td><td  colspan='3'>Scan Tests Amount</td><td  colspan='3'>Pharmacy Amount</td><td>Packages</td><td></td></tr><tr>"
                                     str += "<td  colspan='2'></td>";
-                                    str += "<td><b>Fee</b></td>";
-                                    str += "<td><b>Discount</b></td>";
-                                    str += "<td><b>Total Amount</b></td>";
-                                    str += "<td><b>Paid Amount</b></td>";
-                                    str += "<td><b>Discount</b></td>";
-                                    str += "<td><b>Total Amount</b></td>";
-                                    str += "<td><b>Paid Amount</b></td>";
-                                    str += "<td><b>Discount</b></td>";
-                                    str += "<td><b>Packages Amount</b></td>";
-                                    str += "<td><b>Total</b></td>";
+                                    str += "<td>Fee</td>";
+                                    str += "<td>Discount</td>";
+                                    str += "<td>Total</td>";
+                                    str += "<td>Paid</td>";
+                                    str += "<td>Discount</td>";
+                                    str += "<td>Total</td>";
+                                    str += "<td>Paid</td>";
+                                    str += "<td>Discount</td>";
+                                    str += "<td>Total</td>";
+                                    str += "<td>Paid</td>";
+                                    str += "<td>Discount</td>";
+                                    str += "<td>Packages Amount</td>";
+                                    str += "<td>Total</td>";
                                     str += "<tr>";
                                     var consultationFeesum = 0;
                                     var feeDiscountsum = 0;
@@ -148,6 +151,9 @@
                                     var scanTotalAmountsum = 0;
                                     var scanTestPaidAmountsum = 0;
                                     var scanTestDiscountsum = 0;
+                                    var pharmaTotalAmountsum = 0;
+                                    var pharmaTestPaidAmountsum = 0;
+                                    var pharmaTestDiscountsum = 0;
                                     var RowSum = 0;
                                     for (var i = 0; i < data.data.length; i++) {
                                         if (i == 0) {
@@ -227,13 +233,41 @@
                                         else {
                                             str += "<td>0</td>";
                                         }
+
+
+                                        if (data.data[i]["PharmaTotalAmount"] != null) {
+                                            pharmaTotalAmountsum += data.data[i]["PharmaTotalAmount"];
+                                            // RowSum += data.data[i]["LabTotalAmount"];
+                                            str += "<td>" + data.data[i]["PharmaTotalAmount"] + "</td>";
+                                        }
+                                        else {
+                                            str += "<td>0</td>";
+                                        }
+                                        if (data.data[i]["PharmaPaidAmount"] != null) {
+                                            pharmaTestPaidAmountsum += data.data[i]["PharmaPaidAmount"];
+                                            RowSum += data.data[i]["PharmaPaidAmount"];
+                                            str += "<td>" + data.data[i]["PharmaPaidAmount"] + "</td>";
+                                        }
+                                        else {
+                                            str += "<td>0</td>";
+                                        }
+                                        if (data.data[i]["PharmaDiscount"] != null) {
+                                            pharmaTestDiscountsum += data.data[i]["PharmaDiscount"];
+                                            //RowSum -= data.data[i]["LabTestDiscount"];
+                                            str += "<td>" + data.data[i]["PharmaDiscount"] + "</td>";
+                                        }
+                                        else {
+                                            str += "<td>0</td>";
+                                        }
+
+
                                         str += "<td></td>";
                                         str += "<td>" + RowSum + "</td>";
 
                                         str += "</tr >";
                                         if (i == data.data.length - 1) {
                                             var tot = consultationFeesum - feeDiscountsum + LabTestPaidAmountsum + scanTestDiscountsum;
-                                            str += "<tr><td colspan='2' style='font- size:x - large;'><b>Total: </b></td><td><b>" + consultationFeesum + "</b></td><td><b>" + feeDiscountsum + "</b></td><td><b>" + LabTotalAmountsum + "</b></td><td><b>" + LabTestPaidAmountsum + "</b></td><td><b>" + LabTestDiscountsum + "</b></td><td><b>" + scanTotalAmountsum + "</b></td><td><b>" + scanTestPaidAmountsum + "</b></td><td><b>" + scanTestDiscountsum + "</b></td><td></td><td><b>" + tot + "</b></td></tr >";
+                                            str += "<tr><td colspan='2' style='font- size:x - large;'><b>Total: </b></td><td><b>" + consultationFeesum + "</b></td><td><b>" + feeDiscountsum + "</b></td><td><b>" + LabTotalAmountsum + "</b></td><td><b>" + LabTestPaidAmountsum + "</b></td><td><b>" + LabTestDiscountsum + "</b></td><td><b>" + scanTotalAmountsum + "</b></td><td><b>" + scanTestPaidAmountsum + "</b></td><td><b>" + scanTestDiscountsum + "</b></td><td><b>" + pharmaTotalAmountsum + "</b></td><td><b>" + pharmaTestPaidAmountsum + "</b></td><td><b>" + pharmaTestDiscountsum + "</b></td><td></td><td><b>" + tot + "</b></td></tr >";
                                             consultationFeesum = 0;
                                             feeDiscountsum = 0;
                                             LabTotalAmountsum = 0;
@@ -242,10 +276,13 @@
                                             scanTotalAmountsum = 0;
                                             scanTestPaidAmountsum = 0;
                                             scanTestDiscountsum = 0;
+                                            pharmaTotalAmountsum = 0;
+                                            pharmaTestPaidAmountsum = 0;
+                                            pharmaTestDiscountsum = 0;
                                         }
                                         else if (data.data[i]["DoctorID"] != data.data[i + 1]["DoctorID"]) {
                                             var tot = consultationFeesum - feeDiscountsum + LabTestPaidAmountsum + scanTestDiscountsum;
-                                            str += "<tr><td colspan='2' style='font- size:x - large;'><b>Total: </b></td><td><b>" + consultationFeesum + "</b></td><td><b>" + feeDiscountsum + "</b></td><td><b>" + LabTotalAmountsum + "</b></td><td><b>" + LabTestPaidAmountsum + "</b></td><td><b>" + LabTestDiscountsum + "</b></td><td><b>" + scanTotalAmountsum + "</b></td><td><b>" + scanTestPaidAmountsum + "</b></td><td><b>" + scanTestDiscountsum + "</b></td><td></td><td><b>" + tot + "</b></td></tr >";
+                                            str += "<tr><td colspan='2' style='font- size:x - large;'><b>Total: </b></td><td><b>" + consultationFeesum + "</b></td><td><b>" + feeDiscountsum + "</b></td><td><b>" + LabTotalAmountsum + "</b></td><td><b>" + LabTestPaidAmountsum + "</b></td><td><b>" + LabTestDiscountsum + "</b></td><td><b>" + scanTotalAmountsum + "</b></td><td><b>" + scanTestPaidAmountsum + "</b></td><td><b>" + scanTestDiscountsum + "</b></td><td><b>" + pharmaTotalAmountsum + "</b></td><td><b>" + pharmaTestPaidAmountsum + "</b></td><td><b>" + pharmaTestDiscountsum + "</b></td><td></td><td><b>" + tot + "</b></td></tr >";
                                             consultationFeesum = 0;
                                             feeDiscountsum = 0;
                                             LabTotalAmountsum = 0;
@@ -254,6 +291,9 @@
                                             scanTotalAmountsum = 0;
                                             scanTestPaidAmountsum = 0;
                                             scanTestDiscountsum = 0;
+                                            pharmaTotalAmountsum = 0;
+                                            pharmaTestPaidAmountsum = 0;
+                                            pharmaTestDiscountsum = 0;
                                         }
                                         RowSum = 0;
                                     }
