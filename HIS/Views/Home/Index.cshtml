@@ -4,123 +4,115 @@
 @*<ol class="breadcrumb breadcrumb-2">
     <li><a href="../Home"><i class="fa fa-home"></i>Home</a></li>
 </ol>*@
+<link href="~/Content/his_smart.css" type="text/css" rel="stylesheet" />
 <div class="row">
-    <div class="col-lg-12">
-        <div class="row">
-            <div class="col-lg-3 col-md-6">
-                <div class="panel minimal panel-default">
-                    <div class="panel-heading clearfix"  style="background-color:#3f51b557;">
-                        
-                        <div class="panel-title"><i class='fa fa-user green-color size-80'></i><b> Total Inpatients</b></div>
-                    </div>
-                    <!-- panel body -->
-                    <div class="panel-body">
-                        <div class="stack-order">
-                            <h1 class="no-margins"><b> @ViewBag.TotalInpatients</b></h1>
-                            <small><b>Inpatients registered so far</b></small>
+    <div class="col-md-12">
+        <div class="row form-group">
+            <div class="his-smarts">
+                <div class="col-md-3 his-smart-gd">
+                    <div class="his-smart-block clr-block-1">
+                        <div class="col-md-8 his-smart-left">
+                            <h3>@ViewBag.TotalInpatients</h3>
+                            <h4>Total Inpatients Registered</h4>
+                            @*<p>Other hand, we denounce</p>*@
                         </div>
-                        
+                        <div class="col-md-4 his-smart-right">
+                            <i class="fa fa-user"></i>
+                        </div>
+                        <div class="clearfix"> </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <div class="panel minimal panel-default">
-                    <div class="panel-heading clearfix"  style="background-color:#8bc34aa8;">
-                        
-                        <div class="panel-title"><i class="fa fa-user green-color icon-larger"></i><b> InPatients Today</b></div>
-                    </div>
-                    <!-- panel body -->
-                    <div class="panel-body">
-                        <div>
-                            <h1 class="no-margins"><b> @ViewBag.InpatientsToday</b></h1>
-                            <small><b>Inpatients registered today</b></small>
+                <div class="col-md-3 his-smart-gd">
+                    <div class="his-smart-block clr-block-2">
+                        <div class="col-md-8 his-smart-left">
+                            <h3>@ViewBag.InpatientsToday</h3>
+                            <h4>Inpatients Registered Today</h4>
+                            @*<p>Other hand, we denounce</p>*@
                         </div>
+                        <div class="col-md-4 his-smart-right">
+                            <i class="fa fa-user"> </i>
+                        </div>
+                        <div class="clearfix"> </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <div class="panel minimal panel-default">
-                    <div class="panel-heading clearfix"  style="background-color:#9c27b075;">
-                        
-                        <div class="panel-title" ><i class="fa fa-user green-color"></i><b> Outpatients</b></div>
-                    </div>
-                    <!-- panel body -->
-                    <div class="panel-body">
-                        <div class="stack-order">
-                            <h1 class="no-margins"><b> @ViewBag.OnpatientsToday</b></h1>
-                            <small><b>Outpatients registered today</b></small>
+                <div class="col-md-3 his-smart-gd">
+                    <div class="his-smart-block clr-block-3">
+                        <div class="col-md-8 his-smart-left">
+                            <h3>@ViewBag.OnpatientsToday</h3>
+                            <h4>Outpatients Registered Today</h4>
+                            @*<p>Other hand, we denounce</p>*@
                         </div>
+                        <div class="col-md-4 his-smart-right">
+                            <i class="fa fa-user"> </i>
+                        </div>
+                        <div class="clearfix"> </div>
                     </div>
                 </div>
+                <div class="clearfix"> </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-lg-3 col-md-6">
-                <div class="panel minimal panel-default">
-                    <div class="panel-heading clearfix"  style="background-color:#f4433670;">
-                        <div class="panel-title">
-                        <i class="fa fa-door-open icon-larger green-color"></i><b> Available Rooms</b></div>
-                    </div>
-                    <!-- panel body -->
-                    <div class="panel-body">
-                        <div class="stack-order">
-                            <h1 class="no-margins"><b> @ViewBag.AvailableRooms</b></h1>
-                    <small><b>Total rooms available</b></small>
-                    </div>
-                       
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <div class="panel minimal panel-default">
-                    <div class="panel-heading clearfix"  style="background-color:#2196f361;">
-                        
-                        <div class="panel-title"><i class="fa fa-bed green-color icon-larger"></i><b> Available Beds</b></div>
-                    </div>
-                    <!-- panel body -->
-                    <div class="panel-body">
-                        <div>
-                            <h1 class="no-margins"><b> @ViewBag.AvailableBeds</b></h1>
-                            <small><b>Total beds available</b></small>
+        <div class="row form-group">
+            <div class="his-smarts">
+                <div class="col-md-3 his-smart-gd">
+                    <div class="his-smart-block clr-block-4">
+                        <div class="col-md-8 his-smart-left">
+                            <h3>@ViewBag.AvailableRooms</h3>
+                            <h4>Total Rooms Available</h4>
+                            @*<p>Other hand, we denounce</p>*@
                         </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <div class="panel minimal panel-default">
-                    <div class="panel-heading clearfix"  style="background-color:#e91e6347;">
-                        
-                        <div class="panel-title"><i class="fa fa-bed red-color"></i><b> Allocated Beds</b></div>
-                    </div>
-                    <!-- panel body -->
-                    <div class="panel-body">
-                        <div class="stack-order">
-                            <h1 class="no-margins"><b> @ViewBag.AllocatedBeds</b></h1>
-                            <small><b>Total beds allocated</b></small>
+                        <div class="col-md-4 his-smart-right">
+                            <i class="fa fa-door-open"></i>
                         </div>
+                        <div class="clearfix"> </div>
                     </div>
                 </div>
+                <div class="col-md-3 his-smart-gd">
+                    <div class="his-smart-block clr-block-5">
+                        <div class="col-md-8 his-smart-left">
+                            <h3>@ViewBag.AvailableBeds</h3>
+                            <h4>Total Beds Available</h4>
+                            @*<p>Other hand, we denounce</p>*@
+                        </div>
+                        <div class="col-md-4 his-smart-right">
+                            <i class="fa fa-bed"> </i>
+                        </div>
+                        <div class="clearfix"> </div>
+                    </div>
+                </div>
+                <div class="col-md-3 his-smart-gd">
+                    <div class="his-smart-block clr-block-6">
+                        <div class="col-md-8 his-smart-left">
+                            <h3>@ViewBag.AllocatedBeds</h3>
+                            <h4>Total Beds Allocated</h4>
+                            @*<p>Other hand, we denounce</p>*@
+                        </div>
+                        <div class="col-md-4 his-smart-right">
+                            <i class="fa fa-bed"> </i>
+                        </div>
+                        <div class="clearfix"> </div>
+                    </div>
+                </div>
+                <div class="clearfix"> </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-lg-3 col-md-6">
-                <div class="panel minimal panel-default">
-                    <div class="panel-heading clearfix" style="background-color:lightgrey;">
-                        <div class="panel-title" >
-                        <i class="fa fa-flask icon-larger red-color"></i><b> Reports Undelivered</b></div>
-                    </div>
-                    <!-- panel body -->
-                    <div class="panel-body">
-                        <div class="stack-order">
-                            <h1 class="no-margins"><b> @ViewBag.UnDeliverted</b></h1>
-                            <small><b>Total lab reports yet to be delivered</b></small>
+
+        <div class="row form-group">
+            <div class="his-smarts">
+                <div class="col-md-3 his-smart-gd">
+                    <div class="his-smart-block clr-block-7">
+                        <div class="col-md-8 his-smart-left">
+                            <h3>@ViewBag.UnDeliverted</h3>
+                            <h4>Undelivered Lab Reports</h4>
+                            @*<p>Other hand, we denounce</p>*@
                         </div>
-                        
+                        <div class="col-md-4 his-smart-right">
+                            <i class="fa fa-flask"></i>
+                        </div>
+                        <div class="clearfix"> </div>
                     </div>
                 </div>
+                <div class="clearfix"> </div>
             </div>
         </div>
     </div>
-
 </div>
-

@@ -155,6 +155,7 @@
     <Content Include="Content\fontawesome.css" />
     <Content Include="Content\Gridmvc.css" />
     <Content Include="Content\his_customstyles.css" />
+    <Content Include="Content\his_smart.css" />
     <Content Include="Content\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\images\ui-bg_glass_55_fbf9ee_1x400.png" />
