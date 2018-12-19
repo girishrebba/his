@@ -255,14 +255,15 @@
         </div>
         <!-- /page sidebar -->
         <!-- Main container -->
-        <div class="main-container" style="background:url(../light/images/bg1-his_logo.png);background-size:cover;background-repeat:no-repeat;background-position:center center;">
+        @*<div class="main-container" style="background:url(../light/images/bg1-his_logo.png);background-size:cover;background-repeat:no-repeat;background-position:center center;">*@
+        <div class="main-container" >
             <!-- Main header -->
             <div class="main-header row">
                 <div class="col-sm-6 col-xs-7">
                     <!-- User info -->
                     <ul class="user-info pull-left">
                         <li class="profile-info dropdown">
-                            <a data-toggle="dropdown" class="dropdown-toggle" href="#" aria-expanded="false">@Session["UserName"]<span class="caret"></span></a>
+                            <a data-toggle="dropdown" class="dropdown-toggle" href="#" aria-expanded="false"><b> @Session["UserName"] </b><span class="caret"></span></a>
                             <!-- User action menu -->
                             <ul class="dropdown-menu">
                                 @*<li><a href="#/"><i class="icon-user"></i>My profile</a></li>*@
@@ -283,7 +284,7 @@
                             <!-- /notifications -->
                             <!-- Messages -->
                             <li class="notifications dropdown">
-                                <a data-close-others="true" data-hover="dropdown" data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="icon-mail"></i><span class="badge badge-secondary">12</span></a>
+                                <a data-close-others="true" data-hover="dropdown" data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="icon-mail"></i><span class="badge badge-secondary"></span></a>
                                 <ul class="dropdown-menu pull-right">
                                     <li class="first">
                                         <div class="dropdown-content-header"><i class="fa fa-pencil-square-o pull-right"></i> Messages</div>
