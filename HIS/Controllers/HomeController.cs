@@ -23,8 +23,10 @@ namespace HIS.Controllers
                 ViewBag.TotalInpatients = hs.InPatients.Count();
                 ViewBag.InpatientsToday = hs.InPatients.Where(a => a.Enrolled > dt).Count();
                 ViewBag.OnpatientsToday = hs.OutPatients.Where(a => a.Enrolled > dt).Count();
-                ViewBag.UnDeliverted = hs.LabTestMasters.Where(a => a.IsDelivered == false).Count();
-                
+                ViewBag.UnDelivertedTests = hs.LabTestMasters.Where(a => a.IsDelivered == false).Count();
+                ViewBag.UnDelivertedPrescription = hs.PrescriptionMasters.Where(a => a.IsDelivered == false).Count();
+                ViewBag.UnDelivertedScans = hs.ScanTestMasters.Where(a => a.IsDelivered == false).Count();
+
                 var beds = (from b in hs.Beds
                             join pb in hs.PatientRoomAllocations on b.BedNo equals pb.BedNo
                             where pb.AllocationStatus == true
