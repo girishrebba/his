@@ -449,7 +449,7 @@ namespace HIS.Controllers
                                             join ifs in hs.IntakeFrequencies on pp.IntakeFrequencyID equals ifs.FrequencyID
                                             join u in hs.Users on pm.PrescribedBy equals u.UserID
                                             join ut in hs.UserTypes on u.UserTypeID equals ut.UserTypeID
-                                            where pm.ENMRNO.Equals(enmrNo)&& pm.VisitID == visitID
+                                            where pm.ENMRNO.Equals(enmrNo) && pm.VisitID == visitID
                                             select new
                                             {
                                                 pp,
@@ -470,7 +470,8 @@ namespace HIS.Controllers
                                      MedicineWithDose = HtmlHelpers.HtmlHelpers.GetMedicineWithDose(x.mm.MedicineName, x.mm.MedDose),
                                      IntakeDisplay = x.Frequency,
                                      MedicineID = x.pp.MedicineID,
-                                     PMID = x.pm.PMID
+                                     PMID = x.pm.PMID,
+                                     IsDelivered = x.pm.IsDelivered.HasValue ? x.pm.IsDelivered.Value : false,
                                  }).ToList();
 
                 return patientPrescriptions;
@@ -591,7 +592,8 @@ namespace HIS.Controllers
                                     {
                                         pt,
                                         u,
-                                        tt
+                                        tt,
+                                        ltm
                                     })
                                   .OrderByDescending(b => b.pt.PTID)
                                   .AsEnumerable()
@@ -605,7 +607,8 @@ namespace HIS.Controllers
                                      TestImpression = x.pt.TestImpression,
                                      ReportPath = x.pt.ReportPath,
                                      LTMID = x.pt.LTMID,
-                                     TestID = x.pt.TestID
+                                     TestID = x.pt.TestID,
+                                     IsBillPaid = x.ltm.IsBillPaid.HasValue ? x.ltm.IsBillPaid.Value : false
                                  }).ToList();
 
                 return patientTests;

@@ -29,6 +29,7 @@ namespace HIS
         public bool HasPrescription { get; set; }
         public bool ISIP { get; set; }
         public int RequestQty { get; set; }
+        public bool IsDelivered { get; set; }
     }
 
     public class PPMetaData

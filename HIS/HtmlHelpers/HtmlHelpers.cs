@@ -1046,7 +1046,8 @@ public static List<User> GetDoctors()
                                     {
                                         pt,
                                         u,
-                                        tt
+                                        tt,
+                                        ltm
                                     })
                                   .OrderByDescending(b => b.pt.PSID)
                                   .AsEnumerable()
@@ -1058,7 +1059,8 @@ public static List<User> GetDoctors()
                                      DoctorName = GetFullName(x.u.FirstName, x.u.MiddleName, x.u.LastName),
                                      RecordedValues = x.pt.RecordedValues,
                                      TestImpression = x.pt.TestImpression,
-                                     ReportPath = x.pt.ReportPath
+                                     ReportPath = x.pt.ReportPath,
+                                     IsBillPaid = x.ltm.IsBillPaid.HasValue ? x.ltm.IsBillPaid.Value : false
                                  }).ToList();
 
                 return patientScans;

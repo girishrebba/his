@@ -942,6 +942,7 @@ namespace HIS.Controllers
                     visitPrescription.VisitName = VisitNameWithDate(pre);
                     visitPrescription.Prescriptions = GetPatientVisitPrescriptions(pre.ENMRNO, pre.SNO);
                     visitPrescription.PatientTests = GetPatientVisitTests(pre.ENMRNO, pre.SNO);
+                    visitPrescription.PatientScans = HtmlHelpers.HtmlHelpers.GetOpPatientScans(enmrNo, pre.SNO);
                     prescriptionsHistory.Add(visitPrescription);
                 }
                 return prescriptionsHistory;
