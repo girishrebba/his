@@ -163,9 +163,39 @@
     line-height: 1.7em;
 }
 
+
+.his-smart-middle i.fa.fa-user {
+    font-size: 3em;
+    color: #FC8213;
+    width: 80px;
+    height: 80px;
+    background: #fff;
+    text-align: center;
+    border-radius: 49px;
+    -webkit-border-radius: 49px;
+    -moz-border-radius: 49px;
+    -o-border-radius: 49px;
+    line-height: 1.7em;
+}
+
+
+.his-smart-optoday i.fa.fa-user {
+    font-size: 3em;
+    color: #337AB7;
+    width: 80px;
+    height: 80px;
+    background: #fff;
+    text-align: center;
+    border-radius: 49px;
+    -webkit-border-radius: 49px;
+    -moz-border-radius: 49px;
+    -o-border-radius: 49px;
+    line-height: 1.7em;
+}
+
 .his-smart-right i.fa.fa-door-open {
     font-size: 3em;
-    color: #68AE00;
+    color: #3FBFBF;
     width: 80px;
     height: 80px;
     background: #fff;
@@ -207,7 +237,22 @@
 
 .his-smart-right i.fa.fa-bed {
     font-size: 3em;
-    color: #337AB7;
+    color: #BF3F7F;
+    width: 80px;
+    height: 80px;
+    background: #fff;
+    text-align: center;
+    border-radius: 49px;
+    -webkit-border-radius: 49px;
+    -moz-border-radius: 49px;
+    -o-border-radius: 49px;
+    line-height: 1.7em;
+}
+
+
+.his-smart-left i.fa.fa-bed {
+    font-size: 3em;
+    color: #7F3FBF;
     width: 80px;
     height: 80px;
     background: #fff;

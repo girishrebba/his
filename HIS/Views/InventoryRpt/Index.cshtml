@@ -5,7 +5,11 @@
 }
 
 <script src="~/Scripts/jquery-1.12.4.min.js"></script>
-
+<!-- Breadcrumb -->
+<ol class="breadcrumb breadcrumb-2">
+    <li><a><i class="glyphicon-cog"></i>Admin</a></li>
+    <li class="active"><strong>Inventory Report</strong></li>
+</ol>
 <div class="form-horizontal">
     <table>
         <tr>
@@ -37,7 +41,7 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
-      
+
 
         $('#btnPrint').click(function () {
             $('#dynamicTable').printThis({
@@ -85,8 +89,8 @@
                                 //str += "<td>" + data.data[i]["medDose"] + "</td>";
                                 str += "<td>" + data.data[i]["Brandname"] + "</td>";
                                 str += "<td>" + data.data[i]["category"] + "</td>";
-                                
-                                if (data.data[i]["PricePerItem"] != null) {                                   
+
+                                if (data.data[i]["PricePerItem"] != null) {
                                         str += "<td>" + data.data[i]["PricePerItem"] + " rs" + "</td>";
                                 }
                                 else {
@@ -111,7 +115,7 @@
                                     str += "<td>0</td>";
                                 }
 
-                                str += "</tr >";                              
+                                str += "</tr >";
                             }
 
                             str += "</table>";
@@ -122,7 +126,7 @@
                             $("#dynamicTable").append(str1);
                         }
                     }
-                });           
+                });
         });
     });
 

@@ -4,7 +4,11 @@
 }
 
 <script src="~/Scripts/jquery-1.12.4.min.js"></script>
-
+<!-- Breadcrumb -->
+<ol class="breadcrumb breadcrumb-2">
+    <li><a><i class="glyphicon-cog"></i>Admin</a></li>
+    <li class="active"><strong>Consultant Pay Report</strong></li>
+</ol>
 <div class="form-horizontal">
     <table>
         <tr style="height:100px;width:100%;overflow-y:scroll;">
@@ -121,23 +125,23 @@
                                 if (data != null && data.data.length > 0) {
                                     var str = "";
                                     str += "<table id='mytab' class='table table-striped table-bordered'><tr>"
-                                  
+
                                     str += "<td><b>Consultant Name</b></td>";
                                     str += "<td><b>Date</b></td>";
                                     str += "<td><b>Amount</b></td>";
                                     str += "</tr>";
-                                    
-                                    for (var i = 0; i < data.data.length; i++) {                                      
+
+                                    for (var i = 0; i < data.data.length; i++) {
 
 
                                         str += "<tr><td>" + data.data[i]["consultantname"] + "</td>";
                                         str += "<td>" + data.data[i]["DateDisplay"] + "</td>";
                                         str += "<td>" + data.data[i]["Amount"] + "</td>";
-                                        
-                                      
+
+
 
                                         str += "</tr >";
-                                      
+
                                     }
 
                                     str += "</table>";
