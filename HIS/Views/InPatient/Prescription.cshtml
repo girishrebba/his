@@ -104,210 +104,206 @@
                                     <div class="panel-heading clearfix">
                                         <span class="lableDisplay">Prescriptions:</span>
                                         @*<input value="View & Print" onclick="precriptionprint();" class="btn btn-primary" style="align-self:flex-end;" />*@
-
+                                        <a class="btn btn-primary btn-sm" title="View & Print" style="margin-left:5px" onclick="precriptionprint();"><i class="fa fa-print his-fa-size"></i></a>
                                     </div>
                                     <div class="panel-body">
-                                        @if (!HtmlHelpers.ISPatientDischrged(Model.ENMRNO))
-                {
-                        <div class="historyGrid">
-                            <div id="printgrid">
-                                <div id="headerDiv"></div>
-                                <div class="table-responsive">
-                                    <table class="table table-striped table-bordered" id="ppTable">
-                                        <thead id="thd">
-                                            <tr>
-                                                <th style="width:35%">Medicine</th>
-                                                <th style="width:5%">Quantity</th>
-                                                <th style="width:25%">Intake</th>
-                                                <th style="width:35%">Comments</th>
-                                                <th></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="tbd">
-                                            <tr id="fstRow">
-                                                <td>
-                                                    @Html.EditorFor(model => model.MedicineWithDose, new { htmlAttributes = new { @class = "form-control" } })
-                                                    @Html.HiddenFor(model => model.MedicineID)
-                                                </td>
-                                                <td>
-                                                    @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { Value = Model.Quantity > 0 ? Model.Quantity.ToString() : string.Empty, @class = "form-control" } })
-                                                </td>
-                                                <td>
-                                                    @Html.DropDownListFor(model => model.IntakeFrequencyID, ViewBag.Intakes as SelectList, "--Select--", new { @class = "form-control" })
-                                                </td>
-                                                <td>
-                                                    @Html.TextAreaFor(model => model.Comments, new { @class = "form-control rounded-0", @rows = 2 })
-                                                </td>
-                                                <td><span class="btn btn-success fa fa-plus-circle" style="padding: 0px 3px" id="btnAdd"></span></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-}
-
-
-
 
                                         @foreach (var p in ViewBag.History)
-                {
-                    if (p.Prescriptions != null && p.Prescriptions.Count > 0)
-                    {
-                        <div class="historyGrid">
+                                        {
+                                            if (p.Prescriptions != null && p.Prescriptions.Count > 0)
+                                            {
+                                                <div class="historyGrid">
 
-                            <div class="panel-heading" style="padding-left:1px;">
-                                <span class="lableDisplay">@p.VisitName </span>
-                                <a class="btn btn-primary btn-sm" title="View & Print" style="margin-left:5px" onclick="precriptionprint();"><i class="fa fa-print his-fa-size"></i></a>
-                            </div>
-                            <div class="panel-body">
-                                <div class="table-responsive">
-                                    <table class="table table-striped table-bordered" style="width:100%">
-                                        <thead>
-                                            <tr>
-                                                <th>Medicine</th>
-                                                <th>Quantity</th>
-                                                <th>Intake</th>
-                                                <th>Doctor</th>
-                                                <th>Date</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach (var his in p.Prescriptions)
-                    {
-                        <tr>
-                            <td>@his.MedicineWithDose</td>
-                            <td>@his.Quantity</td>
-                            <td>@his.IntakeDisplay</td>
-                            <td>@his.DoctorName</td>
-                            <td>@his.DateDisplay</td>
-                        </tr>
-}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                            <div class="panel-body">
-                                @if (p.PatientTests != null && p.PatientTests.Count > 0)
-        {
-                        <div class="table-responsive">
-                            <table class="table table-striped table-bordered" style="width:100%">
-                                <thead>
-                                    <tr>
-                                        <th>Test</th>
-                                        <th>Doctor</th>
-                                        <th>Date</th>
-                                        <th>Recorded</th>
-                                        <th>Impression</th>
-                                        <th>Path</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var test in p.PatientTests)
-            {
-                        <tr>
-                            <td>@test.TestName</td>
-                            <td>@test.DoctorName</td>
-                            <td>@test.DateDisplay</td>
-                            <td>@test.RecordedValues</td>
-                            <td>@test.TestImpression</td>
-                            <td><a href='@test.ReportPath' target="_blank" class='btn btn-info btn-sm' title='ReportView'><i class="fa fa-file-download"></i></a></td>
-                        </tr>
-}
-                                </tbody>
-                            </table>
-                        </div>
-}
-                            </div>
+                                                    <div class="panel-heading" style="padding-left:1px;">
+                                                        <span class="lableDisplay">@p.VisitName </span>
+                                                    </div>
+                                                    <div class="panel-body">
+                                                        <div class="table-responsive">
+                                                            <table class="table table-striped table-bordered" style="width:100%">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Medicine</th>
+                                                                        <th>Quantity</th>
+                                                                        <th>Intake</th>
+                                                                        <th>Doctor</th>
+                                                                        <th>Date</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    @foreach (var his in p.Prescriptions)
+                                                                    {
+                                                                        <tr>
+                                                                            <td>@his.MedicineWithDose</td>
+                                                                            <td>@his.Quantity</td>
+                                                                            <td>@his.IntakeDisplay</td>
+                                                                            <td>@his.DoctorName</td>
+                                                                            <td>@his.DateDisplay</td>
+                                                                        </tr>
+                                                                    }
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                    <div class="panel-body">
+                                                        @if (p.PatientTests != null && p.PatientTests.Count > 0)
+                                                        {
+                                                            <div class="table-responsive">
+                                                                <table class="table table-striped table-bordered" style="width:100%">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>Test</th>
+                                                                            <th>Doctor</th>
+                                                                            <th>Date</th>
+                                                                            <th>Recorded</th>
+                                                                            <th>Impression</th>
+                                                                            <th>Path</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        @foreach (var test in p.PatientTests)
+                                                                        {
+                                                                            <tr>
+                                                                                <td>@test.TestName</td>
+                                                                                <td>@test.DoctorName</td>
+                                                                                <td>@test.DateDisplay</td>
+                                                                                <td>@test.RecordedValues</td>
+                                                                                <td>@test.TestImpression</td>
+                                                                                <td><a href='@test.ReportPath' target="_blank" class='btn btn-info btn-sm' title='ReportView'><i class="fa fa-file-download"></i></a></td>
+                                                                            </tr>
+                                                                        }
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        }
+                                                    </div>
 
-                        </div>
-}
+                                                </div>
+                                            }
 
-}
+                                        }
 
                                         <br />
 
                                         @if (ViewBag.InPrescriptions != null && ViewBag.InPrescriptions.Count > 0)
-                {
-                        <div class="historyGrid">
-                            <div class="panel-body1">
-                                <div class="panel panel-default">
-                                    <div class="panel-heading" style="padding-left:1px;">
-                                        <span class="lableDisplay">In Patient Prescriptions </span>
-                                    </div>
-                                    <div class="panel-body">
-                                        <div class="table-responsive">
-                                            <table class="table table-striped table-bordered" style="width:100%">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Medicine</th>
-                                                        <th>Quantity</th>
-                                                        <th>Intake</th>
-                                                        <th>Doctor</th>
-                                                        <th>Date</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @foreach (var his in ViewBag.InPrescriptions)
-                            {
-                                <tr>
-                                    <td>@his.MedicineWithDose</td>
-                                    <td>@his.Quantity</td>
-                                    <td>@his.IntakeDisplay</td>
-                                    <td>@his.DoctorName</td>
-                                    <td>@his.DateDisplay</td>
-                                </tr>
-    }
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-}
+                                        {
+                                            <div class="historyGrid">
+                                                <div class="panel-body1">
+                                                    <div class="panel panel-default">
+                                                        <div class="panel-heading" style="padding-left:1px;">
+                                                            <span class="lableDisplay">In Patient Prescriptions </span>
+                                                        </div>
+                                                        <div class="panel-body">
+                                                            <div class="table-responsive">
+                                                                <table class="table table-striped table-bordered" style="width:100%">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>Medicine</th>
+                                                                            <th>Quantity</th>
+                                                                            <th>Intake</th>
+                                                                            <th>Doctor</th>
+                                                                            <th>Date</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        @foreach (var his in ViewBag.InPrescriptions)
+                                                                        {
+                                                                            <tr>
+                                                                                <td>@his.MedicineWithDose</td>
+                                                                                <td>@his.Quantity</td>
+                                                                                <td>@his.IntakeDisplay</td>
+                                                                                <td>@his.DoctorName</td>
+                                                                                <td>@his.DateDisplay</td>
+                                                                            </tr>
+                                                                        }
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
                                         <br />
                                         @if (ViewBag.MDR != null && ViewBag.MDR.Count > 0)
-                {
-                        <div class="historyGrid">
-                            <div class="panel-body">
-                                <div class="panel panel-default">
-                                    <div class="panel-heading" style="padding-left:1px;">
-                                        <span class="lableDisplay">MDR Prescription</span>
-                                    </div>
-                                    <div class="panel-body">
-                                        <div class="table-responsive">
-                                            <table class="table table-striped table-bordered" style="width:100%">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Medicine</th>
-                                                        <th>Quantity</th>
-                                                        <th>Intake</th>
-                                                        <th>Doctor</th>
-                                                        <th>Date</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @foreach (var his in ViewBag.MDR)
-                            {
-                                <tr>
-                                    <td>@his.MedicineWithDose</td>
-                                    <td>@his.Quantity</td>
-                                    <td>@his.IntakeDisplay</td>
-                                    <td>@his.DoctorName</td>
-                                    <td>@his.DateDisplay</td>
-                                </tr>
-    }
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-}
+                                        {
+                                            <div class="historyGrid">
+                                                <div class="panel-body">
+                                                    <div class="panel panel-default">
+                                                        <div class="panel-heading" style="padding-left:1px;">
+                                                            <span class="lableDisplay">MDR Prescription</span>
+                                                        </div>
+                                                        <div class="panel-body">
+                                                            <div class="table-responsive">
+                                                                <table class="table table-striped table-bordered" style="width:100%">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>Medicine</th>
+                                                                            <th>Quantity</th>
+                                                                            <th>Intake</th>
+                                                                            <th>Doctor</th>
+                                                                            <th>Date</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        @foreach (var his in ViewBag.MDR)
+                                                                        {
+                                                                            <tr>
+                                                                                <td>@his.MedicineWithDose</td>
+                                                                                <td>@his.Quantity</td>
+                                                                                <td>@his.IntakeDisplay</td>
+                                                                                <td>@his.DoctorName</td>
+                                                                                <td>@his.DateDisplay</td>
+                                                                            </tr>
+                                                                        }
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
                                         <br />
 
+                                        @if (!HtmlHelpers.ISPatientDischrged(Model.ENMRNO))
+                                        {
+                                            <div class="historyGrid">
+                                                <div id="printgrid">
+                                                    <div id="headerDiv"></div>
+                                                    <div class="table-responsive">
+                                                        <table class="table table-striped table-bordered" id="ppTable">
+                                                            <thead id="thd">
+                                                                <tr>
+                                                                    <th style="width:35%">Medicine</th>
+                                                                    <th style="width:5%">Quantity</th>
+                                                                    <th style="width:25%">Intake</th>
+                                                                    <th style="width:35%">Comments</th>
+                                                                    <th></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="tbd">
+                                                                <tr id="fstRow">
+                                                                    <td>
+                                                                        @Html.EditorFor(model => model.MedicineWithDose, new { htmlAttributes = new { @class = "form-control" } })
+                                                                        @Html.HiddenFor(model => model.MedicineID)
+                                                                    </td>
+                                                                    <td>
+                                                                        @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { Value = Model.Quantity > 0 ? Model.Quantity.ToString() : string.Empty, @class = "form-control" } })
+                                                                    </td>
+                                                                    <td>
+                                                                        @Html.DropDownListFor(model => model.IntakeFrequencyID, ViewBag.Intakes as SelectList, "--Select--", new { @class = "form-control" })
+                                                                    </td>
+                                                                    <td>
+                                                                        @Html.TextAreaFor(model => model.Comments, new { @class = "form-control rounded-0", @rows = 2 })
+                                                                    </td>
+                                                                    <td><span class="btn btn-success fa fa-plus-circle" style="padding: 0px 3px" id="btnAdd"></span></td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
 
 
                                     </div>
