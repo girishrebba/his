@@ -9,6 +9,7 @@ namespace HIS
     [MetadataType(typeof(OutPatientMetaData))]
     public partial class OutPatient
     {
+        public int RowNum { get; set; }
         public string Name { get; set; }
         public string Address { get; set; }
         public string GenderDisplay { get; set; }

@@ -368,7 +368,7 @@
             <PropertyRef Name="SNO" />
           </Key>
           <Property Name="SNO" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="DateOfVisit" Type="date" Nullable="false" />
+          <Property Name="DateOfVisit" Type="datetime" Nullable="false" />
           <Property Name="ConsultTypeID" Type="int" Nullable="false" />
           <Property Name="ENMRNO" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="Fee" Type="money" Nullable="false" />
@@ -1434,7 +1434,7 @@
           <Property Name="ConsultTypeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ConsultType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="ConsultationFees" Relationship="Self.FK_Consultation_Type" FromRole="ConsultationType" ToRole="ConsultationFee" />
-          <NavigationProperty Name="PatientVisitHistories" Relationship="Self.FK_PVH_Consultation_Type" FromRole="ConsultationType" ToRole="PatientVisitHistory" />
+          <NavigationProperty Name="PatientVisitHistories" Relationship="HISDBModel.FK_PVH_Consultation_Type" FromRole="ConsultationType" ToRole="PatientVisitHistory" />
         </EntityType>
         <EntityType Name="InPatientHistory">
           <Key>
@@ -1502,28 +1502,6 @@
           <NavigationProperty Name="IntakeFrequency" Relationship="Self.FK_PP_FrequencyID" FromRole="PatientPrescription" ToRole="IntakeFrequency" />
           <NavigationProperty Name="MedicineMaster" Relationship="Self.FK_PP_Medicine" FromRole="PatientPrescription" ToRole="MedicineMaster" />
           <NavigationProperty Name="PrescriptionMaster" Relationship="Self.FK_PP_PMID" FromRole="PatientPrescription" ToRole="PrescriptionMaster" />
-        </EntityType>
-        <EntityType Name="PatientVisitHistory">
-          <Key>
-            <PropertyRef Name="SNO" />
-          </Key>
-          <Property Name="SNO" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="DateOfVisit" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="ConsultTypeID" Type="Int32" Nullable="false" />
-          <Property Name="ENMRNO" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Fee" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
-          <Property Name="Discount" Type="Decimal" Precision="5" Scale="2" />
-          <Property Name="DoctorID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="ConsultationType" Relationship="Self.FK_PVH_Consultation_Type" FromRole="PatientVisitHistory" ToRole="ConsultationType" />
-          <NavigationProperty Name="User" Relationship="Self.FK_PatientVisitHistory_Doctor" FromRole="PatientVisitHistory" ToRole="Users" />
-          <Property Name="Purpose" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="HeartBeat" Type="Int32" />
-          <Property Name="BMI" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Weight" Type="Decimal" Precision="6" Scale="2" />
-          <Property Name="BP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="Temperature" Type="Decimal" Precision="10" Scale="2" />
-          <Property Name="NurseID" Type="Int32" />
-          <NavigationProperty Name="OutPatient" Relationship="HISDBModel.FK_PVH_OutPatient_ENMRNO" FromRole="PatientVisitHistory" ToRole="OutPatient" />
         </EntityType>
         <EntityType Name="Permission">
           <Key>
@@ -1642,7 +1620,6 @@
           <Property Name="UserTypeID" Type="Int32" Nullable="false" />
           <NavigationProperty Name="ConsultationFees" Relationship="Self.FK_Consultation_Doctor" FromRole="Users" ToRole="ConsultationFee" />
           <NavigationProperty Name="InPatientHistories" Relationship="Self.FK_InPatientHistory_Doctor" FromRole="Users" ToRole="InPatientHistory" />
-          <NavigationProperty Name="PatientVisitHistories" Relationship="Self.FK_PatientVisitHistory_Doctor" FromRole="Users" ToRole="PatientVisitHistory" />
           <NavigationProperty Name="PrescriptionMasters" Relationship="Self.FK_PM_Doctor" FromRole="Users" ToRole="PrescriptionMaster" />
           <NavigationProperty Name="Specialization" Relationship="Self.FK_User_Specialization" FromRole="Users" ToRole="Specialization" />
           <NavigationProperty Name="UserType" Relationship="Self.FK_User_Type" FromRole="Users" ToRole="UserType" />
@@ -1650,6 +1627,7 @@
           <NavigationProperty Name="ScanTestMasters" Relationship="HISDBModel.FK_STM_Doctor" FromRole="User" ToRole="ScanTestMaster" />
           <NavigationProperty Name="InPatients" Relationship="HISDBModel.FK_InPatients_Doctor" FromRole="User" ToRole="InPatient" />
           <NavigationProperty Name="OutPatients" Relationship="HISDBModel.FK_OutPatients_Doctor" FromRole="User" ToRole="OutPatient" />
+          <NavigationProperty Name="PatientVisitHistories" Relationship="HISDBModel.FK_PatientVisitHistory_Doctor" FromRole="User" ToRole="PatientVisitHistory" />
         </EntityType>
         <EntityType Name="UserType">
           <Key>
@@ -1731,18 +1709,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_PVH_Consultation_Type">
-          <End Role="ConsultationType" Type="Self.ConsultationType" Multiplicity="1" />
-          <End Role="PatientVisitHistory" Type="Self.PatientVisitHistory" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ConsultationType">
-              <PropertyRef Name="ConsultTypeID" />
-            </Principal>
-            <Dependent Role="PatientVisitHistory">
-              <PropertyRef Name="ConsultTypeID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_InPatientHistory_Doctor">
           <End Role="Users" Type="Self.User" Multiplicity="1" />
           <End Role="InPatientHistory" Type="Self.InPatientHistory" Multiplicity="*" />
@@ -1815,18 +1781,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_PatientVisitHistory_Doctor">
-          <End Role="Users" Type="Self.User" Multiplicity="1" />
-          <End Role="PatientVisitHistory" Type="Self.PatientVisitHistory" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Users">
-              <PropertyRef Name="UserID" />
-            </Principal>
-            <Dependent Role="PatientVisitHistory">
-              <PropertyRef Name="DoctorID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_PM_Doctor">
           <End Role="Users" Type="Self.User" Multiplicity="1" />
           <End Role="PrescriptionMaster" Type="Self.PrescriptionMaster" Multiplicity="*" />
@@ -1876,7 +1830,6 @@
           <EntitySet Name="MedicineInventories" EntityType="Self.MedicineInventory" />
           <EntitySet Name="MedicineMasters" EntityType="Self.MedicineMaster" />
           <EntitySet Name="PatientPrescriptions" EntityType="Self.PatientPrescription" />
-          <EntitySet Name="PatientVisitHistories" EntityType="Self.PatientVisitHistory" />
           <EntitySet Name="Permissions" EntityType="Self.Permission" />
           <EntitySet Name="PrescriptionMasters" EntityType="Self.PrescriptionMaster" />
           <EntitySet Name="PurchaseOrders" EntityType="Self.PurchaseOrder" />
@@ -1911,10 +1864,6 @@
             <End Role="ConsultationType" EntitySet="ConsultationTypes" />
             <End Role="ConsultationFee" EntitySet="ConsultationFees" />
           </AssociationSet>
-          <AssociationSet Name="FK_PVH_Consultation_Type" Association="Self.FK_PVH_Consultation_Type">
-            <End Role="ConsultationType" EntitySet="ConsultationTypes" />
-            <End Role="PatientVisitHistory" EntitySet="PatientVisitHistories" />
-          </AssociationSet>
           <AssociationSet Name="FK_InPatientHistory_Doctor" Association="Self.FK_InPatientHistory_Doctor">
             <End Role="Users" EntitySet="Users" />
             <End Role="InPatientHistory" EntitySet="InPatientHistories" />
@@ -1938,10 +1887,6 @@
           <AssociationSet Name="FK_PP_PMID" Association="Self.FK_PP_PMID">
             <End Role="PrescriptionMaster" EntitySet="PrescriptionMasters" />
             <End Role="PatientPrescription" EntitySet="PatientPrescriptions" />
-          </AssociationSet>
-          <AssociationSet Name="FK_PatientVisitHistory_Doctor" Association="Self.FK_PatientVisitHistory_Doctor">
-            <End Role="Users" EntitySet="Users" />
-            <End Role="PatientVisitHistory" EntitySet="PatientVisitHistories" />
           </AssociationSet>
           <AssociationSet Name="FK_PM_Doctor" Association="Self.FK_PM_Doctor">
             <End Role="Users" EntitySet="Users" />
@@ -2118,10 +2063,6 @@
             <End Role="User" EntitySet="Users" />
             <End Role="OutPatient" EntitySet="OutPatients" />
           </AssociationSet>
-          <AssociationSet Name="FK_PVH_OutPatient_ENMRNO" Association="HISDBModel.FK_PVH_OutPatient_ENMRNO">
-            <End Role="OutPatient" EntitySet="OutPatients" />
-            <End Role="PatientVisitHistory" EntitySet="PatientVisitHistories" />
-          </AssociationSet>
           <EntitySet Name="Purposes" EntityType="HISDBModel.Purpose" />
           <AssociationSet Name="FK_PatientPurpose_PurposeID" Association="HISDBModel.FK_PatientPurpose_PurposeID">
             <End Role="Purpose" EntitySet="Purposes" />
@@ -2152,6 +2093,19 @@
             <Parameter Name="Start_Time" Mode="In" Type="DateTime" />
             <Parameter Name="End_Time" Mode="In" Type="DateTime" />
           </FunctionImport>
+          <EntitySet Name="PatientVisitHistories" EntityType="HISDBModel.PatientVisitHistory" />
+          <AssociationSet Name="FK_PVH_Consultation_Type" Association="HISDBModel.FK_PVH_Consultation_Type">
+            <End Role="ConsultationType" EntitySet="ConsultationTypes" />
+            <End Role="PatientVisitHistory" EntitySet="PatientVisitHistories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PVH_OutPatient_ENMRNO" Association="HISDBModel.FK_PVH_OutPatient_ENMRNO">
+            <End Role="OutPatient" EntitySet="OutPatients" />
+            <End Role="PatientVisitHistory" EntitySet="PatientVisitHistories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PatientVisitHistory_Doctor" Association="HISDBModel.FK_PatientVisitHistory_Doctor">
+            <End Role="User" EntitySet="Users" />
+            <End Role="PatientVisitHistory" EntitySet="PatientVisitHistories" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="LabTestMaster">
           <Key>
@@ -2794,18 +2748,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_PVH_OutPatient_ENMRNO">
-          <End Type="HISDBModel.OutPatient" Role="OutPatient" Multiplicity="1" />
-          <End Type="HISDBModel.PatientVisitHistory" Role="PatientVisitHistory" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="OutPatient">
-              <PropertyRef Name="ENMRNO" />
-            </Principal>
-            <Dependent Role="PatientVisitHistory">
-              <PropertyRef Name="ENMRNO" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="Purpose">
           <Key>
             <PropertyRef Name="PurposeID" />
@@ -2881,6 +2823,64 @@
           <Property Type="Decimal" Name="ScanTestPaidAmount" Nullable="true" Precision="19" />
           <Property Type="Decimal" Name="ScanTestDiscount" Nullable="true" Precision="19" />
         </ComplexType>
+        <EntityType Name="PatientVisitHistory">
+          <Key>
+            <PropertyRef Name="SNO" />
+          </Key>
+          <Property Name="SNO" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DateOfVisit" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ConsultTypeID" Type="Int32" Nullable="false" />
+          <Property Name="ENMRNO" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Fee" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="Discount" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="DoctorID" Type="Int32" Nullable="false" />
+          <Property Name="Purpose" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="HeartBeat" Type="Int32" />
+          <Property Name="BMI" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Weight" Type="Decimal" Precision="6" Scale="2" />
+          <Property Name="BP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Temperature" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="NurseID" Type="Int32" />
+          <NavigationProperty Name="ConsultationType" Relationship="HISDBModel.FK_PVH_Consultation_Type" FromRole="PatientVisitHistory" ToRole="ConsultationType" />
+          <NavigationProperty Name="OutPatient" Relationship="HISDBModel.FK_PVH_OutPatient_ENMRNO" FromRole="PatientVisitHistory" ToRole="OutPatient" />
+          <NavigationProperty Name="User" Relationship="HISDBModel.FK_PatientVisitHistory_Doctor" FromRole="PatientVisitHistory" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_PVH_Consultation_Type">
+          <End Type="HISDBModel.ConsultationType" Role="ConsultationType" Multiplicity="1" />
+          <End Type="HISDBModel.PatientVisitHistory" Role="PatientVisitHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ConsultationType">
+              <PropertyRef Name="ConsultTypeID" />
+            </Principal>
+            <Dependent Role="PatientVisitHistory">
+              <PropertyRef Name="ConsultTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PVH_OutPatient_ENMRNO">
+          <End Type="HISDBModel.OutPatient" Role="OutPatient" Multiplicity="1" />
+          <End Type="HISDBModel.PatientVisitHistory" Role="PatientVisitHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OutPatient">
+              <PropertyRef Name="ENMRNO" />
+            </Principal>
+            <Dependent Role="PatientVisitHistory">
+              <PropertyRef Name="ENMRNO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PatientVisitHistory_Doctor">
+          <End Type="HISDBModel.User" Role="User" Multiplicity="1" />
+          <End Type="HISDBModel.PatientVisitHistory" Role="PatientVisitHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="PatientVisitHistory">
+              <PropertyRef Name="DoctorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3008,26 +3008,6 @@
                 <ScalarProperty Name="BatchNo" ColumnName="BatchNo" />
                 <ScalarProperty Name="LotNo" ColumnName="LotNo" />
                 <ScalarProperty Name="DeliverQty" ColumnName="DeliverQty" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="PatientVisitHistories">
-            <EntityTypeMapping TypeName="HISDBModel.PatientVisitHistory">
-              <MappingFragment StoreEntitySet="PatientVisitHistory">
-                <ScalarProperty Name="NurseID" ColumnName="NurseID" />
-                <ScalarProperty Name="Temperature" ColumnName="Temperature" />
-                <ScalarProperty Name="BP" ColumnName="BP" />
-                <ScalarProperty Name="Weight" ColumnName="Weight" />
-                <ScalarProperty Name="BMI" ColumnName="BMI" />
-                <ScalarProperty Name="HeartBeat" ColumnName="HeartBeat" />
-                <ScalarProperty Name="Purpose" ColumnName="Purpose" />
-                <ScalarProperty Name="SNO" ColumnName="SNO" />
-                <ScalarProperty Name="DateOfVisit" ColumnName="DateOfVisit" />
-                <ScalarProperty Name="ConsultTypeID" ColumnName="ConsultTypeID" />
-                <ScalarProperty Name="ENMRNO" ColumnName="ENMRNO" />
-                <ScalarProperty Name="Fee" ColumnName="Fee" />
-                <ScalarProperty Name="Discount" ColumnName="Discount" />
-                <ScalarProperty Name="DoctorID" ColumnName="DoctorID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -3581,6 +3561,26 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="PatientVisitHistories">
+            <EntityTypeMapping TypeName="HISDBModel.PatientVisitHistory">
+              <MappingFragment StoreEntitySet="PatientVisitHistory">
+                <ScalarProperty Name="NurseID" ColumnName="NurseID" />
+                <ScalarProperty Name="Temperature" ColumnName="Temperature" />
+                <ScalarProperty Name="BP" ColumnName="BP" />
+                <ScalarProperty Name="Weight" ColumnName="Weight" />
+                <ScalarProperty Name="BMI" ColumnName="BMI" />
+                <ScalarProperty Name="HeartBeat" ColumnName="HeartBeat" />
+                <ScalarProperty Name="Purpose" ColumnName="Purpose" />
+                <ScalarProperty Name="DoctorID" ColumnName="DoctorID" />
+                <ScalarProperty Name="Discount" ColumnName="Discount" />
+                <ScalarProperty Name="Fee" ColumnName="Fee" />
+                <ScalarProperty Name="ENMRNO" ColumnName="ENMRNO" />
+                <ScalarProperty Name="ConsultTypeID" ColumnName="ConsultTypeID" />
+                <ScalarProperty Name="DateOfVisit" ColumnName="DateOfVisit" />
+                <ScalarProperty Name="SNO" ColumnName="SNO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

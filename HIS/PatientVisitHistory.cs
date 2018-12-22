@@ -30,7 +30,7 @@ namespace HIS
         public Nullable<int> NurseID { get; set; }
     
         public virtual ConsultationType ConsultationType { get; set; }
-        public virtual User User { get; set; }
         public virtual OutPatient OutPatient { get; set; }
+        public virtual User User { get; set; }
     }
 }

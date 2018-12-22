@@ -29,19 +29,24 @@
     <div class="col-lg-12">
         <div class="panel panel-default">
             <div class="panel-heading clearfix">
-                @*<a class="btn btn-success" style="margin-bottom:10px" onclick="PopupForm('@Url.Action("AddModify","OutPatient")',0)"><i class="fa fa-plus"></i> Out Patient</a>*@
                 <a class="btn btn-success" style="margin-bottom:10px" onclick="PopupForm('@Url.Action("AddModify","OutPatient")',0)">Create Out-Patient</a>
+                @*<a class="btn btn-success" style="margin-bottom:10px; margin-left:5px;" onclick="RefreshConsultations()">Refresh</a>*@
+                <span class="pull-right lableDisplay" style="font-size:25px;">Enrolled Consultations For Today</span>
             </div>
+            @*<div class="panel-heading clearfix">
+
+            </div*@
             <div class="panel-body">
                 <div class="table-responsive">
-                    <table id="outPatientsTable" class="table table-striped table-bordered" style="width:100%">
+                    <table id="consultationsTable" class="table table-striped table-bordered" style="width:100%">
                         <thead>
                             <tr>
+                                <th>S.No</th>
                                 <th>ENMRNO</th>
                                 <th>Name</th>
                                 @*<th>DOB</th>*@
                                 @*<th>Gender</th>*@
-                                <th>Phone</th>
+                                @*<th>Phone</th>*@
                                 <th>Doctor</th>
                                 <th>Enrolled</th>
                                 <th>Prev ENMR</th>
@@ -53,12 +58,36 @@
                 </div>
             </div>
         </div>
-    </div>
-</div>
-
-@section scripts{
-    <script>
-        var Popup, dataTable, viewPatient, newVisit, prescription, deliverPopUp;
+        <div class="panel panel-default">
+            <div class="panel-heading clearfix">
+                <span class="pull-left lableDisplay" style="font-size:25px;">General List</span>
+            </div>
+                <div class="panel-body">
+                    <div class="table-responsive">
+                        <table id="outPatientsTable" class="table table-striped table-bordered" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>ENMRNO</th>
+                                    <th>Name</th>
+                                    @*<th>DOB</th>*@
+                                    @*<th>Gender</th>*@
+                                    @*<th>Phone</th>*@
+                                    <th>Doctor</th>
+                                    <th>Enrolled</th>
+                                    <th>Prev ENMR</th>
+                                    @*<th>Valid Till</th>*@
+                                    <th></th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+        @section scripts{
+            <script>
+        var Popup, dataTable, viewPatient, newVisit, prescription, deliverPopUp, consultations;
         $(document).ready(function () {
             dataTable = $("#outPatientsTable").DataTable({
                 "ajax": {
@@ -71,7 +100,7 @@
                     { "data": "Name" },
                     //{ "data": "DOBDisplay" },
                     //{ "data": "GenderDisplay" },
-                    { "data": "Phone" },
+                    //{ "data": "Phone" },
                     { "data": "DoctorName" },
                     { "data": "EnrolledDisplay" },
                     { "data": "PrevENMR" },
@@ -115,6 +144,65 @@
                 "order": [[0, "desc"]],
                 "language": {
                     "emptyTable" : "No data found, Please click on <b>Add New</b> Button"
+                }
+            });
+
+            consultations = $("#consultationsTable").DataTable({
+                "ajax": {
+                    "url": "/OutPatient/GetErolledConsultations",
+                    "type": "GET",
+                    "datatype": "json"
+                },
+                "columns": [
+                    { "data": "RowNum" },
+                    { "data": "ENMRNO" },
+                    { "data": "Name" },
+                    //{ "data": "DOBDisplay" },
+                    //{ "data": "GenderDisplay" },
+                    //{ "data": "Phone" },
+                    { "data": "DoctorName" },
+                    { "data": "EnrolledDisplay" },
+                    { "data": "PrevENMR" },
+                    //{ "data": "ValidDateDisplay" },
+                    {
+                        "data": "ENMRNO", "render": function (data) {
+                            return "@if (His_ExtendedMethods.HasPermissionPage("OutPatient-AddModify"))
+                            {<a class='btn btn-default btn-sm' title='Edit' onclick=PopupForm('@Url.Action("AddModify","OutPatient")/?enmrNo=" + data + "',1)><i class='fa fa-user-edit his-fa-size'></i></a>}"
+                                + "@if (His_ExtendedMethods.HasPermissionPage("OutPatient-ViewPatient")){
+                                    <a class='btn btn-info btn-sm' title = 'View Patient' style = 'margin-left:5px' onclick = PopupViewPatient('@Url.Action("ViewPatient", "OutPatient")/?enmrNo=" + data + "')><i class='fa fa-info-circle his-fa-size'></i></a>}"
+                                + "@if (His_ExtendedMethods.HasPermissionPage("OutPatient-NewVisit")){
+                                    <a class='btn btn-primary btn-sm' title='Consultation' style='margin-left:5px' onclick=PopupNewVisit('@Url.Action("NewVisit", "OutPatient")/?enmrNo=" + data + "')> <i class='fa fa-calendar his-fa-size'></i></a>}"
+                                + "@if (His_ExtendedMethods.HasPermissionPage("OutPatient-OPPrescription")){
+                                    <a class='btn btn-primary btn-sm' title='Prescription' style='margin-left:5px' onclick=PopupPrescription('@Url.Action("OPPrescription", "OutPatient")/?enmrNo=" + data + "')><i class='fa fa-prescription his-fa-size'></i></a>}"
+                                + "@if (His_ExtendedMethods.HasPermissionPage("OutPatient-DeliverPrescription")){
+                                    <a class='btn btn-primary btn-sm' title='Deliver Prescription' style='margin-left:5px' onclick=PopupDeliverPrescription('@Url.Action("DeliverPrescription", "OutPatient")/?enmrNo=" + data + "')><i class='fa fa-prescription-bottle-alt his-fa-size'></i></a>}"
+                                + "@if (His_ExtendedMethods.HasPermissionPage("OutPatient-Admission")){
+                                    <a class='btn btn-primary btn-sm' title='Admit as IP' style='margin-left:5px' onclick=PopupAdmissionForm('@Url.Action("Admission", "OutPatient")/?enmrNo=" + data + "')><i class='fa fa-hospital his-fa-size'></i></a>}"
+                                + "@if (His_ExtendedMethods.HasPermissionPage("OutPatient-ManualDrugRequest")){
+                                    <a class='btn btn-primary btn-sm' title='Manual Drug Request' style='margin-left:5px' onclick=PopupMDRForm('@Url.Action("ManualDrugRequest", "OutPatient")/?enmrNo=" + data + "')><i class='fa fa-capsules his-fa-size'></i></a>}"
+                                + "@if (His_ExtendedMethods.HasPermissionPage("OutPatient-PatientTests")){
+                                    <a class='btn btn-primary btn-sm' title='Lab Test Upload' style='margin-left:5px' onclick=PopupPatientTests('@Url.Action("PatientTests", "OutPatient")/?enmrNo=" + data + "')><i class='fa fa-flask his-fa-size'></i></a>}"
+                                + "@if (His_ExtendedMethods.HasPermissionPage("OutPatient-PatientScans")){
+                                    <a class='btn btn-primary btn-sm' title='Scan Upload' style='margin-left:5px' onclick=PopupPatientScans('@Url.Action("PatientScans", "OutPatient")/?enmrNo=" + data + "')><i class='fa fa-tv his-fa-size'></i></a>}"
+
+                                + "@if (His_ExtendedMethods.HasPermissionPage("OutPatient-LabTestBillPay")){
+                                    <a class='btn btn-primary btn-sm' title='Scan Test Bill Payment' style='margin-left:5px' onclick=PopupScanTestBillPayForm('@Url.Action("opScanTestBillPay", "OutPatient")/?enmrNo=" + data + "')><i class='fab fa-cc-visa his-fa-size'></i></a>}"
+
+                                + "@if (His_ExtendedMethods.HasPermissionPage("OutPatient-LabTestBillPay")){
+                                    <a class='btn btn-primary btn-sm' title='Lab Test Bill Payment' style='margin-left:5px' onclick=PopupLabTestBillPayForm('@Url.Action("LabTestBillPay", "OutPatient")/?enmrNo=" + data + "')><i class='fa fa-credit-card his-fa-size'></i></a>}"
+                                + "@if (His_ExtendedMethods.HasPermissionPage("OutPatient-PrintHistory")){
+                                        <a class='btn btn-primary btn-sm' title='View & Print' style='margin-left:5px' onclick=PopupPrint('@Url.Action("PrintHistory", "OutPatient")/?enmrNo=" + data + "')><i class='fa fa-print his-fa-size'></i></a>}";
+
+                        },
+                        "orderable": false,
+                        "searchable": false,
+                        "width": "35%"
+
+                    }
+                ],
+                "order": [[0, "asc"]],
+                "language": {
+                    "emptyTable" : "No Consutations enrolled so far. Please click is Refresh button."
                 }
             });
         });
@@ -418,7 +506,8 @@
                         if (data.success) {
                             Popup.dialog('close');
                             dataTable.ajax.reload();
-
+                            consultations.ajax.reload();
+                            consultations.ajax.reload();
                             $.notify(data.message, {
                                 globalPosition: "top center",
                                 className: "success"
@@ -443,6 +532,7 @@
                         if (data.success) {
                             newVisit.dialog('close');
                             dataTable.ajax.reload();
+                            consultations.ajax.reload();
                             $.notify(data.message, {
                                 globalPosition: "top center",
                                 className: "success"
@@ -553,6 +643,7 @@
                         });
                         newPP.dialog('close');
                         dataTable.ajax.reload();
+                        consultations.ajax.reload();
                         $.notify(data.message, {
                             globalPosition: "top center",
                             className: "success"
@@ -606,6 +697,7 @@
                         });
                         deliverPopUp.dialog('close');
                         dataTable.ajax.reload();
+                        consultations.ajax.reload();
                         $.notify(data.message, {
                             globalPosition: "top center",
                             className: "success"
@@ -669,6 +761,7 @@
                         });
                         MDRpopup.dialog('close');
                         dataTable.ajax.reload();
+                        consultations.ajax.reload();
                         $.notify(data.message, {
                             globalPosition: "top center",
                             className: "success"
@@ -707,6 +800,7 @@
                     if (data.success) {
                         newPT.dialog('close');
                         dataTable.ajax.reload();
+                        consultations.ajax.reload();
                         $.notify(data.message, {
                             globalPosition: "top center",
                             className: "success"
@@ -747,6 +841,7 @@
                     if (data.success) {
                         newPT.dialog('close');
                         dataTable.ajax.reload();
+                        consultations.ajax.reload();
                         $.notify(data.message, {
                             globalPosition: "top center",
                             className: "success"
@@ -790,6 +885,7 @@
                         });
                         billPayPopUp.dialog('close');
                         dataTable.ajax.reload();
+                        consultations.ajax.reload();
                         $.notify(data.message, {
                             globalPosition: "top center",
                             className: "success"
@@ -812,7 +908,6 @@
                     success: function (data) {
                         if (data.success) {
                             admissionPP.dialog('close');
-                            dataTable.ajax.reload();
                             $.notify(data.message, {
                                 globalPosition: "top center",
                                 className: "success"
@@ -858,6 +953,7 @@
 
                         billPayPopUp.dialog('close');
                         dataTable.ajax.reload();
+                        consultations.ajax.reload();
                         $.notify(data.message, {
                             globalPosition: "top center",
                             className: "success"
@@ -869,10 +965,10 @@
             return false;
         }
 
-       
 
-    </script>
-}
+
+            </script>
+        }
 
 
 

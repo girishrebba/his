@@ -7,6 +7,7 @@ using System.Data.Entity;
 using System.IO;
 using HIS.Action_Filters;
 using System.ComponentModel;
+using System.Globalization;
 
 namespace HIS.Controllers
 {
@@ -56,14 +57,15 @@ namespace HIS.Controllers
                                      PrevENMR = x.op.PrevENMR
                                  }).ToList();
 
-                // Bind the Valid till date
-                //if(outPatients != null && outPatients.Count() > 0)
+
+                //Bind the Valid till date
+                //if (outPatients != null && outPatients.Count() > 0)
                 //{
                 //    int validDays = 0;
-                //    foreach(OutPatient op in outPatients)
+                //    foreach (OutPatient op in outPatients)
                 //    {
                 //        var latestVisit = hs.PatientVisitHistories.Where(pvh => pvh.ENMRNO == op.ENMRNO).OrderByDescending(pvh => pvh.SNO).FirstOrDefault();
-                //        if(latestVisit != null)
+                //        if (latestVisit != null)
                 //        {
                 //            validDays = hs.ConsultationFees.Where(cf => cf.DoctorID == latestVisit.DoctorID && cf.ConsultTypeID == latestVisit.ConsultTypeID).First().ValidDays.Value;
                 //            if (latestVisit.DateOfVisit.AddDays(validDays) > DateTime.Today)
@@ -71,11 +73,58 @@ namespace HIS.Controllers
                 //                op.ValidDateDisplay = HtmlHelpers.HtmlHelpers.DateFormat(latestVisit.DateOfVisit.AddDays(validDays));
                 //            }
                 //        }
-                        
+
                 //    }
                 //}
-
+                // Get patients who has visits today.
                 return Json(new { data = outPatients }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public ActionResult GetErolledConsultations()
+        {
+            DateTime startDateTime = DateTime.Today; 
+            DateTime endDateTime = DateTime.Today.AddDays(1).AddTicks(-1);
+            int sno = 0;
+            using (HISDBEntities hs = new HISDBEntities())
+            {
+                var outPatients = (from op in hs.OutPatients
+                                   join user in hs.Users on op.DoctorID equals user.UserID
+                                   join pv in hs.PatientVisitHistories on op.ENMRNO equals pv.ENMRNO
+                                   where (op.Status == null || op.Status == false) &&
+                                   (pv.DateOfVisit >= startDateTime && pv.DateOfVisit <= endDateTime)
+                                   select new
+                                   {
+                                       op,
+                                       user,
+                                       pv
+                                   })
+                                  .OrderBy(b => b.pv.DateOfVisit)
+                                  .AsEnumerable()
+                                 .Select(x => new OutPatient
+                                 {
+                                     RowNum = ++sno,
+                                     SNO = x.op.SNO,
+                                     ENMRNO = x.op.ENMRNO,
+                                     Name = x.op.GetFullName(),
+                                     DOBDisplay = HtmlHelpers.HtmlHelpers.DateFormat(x.op.DOB),
+                                     Address = HtmlHelpers.HtmlHelpers.GetFullAddress(
+                                         x.op.Address1,
+                                         x.op.Address2,
+                                         x.op.City,
+                                         x.op.State,
+                                         x.op.PinCode),
+                                     GenderDisplay = HtmlHelpers.HtmlHelpers.GetGender(x.op.Gender),
+                                     Phone = x.op.Phone,
+                                     DoctorName = HtmlHelpers.HtmlHelpers.GetFullName(
+                                         x.user.FirstName,
+                                         x.user.MiddleName,
+                                         x.user.LastName),
+                                     Purpose = x.op.Purpose,
+                                     EnrolledDisplay = HtmlHelpers.HtmlHelpers.DateFormat(x.op.Enrolled),
+                                     PrevENMR = x.op.PrevENMR
+                                 }).ToList();
+                return Json(new { data = outPatients  }, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -392,6 +441,7 @@ namespace HIS.Controllers
                 {
                     pvh.Purpose = string.Join(",", pvh.PurposeIds);
                 }
+                pvh.DateOfVisit = pvh.DateOfVisit.Add(DateTime.Now.TimeOfDay);
                 hs.PatientVisitHistories.Add(pvh);
                 hs.SaveChanges();
                 return Json(new { success = true, message = string.Format("Consultation created Successfully for ENMRNO: {0}", pvh.ENMRNO) }, JsonRequestBehavior.AllowGet);
