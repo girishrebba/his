@@ -887,7 +887,7 @@ namespace HIS.Controllers
             ViewBag.Intakes = new SelectList(Intakes, "FrequencyID", "Frequency");
             ViewBag.Users = new SelectList(Users, "UserID", "NameDisplay");
             ViewBag.History = patientVisitHistory;
-            ViewBag.MDR = GetPatientVisitPrescriptions(enmrNo, 0).Where(v => v.VisitID == 0).ToList();
+            ViewBag.MDR = GetPatientVisitPrescriptions(enmrNo, 0).Where(v => v.VisitID == 0 && v.ISIP == false).ToList();
             ViewBag.IsNewVisit = patientVisitHistory.Count() <= 0 ? true : false;
             PatientPrescription pp = new PatientPrescription();
             pp.ENMRNO = enmrNo;
@@ -1026,10 +1026,10 @@ namespace HIS.Controllers
                                  //into subcat
                                  //from bsc in subcat.DefaultIfEmpty()
                                  where 
-                                 (mm.MedicineName.StartsWith(Prefix)
-                                 || bc.Category.StartsWith(Prefix)
-                                 || bsc.SubCategory.StartsWith(Prefix)
-                                 || mm.MedDose.StartsWith(Prefix))
+                                 (mm.MedicineName.Contains(Prefix)
+                                 || bc.Category.Contains(Prefix)
+                                 || bsc.SubCategory.Contains(Prefix)
+                                 || mm.MedDose.Contains(Prefix))
                                  select new { bc, mm, mi,bsc.SubCategory }).AsEnumerable()
                                  .Select(m => new MedicineMaster
                                  {
