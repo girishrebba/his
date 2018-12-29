@@ -29,6 +29,17 @@ namespace HIS.HtmlHelpers
                 string.IsNullOrEmpty(lastName) ? string.Empty : lastName);
         }
 
+        public static string PayTypeDisplay(int type)
+        {
+            if (type == 1)
+                return "Advance";
+            else if (type == 2)
+                return "Charge";
+            else if (type == 3)
+                return "Refund";
+            else return string.Empty;
+        }
+
         public static string GetMedicineWithDose(string medicineName, string dose)
         {
             return string.Format("{0} - {1}", medicineName, dose);

@@ -21,6 +21,7 @@ namespace HIS
         public string Purpose { get; set; }
         public int PaymentMode { get; set; }
         public string LastFourDigits { get; set; }
+        public int PayType { get; set; }
     
         public virtual InPatient InPatient { get; set; }
     }

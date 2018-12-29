@@ -17,76 +17,96 @@
 @using (Html.BeginForm("Fee", "InPatient", FormMethod.Post, new { onsubmit = "return SubmitFeeForm(this)" }))
 {
     @Html.HiddenFor(model => model.ENMRNO)
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="panel panel-default">
-                <div class="panel-heading clearfix">
-                    ENMRNO: <span class="lableDisplay">@Model.ENMRNO </span>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading clearfix">
+                ENMRNO: <span class="lableDisplay">@Model.ENMRNO </span>
+            </div>
+            <div class="panel-body ">
+                <div class="table-responsive">
+                    <table id="feeHistoryTable" class="table table-striped table-bordered" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Amount</th>
+                                <th>Purpose</th>
+                                <th>Pay Type</th>
+                                <th>Payment Mode</th>
+                            </tr>
+                        </thead>
+                    </table>
                 </div>
-                <div class="panel-body ">
-                    <div class="table-responsive">
-                        <table id="feeHistoryTable" class="table table-striped table-bordered" style="width:100%">
-                            <thead>
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Amount</th>
-                                    <th>Purpose</th>
-                                    <th>Payment Mode</th>
-                                </tr>
-                            </thead>
-                        </table>
+                @if (!HtmlHelpers.ISPatientDischrged(Model.ENMRNO))
+                {
+                    <div class="panel-heading clearfix">
+                        <a id="addNew" class="btn btn-success" style="margin-bottom:10px"><i class="fa fa-plus"></i> Add New</a>
                     </div>
-                    @if (!HtmlHelpers.ISPatientDischrged(Model.ENMRNO))
-                    {
-                <div class="panel-heading clearfix">
-                    <a id="addNew" class="btn btn-success" style="margin-bottom:10px"><i class="fa fa-plus"></i> Add New</a>
-                </div>
 
-                <div id="feeForm" class="form-horizontal hidden">
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.Amount, "Amount:", new { @class = "control-label col-md-2 required" })
-                        <div class="col-sm-4">
-                            @Html.EditorFor(model => model.Amount, new { htmlAttributes = new { Value = Model.Amount > 0 ? Model.Amount.ToString() : string.Empty, @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.Amount)
-                        </div>
-                        @Html.LabelFor(model => model.PaidOn, "Date:", htmlAttributes: new { @class = "control-label col-md-2 required" })
-                        <div class="col-sm-4">
-                            <div id="date-popup" class="input-group date">
-                                @Html.EditorFor(model => model.PaidOn, new { htmlAttributes = new { Value = Html.DateFormat(Model.PaidOn), @class = "datepicker form-control", @placeholder = "" } })
-                                <span class="btnpicker input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <div id="feeForm" class="form-horizontal hidden">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.PayType, "Pay Type:", htmlAttributes: new { @class = "control-label col-md-2 required" })
+                            <div class="col-sm-4">
+                                @Html.DropDownList("PayType", new List<SelectListItem>(){
+               new SelectListItem { Text = "--Select--", Value = "" },
+               new SelectListItem { Text = "Advance", Value = "1"  },
+               new SelectListItem { Text = "Charge", Value =  "2"},
+               new SelectListItem { Text = "Refund", Value =  "3"}
+               },
+                                htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.PayType, "", new { @class = "text-danger" })
                             </div>
-                            @Html.ValidationMessageFor(model => model.PaidOn, "", new { @class = "text-danger" })
+                            @Html.LabelFor(model => model.Amount, "Amount:", new { @class = "control-label col-md-2 required" })
+                            <div class="col-sm-4">
+                                @Html.EditorFor(model => model.Amount, new { htmlAttributes = new { Value = Model.Amount > 0 ? Model.Amount.ToString() : string.Empty, @class = "form-control numericonly" } })
+                                @Html.ValidationMessageFor(model => model.Amount)
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.PaidOn, "Date:", htmlAttributes: new { @class = "control-label col-md-2 required" })
+                            <div class="col-sm-4">
+                                <div id="date-popup" class="input-group date">
+                                    @Html.EditorFor(model => model.PaidOn, new { htmlAttributes = new { Value = Html.DateFormat(Model.PaidOn), @class = "datepicker form-control", @placeholder = "" } })
+                                    <span class="btnpicker input-group-addon"><i class="fa fa-calendar"></i></span>
+                                </div>
+                                @Html.ValidationMessageFor(model => model.PaidOn, "", new { @class = "text-danger" })
+                            </div>
+                            @Html.LabelFor(model => model.Purpose, "Purpose:", new { @class = "control-label col-md-2" })
+                            <div class="col-sm-4">
+                                @Html.EditorFor(model => model.Purpose, new { htmlAttributes = new { Value = Model.Amount > 0 ? Model.Amount.ToString() : string.Empty, @class = "form-control" } })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.PaymentMode, "Pay Mode:", new { @class = "control-label col-md-2" })
+                            <div class="col-sm-4">
+                                @Html.DropDownListFor(model => model.PaymentMode, ViewBag.PayModes as SelectList, "--Select--", new { @class = "form-control" })
+                            </div>
+                            <div id="divFourDigits" class="hidden">
+                                @Html.LabelFor(model => model.LastFourDigits, "Last 4 Digits:", new { @class = "control-label col-md-2" })
+                                <div class="col-sm-4">
+                                    @Html.EditorFor(model => model.LastFourDigits, new { maxlength = 4, htmlAttributes = new { @class = "form-control" } })
+                                </div>
+                            </div>
+                        </div>
+                        @*<div id="divFourDigits" class="form-group hidden">
+                                @Html.LabelFor(model => model.LastFourDigits, "Last 4 Digits:", new { @class = "control-label col-md-2" })
+                                <div class="col-sm-4">
+                                    @Html.EditorFor(model => model.LastFourDigits, new { maxlength = 4, htmlAttributes = new { @class = "form-control" } })
+                                </div>
+                            </div>*@
+                        <div class="form-group">
+                            <div class="col-md-3 col-md-offset-5">
+                                <input type="submit" value="Submit" class="btn btn-primary" />
+                                <input type="reset" value="Reset" class="btn" />
+                            </div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.Purpose, "Purpose:", new { @class = "control-label col-md-2" })
-                        <div class="col-sm-4">
-                            @Html.EditorFor(model => model.Purpose, new { htmlAttributes = new { Value = Model.Amount > 0 ? Model.Amount.ToString() : string.Empty, @class = "form-control" } })
-                        </div>
-                        @Html.LabelFor(model => model.PaymentMode, "Pay Mode:", new { @class = "control-label col-md-2" })
-                        <div class="col-sm-4">
-                            @Html.DropDownListFor(model => model.PaymentMode, ViewBag.PayModes as SelectList, "--Select--", new { @class = "form-control" })
-                        </div>
-                    </div>
-                    <div id="divFourDigits" class="form-group hidden">
-                        @Html.LabelFor(model => model.LastFourDigits, "Last 4 Digits:", new { @class = "control-label col-md-2" })
-                        <div class="col-sm-4">
-                            @Html.EditorFor(model => model.LastFourDigits, new { maxlength = 4, htmlAttributes = new { @class = "form-control" } })
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-3 col-md-offset-5">
-                            <input type="submit" value="Submit" class="btn btn-primary" />
-                            <input type="reset" value="Reset" class="btn" />
-                        </div>
-                    </div>
-                </div>
-                    }
-                </div>
+                }
             </div>
         </div>
-
     </div>
+
+</div>
 }
 
  <script src="~/Scripts/jquery.validate-his.js"></script>
@@ -103,6 +123,7 @@
             { "data": "PaidDateDisplay" },
             { "data": "Amount" },
             { "data": "Purpose" },
+            { "data": "PayTypeDisplay" },
             { "data": "PayModeDisplay" }
         ],
         "language": {

@@ -201,7 +201,9 @@ namespace HIS.Controllers
                                                    PaidDateDisplay = HtmlHelpers.HtmlHelpers.DateFormat(x.f.PaidOn),
                                                    Amount = x.f.Amount,
                                                    Purpose = x.f.Purpose,
-                                                   PayModeDisplay = x.Mode
+                                                   PayModeDisplay = x.Mode,
+                                                   PayType = x.f.PayType,
+                                                   PayTypeDisplay = HtmlHelpers.HtmlHelpers.PayTypeDisplay(x.f.PayType)
                                                }).ToList();
             }
         }
@@ -411,31 +413,40 @@ namespace HIS.Controllers
         public ActionResult Discharge(string enmrNo)
         {
             var dischargeModel = new DischargeModel();
+            List<FeeCollection> feeCollection = GetPaymentHistory(enmrNo);
             dischargeModel.ENMRNO = enmrNo;
             dischargeModel.RoomChargeTable = HtmlHelpers.HtmlHelpers.GetRoomBilling(enmrNo);
             dischargeModel.Tests = HtmlHelpers.HtmlHelpers.GetInPatientTests(enmrNo);
             dischargeModel.Scans = HtmlHelpers.HtmlHelpers.GetInPatientScans(enmrNo);
             dischargeModel.InsuranceScantionedAmount = HtmlHelpers.HtmlHelpers.InsuranceScantionedAmount(enmrNo);
             dischargeModel.PharmaPackageAmount = HtmlHelpers.HtmlHelpers.PharmaPackAmount(enmrNo);
-            dischargeModel.FeeCollectionTable = GetPaymentHistory(enmrNo);
-            
+            dischargeModel.FeeAdvanceTable = feeCollection.Where(x=>x.PayType == 1).ToList();
+            dischargeModel.FeeChargesTable = feeCollection.Where(x => x.PayType == 2).ToList();
+            dischargeModel.FeeRefundedTable = feeCollection.Where(x => x.PayType == 3).ToList();
+
             dischargeModel.CanBeDischarge = false;
-            ViewBag.TotalFee = dischargeModel.FeeCollectionTable.Sum(i => i.Amount);
+            ViewBag.TotalFee = dischargeModel.FeeAdvanceTable.Sum(i => i.Amount);
+            
             if (dischargeModel.RoomChargeTable != null)
             {
                 ViewBag.RoomFee = (dischargeModel.RoomChargeTable.OccupiedDays * dischargeModel.RoomChargeTable.CostPerDay);
             }
             else { ViewBag.RoomFee = 0; }
-            if(ViewBag.TotalFee + dischargeModel.InsuranceScantionedAmount < ViewBag.RoomFee + dischargeModel.PharmaPackageAmount)
+
+            dischargeModel.PLedger = (dischargeModel.FeeAdvanceTable.Sum(i => i.Amount) + dischargeModel.InsuranceScantionedAmount);
+            dischargeModel.HLedger = (ViewBag.RoomFee + dischargeModel.PharmaPackageAmount + dischargeModel.FeeChargesTable.Sum(i => i.Amount)+ dischargeModel.FeeRefundedTable.Sum(i => i.Amount));
+
+            if (dischargeModel.PLedger < dischargeModel.HLedger)
             {
-                ViewBag.PayAmount = ViewBag.RoomFee + dischargeModel.PharmaPackageAmount - ViewBag.TotalFee - dischargeModel.InsuranceScantionedAmount;
+                //ViewBag.PayAmount = ViewBag.RoomFee + dischargeModel.PharmaPackageAmount - ViewBag.TotalFee - dischargeModel.InsuranceScantionedAmount;
+                ViewBag.PayAmount = dischargeModel.HLedger - dischargeModel.PLedger;
                 ViewBag.Refund = 0;
                     }
             else { ViewBag.PayAmount = 0;
-                ViewBag.Refund = (ViewBag.TotalFee + dischargeModel.InsuranceScantionedAmount) - (ViewBag.RoomFee + dischargeModel.PharmaPackageAmount);
+                ViewBag.Refund = dischargeModel.PLedger - dischargeModel.HLedger;
             }
 
-            if (ViewBag.TotalFee == ViewBag.RoomFee)
+            if (dischargeModel.PLedger == dischargeModel.HLedger)
             {
                 dischargeModel.CanBeDischarge = true;
                 ViewBag.PayAmount = 0;

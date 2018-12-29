@@ -8,6 +8,7 @@ namespace HIS
     {
         public string PaidDateDisplay { get; set; }
         public string PayModeDisplay { get; set; }
+        public string PayTypeDisplay { get; set; }
     }
 
     public class FeeCollectionMetaData
@@ -17,5 +18,7 @@ namespace HIS
         public decimal Amount { get; set; }
         [Required(ErrorMessage = "Please choose Pay Mode", AllowEmptyStrings = false)]
         public int PaymentMode { get; set; }
+        [Required(ErrorMessage = "Please choose Pay Type", AllowEmptyStrings = false)]
+        public int PayType { get; set; }
     }
 }

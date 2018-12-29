@@ -50,7 +50,6 @@
         <EntityTypeShape EntityType="HISDBModel.PatientRoomAllocation" Width="1.5" PointX="13.5" PointY="16.375" />
         <AssociationConnector Association="HISDBModel.FK_PRA_RoomNo" />
         <EntityTypeShape EntityType="HISDBModel.PaymentMode" Width="1.5" PointX="5.375" PointY="0.75" />
-        <EntityTypeShape EntityType="HISDBModel.FeeCollection" Width="1.5" PointX="10.5" PointY="17.125" />
         <EntityTypeShape EntityType="HISDBModel.OrderMaster" Width="1.5" PointX="8.25" PointY="57.25" />
         <EntityTypeShape EntityType="HISDBModel.OrderRequest" Width="1.5" PointX="10.5" PointY="50" />
         <AssociationConnector Association="HISDBModel.FK_OR_MedicineID" />
@@ -82,7 +81,6 @@
         <EntityTypeShape EntityType="HISDBModel.OutPatient" Width="1.5" PointX="14.25" PointY="22.25" />
         <AssociationConnector Association="HISDBModel.FK_InPatients_BloodGroup" />
         <AssociationConnector Association="HISDBModel.FK_OutPatients_BloodGroup" />
-        <AssociationConnector Association="HISDBModel.FK_FeeCollection_ENMRNO" />
         <AssociationConnector Association="HISDBModel.FK_IPH_InPatients_ENMRNO" />
         <AssociationConnector Association="HISDBModel.FK_InPatients_Doctor" />
         <AssociationConnector Association="HISDBModel.FK_INPatients_PKitID" />
@@ -96,6 +94,8 @@
         <AssociationConnector Association="HISDBModel.FK_PVH_Consultation_Type" />
         <AssociationConnector Association="HISDBModel.FK_PVH_OutPatient_ENMRNO" />
         <AssociationConnector Association="HISDBModel.FK_PatientVisitHistory_Doctor" />
+        <EntityTypeShape EntityType="HISDBModel.FeeCollection" Width="1.5" PointX="18.5" PointY="14.25" />
+        <AssociationConnector Association="HISDBModel.FK_FeeCollection_ENMRNO" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

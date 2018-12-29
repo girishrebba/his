@@ -53,7 +53,6 @@ namespace HIS
         public virtual DbSet<PatientTest> PatientTests { get; set; }
         public virtual DbSet<PatientRoomAllocation> PatientRoomAllocations { get; set; }
         public virtual DbSet<PaymentMode> PaymentModes { get; set; }
-        public virtual DbSet<FeeCollection> FeeCollections { get; set; }
         public virtual DbSet<OrderMaster> OrderMasters { get; set; }
         public virtual DbSet<OrderRequest> OrderRequests { get; set; }
         public virtual DbSet<ScanCategory> ScanCategories { get; set; }
@@ -75,6 +74,7 @@ namespace HIS
         public virtual DbSet<BrandSubCategory> BrandSubCategories { get; set; }
         public virtual DbSet<Supplier> Suppliers { get; set; }
         public virtual DbSet<PatientVisitHistory> PatientVisitHistories { get; set; }
+        public virtual DbSet<FeeCollection> FeeCollections { get; set; }
     
         public virtual int ConvertOutPatientToInPatient(string eNMRNO, Nullable<decimal> estAmount, Nullable<decimal> advAmount)
         {
