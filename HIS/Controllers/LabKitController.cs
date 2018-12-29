@@ -68,7 +68,7 @@ namespace HIS.Controllers
                 if(kitInfo != null)
                 {
                     kitName = kitInfo.TestName;
-                    kitCost = kitInfo.TestCost.Value;
+                    kitCost = kitInfo.TestCost.HasValue ? kitInfo.TestCost.Value : 0;
                 }
 
                 bool hasItems = hs.LabKitItems.Where(li => li.LKitID == lkitId).Any();

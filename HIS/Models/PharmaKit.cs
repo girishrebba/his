@@ -25,6 +25,7 @@ namespace HIS
         public string PKitName { get; set; }
 
         [Required(ErrorMessage = "Please enter Package Cost", AllowEmptyStrings = false)]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:#.#}")]
         public string PKitCost { get; set; }
 
         [Required(ErrorMessage = "Please enter quantity", AllowEmptyStrings = false)]

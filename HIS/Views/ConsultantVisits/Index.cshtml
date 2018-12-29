@@ -25,7 +25,6 @@
                                 <th>Name</th>
                                 <th>Date of payment</th>
                                 <th>Amount</th>
-                                <th></th>
                             </tr>
                         </thead>
                     </table>
@@ -36,7 +35,7 @@
 </div>
 
 @section scripts{
-    <script>
+<script>
         var Popup, dataTable;
         $(document).ready(function () {
             dataTable = $("#consultantTable").DataTable({
@@ -52,11 +51,11 @@
                     @*{
                         "data":"ConsultantVisitId", "render" : function (data) {
                             return "<a class='btn btn-default btn-sm' onclick=PopupForm('@Url.Action("AddModify", "ConsultantVisits")/" + data + "')><i class='fa fa-user-edit'></i> Edit</a>";
-                    },*@
+                    },
                     {
                         "orderable": false,
                         "searchable":false
-                    }
+                    }*@
                 ],
                 "language": {
                     "emptyTable" : "No data found, Please click on <b>Add New</b> Button"
@@ -116,7 +115,7 @@
             }
             return false;
         }
-    </script>
+</script>
 }
 
 

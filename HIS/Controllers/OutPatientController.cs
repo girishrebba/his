@@ -707,10 +707,10 @@ namespace HIS.Controllers
             using (HISDBEntities hs = new HISDBEntities())
             {
 
-                var patientTests = (from pt in hs.PatientTests
-                                    join ltm in hs.ScanTestMasters on pt.LTMID equals ltm.STMID
+                var patientTests = (from pt in hs.PatientScans
+                                    join ltm in hs.ScanTestMasters on pt.STMID equals ltm.STMID
                                     join op in hs.OutPatients on ltm.ENMRNO equals op.ENMRNO
-                                    join tt in hs.TestTypes on pt.TestID equals tt.TestID
+                                    join tt in hs.Scans on pt.ScanID equals tt.ScanID
                                     join u in hs.Users on ltm.PrescribedBy equals u.UserID
                                     join ut in hs.UserTypes on u.UserTypeID equals ut.UserTypeID
                                     where ltm.ENMRNO == enmrNo && ltm.VisitID == visitID && ltm.IsDelivered == false
@@ -720,19 +720,19 @@ namespace HIS.Controllers
                                         u,
                                         tt
                                     })
-                                  .OrderByDescending(b => b.pt.PTID)
+                                  .OrderByDescending(b => b.pt.ScanID)
                                   .AsEnumerable()
                                  .Select(x => new PatientScan
                                  {
                                      ENMRNO = x.pt.ENMRNO,
-                                     ScanName = x.tt.TestName,
-                                     DateDisplay = HtmlHelpers.HtmlHelpers.DateFormat(x.pt.TestDate),
+                                     ScanName = x.tt.ScanName,
+                                     DateDisplay = HtmlHelpers.HtmlHelpers.DateFormat(x.pt.ScanDate),
                                      DoctorName = HtmlHelpers.HtmlHelpers.GetFullName(x.u.FirstName, x.u.MiddleName, x.u.LastName),
                                      RecordedValues = x.pt.RecordedValues,
                                      TestImpression = x.pt.TestImpression,
                                      ReportPath = x.pt.ReportPath,
-                                     STMID = x.pt.LTMID,
-                                     ScanID = x.pt.TestID
+                                     STMID = x.pt.STMID,
+                                     ScanID = x.pt.ScanID
                                  }).ToList();
 
                 return patientTests;
@@ -964,7 +964,7 @@ namespace HIS.Controllers
                         else
                         {
                             System.Data.Entity.Core.Objects.ObjectParameter ltmidOut = new System.Data.Entity.Core.Objects.ObjectParameter("STMID", typeof(Int32));
-                            db.CreateMasterScanTest(prescriptions[0].ENMRNO, Convert.ToInt32(System.Web.HttpContext.Current.Session["UserID"]), prescriptions[0].VisitID, true, ltmidOut);
+                            db.CreateMasterScanTest(prescriptions[0].ENMRNO, Convert.ToInt32(System.Web.HttpContext.Current.Session["UserID"]), prescriptions[0].VisitID, false, ltmidOut);
                             stmid = Convert.ToInt32(ltmidOut.Value);
                         }
                         foreach (var id in suggestedTestsIfAny.ScanIds)
@@ -1100,14 +1100,16 @@ namespace HIS.Controllers
         public ActionResult PatientScans(string enmrNo)
         {
             ViewBag.ENMRNO = enmrNo;
+            var latestVisit = new PatientVisitHistory();
             var PatientScans = new List<PatientScan>();
             using (var hs = new HISDBEntities())
             {
-                PatientScans = GetPatientNotDeliverVisitScans(enmrNo, 0);
+                latestVisit = hs.PatientVisitHistories.Where(pvh => pvh.ENMRNO == enmrNo).OrderByDescending(pvh => pvh.SNO).FirstOrDefault();
+                PatientScans = GetPatientNotDeliverVisitScans(enmrNo, latestVisit.SNO);
                 if (PatientScans.Count() > 0)
                 {
                     PatientScans[0].ENMRNO = enmrNo;
-                    PatientScans[0].VisitName = "In Patient";
+                    PatientScans[0].VisitName = VisitName(latestVisit.ConsultTypeID);
                 }
             }
             return View(PatientScans);

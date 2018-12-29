@@ -68,7 +68,7 @@
     <div class="row">
         <div class="form-group">
             <div class="col-md-3 col-md-offset-5">
-                <input type="submit" value="Submit" class="btn btn-primary" />
+                <input type="submit" id="btnSubmit" value="Submit" class="btn btn-primary hidden" />
                 <input type="reset" value="Reset" class="btn" />
             </div>
         </div>
@@ -80,7 +80,7 @@
                 $('#btnAdd').click(function () {
                     var form = $("#kitForm")
                     $.validator.unobtrusive.parse(form);
-                    if ($(form).valid()) {
+                    if ($(form).valid() && $('#MedicineWithDose').val() != null && $('#MedicineWithDose').val() != '') {
                         $('table#itemTable > tbody').append('<tr>' +
                             '<td style="display:none">' + $('#MedicineID').val() + '</td>' + // MedicineID
                             '<td>' + $('#MedicineWithDose').val() + '</td>' + // medicine
@@ -88,6 +88,10 @@
                             '<td><span class="btn btn-danger fa fa-trash" style="padding: 0px 3px" onclick = "remove(this)"></span></td>' +
                             '</tr>');
                         clearInputs();
+                        //$("#btnSubmit").removeClass("hidden");
+                    }
+                    else{
+                        alert('Please enter medicine!!');
                     }
                     return false;
                 });
@@ -130,12 +134,12 @@
             function remove(e) {
                 $(e).closest('tr').remove();
                 if ($('#kitForm tr').length < 3)
-                    $('#btnSubmit').addClass('disabled');
+                    $('#btnSubmit').addClass('hidden');
             }
 
             function clearInputs() {
                 $('#MedicineWithDose').val('');
                 $('#Quantity').val('');
-                $('#btnSubmit').removeClass('disabled');
+                $('#btnSubmit').removeClass('hidden');
             }
         </script>

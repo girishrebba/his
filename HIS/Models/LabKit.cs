@@ -7,16 +7,18 @@ namespace HIS
     {
     }
 
-    //[MetadataType(typeof(LabKitMetaData))]
     //public class LabKitViewModel : LabKit
     //{
-    //    public int TestID { get; set; }
-    //    public string TestName { get; set; }
     //    public string InputTest { get; set; }
     //}
-        public class LabKitMetaData
-    {
-        [Required(ErrorMessage = "Please enter Kit Name", AllowEmptyStrings = false)]
-        public string LKitName { get; set; }
-    }
+
+    //public class LabKitMetaData
+    //{
+    //    [Required(ErrorMessage = "Please enter Kit Name", AllowEmptyStrings = false)]
+    //    public string LKitName { get; set; }
+
+    //    [Required(ErrorMessage = "Please enter Test Cost", AllowEmptyStrings = false)]
+    //    [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:#.#}")]
+    //    public string LKitCost { get; set; }
+    //}
 }

@@ -23,6 +23,7 @@
 </style>
 @using (Html.BeginForm("AddModifyKitItems", "PharmaKit", FormMethod.Post, new { id = "kitForm", onsubmit = "return SubmitPharmaKitForm(this);" }))
 {
+     
     @Html.HiddenFor(model => model[0].PKitID, new { @id = "PKitID" })
     <div class="form-horizontal">
         <div class="astriskNote"><span></span></div>
@@ -49,7 +50,7 @@
                     </tr>
                     <tr>
                         <td>
-                            @Html.EditorFor(model => model[0].InputMedicine, new { htmlAttributes = new { @id= "MedicineWithDose", @class = "form-control" } })
+                            @Html.EditorFor(model => model[0].InputMedicine, new { htmlAttributes = new { @id = "MedicineWithDose", @class = "form-control" } })
                             @Html.HiddenFor(model => model[0].MedicineID, new { @id = "MedicineID" })
                         </td>
                         <td>
@@ -60,7 +61,7 @@
                 </thead>
                 <tbody>
                     @foreach (PharmaKitViewModel p in Model)
-    {
+                    {
                 <tr>
                     <td style="display:none">@p.MedicineID</td>
                     <td>@p.MedicineWithDose</td>
@@ -69,7 +70,7 @@
                     </td>
                     <td><span class="btn btn-danger fa fa-trash" style="padding: 0px 3px" onclick="remove(this)"></span></td>
                 </tr>
-}
+                    }
                 </tbody>
             </table>
         </div>
@@ -82,13 +83,19 @@
             </div>
         </div>
     </div>
-}
+        }
 <script type="text/javascript">
-            $(function () {
+    $(function () {
+        if (($('#kitForm').find('table#itemTable > tbody tr').length < 1)) {
+            $('#btnSubmit').addClass('hidden');
+        }
+        else {
+            $('#btnSubmit').removeClass('hidden');
+        }
                 $('#btnAdd').click(function () {
                     var form = $("#kitForm")
                     $.validator.unobtrusive.parse(form);
-                    if ($(form).valid()) {
+                    if ($(form).valid() && $('#MedicineWithDose').val() != null && $('#MedicineWithDose').val() != '') {
                         $('table#itemTable > tbody').append('<tr>' +
                             '<td style="display:none">' + $('#MedicineID').val() + '</td>' + // MedicineID
                             '<td>' + $('#MedicineWithDose').val() + '</td>' + // medicine
@@ -145,12 +152,12 @@
             function remove(e) {
                 $(e).closest('tr').remove();
                 if ($('#kitForm tr').length < 3)
-                    $('#btnSubmit').addClass('disabled');
+                    $('#btnSubmit').addClass('hidden');
             }
 
             function clearInputs() {
                 $('#MedicineWithDose').val('');
                 $('#InputQuantity').val('');
-                $('#btnSubmit').removeClass('disabled');
+                $('#btnSubmit').removeClass('hidden');
             }
 </script>

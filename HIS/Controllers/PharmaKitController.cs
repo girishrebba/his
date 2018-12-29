@@ -41,6 +41,7 @@ namespace HIS.Controllers
         [Description(" - Pharma Kits Add/Edit page.")]
         public ActionResult EditKitItems(int id = 0)
         {
+            ViewBag.PKitID = id;
             if (id > 0)
             {
                 return View(GetPharmaKitItems(id));

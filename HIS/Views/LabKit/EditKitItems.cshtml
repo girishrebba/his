@@ -69,44 +69,38 @@
             </tbody>
         </table>
     </div>
-    @if (Model.Count > 0 && Model[0].TestID != 0)
-    {
-        <div class="row" id="btnDiv">
-            <div class="form-group">
-                <div class="col-md-3 col-md-offset-5">
-                    <input type="submit" value="Submit" id="btnSubmit" class="btn btn-primary" />
-                    <input type="reset" value="Reset" class="btn" />
-                </div>
+    
+    <div class="row" id="btnDiv">
+        <div class="form-group">
+            <div class="col-md-3 col-md-offset-5">
+                <input type="submit" value="Submit" id="btnSubmit" class="btn btn-primary" />
+                <input type="reset" value="Reset" class="btn" />
             </div>
         </div>
-    }
-    else
-    {
-         <div class="row hidden" id="btnDiv">
-            <div class="form-group">
-                <div class="col-md-3 col-md-offset-5">
-                    <input type="submit" value="Submit" id="btnSubmit" class="btn btn-primary" />
-                    <input type="reset" value="Reset" class="btn" />
-                </div>
-            </div>
-        </div>
-    }
-
+    </div>
 </div>
 }
 <script type="text/javascript">
-            $(function () {
+    $(function () {
+        if (($('#kitForm').find('table#itemTable > tbody tr').length < 1)) {
+            $('#btnSubmit').addClass('hidden');
+        }
+        else {
+            $('#btnSubmit').removeClass('hidden');
+        }
                 $('#btnAdd').click(function () {
-                    $('#btnDiv').removeClass("hidden");
                     var form = $("#kitForm")
                     $.validator.unobtrusive.parse(form);
-                    if ($(form).valid()) {
+                    if ($(form).valid() && $('#TestName').val() != null && $('#TestName').val() != '') {
                         $('table#itemTable > tbody').append('<tr>' +
                             '<td style="display:none">' + $('#TestID').val() + '</td>' + // MedicineID
                             '<td>' + $('#TestName').val() + '</td>' + // medicine
                             '<td><span class="btn btn-danger fa fa-trash" style="padding: 0px 3px" onclick = "remove(this)"></span></td>' +
                             '</tr>');
                         clearInputs();
+                    }
+                    else {
+                        alert('Please enter test!!');
                     }
                     return false;
                 });
@@ -151,11 +145,12 @@
             function remove(e) {
                 $(e).closest('tr').remove();
                 if ($('#kitForm').find('table#itemTable > tbody tr').length < 1) {
-                    $('#btnDiv').addClass("hidden");
+                    $('#btnSubmit').addClass("hidden");
                 }
             }
 
             function clearInputs() {
                 $('#TestName').val('');
+                $('#btnSubmit').removeClass("hidden");
             }
 </script>

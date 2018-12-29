@@ -21,7 +21,7 @@
         top: 60px !important;
     }
 </style>
-@using (Html.BeginForm("SaveKitItems", "LabKit", FormMethod.Post, new { id = "kitForm", onsubmit = "return SubmitLabKitForm(this)" }))
+@using (Html.BeginForm("SaveKitItems", "LabKit", FormMethod.Post, new { id = "labKitForm", onsubmit = "return SubmitLabKitForm(this)" }))
 {
     @Html.HiddenFor(model => model.LKitID)
     <div class="form-horizontal">
@@ -61,7 +61,7 @@
         <div class="row">
             <div class="form-group">
                 <div class="col-md-3 col-md-offset-5">
-                    <input type="submit" value="Submit" class="btn btn-primary" />
+                    <input type="submit" value="Submit"  id ="btnSubmit" class="btn btn-primary hidden" />
                     <input type="reset" value="Reset" class="btn" />
                 </div>
             </div>
@@ -71,15 +71,18 @@
 <script type="text/javascript">
             $(function () {
                 $('#btnAdd').click(function () {
-                    var form = $("#kitForm")
+                    var form = $("#labKitForm")
                     $.validator.unobtrusive.parse(form);
-                    if ($(form).valid()) {
+                    if ($(form).valid() && $('#TestName').val() != null && $('#TestName').val() != '') {
                         $('table#itemTable > tbody').append('<tr>' +
                             '<td style="display:none">' + $('#TestID').val() + '</td>' + // MedicineID
                             '<td>' + $('#TestName').val() + '</td>' + // medicine
                             '<td><span class="btn btn-danger fa fa-trash" style="padding: 0px 3px" onclick = "remove(this)"></span></td>' +
                             '</tr>');
                         clearInputs();
+                    }
+                    else {
+                        alert('Please enter test!!');
                     }
                     return false;
                 });
@@ -118,12 +121,12 @@
 
             function remove(e) {
                 $(e).closest('tr').remove();
-                if ($('#kitForm tr').length < 3)
-                    $('#btnSubmit').addClass('disabled');
+                if ($('#labKitForm tr').length < 3)
+                    $('#btnSubmit').addClass('hidden');
             }
 
             function clearInputs() {
                 $('#TestName').val('');
-                $('#btnSubmit').removeClass('disabled');
+                $('#btnSubmit').removeClass('hidden');
             }
 </script>
