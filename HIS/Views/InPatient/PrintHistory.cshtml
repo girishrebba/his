@@ -328,6 +328,14 @@
 
 <script type="text/javascript">
 
+    $("#printrpt").click(function () {
+        $("#PrintDiv").printThis({
+            header: '<img src="http://sravanthihospital.in/light/images/hms-logo_login.png" style="width:420px;" alt="Mouldifi" title="Sravanthi Hospitals">',
+            footer: false,
+            pageTitle: "Page title",
+            Title: 'Pring page'
+        });
+    });
 
         $(document).ready(function () {
 
@@ -383,14 +391,6 @@
 
 
 
-              $("#printrpt").click(function () {
-                  $("#PrintDiv").printThis({                    
-                      header: '<img src="http://sravanthihospital.in/light/images/hms-logo_login.png" style="width:420px;" alt="Mouldifi" title="Sravanthi Hospitals">',
-                      footer: false,
-                      pageTitle: "Page title",
-                      Title: 'Pring page' 
-                  });
-              });
-
+             
         });
 </script>

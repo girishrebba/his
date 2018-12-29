@@ -355,6 +355,18 @@
             });
 
             $("input[data-val-required]").parent("label").addClass("required");
+
+        //session end
+        var sessionTimeoutWarning = @Session.Timeout - 1;
+        var sTimeout = parseInt(sessionTimeoutWarning) * 20 * 1000;
+        setTimeout('SessionEnd()', sTimeout);
+        
+        function SessionEnd() {
+            window.location.hostname = "";
+            alert('Session Expired, Please login..');
+            window.location = "/Login/index/";
+        }
+
         });
     </script>
     @RenderSection("scripts", required: false)

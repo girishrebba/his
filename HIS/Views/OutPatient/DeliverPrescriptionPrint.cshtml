@@ -112,8 +112,8 @@
                                     <td colspan="1" align="left" id="grandTotal">@Model.Sum(i => i.TotalAmount).ToString("0.##")</td>
                                 </tr>
                                 <tr>
-                                    <td colspan="8" align="right">Discount% (-):</td>
-                                    <td colspan="1" align="left" id="discountAmount">@Model.Sum(i => i.Discount).ToString("0.##")</td>
+                                    <td colspan="8" align="right">Discount (-):</td>
+                                    <td colspan="1" align="left" id="discountAmount">@((Model.Sum(i => i.TotalAmount) - Model.Sum(i => i.PaidAmount)).ToString("0.##"))</td>
                                 </tr>
                                 <tr>
                                     <td colspan="8" align="right">Total Amount:</td>

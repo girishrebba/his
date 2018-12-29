@@ -363,7 +363,7 @@
       <PropertyRef Name="SNO" />
     </Key>
     <Property Name="SNO" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="DateOfVisit" Type="date" Nullable="false" />
+    <Property Name="DateOfVisit" Type="datetime" Nullable="false" />
     <Property Name="ConsultTypeID" Type="int" Nullable="false" />
     <Property Name="ENMRNO" Type="varchar" MaxLength="30" Nullable="false" />
     <Property Name="Fee" Type="money" Nullable="false" />

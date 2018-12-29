@@ -27,5 +27,8 @@ namespace HIS
         public Nullable<decimal> ScanTotalAmount { get; set; }
         public Nullable<decimal> ScanTestPaidAmount { get; set; }
         public Nullable<decimal> ScanTestDiscount { get; set; }
+        public Nullable<decimal> PharmaTotalAmount { get; set; }
+        public Nullable<decimal> PharmaPaidAmount { get; set; }
+        public Nullable<decimal> PharmaDiscount { get; set; }
     }
 }

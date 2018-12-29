@@ -2083,16 +2083,6 @@
             <Parameter Name="Name" Mode="In" Type="String" />
             <Parameter Name="SupplierID" Mode="InOut" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="IpRevenueReport" ReturnType="Collection(HISDBModel.IpRevenueReport_Result)">
-            <Parameter Name="Doctors" Mode="In" Type="String" />
-            <Parameter Name="Start_Time" Mode="In" Type="DateTime" />
-            <Parameter Name="End_Time" Mode="In" Type="DateTime" />
-          </FunctionImport>
-          <FunctionImport Name="RevenueReport" ReturnType="Collection(HISDBModel.RevenueReport_Result)">
-            <Parameter Name="Doctors" Mode="In" Type="String" />
-            <Parameter Name="Start_Time" Mode="In" Type="DateTime" />
-            <Parameter Name="End_Time" Mode="In" Type="DateTime" />
-          </FunctionImport>
           <EntitySet Name="PatientVisitHistories" EntityType="HISDBModel.PatientVisitHistory" />
           <AssociationSet Name="FK_PVH_Consultation_Type" Association="HISDBModel.FK_PVH_Consultation_Type">
             <End Role="ConsultationType" EntitySet="ConsultationTypes" />
@@ -2106,6 +2096,16 @@
             <End Role="User" EntitySet="Users" />
             <End Role="PatientVisitHistory" EntitySet="PatientVisitHistories" />
           </AssociationSet>
+          <FunctionImport Name="IpRevenueReport" ReturnType="Collection(HISDBModel.IpRevenueReport_Result)">
+            <Parameter Name="Doctors" Mode="In" Type="String" />
+            <Parameter Name="Start_Time" Mode="In" Type="DateTime" />
+            <Parameter Name="End_Time" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="RevenueReport" ReturnType="Collection(HISDBModel.RevenueReport_Result)">
+            <Parameter Name="Doctors" Mode="In" Type="String" />
+            <Parameter Name="Start_Time" Mode="In" Type="DateTime" />
+            <Parameter Name="End_Time" Mode="In" Type="DateTime" />
+          </FunctionImport>
           </EntityContainer>
         <EntityType Name="LabTestMaster">
           <Key>
@@ -2790,39 +2790,6 @@
           <Property Name="SupplierID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="SupplierName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
         </EntityType>
-        <ComplexType Name="IpRevenueReport_Result">
-          <Property Type="String" Name="ENMRNO" Nullable="false" MaxLength="30" />
-          <Property Type="String" Name="PatientFirstName" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="PatientLasttName" Nullable="true" MaxLength="50" />
-          <Property Type="Int32" Name="DoctorID" Nullable="false" />
-          <Property Type="String" Name="DoctorFirstName" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="DoctorLasttName" Nullable="true" MaxLength="50" />
-          <Property Type="Decimal" Name="consultationFee" Nullable="true" Precision="19" />
-          <Property Type="Decimal" Name="feeDiscount" Nullable="true" Precision="38" Scale="2" />
-          <Property Type="Decimal" Name="LabTotalAmount" Nullable="true" Precision="19" />
-          <Property Type="Decimal" Name="LabTestPaidAmount" Nullable="true" Precision="19" />
-          <Property Type="Decimal" Name="LabTestDiscount" Nullable="true" Precision="19" />
-          <Property Type="Decimal" Name="ScanTotalAmount" Nullable="true" Precision="19" />
-          <Property Type="Decimal" Name="ScanTestPaidAmount" Nullable="true" Precision="19" />
-          <Property Type="Decimal" Name="ScanTestDiscount" Nullable="true" Precision="19" />
-          <Property Type="Decimal" Name="packageCost" Nullable="true" Precision="19" />
-        </ComplexType>
-        <ComplexType Name="RevenueReport_Result">
-          <Property Type="String" Name="ENMRNO" Nullable="false" MaxLength="30" />
-          <Property Type="String" Name="PatientFirstName" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="PatientLasttName" Nullable="true" MaxLength="50" />
-          <Property Type="Int32" Name="DoctorID" Nullable="false" />
-          <Property Type="String" Name="DoctorFirstName" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="DoctorLasttName" Nullable="true" MaxLength="50" />
-          <Property Type="Decimal" Name="consultationFee" Nullable="true" Precision="19" />
-          <Property Type="Decimal" Name="feeDiscount" Nullable="true" Precision="38" Scale="2" />
-          <Property Type="Decimal" Name="LabTotalAmount" Nullable="true" Precision="19" />
-          <Property Type="Decimal" Name="LabTestPaidAmount" Nullable="true" Precision="19" />
-          <Property Type="Decimal" Name="LabTestDiscount" Nullable="true" Precision="19" />
-          <Property Type="Decimal" Name="ScanTotalAmount" Nullable="true" Precision="19" />
-          <Property Type="Decimal" Name="ScanTestPaidAmount" Nullable="true" Precision="19" />
-          <Property Type="Decimal" Name="ScanTestDiscount" Nullable="true" Precision="19" />
-        </ComplexType>
         <EntityType Name="PatientVisitHistory">
           <Key>
             <PropertyRef Name="SNO" />
@@ -2881,6 +2848,45 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <ComplexType Name="IpRevenueReport_Result">
+          <Property Type="String" Name="ENMRNO" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="PatientFirstName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="PatientLasttName" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="DoctorID" Nullable="false" />
+          <Property Type="String" Name="DoctorFirstName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="DoctorLasttName" Nullable="true" MaxLength="50" />
+          <Property Type="Decimal" Name="consultationFee" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="feeDiscount" Nullable="true" Precision="38" Scale="2" />
+          <Property Type="Decimal" Name="LabTotalAmount" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="LabTestPaidAmount" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="LabTestDiscount" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="ScanTotalAmount" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="ScanTestPaidAmount" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="ScanTestDiscount" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="PharmaTotalAmount" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="PharmaPaidAmount" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="PharmaDiscount" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="packageCost" Nullable="true" Precision="19" />
+        </ComplexType>
+        <ComplexType Name="RevenueReport_Result">
+          <Property Type="String" Name="ENMRNO" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="PatientFirstName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="PatientLasttName" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="DoctorID" Nullable="false" />
+          <Property Type="String" Name="DoctorFirstName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="DoctorLasttName" Nullable="true" MaxLength="50" />
+          <Property Type="Decimal" Name="consultationFee" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="feeDiscount" Nullable="true" Precision="38" Scale="2" />
+          <Property Type="Decimal" Name="LabTotalAmount" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="LabTestPaidAmount" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="LabTestDiscount" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="ScanTotalAmount" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="ScanTestPaidAmount" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="ScanTestDiscount" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="PharmaTotalAmount" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="PharmaPaidAmount" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="PharmaDiscount" Nullable="true" Precision="19" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3520,6 +3526,26 @@
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="AddSubCategory" FunctionName="HISDBModel.Store.AddSubCategory" />
           <FunctionImportMapping FunctionImportName="AddSupplier" FunctionName="HISDBModel.Store.AddSupplier" />
+          <EntitySetMapping Name="PatientVisitHistories">
+            <EntityTypeMapping TypeName="HISDBModel.PatientVisitHistory">
+              <MappingFragment StoreEntitySet="PatientVisitHistory">
+                <ScalarProperty Name="NurseID" ColumnName="NurseID" />
+                <ScalarProperty Name="Temperature" ColumnName="Temperature" />
+                <ScalarProperty Name="BP" ColumnName="BP" />
+                <ScalarProperty Name="Weight" ColumnName="Weight" />
+                <ScalarProperty Name="BMI" ColumnName="BMI" />
+                <ScalarProperty Name="HeartBeat" ColumnName="HeartBeat" />
+                <ScalarProperty Name="Purpose" ColumnName="Purpose" />
+                <ScalarProperty Name="DoctorID" ColumnName="DoctorID" />
+                <ScalarProperty Name="Discount" ColumnName="Discount" />
+                <ScalarProperty Name="Fee" ColumnName="Fee" />
+                <ScalarProperty Name="ENMRNO" ColumnName="ENMRNO" />
+                <ScalarProperty Name="ConsultTypeID" ColumnName="ConsultTypeID" />
+                <ScalarProperty Name="DateOfVisit" ColumnName="DateOfVisit" />
+                <ScalarProperty Name="SNO" ColumnName="SNO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="IpRevenueReport" FunctionName="HISDBModel.Store.IpRevenueReport">
             <ResultMapping>
               <ComplexTypeMapping TypeName="HISDBModel.IpRevenueReport_Result">
@@ -3537,6 +3563,9 @@
                 <ScalarProperty Name="ScanTotalAmount" ColumnName="ScanTotalAmount" />
                 <ScalarProperty Name="ScanTestPaidAmount" ColumnName="ScanTestPaidAmount" />
                 <ScalarProperty Name="ScanTestDiscount" ColumnName="ScanTestDiscount" />
+                <ScalarProperty Name="PharmaTotalAmount" ColumnName="PharmaTotalAmount" />
+                <ScalarProperty Name="PharmaPaidAmount" ColumnName="PharmaPaidAmount" />
+                <ScalarProperty Name="PharmaDiscount" ColumnName="PharmaDiscount" />
                 <ScalarProperty Name="packageCost" ColumnName="packageCost" />
               </ComplexTypeMapping>
             </ResultMapping>
@@ -3558,29 +3587,12 @@
                 <ScalarProperty Name="ScanTotalAmount" ColumnName="ScanTotalAmount" />
                 <ScalarProperty Name="ScanTestPaidAmount" ColumnName="ScanTestPaidAmount" />
                 <ScalarProperty Name="ScanTestDiscount" ColumnName="ScanTestDiscount" />
+                <ScalarProperty Name="PharmaTotalAmount" ColumnName="PharmaTotalAmount" />
+                <ScalarProperty Name="PharmaPaidAmount" ColumnName="PharmaPaidAmount" />
+                <ScalarProperty Name="PharmaDiscount" ColumnName="PharmaDiscount" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <EntitySetMapping Name="PatientVisitHistories">
-            <EntityTypeMapping TypeName="HISDBModel.PatientVisitHistory">
-              <MappingFragment StoreEntitySet="PatientVisitHistory">
-                <ScalarProperty Name="NurseID" ColumnName="NurseID" />
-                <ScalarProperty Name="Temperature" ColumnName="Temperature" />
-                <ScalarProperty Name="BP" ColumnName="BP" />
-                <ScalarProperty Name="Weight" ColumnName="Weight" />
-                <ScalarProperty Name="BMI" ColumnName="BMI" />
-                <ScalarProperty Name="HeartBeat" ColumnName="HeartBeat" />
-                <ScalarProperty Name="Purpose" ColumnName="Purpose" />
-                <ScalarProperty Name="DoctorID" ColumnName="DoctorID" />
-                <ScalarProperty Name="Discount" ColumnName="Discount" />
-                <ScalarProperty Name="Fee" ColumnName="Fee" />
-                <ScalarProperty Name="ENMRNO" ColumnName="ENMRNO" />
-                <ScalarProperty Name="ConsultTypeID" ColumnName="ConsultTypeID" />
-                <ScalarProperty Name="DateOfVisit" ColumnName="DateOfVisit" />
-                <ScalarProperty Name="SNO" ColumnName="SNO" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
