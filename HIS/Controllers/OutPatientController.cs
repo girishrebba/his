@@ -377,7 +377,7 @@ namespace HIS.Controllers
                     ENMRNO = op.ENMRNO,
                     ConsultTypeID = 1,
                     Fee = fee,
-                    DateOfVisit = op.Enrolled.Value,
+                    DateOfVisit = DateTime.Now,
                     Weight = op.Weight,
                     Temperature = op.Temperature,
                     BP = op.BP,

@@ -422,20 +422,28 @@ public static List<User> GetDoctors()
         public static string GetSequencedEnmrNo()
         {
             string initial = ConfigurationManager.AppSettings["EnmrNoStartsWith"];
-            string ipEnmr = "0", opEnmr = "0";
-            InPatient in_Patient;
-            OutPatient out_Patient;
+            int ipCount = 0, opCount = 0;
+            //string ipEnmr = "0", opEnmr = "0";
+            //InPatient in_Patient;
+            //OutPatient out_Patient;
+            //using (HISDBEntities db = new HISDBEntities())
+            //{
+            //    in_Patient = db.InPatients.OrderByDescending(ip => ip.SNO).FirstOrDefault();
+            //    out_Patient = db.OutPatients.OrderByDescending(ip => ip.SNO).FirstOrDefault();
+            //}
+
+            //if (in_Patient != null) ipEnmr = in_Patient.ENMRNO;
+            //if (out_Patient != null) opEnmr = out_Patient.ENMRNO;
             using (HISDBEntities db = new HISDBEntities())
             {
-                in_Patient = db.InPatients.OrderByDescending(ip => ip.SNO).FirstOrDefault();
-                out_Patient = db.OutPatients.OrderByDescending(ip => ip.SNO).FirstOrDefault();
+                ipCount = (from ip in db.InPatients
+                           where !db.OutPatients.Any(o => o.ENMRNO == ip.ENMRNO)
+                           select ip.ENMRNO).Count();
+
+
+                opCount = db.OutPatients.Count();
             }
-
-            if (in_Patient != null) ipEnmr = in_Patient.ENMRNO;
-            if (out_Patient != null) opEnmr = out_Patient.ENMRNO;
-
-            return string.Format("{0}-{1}", initial, GetNextEnmrNo(ipEnmr.Substring(ipEnmr.LastIndexOf('-')+1)
-                , opEnmr.Substring(opEnmr.LastIndexOf('-')+1)).ToString().PadLeft(5,'0'));            
+            return string.Format("{0}-{1}", initial, (ipCount+opCount+1).ToString().PadLeft(5,'0'));            
         }
 
         public static int GetNextEnmrNo(string ipEnmr, string opEnmr)
