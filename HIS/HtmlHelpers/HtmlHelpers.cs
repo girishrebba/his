@@ -894,6 +894,15 @@ public static List<User> GetDoctors()
                 return patientScans;
             }
         }
+        public static string GetVisitName(int consultTypeID)
+        {
+            using (HISDBEntities db = new HISDBEntities())
+            {
+                var consultName = db.ConsultationTypes.Where(ct => ct.ConsultTypeID == consultTypeID).FirstOrDefault().ConsultType;
+
+                return consultName;
+            }
+        }
 
 
         public static List<PatientTest> GetInPatientTests(string enmrNo)

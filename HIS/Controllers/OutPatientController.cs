@@ -144,7 +144,7 @@ namespace HIS.Controllers
                 latestVisit = hs.PatientVisitHistories.Where(pvh => pvh.ENMRNO == enmrNo).OrderByDescending(pvh => pvh.SNO).FirstOrDefault();
 
                 prescriptions = GetPatientNotDeliverPrescriptions(enmrNo, latestVisit.SNO);
-                string visitName = VisitName(latestVisit.ConsultTypeID);
+                string visitName = HtmlHelpers.HtmlHelpers.GetVisitName(latestVisit.ConsultTypeID);
                 if(prescriptions.Count() > 0)
                 {
                     foreach(var pp in prescriptions)
@@ -172,7 +172,7 @@ namespace HIS.Controllers
                 latestVisit = hs.PatientVisitHistories.Where(pvh => pvh.ENMRNO == enmrNo && pvh.SNO == visitid).FirstOrDefault();
 
                 prescriptions = GetPatientPrintPrescriptions(enmrNo, latestVisit.SNO);
-                string visitName = VisitName(latestVisit.ConsultTypeID);
+                string visitName = HtmlHelpers.HtmlHelpers.GetVisitName(latestVisit.ConsultTypeID);
                 if (prescriptions.Count() > 0)
                 {
                     foreach (var pp in prescriptions)
@@ -856,15 +856,15 @@ namespace HIS.Controllers
                 return string.Format("{0} : {1}", consultName, HtmlHelpers.HtmlHelpers.DateFormat(visit.DateOfVisit));
             }
         }
-        private string VisitName(int consultTypeID)
-        {
-            using (HISDBEntities db = new HISDBEntities())
-            {
-                var consultName = db.ConsultationTypes.Where(ct => ct.ConsultTypeID == consultTypeID).FirstOrDefault().ConsultType;
+        //private string VisitName(int consultTypeID)
+        //{
+        //    using (HISDBEntities db = new HISDBEntities())
+        //    {
+        //        var consultName = db.ConsultationTypes.Where(ct => ct.ConsultTypeID == consultTypeID).FirstOrDefault().ConsultType;
 
-                return consultName;
-            }
-        }
+        //        return consultName;
+        //    }
+        //}
 
         [HttpGet]
         public ActionResult OPPrescription(string enmrNo)
@@ -1053,11 +1053,11 @@ namespace HIS.Controllers
                 latestVisit = hs.PatientVisitHistories.Where(pvh => pvh.ENMRNO == enmrNo).OrderByDescending(pvh => pvh.SNO).FirstOrDefault();
 
                 patientTests = GetPatientNotDeliverVisitTests(enmrNo, latestVisit.SNO);
-                string visitName = VisitName(latestVisit.ConsultTypeID);
+               // string visitName = HtmlHelpers.HtmlHelpers.GetVisitName(latestVisit.ConsultTypeID);
                 if (patientTests.Count() > 0)
                 {
                     patientTests[0].ENMRNO = enmrNo;
-                    patientTests[0].VisitName = VisitName(latestVisit.ConsultTypeID);
+                    patientTests[0].VisitName = HtmlHelpers.HtmlHelpers.GetVisitName(latestVisit.ConsultTypeID);
                     
                 }
             }
@@ -1109,7 +1109,7 @@ namespace HIS.Controllers
                 if (PatientScans.Count() > 0)
                 {
                     PatientScans[0].ENMRNO = enmrNo;
-                    PatientScans[0].VisitName = VisitName(latestVisit.ConsultTypeID);
+                    PatientScans[0].VisitName = HtmlHelpers.HtmlHelpers.GetVisitName(latestVisit.ConsultTypeID);
                 }
             }
             return View(PatientScans);
@@ -1159,11 +1159,11 @@ namespace HIS.Controllers
                 latestVisit = hs.PatientVisitHistories.Where(pvh => pvh.ENMRNO == enmrNo).OrderByDescending(pvh => pvh.SNO).FirstOrDefault();
 
                 patientTests = GetPatientVisitTestsBillPay(enmrNo, latestVisit.SNO);
-                string visitName = VisitName(latestVisit.ConsultTypeID);
+                //string visitName = HtmlHelpers.HtmlHelpers.GetVisitName(latestVisit.ConsultTypeID);
                 if (patientTests.Count() > 0)
                 {
                     patientTests[0].ENMRNO = enmrNo;
-                    patientTests[0].VisitName = VisitName(latestVisit.ConsultTypeID);
+                    patientTests[0].VisitName = HtmlHelpers.HtmlHelpers.GetVisitName(latestVisit.ConsultTypeID);
 
                 }
             }
@@ -1179,11 +1179,11 @@ namespace HIS.Controllers
                 latestVisit = hs.PatientVisitHistories.Where(pvh => pvh.ENMRNO == enmrNo && pvh.SNO == visitid).FirstOrDefault();
 
                 patientTests = GetPatientVisitTestsBillPayPrint(enmrNo, latestVisit.SNO);
-                string visitName = VisitName(latestVisit.ConsultTypeID);
+                //string visitName = HtmlHelpers.HtmlHelpers.GetVisitName(latestVisit.ConsultTypeID);
                 if (patientTests.Count() > 0)
                 {
                     patientTests[0].ENMRNO = enmrNo;
-                    patientTests[0].VisitName = VisitName(latestVisit.ConsultTypeID);
+                    patientTests[0].VisitName = HtmlHelpers.HtmlHelpers.GetVisitName(latestVisit.ConsultTypeID);
 
                 }
             }
@@ -1243,11 +1243,11 @@ namespace HIS.Controllers
                 latestVisit = hs.PatientVisitHistories.Where(pvh => pvh.ENMRNO == enmrNo).OrderByDescending(pvh => pvh.SNO).FirstOrDefault();
 
                 patientScans = HtmlHelpers.HtmlHelpers.GetPatientVisitScansBillPay(enmrNo, latestVisit.SNO);
-                string visitName = VisitName(latestVisit.ConsultTypeID);    
+                //string visitName = VisitName(latestVisit.ConsultTypeID);    
                 if (patientScans.Count() > 0)
                 {
                     patientScans[0].ENMRNO = enmrNo;
-                    patientScans[0].VisitName = VisitName(latestVisit.ConsultTypeID);
+                    patientScans[0].VisitName = HtmlHelpers.HtmlHelpers.GetVisitName(latestVisit.ConsultTypeID);
 
                 }
             }
@@ -1263,11 +1263,11 @@ namespace HIS.Controllers
                 latestVisit = hs.PatientVisitHistories.Where(pvh => pvh.ENMRNO == enmrNo && pvh.SNO == visitid).FirstOrDefault();
 
                 patientScans = HtmlHelpers.HtmlHelpers.GetPatientVisitScansBillPayPrint(enmrNo, latestVisit.SNO);
-                string visitName = VisitName(latestVisit.ConsultTypeID);
+                //string visitName = VisitName(latestVisit.ConsultTypeID);
                 if (patientScans.Count() > 0)
                 {
                     patientScans[0].ENMRNO = enmrNo;
-                    patientScans[0].VisitName = VisitName(latestVisit.ConsultTypeID);
+                    patientScans[0].VisitName = HtmlHelpers.HtmlHelpers.GetVisitName(latestVisit.ConsultTypeID);
 
                 }
             }
@@ -1306,6 +1306,86 @@ namespace HIS.Controllers
             return View(new AdmissionModel() { ENMRNO = enmrNo });
         }
 
+        [HttpGet]
+        [Description(" - Refunds.")]
+        public ActionResult Refunds(string enmrNo, int visitID, int refundID)
+        {
+            var refunds = new RefundViewModel();
+            // Consultation
+            if (refundID == 1)
+            {
+                refunds = GetConsultationBillingHistory(enmrNo).Where(v=>v.VisitID == visitID).FirstOrDefault();
+            }
+            else if (refundID == 2) // Prescription
+            {
+                refunds = GetPrescriptionBillingHistory(enmrNo).Where(v => v.VisitID == visitID).FirstOrDefault();
+            }
+            else if (refundID == 3) // Lab Test
+            {
+                refunds = GetLabTestBillingHistory(enmrNo).Where(v => v.VisitID == visitID).FirstOrDefault();
+
+            }
+            else if (refundID == 4) // Scan
+            {
+                refunds = GetScanBillingHistory(enmrNo).Where(v => v.VisitID == visitID).FirstOrDefault();
+
+            }
+            return View(refunds);
+        }
+
+        [HttpPost]
+        [Description(" - Refunds.")]
+        public ActionResult Refunds(RefundViewModel rvm)
+        {
+            if (rvm != null)
+            {
+                using (HISDBEntities hs = new HISDBEntities())
+                {
+                    if (rvm.RefundID == 1) // Consultation
+                    {
+                        var pvm = hs.PatientVisitHistories.Where(p => p.SNO == rvm.VisitID && p.ENMRNO == rvm.ENMRNO).FirstOrDefault();
+                        pvm.RefundAmount = rvm.PrevRefAmount + rvm.RefundAmount;
+                        pvm.RefundReason = rvm.RefundReason;
+                        hs.Entry(pvm).State = EntityState.Modified;
+                    }
+                    else if (rvm.RefundID == 2) // Prescription
+                    {
+                        var pvm = hs.PrescriptionMasters.Where(p => p.VisitID == rvm.VisitID && p.ENMRNO == rvm.ENMRNO).FirstOrDefault();
+                        pvm.RefundAmount = rvm.PrevRefAmount + rvm.RefundAmount;
+                        pvm.RefundReason = rvm.RefundReason;
+                        hs.Entry(pvm).State = EntityState.Modified;
+                    }
+                    else if (rvm.RefundID == 3) // Lab Test
+                    {
+                        var pvm = hs.LabTestMasters.Where(p => p.VisitID == rvm.VisitID && p.ENMRNO == rvm.ENMRNO).FirstOrDefault();
+                        pvm.RefundAmount = rvm.PrevRefAmount + rvm.RefundAmount;
+                        pvm.RefundReason = rvm.RefundReason;
+                        hs.Entry(pvm).State = EntityState.Modified;
+                    }
+                    else if (rvm.RefundID == 4) // Scan
+                    {
+                        var pvm = hs.ScanTestMasters.Where(p => p.VisitID == rvm.VisitID && p.ENMRNO == rvm.ENMRNO).FirstOrDefault();
+                        pvm.RefundAmount = rvm.PrevRefAmount + rvm.RefundAmount;
+                        pvm.RefundReason = rvm.RefundReason;
+                        hs.Entry(pvm).State = EntityState.Modified;
+                    }
+                    hs.SaveChanges();
+                }
+                return Json(new { success = true, message = string.Format("Patient ENMRNO: {0} bill refunded Successfully", rvm.ENMRNO) }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { success = false, message = string.Format("Patient ENMRNO: {0} bill not refunded due to some error.", rvm.ENMRNO) }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpGet]
+        [Description(" - Bill History.")]
+        public ActionResult BillHistory(string enmrNo)
+        {
+            return View(new RefundViewModel() { ENMRNO = enmrNo });
+        }
+
         [HttpPost]
         [Description(" - Admission.")]
         public ActionResult Admission(AdmissionModel model)
@@ -1321,7 +1401,7 @@ namespace HIS.Controllers
             }
             else
             {
-                return Json(new { success = true, message = string.Format("Error Occured while admitting the NMRNO: {0} admitted Successfully", model.ENMRNO) }, JsonRequestBehavior.AllowGet);
+                return Json(new { success = true, message = string.Format("Error Occured while admitting the ENMRNO: {0} admitted Successfully", model.ENMRNO) }, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -1450,5 +1530,129 @@ namespace HIS.Controllers
             return View(GetPatientDetails(enmrNo));
         }
 
+        public JsonResult GetBillings(int refundID, string enmrNo)
+        {
+            //int refundID = 0;
+            var refunds = new List<RefundViewModel>();
+            if (refundID == 0) refundID = 1;
+            using (HISDBEntities hs = new HISDBEntities())
+            {
+                // Consultation
+                if (refundID == 1)
+                {
+                    refunds = GetConsultationBillingHistory(enmrNo);
+                }
+                else if (refundID == 2) // Prescription
+                {
+                    refunds = GetPrescriptionBillingHistory(enmrNo);
+                }
+                else if (refundID == 3) // Lab Test
+                {
+                    refunds = GetLabTestBillingHistory(enmrNo);
+
+                }
+                else if (refundID == 4) // Scan
+                {
+                    refunds = GetScanBillingHistory(enmrNo);
+
+                }
+            }
+            return Json(new { data = refunds }, JsonRequestBehavior.AllowGet);
+        }
+
+        private static List<RefundViewModel> GetScanBillingHistory(string enmrNo)
+        {
+            using (HISDBEntities hs = new HISDBEntities())
+            {
+                return (from pv in hs.PatientVisitHistories
+                    join sm in hs.ScanTestMasters on pv.SNO equals sm.VisitID
+                    where pv.ENMRNO == enmrNo && sm.IsBillPaid == true
+                    select new { pv, sm })
+                                              .OrderByDescending(p => p.sm.DatePrescribed)
+                                              .AsEnumerable()
+                                              .Select(x => new RefundViewModel
+                                              {
+                                                  VisitID = x.pv.SNO,
+                                                  VisitName = HtmlHelpers.HtmlHelpers.GetVisitName(x.pv.ConsultTypeID),
+                                                  BillAmount = x.sm.TotalAmount.HasValue?x.sm.TotalAmount.Value:0,
+                                                  PaidAmount = x.sm.PaidAmount.HasValue ? x.sm.PaidAmount.Value : 0,
+                                                  Discount = x.sm.Discount.HasValue ? x.sm.Discount.Value : 0,
+                                                  //RefundAmount = x.sm.RefundAmount.HasValue ? x.sm.RefundAmount.Value : 0,
+                                                  PrevRefAmount = x.sm.RefundAmount.HasValue ? x.sm.RefundAmount.Value : 0,
+                                                  ENMRNO = x.pv.ENMRNO
+                                              }).ToList();
+        }
+        }
+
+        private static List<RefundViewModel> GetLabTestBillingHistory(string enmrNo)
+        {
+            using (HISDBEntities hs = new HISDBEntities())
+            {
+                return (from pv in hs.PatientVisitHistories
+                    join lm in hs.LabTestMasters on pv.SNO equals lm.VisitID
+                    where pv.ENMRNO == enmrNo && lm.IsBillPaid == true
+                    select new { pv, lm })
+                                              .OrderByDescending(p => p.lm.DatePrescribed)
+                                              .AsEnumerable()
+                                              .Select(x => new RefundViewModel
+                                              {
+                                                  VisitID = x.pv.SNO,
+                                                  VisitName = HtmlHelpers.HtmlHelpers.GetVisitName(x.pv.ConsultTypeID),
+                                                  BillAmount = x.lm.TotalAmount.HasValue?x.lm.TotalAmount.Value:0,
+                                                  PaidAmount = x.lm.PaidAmount.HasValue ? x.lm.PaidAmount.Value : 0,
+                                                  Discount = x.lm.Discount.HasValue ? x.lm.Discount.Value : 0,
+                                                  //RefundAmount = x.lm.RefundAmount.HasValue ? x.lm.RefundAmount.Value : 0,
+                                                  PrevRefAmount = x.lm.RefundAmount.HasValue ? x.lm.RefundAmount.Value : 0,
+                                                  ENMRNO = x.pv.ENMRNO
+                                              }).ToList();
+        }
+        }
+
+        private static List<RefundViewModel> GetPrescriptionBillingHistory(string enmrNo)
+        {
+            using (HISDBEntities hs = new HISDBEntities())
+            {
+                return (from pv in hs.PatientVisitHistories
+                    join ps in hs.PrescriptionMasters on pv.SNO equals ps.VisitID
+                    where pv.ENMRNO == enmrNo && ps.IsDelivered == true
+                    select new { pv, ps })
+                                              .OrderByDescending(p => p.ps.DatePrescribed)
+                                              .AsEnumerable()
+                                              .Select(x => new RefundViewModel
+                                              {
+                                                  VisitID = x.pv.SNO,
+                                                  VisitName = HtmlHelpers.HtmlHelpers.GetVisitName(x.pv.ConsultTypeID),
+                                                  BillAmount = x.ps.TotalAmount.HasValue ? x.ps.TotalAmount.Value : 0,
+                                                  PaidAmount = x.ps.PaidAmount.HasValue ? x.ps.PaidAmount.Value : 0,
+                                                  Discount = x.ps.Discount.HasValue ? x.ps.Discount.Value : 0,
+                                                  //RefundAmount = x.ps.RefundAmount.HasValue ? x.ps.RefundAmount.Value : 0,
+                                                  PrevRefAmount = x.ps.RefundAmount.HasValue ? x.ps.RefundAmount.Value : 0,
+                                                  ENMRNO = x.pv.ENMRNO
+                                              }).ToList();
+        }
+        }
+
+        private static List<RefundViewModel> GetConsultationBillingHistory(string enmrNo)
+        {
+            using (HISDBEntities hs = new HISDBEntities())
+            {
+                return (from pv in hs.PatientVisitHistories
+                        where pv.ENMRNO == enmrNo
+                        select new { pv })
+                                          .OrderByDescending(p => p.pv.SNO)
+                                          .AsEnumerable()
+                                          .Select(x => new RefundViewModel
+                                          {
+                                              VisitID = x.pv.SNO,
+                                              VisitName = HtmlHelpers.HtmlHelpers.GetVisitName(x.pv.ConsultTypeID),
+                                              BillAmount = x.pv.Fee,
+                                              PaidAmount = x.pv.Fee - (x.pv.Discount.HasValue ? x.pv.Discount.Value : 0),
+                                              Discount = x.pv.Discount.HasValue ? x.pv.Discount.Value : 0,
+                                              //RefundAmount = x.pv.RefundAmount.HasValue ? x.pv.RefundAmount.Value : 0,
+                                              PrevRefAmount = x.pv.RefundAmount.HasValue ? x.pv.RefundAmount.Value : 0,
+                                              ENMRNO = x.pv.ENMRNO,
+                                          }).ToList();
+            }
+        }
     }
 }

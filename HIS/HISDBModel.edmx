@@ -168,6 +168,8 @@
           <Property Name="InsuranceEstAmt" Type="money" />
           <Property Name="InsuranceRecievedAmt" Type="money" />
           <Property Name="PkitID" Type="int" />
+          <Property Name="Relation" Type="varchar" MaxLength="50" />
+          <Property Name="RelationName" Type="varchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="InsuranceProvider">
           <Key>
@@ -215,6 +217,9 @@
           <Property Name="PaidAmount" Type="money" />
           <Property Name="TotalAmount" Type="money" />
           <Property Name="ISIP" Type="bit" />
+          <Property Name="RefundAmount" Type="money" />
+          <Property Name="RefundReason" Type="varchar" MaxLength="500" />
+          <Property Name="RefundedOn" Type="datetime" />
         </EntityType>
         <EntityType Name="MedicineInventory">
           <Key>
@@ -294,6 +299,8 @@
           <Property Name="Temperature" Type="decimal" Precision="10" Scale="4" />
           <Property Name="OthContact" Type="varchar" MaxLength="10" />
           <Property Name="PrevENMR" Type="varchar" MaxLength="30" />
+          <Property Name="Relation" Type="varchar" MaxLength="50" />
+          <Property Name="RelationName" Type="varchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="PatientInsurance">
           <Key>
@@ -382,6 +389,9 @@
           <Property Name="BP" Type="nvarchar" MaxLength="20" />
           <Property Name="Temperature" Type="decimal" Precision="10" Scale="2" />
           <Property Name="NurseID" Type="int" />
+          <Property Name="RefundAmount" Type="money" />
+          <Property Name="RefundReason" Type="varchar" MaxLength="500" />
+          <Property Name="RefundedOn" Type="datetime" />
         </EntityType>
         <EntityType Name="PaymentModes">
           <Key>
@@ -430,6 +440,9 @@
           <Property Name="PaidAmount" Type="money" />
           <Property Name="TotalAmount" Type="money" />
           <Property Name="ISIP" Type="bit" />
+          <Property Name="RefundAmount" Type="money" />
+          <Property Name="RefundReason" Type="varchar" MaxLength="500" />
+          <Property Name="RefundedOn" Type="datetime" />
         </EntityType>
         <EntityType Name="PurchaseOrder">
           <Key>
@@ -507,6 +520,9 @@
           <Property Name="PaidAmount" Type="money" />
           <Property Name="TotalAmount" Type="money" />
           <Property Name="ISIP" Type="bit" />
+          <Property Name="RefundAmount" Type="money" />
+          <Property Name="RefundReason" Type="varchar" MaxLength="500" />
+          <Property Name="RefundedOn" Type="datetime" />
         </EntityType>
         <EntityType Name="Specialization">
           <Key>
@@ -1529,6 +1545,9 @@
           <NavigationProperty Name="User" Relationship="Self.FK_PM_Doctor" FromRole="PrescriptionMaster" ToRole="Users" />
           <Property Name="TotalAmount" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="ISIP" Type="Boolean" />
+          <Property Name="RefundAmount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="RefundReason" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="RefundedOn" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="PurchaseOrder">
           <Key>
@@ -2125,6 +2144,9 @@
           <NavigationProperty Name="User" Relationship="HISDBModel.FK_LTM_Doctor" FromRole="LabTestMaster" ToRole="User" />
           <NavigationProperty Name="PatientTests" Relationship="HISDBModel.FK_PatientTests_LTMID" FromRole="LabTestMaster" ToRole="PatientTest" />
           <Property Name="ISIP" Type="Boolean" />
+          <Property Name="RefundAmount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="RefundReason" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="RefundedOn" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="PatientTest">
           <Key>
@@ -2307,6 +2329,9 @@
           <Property Name="ISIP" Type="Boolean" />
           <NavigationProperty Name="PatientScans" Relationship="HISDBModel.FK_PatientScans_STMID" FromRole="ScanTestMaster" ToRole="PatientScan" />
           <NavigationProperty Name="User" Relationship="HISDBModel.FK_STM_Doctor" FromRole="ScanTestMaster" ToRole="User" />
+          <Property Name="RefundAmount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="RefundReason" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="RefundedOn" Type="DateTime" Precision="3" />
         </EntityType>
         <Association Name="FK_PatientScans_ScanID">
           <End Type="HISDBModel.TestType" Role="TestType" Multiplicity="1" />
@@ -2597,6 +2622,8 @@
           <NavigationProperty Name="PharmaKit" Relationship="HISDBModel.FK_INPatients_PKitID" FromRole="InPatient" ToRole="PharmaKit" />
           <NavigationProperty Name="PatientRoomAllocations" Relationship="HISDBModel.FK_PRA_InPatients_ENMRNO" FromRole="InPatient" ToRole="PatientRoomAllocation" />
           <NavigationProperty Name="FeeCollections" Relationship="HISDBModel.FK_FeeCollection_ENMRNO" FromRole="InPatient" ToRole="FeeCollection" />
+          <Property Name="Relation" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="RelationName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="OutPatient">
           <Key>
@@ -2639,6 +2666,8 @@
           <NavigationProperty Name="BloodGroup" Relationship="HISDBModel.FK_OutPatients_BloodGroup" FromRole="OutPatient" ToRole="BloodGroup" />
           <NavigationProperty Name="User" Relationship="HISDBModel.FK_OutPatients_Doctor" FromRole="OutPatient" ToRole="User" />
           <NavigationProperty Name="PatientVisitHistories" Relationship="HISDBModel.FK_PVH_OutPatient_ENMRNO" FromRole="OutPatient" ToRole="PatientVisitHistory" />
+          <Property Name="Relation" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="RelationName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
         </EntityType>
         <Association Name="FK_InPatients_BloodGroup">
           <End Type="HISDBModel.BloodGroup" Role="BloodGroup" Multiplicity="0..1" />
@@ -2787,6 +2816,9 @@
           <NavigationProperty Name="ConsultationType" Relationship="HISDBModel.FK_PVH_Consultation_Type" FromRole="PatientVisitHistory" ToRole="ConsultationType" />
           <NavigationProperty Name="OutPatient" Relationship="HISDBModel.FK_PVH_OutPatient_ENMRNO" FromRole="PatientVisitHistory" ToRole="OutPatient" />
           <NavigationProperty Name="User" Relationship="HISDBModel.FK_PatientVisitHistory_Doctor" FromRole="PatientVisitHistory" ToRole="User" />
+          <Property Name="RefundAmount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="RefundReason" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="RefundedOn" Type="DateTime" Precision="3" />
         </EntityType>
         <Association Name="FK_PVH_Consultation_Type">
           <End Type="HISDBModel.ConsultationType" Role="ConsultationType" Multiplicity="1" />
@@ -3032,6 +3064,9 @@
           <EntitySetMapping Name="PrescriptionMasters">
             <EntityTypeMapping TypeName="HISDBModel.PrescriptionMaster">
               <MappingFragment StoreEntitySet="PrescriptionMaster">
+                <ScalarProperty Name="RefundedOn" ColumnName="RefundedOn" />
+                <ScalarProperty Name="RefundReason" ColumnName="RefundReason" />
+                <ScalarProperty Name="RefundAmount" ColumnName="RefundAmount" />
                 <ScalarProperty Name="ISIP" ColumnName="ISIP" />
                 <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
                 <ScalarProperty Name="PMID" ColumnName="PMID" />
@@ -3147,6 +3182,9 @@
           <EntitySetMapping Name="LabTestMasters">
             <EntityTypeMapping TypeName="HISDBModel.LabTestMaster">
               <MappingFragment StoreEntitySet="LabTestMaster">
+                <ScalarProperty Name="RefundedOn" ColumnName="RefundedOn" />
+                <ScalarProperty Name="RefundReason" ColumnName="RefundReason" />
+                <ScalarProperty Name="RefundAmount" ColumnName="RefundAmount" />
                 <ScalarProperty Name="ISIP" ColumnName="ISIP" />
                 <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
                 <ScalarProperty Name="PaidAmount" ColumnName="PaidAmount" />
@@ -3257,6 +3295,9 @@
           <EntitySetMapping Name="ScanTestMasters">
             <EntityTypeMapping TypeName="HISDBModel.ScanTestMaster">
               <MappingFragment StoreEntitySet="ScanTestMaster">
+                <ScalarProperty Name="RefundedOn" ColumnName="RefundedOn" />
+                <ScalarProperty Name="RefundReason" ColumnName="RefundReason" />
+                <ScalarProperty Name="RefundAmount" ColumnName="RefundAmount" />
                 <ScalarProperty Name="ISIP" ColumnName="ISIP" />
                 <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
                 <ScalarProperty Name="PaidAmount" ColumnName="PaidAmount" />
@@ -3389,6 +3430,8 @@
           <EntitySetMapping Name="InPatients">
             <EntityTypeMapping TypeName="HISDBModel.InPatient">
               <MappingFragment StoreEntitySet="InPatients">
+                <ScalarProperty Name="RelationName" ColumnName="RelationName" />
+                <ScalarProperty Name="Relation" ColumnName="Relation" />
                 <ScalarProperty Name="PkitID" ColumnName="PkitID" />
                 <ScalarProperty Name="InsuranceRecievedAmt" ColumnName="InsuranceRecievedAmt" />
                 <ScalarProperty Name="InsuranceEstAmt" ColumnName="InsuranceEstAmt" />
@@ -3439,6 +3482,8 @@
           <EntitySetMapping Name="OutPatients">
             <EntityTypeMapping TypeName="HISDBModel.OutPatient">
               <MappingFragment StoreEntitySet="OutPatients">
+                <ScalarProperty Name="RelationName" ColumnName="RelationName" />
+                <ScalarProperty Name="Relation" ColumnName="Relation" />
                 <ScalarProperty Name="PrevENMR" ColumnName="PrevENMR" />
                 <ScalarProperty Name="OthContact" ColumnName="OthContact" />
                 <ScalarProperty Name="Temperature" ColumnName="Temperature" />
@@ -3518,6 +3563,9 @@
           <EntitySetMapping Name="PatientVisitHistories">
             <EntityTypeMapping TypeName="HISDBModel.PatientVisitHistory">
               <MappingFragment StoreEntitySet="PatientVisitHistory">
+                <ScalarProperty Name="RefundedOn" ColumnName="RefundedOn" />
+                <ScalarProperty Name="RefundReason" ColumnName="RefundReason" />
+                <ScalarProperty Name="RefundAmount" ColumnName="RefundAmount" />
                 <ScalarProperty Name="NurseID" ColumnName="NurseID" />
                 <ScalarProperty Name="Temperature" ColumnName="Temperature" />
                 <ScalarProperty Name="BP" ColumnName="BP" />

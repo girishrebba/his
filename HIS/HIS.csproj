@@ -1214,6 +1214,7 @@
     <Compile Include="Models\PharmaKitItem.cs" />
     <Compile Include="Models\PurchaseOrder.cs" />
     <Compile Include="Models\Purpose.cs" />
+    <Compile Include="Models\RefundViewModel.cs" />
     <Compile Include="Models\Revenuerpt.cs" />
     <Compile Include="Models\RolePermissions.cs" />
     <Compile Include="Models\Room.cs" />
@@ -1560,6 +1561,8 @@
     <Content Include="Views\InPatient\DeliverPrescriptionprint.cshtml" />
     <Content Include="Views\InPatient\LabTestBillPayPrint.cshtml" />
     <Content Include="Views\InPatient\ScanTestBillPayPrint.cshtml" />
+    <Content Include="Views\OutPatient\Refunds.cshtml" />
+    <Content Include="Views\OutPatient\BillHistory.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

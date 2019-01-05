@@ -88,7 +88,8 @@
         @section scripts{
             <script>
         var Popup, dataTable, viewPatient, newVisit, prescription, deliverPopUp, consultations;
-        $(document).ready(function () {
+                $(document).ready(function () {
+                    $('body').loadingModal({ text: 'Loading...' });
             dataTable = $("#outPatientsTable").DataTable({
                 "ajax": {
                     "url": "/OutPatient/GetOutPatients",
@@ -132,7 +133,9 @@
                                 + "@if (His_ExtendedMethods.HasPermissionPage("OutPatient-LabTestBillPay")){
                                     <a class='btn btn-primary btn-sm' title='Lab Test Bill Payment' style='margin-left:5px' onclick=PopupLabTestBillPayForm('@Url.Action("LabTestBillPay", "OutPatient")/?enmrNo=" + data + "')><i class='fa fa-credit-card his-fa-size'></i></a>}"
                                 + "@if (His_ExtendedMethods.HasPermissionPage("OutPatient-PrintHistory")){
-                                        <a class='btn btn-primary btn-sm' title='View & Print' style='margin-left:5px' onclick=PopupPrint('@Url.Action("PrintHistory", "OutPatient")/?enmrNo=" + data + "')><i class='fa fa-print his-fa-size'></i></a>}";
+                                        <a class='btn btn-primary btn-sm' title='View & Print' style='margin-left:5px' onclick=PopupPrint('@Url.Action("PrintHistory", "OutPatient")/?enmrNo=" + data + "')><i class='fa fa-print his-fa-size'></i></a>}"
+                                + "@if (His_ExtendedMethods.HasPermissionPage("OutPatient-BillHistory")){
+                                        <a class='btn btn-primary btn-sm' title='Bill Refund History' style='margin-left:5px' onclick=PopupBillingForm('@Url.Action("BillHistory", "OutPatient")/?enmrNo=" + data + "')><i class='fas fa-exchange-alt his-fa-size'></i></a>}";
 
                         },
                         "orderable": false,
@@ -144,6 +147,9 @@
                 "order": [[0, "desc"]],
                 "language": {
                     "emptyTable" : "No data found, Please click on <b>Add New</b> Button"
+                },
+                "initComplete": function (settings, json) {
+                    $('body').loadingModal('destroy');
                 }
             });
 
@@ -191,18 +197,21 @@
                                 + "@if (His_ExtendedMethods.HasPermissionPage("OutPatient-LabTestBillPay")){
                                     <a class='btn btn-primary btn-sm' title='Lab Test Bill Payment' style='margin-left:5px' onclick=PopupLabTestBillPayForm('@Url.Action("LabTestBillPay", "OutPatient")/?enmrNo=" + data + "')><i class='fa fa-credit-card his-fa-size'></i></a>}"
                                 + "@if (His_ExtendedMethods.HasPermissionPage("OutPatient-PrintHistory")){
-                                        <a class='btn btn-primary btn-sm' title='View & Print' style='margin-left:5px' onclick=PopupPrint('@Url.Action("PrintHistory", "OutPatient")/?enmrNo=" + data + "')><i class='fa fa-print his-fa-size'></i></a>}";
-
+                                        <a class='btn btn-primary btn-sm' title='View & Print' style='margin-left:5px' onclick=PopupPrint('@Url.Action("PrintHistory", "OutPatient")/?enmrNo=" + data + "')><i class='fa fa-print his-fa-size'></i></a>}"
+                                + "@if (His_ExtendedMethods.HasPermissionPage("OutPatient-BillHistory")){
+                                        <a class='btn btn-primary btn-sm' title='Bill Refund History' style='margin-left:5px' onclick=PopupBillingForm('@Url.Action("BillHistory", "OutPatient")/?enmrNo=" + data + "')><i class='fas fa-exchange-alt his-fa-size'></i></a>}";
                         },
                         "orderable": false,
                         "searchable": false,
                         "width": "35%"
-
                     }
                 ],
                 "order": [[0, "asc"]],
                 "language": {
                     "emptyTable" : "No Consutations enrolled so far. Please click is Refresh button."
+                },
+                "initComplete": function (settings, json) {
+                    $('body').loadingModal('destroy');
                 }
             });
         });
@@ -491,6 +500,29 @@
                 });
         }
 
+                function PopupBillingForm(url) {
+                    $('body').loadingModal({ text: 'Loading...' });
+                    var billHis = $('<div/>');
+                    $.get(url)
+                        .done(function (response) {
+                            billHis.html(response);
+                            billHisPopUp = billHis.dialog({
+                                autoOpen: true,
+                                resizable: true,
+                                modal: true,
+                                title: 'Billing History',
+                                width: '70%',
+                                close: function () {
+                                    billHisPopUp.dialog('destroy').remove();
+                                },
+                                open: function (event, ui) {
+                                    $('.ui-dialog-content').css('overflow', 'hidden');
+                                    $('body').loadingModal('destroy');
+                                }
+                            });
+                        });
+                }
+
         function SubmitForm(form) {
             $.validator.setDefaults({
                 ignore: []
@@ -506,7 +538,6 @@
                         if (data.success) {
                             Popup.dialog('close');
                             dataTable.ajax.reload();
-                            consultations.ajax.reload();
                             consultations.ajax.reload();
                             $.notify(data.message, {
                                 globalPosition: "top center",

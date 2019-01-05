@@ -28,6 +28,9 @@ namespace HIS
         public string BP { get; set; }
         public Nullable<decimal> Temperature { get; set; }
         public Nullable<int> NurseID { get; set; }
+        public Nullable<decimal> RefundAmount { get; set; }
+        public string RefundReason { get; set; }
+        public Nullable<System.DateTime> RefundedOn { get; set; }
     
         public virtual ConsultationType ConsultationType { get; set; }
         public virtual OutPatient OutPatient { get; set; }

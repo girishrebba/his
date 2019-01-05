@@ -1,0 +1,80 @@
+﻿@model HIS.RefundViewModel
+@{
+    Layout = null;
+}
+@using (Html.BeginForm("Refunds", "OutPatient", FormMethod.Post, new { onsubmit = "return SubmitRefundForm(this)" }))
+{
+    @Html.HiddenFor(model => model.ENMRNO)
+    @Html.HiddenFor(model => model.PrevRefAmount)
+    @Html.HiddenFor(model => model.RefundID)
+    @Html.HiddenFor(model => model.VisitID)
+    @*<div class="astriskNote"><span></span></div>*@
+<div class="form-horizontal">
+    <div class="form-group">
+        @Html.LabelFor(model => model.VisitName, "Visit:", new { @class = "control-label col-md-2" })
+        <div class="col-sm-4 lableDisplay">
+            @Html.DisplayFor(model => model.VisitName, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.BillAmount, "Bill:", new { @class = "control-label col-md-2" })
+        <div class="col-sm-4 lableDisplay" id="BillAmount">
+            @Html.DisplayFor(model => model.BillAmount, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.PaidAmount, "Paid:", new { @class = "control-label col-md-2" })
+        <div class="col-sm-4 lableDisplay" id="PaidAmount">
+            @Html.DisplayFor(model => model.PaidAmount, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.PrevRefAmount, "Refunded:", new { @class = "control-label col-md-2" })
+        <div class="col-sm-4 lableDisplay" id="RefundedAmount">
+            @Html.DisplayFor(model => model.PrevRefAmount, new { htmlAttributes = new { Value = Model.PrevRefAmount > 0 ? Model.PrevRefAmount.ToString("0.00") : string.Empty, @class = "form-control" } })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.RefundAmount, "Refund:", new { @class = "control-label col-md-2" })
+        <div class="col-sm-4 lableDisplay">
+            @Html.EditorFor(model => model.RefundAmount, new { htmlAttributes = new { Value = Model.RefundAmount > 0 ? Model.RefundAmount.ToString("0.00") : string.Empty, @class = "form-control numericdecimal" } })
+        </div>
+    </div>
+</div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.RefundReason, "Refund Reason:", new { @class = "control-label" })
+        @*<div class="col-sm-4">*@
+        @Html.EditorFor(model => model.RefundReason, new { htmlAttributes = new { @class = "form-control" } })
+        @* @Html.ValidationMessageFor(model => model.AdvAmount)*@
+        @*</div>*@
+    </div>
+    <div class="form-group" style="padding-top:30px;">
+        <div class="col-sm-offset-3">
+            <input type="submit" value="Submit" id="btnSubmit" class="btn btn-primary" />
+            <input type="reset" value="Reset" class="btn" />
+        </div>
+    </div>
+
+}
+    <script src="~/Scripts/jquery.validate-his.js"></script>
+<script type="text/javascript">
+    $('#btnSubmit').click(function () {
+        var billAmount = $('#BillAmount').html();
+        var paid = $('#PaidAmount').html();
+        var refundOld = $('#RefundedAmount').html();
+        var refundNew = $('#RefundAmount').val();
+        //alert(+paid + +refundOld + +refundNew);
+        //alert(refundNew);
+        if (refundNew === undefined || refundNew == null || +refundNew == 0)
+        {
+            alert("Please enter Refund amount!!");
+            return false;
+        }
+        else if ((+refundOld + +refundNew) > +paid) {
+            alert("This bill is refunding beyond the orginal bill amount. Please recheck!!");
+            return false;
+        }
+    });
+</script>

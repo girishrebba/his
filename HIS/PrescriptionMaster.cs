@@ -30,6 +30,9 @@ namespace HIS
         public Nullable<decimal> PaidAmount { get; set; }
         public Nullable<decimal> TotalAmount { get; set; }
         public Nullable<bool> ISIP { get; set; }
+        public Nullable<decimal> RefundAmount { get; set; }
+        public string RefundReason { get; set; }
+        public Nullable<System.DateTime> RefundedOn { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PatientPrescription> PatientPrescriptions { get; set; }

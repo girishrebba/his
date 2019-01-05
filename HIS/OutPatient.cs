@@ -54,6 +54,8 @@ namespace HIS
         public Nullable<decimal> Temperature { get; set; }
         public string OthContact { get; set; }
         public string PrevENMR { get; set; }
+        public string Relation { get; set; }
+        public string RelationName { get; set; }
     
         public virtual BloodGroup BloodGroup { get; set; }
         public virtual User User { get; set; }
