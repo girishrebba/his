@@ -32,12 +32,17 @@ namespace HIS
 
         public string GetDOBFormat()
         {
-            return this.DOB != null ? this.DOB.Value.ToString("MM/dd/yyyy") : string.Empty;
+            return this.DOB != null ? this.DOB.Value.ToString("dd-MMM-yyyy") : string.Empty;
+        }
+
+        public string GetAge()
+        {
+            return this.Age != null ? this.Age.ToString() : string.Empty;
         }
 
         public string GetEnrolledFormat()
         {
-            return this.Enrolled != null ? this.Enrolled.Value.ToString("MM/dd/yyyy") : string.Empty;
+            return this.Enrolled != null ? this.Enrolled.Value.ToString("dd-MMM-yyyy") : string.Empty;
         }        
     }
 
@@ -60,5 +65,8 @@ namespace HIS
         public int DoctorID { get; set; }
         [Required(ErrorMessage = "Blood Group is Required", AllowEmptyStrings = false)]
         public int BloodGroupID { get; set; }
+        [MaxLength(3)]
+        [Required(ErrorMessage = "Age is Required", AllowEmptyStrings = false)]
+        public int Age { get; set; }
     }
 }

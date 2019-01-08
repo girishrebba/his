@@ -38,6 +38,11 @@ namespace HIS
             return this.Enrolled != null ? this.Enrolled.Value.ToString("MM/dd/yyyy") : string.Empty;
         }
 
+        public string GetAge()
+        {
+            return this.Age != null ? this.Age.ToString() : string.Empty;
+        }
+
         public string GetFullAddress()
         {
             return string.Format("{0} {1} {2} {3} {4}",
@@ -94,6 +99,10 @@ namespace HIS
         public int DoctorID { get; set; }
         [Required(ErrorMessage = "Blood Group is Required", AllowEmptyStrings = false)]
         public int BloodGroupID { get; set; }
+        [MaxLength(3)]
+        [Required(ErrorMessage = "Age is Required", AllowEmptyStrings = false)]
+        public int Age { get; set; }
+
 
         public Nullable<int> ProviderID { get; set; }
         public string InsuranceFileNo { get; set; }

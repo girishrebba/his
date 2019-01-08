@@ -162,6 +162,9 @@
     <NavigationProperty Name="User" Relationship="Self.FK_PM_Doctor" FromRole="PrescriptionMaster" ToRole="Users" />
     <Property Name="TotalAmount" Type="Decimal" Precision="19" Scale="4" />
     <Property Name="ISIP" Type="Boolean" />
+    <Property Name="RefundAmount" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="RefundReason" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="RefundedOn" Type="DateTime" Precision="3" />
   </EntityType>
   <EntityType Name="PurchaseOrder">
     <Key>
@@ -259,9 +262,9 @@
     <NavigationProperty Name="UserType" Relationship="Self.FK_User_Type" FromRole="Users" ToRole="UserType" />
     <NavigationProperty Name="LabTestMasters" Relationship="HISDBModel.FK_LTM_Doctor" FromRole="User" ToRole="LabTestMaster" />
     <NavigationProperty Name="ScanTestMasters" Relationship="HISDBModel.FK_STM_Doctor" FromRole="User" ToRole="ScanTestMaster" />
+    <NavigationProperty Name="PatientVisitHistories" Relationship="HISDBModel.FK_PatientVisitHistory_Doctor" FromRole="User" ToRole="PatientVisitHistory" />
     <NavigationProperty Name="InPatients" Relationship="HISDBModel.FK_InPatients_Doctor" FromRole="User" ToRole="InPatient" />
     <NavigationProperty Name="OutPatients" Relationship="HISDBModel.FK_OutPatients_Doctor" FromRole="User" ToRole="OutPatient" />
-    <NavigationProperty Name="PatientVisitHistories" Relationship="HISDBModel.FK_PatientVisitHistory_Doctor" FromRole="User" ToRole="PatientVisitHistory" />
   </EntityType>
   <EntityType Name="UserType">
     <Key>
@@ -573,7 +576,6 @@
       <End Role="PatientRoomAllocation" EntitySet="PatientRoomAllocations" />
     </AssociationSet>
     <EntitySet Name="PaymentModes" EntityType="HISDBModel.PaymentMode" />
-    <EntitySet Name="FeeCollections" EntityType="HISDBModel.FeeCollection" />
     <EntitySet Name="OrderMasters" EntityType="HISDBModel.OrderMaster" />
     <EntitySet Name="OrderRequests" EntityType="HISDBModel.OrderRequest" />
     <AssociationSet Name="FK_OR_MedicineID" Association="HISDBModel.FK_OR_MedicineID">
@@ -663,6 +665,46 @@
       <Parameter Name="Start_Time" Mode="In" Type="DateTime" />
       <Parameter Name="End_Time" Mode="In" Type="DateTime" />
     </FunctionImport>
+    <EntitySet Name="Purposes" EntityType="HISDBModel.Purpose" />
+    <AssociationSet Name="FK_PatientPurpose_PurposeID" Association="HISDBModel.FK_PatientPurpose_PurposeID">
+      <End Role="Purpose" EntitySet="Purposes" />
+      <End Role="PatientPurpose" EntitySet="PatientPurposes" />
+    </AssociationSet>
+    <FunctionImport Name="CreateMasterOrder">
+      <Parameter Name="OrderNo" Mode="In" Type="String" />
+      <Parameter Name="OMID" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="BedReport" ReturnType="Collection(HISDBModel.BedReport_Result)" />
+    <EntitySet Name="BrandSubCategories" EntityType="HISDBModel.BrandSubCategory" />
+    <EntitySet Name="Suppliers" EntityType="HISDBModel.Supplier" />
+    <FunctionImport Name="AddSubCategory">
+      <Parameter Name="Name" Mode="In" Type="String" />
+      <Parameter Name="SubCategoryID" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="AddSupplier">
+      <Parameter Name="Name" Mode="In" Type="String" />
+      <Parameter Name="SupplierID" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <EntitySet Name="PatientVisitHistories" EntityType="HISDBModel.PatientVisitHistory" />
+    <AssociationSet Name="FK_PVH_Consultation_Type" Association="HISDBModel.FK_PVH_Consultation_Type">
+      <End Role="ConsultationType" EntitySet="ConsultationTypes" />
+      <End Role="PatientVisitHistory" EntitySet="PatientVisitHistories" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PatientVisitHistory_Doctor" Association="HISDBModel.FK_PatientVisitHistory_Doctor">
+      <End Role="User" EntitySet="Users" />
+      <End Role="PatientVisitHistory" EntitySet="PatientVisitHistories" />
+    </AssociationSet>
+    <FunctionImport Name="IpRevenueReport" ReturnType="Collection(HISDBModel.IpRevenueReport_Result)">
+      <Parameter Name="Doctors" Mode="In" Type="String" />
+      <Parameter Name="Start_Time" Mode="In" Type="DateTime" />
+      <Parameter Name="End_Time" Mode="In" Type="DateTime" />
+    </FunctionImport>
+    <FunctionImport Name="RevenueReport" ReturnType="Collection(HISDBModel.RevenueReport_Result)">
+      <Parameter Name="Doctors" Mode="In" Type="String" />
+      <Parameter Name="Start_Time" Mode="In" Type="DateTime" />
+      <Parameter Name="End_Time" Mode="In" Type="DateTime" />
+    </FunctionImport>
+    <EntitySet Name="FeeCollections" EntityType="HISDBModel.FeeCollection" />
     <EntitySet Name="InPatients" EntityType="HISDBModel.InPatient" />
     <EntitySet Name="OutPatients" EntityType="HISDBModel.OutPatient" />
     <AssociationSet Name="FK_InPatients_BloodGroup" Association="HISDBModel.FK_InPatients_BloodGroup">
@@ -697,49 +739,10 @@
       <End Role="User" EntitySet="Users" />
       <End Role="OutPatient" EntitySet="OutPatients" />
     </AssociationSet>
-    <EntitySet Name="Purposes" EntityType="HISDBModel.Purpose" />
-    <AssociationSet Name="FK_PatientPurpose_PurposeID" Association="HISDBModel.FK_PatientPurpose_PurposeID">
-      <End Role="Purpose" EntitySet="Purposes" />
-      <End Role="PatientPurpose" EntitySet="PatientPurposes" />
-    </AssociationSet>
-    <FunctionImport Name="CreateMasterOrder">
-      <Parameter Name="OrderNo" Mode="In" Type="String" />
-      <Parameter Name="OMID" Mode="InOut" Type="Int32" />
-    </FunctionImport>
-    <FunctionImport Name="BedReport" ReturnType="Collection(HISDBModel.BedReport_Result)" />
-    <EntitySet Name="BrandSubCategories" EntityType="HISDBModel.BrandSubCategory" />
-    <EntitySet Name="Suppliers" EntityType="HISDBModel.Supplier" />
-    <FunctionImport Name="AddSubCategory">
-      <Parameter Name="Name" Mode="In" Type="String" />
-      <Parameter Name="SubCategoryID" Mode="InOut" Type="Int32" />
-    </FunctionImport>
-    <FunctionImport Name="AddSupplier">
-      <Parameter Name="Name" Mode="In" Type="String" />
-      <Parameter Name="SupplierID" Mode="InOut" Type="Int32" />
-    </FunctionImport>
-    <EntitySet Name="PatientVisitHistories" EntityType="HISDBModel.PatientVisitHistory" />
-    <AssociationSet Name="FK_PVH_Consultation_Type" Association="HISDBModel.FK_PVH_Consultation_Type">
-      <End Role="ConsultationType" EntitySet="ConsultationTypes" />
-      <End Role="PatientVisitHistory" EntitySet="PatientVisitHistories" />
-    </AssociationSet>
     <AssociationSet Name="FK_PVH_OutPatient_ENMRNO" Association="HISDBModel.FK_PVH_OutPatient_ENMRNO">
       <End Role="OutPatient" EntitySet="OutPatients" />
       <End Role="PatientVisitHistory" EntitySet="PatientVisitHistories" />
     </AssociationSet>
-    <AssociationSet Name="FK_PatientVisitHistory_Doctor" Association="HISDBModel.FK_PatientVisitHistory_Doctor">
-      <End Role="User" EntitySet="Users" />
-      <End Role="PatientVisitHistory" EntitySet="PatientVisitHistories" />
-    </AssociationSet>
-    <FunctionImport Name="IpRevenueReport" ReturnType="Collection(HISDBModel.IpRevenueReport_Result)">
-      <Parameter Name="Doctors" Mode="In" Type="String" />
-      <Parameter Name="Start_Time" Mode="In" Type="DateTime" />
-      <Parameter Name="End_Time" Mode="In" Type="DateTime" />
-    </FunctionImport>
-    <FunctionImport Name="RevenueReport" ReturnType="Collection(HISDBModel.RevenueReport_Result)">
-      <Parameter Name="Doctors" Mode="In" Type="String" />
-      <Parameter Name="Start_Time" Mode="In" Type="DateTime" />
-      <Parameter Name="End_Time" Mode="In" Type="DateTime" />
-    </FunctionImport>
   </EntityContainer>
   <EntityType Name="LabTestMaster">
     <Key>
@@ -758,6 +761,9 @@
     <NavigationProperty Name="User" Relationship="HISDBModel.FK_LTM_Doctor" FromRole="LabTestMaster" ToRole="User" />
     <NavigationProperty Name="PatientTests" Relationship="HISDBModel.FK_PatientTests_LTMID" FromRole="LabTestMaster" ToRole="PatientTest" />
     <Property Name="ISIP" Type="Boolean" />
+    <Property Name="RefundAmount" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="RefundReason" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="RefundedOn" Type="DateTime" Precision="3" />
   </EntityType>
   <EntityType Name="PatientTest">
     <Key>
@@ -842,19 +848,6 @@
     </Key>
     <Property Name="ModeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="Mode" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
-  </EntityType>
-  <EntityType Name="FeeCollection">
-    <Key>
-      <PropertyRef Name="FeeID" />
-    </Key>
-    <Property Name="FeeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="ENMRNO" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-    <Property Name="Amount" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
-    <Property Name="PaidOn" Type="DateTime" Nullable="false" Precision="3" />
-    <Property Name="Purpose" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
-    <Property Name="PaymentMode" Type="Int32" Nullable="false" />
-    <Property Name="LastFourDigits" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-    <NavigationProperty Name="InPatient" Relationship="HISDBModel.FK_FeeCollection_ENMRNO" FromRole="FeeCollection" ToRole="InPatient" />
   </EntityType>
   <EntityType Name="OrderMaster">
     <Key>
@@ -953,6 +946,9 @@
     <Property Name="ISIP" Type="Boolean" />
     <NavigationProperty Name="PatientScans" Relationship="HISDBModel.FK_PatientScans_STMID" FromRole="ScanTestMaster" ToRole="PatientScan" />
     <NavigationProperty Name="User" Relationship="HISDBModel.FK_STM_Doctor" FromRole="ScanTestMaster" ToRole="User" />
+    <Property Name="RefundAmount" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="RefundReason" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="RefundedOn" Type="DateTime" Precision="3" />
   </EntityType>
   <Association Name="FK_PatientScans_ScanID">
     <End Type="HISDBModel.TestType" Role="TestType" Multiplicity="1" />
@@ -1189,6 +1185,150 @@
     <Property Type="DateTime" Name="Consultationdate" Nullable="false" />
     <Property Type="Decimal" Name="Amount" Nullable="true" Precision="19" />
   </ComplexType>
+  <EntityType Name="Purpose">
+    <Key>
+      <PropertyRef Name="PurposeID" />
+    </Key>
+    <Property Name="PurposeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="PurposeName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="PatientPurposes" Relationship="HISDBModel.FK_PatientPurpose_PurposeID" FromRole="Purpose" ToRole="PatientPurpose" />
+  </EntityType>
+  <Association Name="FK_PatientPurpose_PurposeID">
+    <End Type="HISDBModel.Purpose" Role="Purpose" Multiplicity="1" />
+    <End Type="HISDBModel.PatientPurpose" Role="PatientPurpose" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Purpose">
+        <PropertyRef Name="PurposeID" />
+      </Principal>
+      <Dependent Role="PatientPurpose">
+        <PropertyRef Name="PurposeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <ComplexType Name="BedReport_Result1">
+    <Property Type="String" Name="bedname" Nullable="false" MaxLength="30" />
+    <Property Type="String" Name="description" Nullable="true" />
+    <Property Type="String" Name="bedtype" Nullable="false" MaxLength="50" />
+    <Property Type="String" Name="roomname" Nullable="true" MaxLength="30" />
+    <Property Type="String" Name="roomtype" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="bedstatus" Nullable="false" MaxLength="9" />
+  </ComplexType>
+  <EntityType Name="BrandSubCategory">
+    <Key>
+      <PropertyRef Name="SubCategoryID" />
+    </Key>
+    <Property Name="SubCategoryID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="SubCategory" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="Supplier">
+    <Key>
+      <PropertyRef Name="SupplierID" />
+    </Key>
+    <Property Name="SupplierID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="SupplierName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="PatientVisitHistory">
+    <Key>
+      <PropertyRef Name="SNO" />
+    </Key>
+    <Property Name="SNO" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="DateOfVisit" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="ConsultTypeID" Type="Int32" Nullable="false" />
+    <Property Name="ENMRNO" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="Fee" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+    <Property Name="Discount" Type="Decimal" Precision="5" Scale="2" />
+    <Property Name="DoctorID" Type="Int32" Nullable="false" />
+    <Property Name="Purpose" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="HeartBeat" Type="Int32" />
+    <Property Name="BMI" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Weight" Type="Decimal" Precision="6" Scale="2" />
+    <Property Name="BP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="Temperature" Type="Decimal" Precision="10" Scale="2" />
+    <Property Name="NurseID" Type="Int32" />
+    <NavigationProperty Name="ConsultationType" Relationship="HISDBModel.FK_PVH_Consultation_Type" FromRole="PatientVisitHistory" ToRole="ConsultationType" />
+    <NavigationProperty Name="User" Relationship="HISDBModel.FK_PatientVisitHistory_Doctor" FromRole="PatientVisitHistory" ToRole="User" />
+    <Property Name="RefundAmount" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="RefundReason" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="RefundedOn" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="OutPatient" Relationship="HISDBModel.FK_PVH_OutPatient_ENMRNO" FromRole="PatientVisitHistory" ToRole="OutPatient" />
+  </EntityType>
+  <Association Name="FK_PVH_Consultation_Type">
+    <End Type="HISDBModel.ConsultationType" Role="ConsultationType" Multiplicity="1" />
+    <End Type="HISDBModel.PatientVisitHistory" Role="PatientVisitHistory" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ConsultationType">
+        <PropertyRef Name="ConsultTypeID" />
+      </Principal>
+      <Dependent Role="PatientVisitHistory">
+        <PropertyRef Name="ConsultTypeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PatientVisitHistory_Doctor">
+    <End Type="HISDBModel.User" Role="User" Multiplicity="1" />
+    <End Type="HISDBModel.PatientVisitHistory" Role="PatientVisitHistory" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="PatientVisitHistory">
+        <PropertyRef Name="DoctorID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <ComplexType Name="IpRevenueReport_Result">
+    <Property Type="String" Name="ENMRNO" Nullable="false" MaxLength="30" />
+    <Property Type="String" Name="PatientFirstName" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="PatientLasttName" Nullable="true" MaxLength="50" />
+    <Property Type="Int32" Name="DoctorID" Nullable="false" />
+    <Property Type="String" Name="DoctorFirstName" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="DoctorLasttName" Nullable="true" MaxLength="50" />
+    <Property Type="Decimal" Name="consultationFee" Nullable="true" Precision="19" />
+    <Property Type="Decimal" Name="feeDiscount" Nullable="true" Precision="38" Scale="2" />
+    <Property Type="Decimal" Name="LabTotalAmount" Nullable="true" Precision="19" />
+    <Property Type="Decimal" Name="LabTestPaidAmount" Nullable="true" Precision="19" />
+    <Property Type="Decimal" Name="LabTestDiscount" Nullable="true" Precision="19" />
+    <Property Type="Decimal" Name="ScanTotalAmount" Nullable="true" Precision="19" />
+    <Property Type="Decimal" Name="ScanTestPaidAmount" Nullable="true" Precision="19" />
+    <Property Type="Decimal" Name="ScanTestDiscount" Nullable="true" Precision="19" />
+    <Property Type="Decimal" Name="PharmaTotalAmount" Nullable="true" Precision="19" />
+    <Property Type="Decimal" Name="PharmaPaidAmount" Nullable="true" Precision="19" />
+    <Property Type="Decimal" Name="PharmaDiscount" Nullable="true" Precision="19" />
+    <Property Type="Decimal" Name="packageCost" Nullable="true" Precision="19" />
+  </ComplexType>
+  <ComplexType Name="RevenueReport_Result">
+    <Property Type="String" Name="ENMRNO" Nullable="false" MaxLength="30" />
+    <Property Type="String" Name="PatientFirstName" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="PatientLasttName" Nullable="true" MaxLength="50" />
+    <Property Type="Int32" Name="DoctorID" Nullable="false" />
+    <Property Type="String" Name="DoctorFirstName" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="DoctorLasttName" Nullable="true" MaxLength="50" />
+    <Property Type="Decimal" Name="consultationFee" Nullable="true" Precision="19" />
+    <Property Type="Decimal" Name="feeDiscount" Nullable="true" Precision="38" Scale="2" />
+    <Property Type="Decimal" Name="LabTotalAmount" Nullable="true" Precision="19" />
+    <Property Type="Decimal" Name="LabTestPaidAmount" Nullable="true" Precision="19" />
+    <Property Type="Decimal" Name="LabTestDiscount" Nullable="true" Precision="19" />
+    <Property Type="Decimal" Name="ScanTotalAmount" Nullable="true" Precision="19" />
+    <Property Type="Decimal" Name="ScanTestPaidAmount" Nullable="true" Precision="19" />
+    <Property Type="Decimal" Name="ScanTestDiscount" Nullable="true" Precision="19" />
+    <Property Type="Decimal" Name="PharmaTotalAmount" Nullable="true" Precision="19" />
+    <Property Type="Decimal" Name="PharmaPaidAmount" Nullable="true" Precision="19" />
+    <Property Type="Decimal" Name="PharmaDiscount" Nullable="true" Precision="19" />
+  </ComplexType>
+  <EntityType Name="FeeCollection">
+    <Key>
+      <PropertyRef Name="FeeID" />
+    </Key>
+    <Property Name="FeeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ENMRNO" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="Amount" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+    <Property Name="PaidOn" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Purpose" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+    <Property Name="PaymentMode" Type="Int32" Nullable="false" />
+    <Property Name="LastFourDigits" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="PayType" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="InPatient" Relationship="HISDBModel.FK_FeeCollection_ENMRNO" FromRole="FeeCollection" ToRole="InPatient" />
+  </EntityType>
   <EntityType Name="InPatient">
     <Key>
       <PropertyRef Name="ENMRNO" />
@@ -1237,6 +1377,9 @@
     <Property Name="InsuranceEstAmt" Type="Decimal" Precision="19" Scale="4" />
     <Property Name="InsuranceRecievedAmt" Type="Decimal" Precision="19" Scale="4" />
     <Property Name="PkitID" Type="Int32" />
+    <Property Name="Relation" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="RelationName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Age" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="BloodGroup" Relationship="HISDBModel.FK_InPatients_BloodGroup" FromRole="InPatient" ToRole="BloodGroup" />
     <NavigationProperty Name="FeeCollections" Relationship="HISDBModel.FK_FeeCollection_ENMRNO" FromRole="InPatient" ToRole="FeeCollection" />
     <NavigationProperty Name="InPatientHistories" Relationship="HISDBModel.FK_IPH_InPatients_ENMRNO" FromRole="InPatient" ToRole="InPatientHistory" />
@@ -1282,6 +1425,9 @@
     <Property Name="Temperature" Type="Decimal" Precision="10" Scale="4" />
     <Property Name="OthContact" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
     <Property Name="PrevENMR" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="Relation" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="RelationName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Age" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="BloodGroup" Relationship="HISDBModel.FK_OutPatients_BloodGroup" FromRole="OutPatient" ToRole="BloodGroup" />
     <NavigationProperty Name="User" Relationship="HISDBModel.FK_OutPatients_Doctor" FromRole="OutPatient" ToRole="User" />
     <NavigationProperty Name="PatientVisitHistories" Relationship="HISDBModel.FK_PVH_OutPatient_ENMRNO" FromRole="OutPatient" ToRole="PatientVisitHistory" />
@@ -1382,82 +1528,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <EntityType Name="Purpose">
-    <Key>
-      <PropertyRef Name="PurposeID" />
-    </Key>
-    <Property Name="PurposeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="PurposeName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
-    <NavigationProperty Name="PatientPurposes" Relationship="HISDBModel.FK_PatientPurpose_PurposeID" FromRole="Purpose" ToRole="PatientPurpose" />
-  </EntityType>
-  <Association Name="FK_PatientPurpose_PurposeID">
-    <End Type="HISDBModel.Purpose" Role="Purpose" Multiplicity="1" />
-    <End Type="HISDBModel.PatientPurpose" Role="PatientPurpose" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Purpose">
-        <PropertyRef Name="PurposeID" />
-      </Principal>
-      <Dependent Role="PatientPurpose">
-        <PropertyRef Name="PurposeID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <ComplexType Name="BedReport_Result1">
-    <Property Type="String" Name="bedname" Nullable="false" MaxLength="30" />
-    <Property Type="String" Name="description" Nullable="true" />
-    <Property Type="String" Name="bedtype" Nullable="false" MaxLength="50" />
-    <Property Type="String" Name="roomname" Nullable="true" MaxLength="30" />
-    <Property Type="String" Name="roomtype" Nullable="true" MaxLength="50" />
-    <Property Type="String" Name="bedstatus" Nullable="false" MaxLength="9" />
-  </ComplexType>
-  <EntityType Name="BrandSubCategory">
-    <Key>
-      <PropertyRef Name="SubCategoryID" />
-    </Key>
-    <Property Name="SubCategoryID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="SubCategory" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
-  </EntityType>
-  <EntityType Name="Supplier">
-    <Key>
-      <PropertyRef Name="SupplierID" />
-    </Key>
-    <Property Name="SupplierID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="SupplierName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
-  </EntityType>
-  <EntityType Name="PatientVisitHistory">
-    <Key>
-      <PropertyRef Name="SNO" />
-    </Key>
-    <Property Name="SNO" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="DateOfVisit" Type="DateTime" Nullable="false" Precision="3" />
-    <Property Name="ConsultTypeID" Type="Int32" Nullable="false" />
-    <Property Name="ENMRNO" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-    <Property Name="Fee" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
-    <Property Name="Discount" Type="Decimal" Precision="5" Scale="2" />
-    <Property Name="DoctorID" Type="Int32" Nullable="false" />
-    <Property Name="Purpose" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-    <Property Name="HeartBeat" Type="Int32" />
-    <Property Name="BMI" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="Weight" Type="Decimal" Precision="6" Scale="2" />
-    <Property Name="BP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-    <Property Name="Temperature" Type="Decimal" Precision="10" Scale="2" />
-    <Property Name="NurseID" Type="Int32" />
-    <NavigationProperty Name="ConsultationType" Relationship="HISDBModel.FK_PVH_Consultation_Type" FromRole="PatientVisitHistory" ToRole="ConsultationType" />
-    <NavigationProperty Name="OutPatient" Relationship="HISDBModel.FK_PVH_OutPatient_ENMRNO" FromRole="PatientVisitHistory" ToRole="OutPatient" />
-    <NavigationProperty Name="User" Relationship="HISDBModel.FK_PatientVisitHistory_Doctor" FromRole="PatientVisitHistory" ToRole="User" />
-  </EntityType>
-  <Association Name="FK_PVH_Consultation_Type">
-    <End Type="HISDBModel.ConsultationType" Role="ConsultationType" Multiplicity="1" />
-    <End Type="HISDBModel.PatientVisitHistory" Role="PatientVisitHistory" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="ConsultationType">
-        <PropertyRef Name="ConsultTypeID" />
-      </Principal>
-      <Dependent Role="PatientVisitHistory">
-        <PropertyRef Name="ConsultTypeID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_PVH_OutPatient_ENMRNO">
     <End Type="HISDBModel.OutPatient" Role="OutPatient" Multiplicity="1" />
     <End Type="HISDBModel.PatientVisitHistory" Role="PatientVisitHistory" Multiplicity="*" />
@@ -1470,55 +1540,4 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_PatientVisitHistory_Doctor">
-    <End Type="HISDBModel.User" Role="User" Multiplicity="1" />
-    <End Type="HISDBModel.PatientVisitHistory" Role="PatientVisitHistory" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="User">
-        <PropertyRef Name="UserID" />
-      </Principal>
-      <Dependent Role="PatientVisitHistory">
-        <PropertyRef Name="DoctorID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <ComplexType Name="IpRevenueReport_Result">
-    <Property Type="String" Name="ENMRNO" Nullable="false" MaxLength="30" />
-    <Property Type="String" Name="PatientFirstName" Nullable="true" MaxLength="50" />
-    <Property Type="String" Name="PatientLasttName" Nullable="true" MaxLength="50" />
-    <Property Type="Int32" Name="DoctorID" Nullable="false" />
-    <Property Type="String" Name="DoctorFirstName" Nullable="true" MaxLength="50" />
-    <Property Type="String" Name="DoctorLasttName" Nullable="true" MaxLength="50" />
-    <Property Type="Decimal" Name="consultationFee" Nullable="true" Precision="19" />
-    <Property Type="Decimal" Name="feeDiscount" Nullable="true" Precision="38" Scale="2" />
-    <Property Type="Decimal" Name="LabTotalAmount" Nullable="true" Precision="19" />
-    <Property Type="Decimal" Name="LabTestPaidAmount" Nullable="true" Precision="19" />
-    <Property Type="Decimal" Name="LabTestDiscount" Nullable="true" Precision="19" />
-    <Property Type="Decimal" Name="ScanTotalAmount" Nullable="true" Precision="19" />
-    <Property Type="Decimal" Name="ScanTestPaidAmount" Nullable="true" Precision="19" />
-    <Property Type="Decimal" Name="ScanTestDiscount" Nullable="true" Precision="19" />
-    <Property Type="Decimal" Name="PharmaTotalAmount" Nullable="true" Precision="19" />
-    <Property Type="Decimal" Name="PharmaPaidAmount" Nullable="true" Precision="19" />
-    <Property Type="Decimal" Name="PharmaDiscount" Nullable="true" Precision="19" />
-    <Property Type="Decimal" Name="packageCost" Nullable="true" Precision="19" />
-  </ComplexType>
-  <ComplexType Name="RevenueReport_Result">
-    <Property Type="String" Name="ENMRNO" Nullable="false" MaxLength="30" />
-    <Property Type="String" Name="PatientFirstName" Nullable="true" MaxLength="50" />
-    <Property Type="String" Name="PatientLasttName" Nullable="true" MaxLength="50" />
-    <Property Type="Int32" Name="DoctorID" Nullable="false" />
-    <Property Type="String" Name="DoctorFirstName" Nullable="true" MaxLength="50" />
-    <Property Type="String" Name="DoctorLasttName" Nullable="true" MaxLength="50" />
-    <Property Type="Decimal" Name="consultationFee" Nullable="true" Precision="19" />
-    <Property Type="Decimal" Name="feeDiscount" Nullable="true" Precision="38" Scale="2" />
-    <Property Type="Decimal" Name="LabTotalAmount" Nullable="true" Precision="19" />
-    <Property Type="Decimal" Name="LabTestPaidAmount" Nullable="true" Precision="19" />
-    <Property Type="Decimal" Name="LabTestDiscount" Nullable="true" Precision="19" />
-    <Property Type="Decimal" Name="ScanTotalAmount" Nullable="true" Precision="19" />
-    <Property Type="Decimal" Name="ScanTestPaidAmount" Nullable="true" Precision="19" />
-    <Property Type="Decimal" Name="ScanTestDiscount" Nullable="true" Precision="19" />
-    <Property Type="Decimal" Name="PharmaTotalAmount" Nullable="true" Precision="19" />
-    <Property Type="Decimal" Name="PharmaPaidAmount" Nullable="true" Precision="19" />
-    <Property Type="Decimal" Name="PharmaDiscount" Nullable="true" Precision="19" />
-  </ComplexType>
 </Schema>

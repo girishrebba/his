@@ -33,7 +33,7 @@ namespace HIS
         public Nullable<System.DateTime> RefundedOn { get; set; }
     
         public virtual ConsultationType ConsultationType { get; set; }
-        public virtual OutPatient OutPatient { get; set; }
         public virtual User User { get; set; }
+        public virtual OutPatient OutPatient { get; set; }
     }
 }

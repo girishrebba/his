@@ -77,25 +77,25 @@
         <EntityTypeShape EntityType="HISDBModel.LabKitItem" Width="1.5" PointX="11.25" PointY="20.625" />
         <AssociationConnector Association="HISDBModel.FK_LKI_LKitID" />
         <AssociationConnector Association="HISDBModel.FK_LKI_TestID" />
-        <EntityTypeShape EntityType="HISDBModel.InPatient" Width="1.5" PointX="16.25" PointY="10.25" />
-        <EntityTypeShape EntityType="HISDBModel.OutPatient" Width="1.5" PointX="14.25" PointY="22.25" />
-        <AssociationConnector Association="HISDBModel.FK_InPatients_BloodGroup" />
-        <AssociationConnector Association="HISDBModel.FK_OutPatients_BloodGroup" />
-        <AssociationConnector Association="HISDBModel.FK_IPH_InPatients_ENMRNO" />
-        <AssociationConnector Association="HISDBModel.FK_InPatients_Doctor" />
-        <AssociationConnector Association="HISDBModel.FK_INPatients_PKitID" />
-        <AssociationConnector Association="HISDBModel.FK_PRA_InPatients_ENMRNO" />
-        <AssociationConnector Association="HISDBModel.FK_OutPatients_Doctor" />
         <EntityTypeShape EntityType="HISDBModel.Purpose" Width="1.5" PointX="7.75" PointY="1" />
         <AssociationConnector Association="HISDBModel.FK_PatientPurpose_PurposeID" />
         <EntityTypeShape EntityType="HISDBModel.BrandSubCategory" Width="1.5" PointX="13.375" PointY="6.75" />
         <EntityTypeShape EntityType="HISDBModel.Supplier" Width="1.5" PointX="13.375" PointY="9.75" />
         <EntityTypeShape EntityType="HISDBModel.PatientVisitHistory" Width="1.5" PointX="18.5" PointY="18.25" />
         <AssociationConnector Association="HISDBModel.FK_PVH_Consultation_Type" />
-        <AssociationConnector Association="HISDBModel.FK_PVH_OutPatient_ENMRNO" />
         <AssociationConnector Association="HISDBModel.FK_PatientVisitHistory_Doctor" />
         <EntityTypeShape EntityType="HISDBModel.FeeCollection" Width="1.5" PointX="18.5" PointY="14.25" />
+        <EntityTypeShape EntityType="HISDBModel.InPatient" Width="1.5" PointX="16.25" PointY="9.875" />
+        <EntityTypeShape EntityType="HISDBModel.OutPatient" Width="1.5" PointX="8.25" PointY="15" />
+        <AssociationConnector Association="HISDBModel.FK_InPatients_BloodGroup" />
+        <AssociationConnector Association="HISDBModel.FK_OutPatients_BloodGroup" />
         <AssociationConnector Association="HISDBModel.FK_FeeCollection_ENMRNO" />
+        <AssociationConnector Association="HISDBModel.FK_IPH_InPatients_ENMRNO" />
+        <AssociationConnector Association="HISDBModel.FK_InPatients_Doctor" />
+        <AssociationConnector Association="HISDBModel.FK_INPatients_PKitID" />
+        <AssociationConnector Association="HISDBModel.FK_PRA_InPatients_ENMRNO" />
+        <AssociationConnector Association="HISDBModel.FK_OutPatients_Doctor" />
+        <AssociationConnector Association="HISDBModel.FK_PVH_OutPatient_ENMRNO" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

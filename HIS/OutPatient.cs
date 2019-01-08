@@ -56,6 +56,7 @@ namespace HIS
         public string PrevENMR { get; set; }
         public string Relation { get; set; }
         public string RelationName { get; set; }
+        public string Age { get; set; }
     
         public virtual BloodGroup BloodGroup { get; set; }
         public virtual User User { get; set; }

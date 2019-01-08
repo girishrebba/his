@@ -362,6 +362,7 @@
         setTimeout('SessionEnd()', sTimeout);
         
         function SessionEnd() {
+            $('body').loadingModal('destroy');
             window.location.hostname = "";
             alert('Session Expired, Please login..');
             window.location = "/Login/index/";

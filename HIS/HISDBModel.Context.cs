@@ -68,13 +68,13 @@ namespace HIS
         public virtual DbSet<Scan> Scans { get; set; }
         public virtual DbSet<ConsultantVisit> ConsultantVisits { get; set; }
         public virtual DbSet<LabKitItem> LabKitItems { get; set; }
-        public virtual DbSet<InPatient> InPatients { get; set; }
-        public virtual DbSet<OutPatient> OutPatients { get; set; }
         public virtual DbSet<Purpose> Purposes { get; set; }
         public virtual DbSet<BrandSubCategory> BrandSubCategories { get; set; }
         public virtual DbSet<Supplier> Suppliers { get; set; }
         public virtual DbSet<PatientVisitHistory> PatientVisitHistories { get; set; }
         public virtual DbSet<FeeCollection> FeeCollections { get; set; }
+        public virtual DbSet<InPatient> InPatients { get; set; }
+        public virtual DbSet<OutPatient> OutPatients { get; set; }
     
         public virtual int ConvertOutPatientToInPatient(string eNMRNO, Nullable<decimal> estAmount, Nullable<decimal> advAmount)
         {

@@ -362,6 +362,13 @@ namespace HIS.Controllers
         private void CreateVisit(OutPatient op)
         {
             decimal fee = 0;
+
+            //Time zone convertion
+           // DateTime dateNow = DateTime.Now;
+            //Console.WriteLine("The date and time are {0} UTC.",TimeZoneInfo.ConvertTimeToUtc(dateNow));
+           // DateTime utcdate = DateTime.ParseExact(DateTime.Now.ToString(), "M/dd/yyyy h: mm:ss tt", CultureInfo.InvariantCulture);
+           // var istdate = TimeZoneInfo.ConvertTimeFromUtc(dateNow, TimeZoneInfo.FindSystemTimeZoneById("India Standard Time"));
+
             using (var db = new HISDBEntities())
             {
                 var consultFee = db.ConsultationFees.Where(cf => cf.ConsultTypeID == 1 && cf.DoctorID == op.DoctorID).FirstOrDefault();
@@ -375,7 +382,7 @@ namespace HIS.Controllers
                     ENMRNO = op.ENMRNO,
                     ConsultTypeID = 1,
                     Fee = fee,
-                    DateOfVisit = DateTime.Now,
+                    DateOfVisit = DateTime.Now.AddHours(12.5),
                     Weight = op.Weight,
                     Temperature = op.Temperature,
                     BP = op.BP,

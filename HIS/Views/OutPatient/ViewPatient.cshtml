@@ -38,9 +38,9 @@
         </div>
     </div>
     <div class="form-group">
-        @Html.LabelFor(model => model.Email, "Email:", new { @class = "control-label col-md-2" })
+        @Html.LabelFor(model => model.Age, "Age(in years):", new { @class = "control-label col-md-2" })
         <div class="col-sm-4 lableDisplay">
-            @Html.DisplayFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.DisplayFor(model => model.Age, new { htmlAttributes = new { @class = "form-control" } })
         </div>
         @Html.LabelFor(model => model.MaritalStatus, "Marital Status:", new { @class = "control-label col-md-2" })
         <div class="col-sm-4 lableDisplay">
@@ -79,8 +79,12 @@
     </div>
     <div class="form-group">
         @Html.LabelFor(model => model.DoctorName, "Doctor:", new { @class = "control-label col-md-2" })
-        <div class="col-sm-8 lableDisplay">
+        <div class="col-sm-4 lableDisplay">
             @Html.DisplayFor(model => model.DoctorName, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+        @Html.LabelFor(model => model.Email, "Email:", new { @class = "control-label col-md-2" })
+        <div class="col-sm-4 lableDisplay">
+            @Html.DisplayFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
         </div>
     </div>
     <div class="form-group">

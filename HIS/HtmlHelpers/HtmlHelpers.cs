@@ -13,12 +13,12 @@ namespace HIS.HtmlHelpers
     {
         public static string DateFormat(this HtmlHelper helper, DateTime? date)
         {
-            return (date != null && date != DateTime.MinValue) ? date.Value.ToString("MM/dd/yyyy") : string.Empty;
+            return (date != null && date != DateTime.MinValue) ? date.Value.ToString("dd-MMM-yyyy") : string.Empty;
         }
 
         public static string DateFormat(DateTime? date)
         {
-            return (date != null && date != DateTime.MinValue) ? date.Value.ToString("MM/dd/yyyy") : string.Empty;
+            return (date != null && date != DateTime.MinValue) ? date.Value.ToString("dd-MMM-yyyy") : string.Empty;
         }
 
         public static string GetFullName(string firstName, string middleName, string lastName)

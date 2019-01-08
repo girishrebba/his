@@ -103,6 +103,7 @@
     <Property Name="Purpose" Type="varchar" MaxLength="300" />
     <Property Name="PaymentMode" Type="int" Nullable="false" />
     <Property Name="LastFourDigits" Type="varchar" MaxLength="10" />
+    <Property Name="PayType" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="InPatientHistory">
     <Key>
@@ -162,6 +163,9 @@
     <Property Name="InsuranceEstAmt" Type="money" />
     <Property Name="InsuranceRecievedAmt" Type="money" />
     <Property Name="PkitID" Type="int" />
+    <Property Name="Relation" Type="varchar" MaxLength="50" />
+    <Property Name="RelationName" Type="varchar" MaxLength="100" />
+    <Property Name="Age" Type="nvarchar" MaxLength="10" />
   </EntityType>
   <EntityType Name="InsuranceProvider">
     <Key>
@@ -209,6 +213,9 @@
     <Property Name="PaidAmount" Type="money" />
     <Property Name="TotalAmount" Type="money" />
     <Property Name="ISIP" Type="bit" />
+    <Property Name="RefundAmount" Type="money" />
+    <Property Name="RefundReason" Type="varchar" MaxLength="500" />
+    <Property Name="RefundedOn" Type="datetime" />
   </EntityType>
   <EntityType Name="MedicineInventory">
     <Key>
@@ -288,6 +295,9 @@
     <Property Name="Temperature" Type="decimal" Precision="10" Scale="4" />
     <Property Name="OthContact" Type="varchar" MaxLength="10" />
     <Property Name="PrevENMR" Type="varchar" MaxLength="30" />
+    <Property Name="Relation" Type="varchar" MaxLength="50" />
+    <Property Name="RelationName" Type="varchar" MaxLength="100" />
+    <Property Name="Age" Type="nvarchar" MaxLength="10" />
   </EntityType>
   <EntityType Name="PatientInsurance">
     <Key>
@@ -376,6 +386,9 @@
     <Property Name="BP" Type="nvarchar" MaxLength="20" />
     <Property Name="Temperature" Type="decimal" Precision="10" Scale="2" />
     <Property Name="NurseID" Type="int" />
+    <Property Name="RefundAmount" Type="money" />
+    <Property Name="RefundReason" Type="varchar" MaxLength="500" />
+    <Property Name="RefundedOn" Type="datetime" />
   </EntityType>
   <EntityType Name="PaymentModes">
     <Key>
@@ -424,6 +437,9 @@
     <Property Name="PaidAmount" Type="money" />
     <Property Name="TotalAmount" Type="money" />
     <Property Name="ISIP" Type="bit" />
+    <Property Name="RefundAmount" Type="money" />
+    <Property Name="RefundReason" Type="varchar" MaxLength="500" />
+    <Property Name="RefundedOn" Type="datetime" />
   </EntityType>
   <EntityType Name="PurchaseOrder">
     <Key>
@@ -448,7 +464,7 @@
       <PropertyRef Name="PurposeID" />
     </Key>
     <Property Name="PurposeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="PurposeName" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="PurposeName" Type="varchar" MaxLength="100" />
   </EntityType>
   <EntityType Name="Rooms">
     <Key>
@@ -501,6 +517,9 @@
     <Property Name="PaidAmount" Type="money" />
     <Property Name="TotalAmount" Type="money" />
     <Property Name="ISIP" Type="bit" />
+    <Property Name="RefundAmount" Type="money" />
+    <Property Name="RefundReason" Type="varchar" MaxLength="500" />
+    <Property Name="RefundedOn" Type="datetime" />
   </EntityType>
   <EntityType Name="Specialization">
     <Key>
@@ -1094,10 +1113,6 @@
     <Parameter Name="VisitID" Type="int" Mode="In" />
     <Parameter Name="ISIP" Type="bit" Mode="In" />
     <Parameter Name="LTMID" Type="int" Mode="InOut" />
-  </Function>
-  <Function Name="CreateMasterOrder" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-    <Parameter Name="OrderNo" Type="varchar" Mode="In" />
-    <Parameter Name="OMID" Type="int" Mode="InOut" />
   </Function>
   <Function Name="CreateMasterPharmaKit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="PKitName" Type="varchar" Mode="In" />
