@@ -260,10 +260,11 @@ namespace HIS.Controllers
             using (HISDBEntities hs = new HISDBEntities())
             {
                 var medicines = (from mm in hs.MedicineMasters
-                                 where mm.MedicineName.StartsWith(Prefix)
+                                 where mm.MedicineName.Contains(Prefix)
                                  select new { mm }).AsEnumerable()
                                  .Select(m => new MedicineMaster { MMID = m.mm.MMID,
                                  MedicineDisplay = HtmlHelpers.HtmlHelpers.GetMedicineWithDose(m.mm.MedicineName, m.mm.MedDose),
+                                 SelectDisplay = m.mm.MedicineName
                                  }).ToList();
                 return Json(medicines, JsonRequestBehavior.AllowGet);
             }         

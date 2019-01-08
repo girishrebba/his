@@ -313,8 +313,7 @@ namespace HIS.Controllers
                 {
                     ViewBag.BloodGroups = new SelectList(BloodGroups, "GroupID", "GroupName", patient.BloodGroupID);
                     ViewBag.Users = new SelectList(Users, "UserID", "NameDisplay", patient.DoctorID);
-                    patient.Purposes = HtmlHelpers.HtmlHelpers.GetPurposes();
-                    patient.PurposeIds = patient.Purpose.Split(',');
+                    
                     return View(patient);
                 }
                 else
@@ -359,7 +358,6 @@ namespace HIS.Controllers
                 op.Purpose = string.Empty;
             }
         }
-
 
         private void CreateVisit(OutPatient op)
         {
@@ -422,6 +420,9 @@ namespace HIS.Controllers
                     outPatient.MaritalStatusDisplay = HtmlHelpers.HtmlHelpers.GetMaritalStatus(outpatient.op.MaritalStatus);
                     outPatient.DOBDisplay = HtmlHelpers.HtmlHelpers.DateFormat(outpatient.op.DOB);
                     outPatient.EnrolledDisplay = HtmlHelpers.HtmlHelpers.DateFormat(outpatient.op.Enrolled);
+                    outPatient.Purposes = HtmlHelpers.HtmlHelpers.GetPurposes();
+                    outPatient.PurposeIds = !string.IsNullOrEmpty(outpatient.op.Purpose) ? outpatient.op.Purpose.Split(',') : null;
+                    outPatient.Purpose = HtmlHelpers.HtmlHelpers.GetPurpose(outpatient.op.Purpose, outPatient.Purposes);
                 }
                 return outPatient;
             }
@@ -1034,9 +1035,9 @@ namespace HIS.Controllers
                                  .Select(m => new MedicineMaster
                                  {
                                      MMID = m.mm.MMID,
-                                     MedicineDisplay = HtmlHelpers.HtmlHelpers.GetMedicineCategoryWithDoseAvailableQty(m.SubCategory,m.bc.Category, m.mm.MedicineName, m.mm.MedDose, m.mi.AvailableQty.Value),
+                                     MedicineDisplay = HtmlHelpers.HtmlHelpers.GetMedicineCategoryWithDoseAvailableQty(m.SubCategory,m.bc.Category, m.mm.MedicineName, m.mm.MedDose, m.mi.AvailableQty.HasValue?m.mi.AvailableQty.Value:0),
                                      ItemPrice = m.mi.PricePerItem,
-                                     SelectDisplay = string.Format("{0} - {1}",m.mm.MedicineName, m.mm.MedDose)
+                                     SelectDisplay = m.mm.MedicineName,//string.Format("{0} - {1}",m.mm.MedicineName, m.mm.MedDose)
                                  }).ToList();
                 return Json(medicines, JsonRequestBehavior.AllowGet);
             }

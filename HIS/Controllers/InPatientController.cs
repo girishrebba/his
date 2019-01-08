@@ -91,8 +91,6 @@ namespace HIS.Controllers
                     ViewBag.BloodGroupsList = new SelectList(BloodGroups, "GroupID", "GroupName", patient.BloodGroupID);
                     ViewBag.Users = new SelectList(Users, "UserID", "NameDisplay", patient.DoctorID);
                     ViewBag.InsuranceprovidersList = new SelectList(Insuranceproviders, "ProviderID", "ProviderName",patient.ProviderID);
-                    patient.Purposes = HtmlHelpers.HtmlHelpers.GetPurposes();
-                    patient.PurposeIds = !string.IsNullOrEmpty(patient.Purpose)?patient.Purpose.Split(',') : null;
                     patient.PharmaKits = HtmlHelpers.HtmlHelpers.GetPharmaKits();
                     return View(patient);
                 }
@@ -161,6 +159,9 @@ namespace HIS.Controllers
                     inPatient.DOBDisplay = inpatient.ip.GetDOBFormat();
                     inPatient.EnrolledDisplay = inpatient.ip.GetEnrolledFormat();
                     inPatient.DischargeDateDisplay = HtmlHelpers.HtmlHelpers.DateFormat(inpatient.ip.DischargedOn);
+                    inPatient.Purposes = HtmlHelpers.HtmlHelpers.GetPurposes();
+                    inPatient.PurposeIds = !string.IsNullOrEmpty(inpatient.ip.Purpose) ? inpatient.ip.Purpose.Split(',') : null;
+                    inPatient.Purpose = HtmlHelpers.HtmlHelpers.GetPurpose(inpatient.ip.Purpose, inPatient.Purposes);
                 }
 
                 return inPatient;

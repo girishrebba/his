@@ -18,6 +18,7 @@ namespace HIS
         public string DischargeDateDisplay { get; set; }
         public List<Purpose> Purposes { get; set; }
         public string[] PurposeIds { get; set; }
+        public string PurposeDisplay { get; set; }
         public List<PharmaKit> PharmaKits { get; set; }
         public string GetFullName()
         {

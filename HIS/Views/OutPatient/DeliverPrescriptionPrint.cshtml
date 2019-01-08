@@ -67,14 +67,14 @@
                             <thead>
                                 <tr>
                                     <th style="width:23%">Medicine</th>
-                                    <th style="width:6%">Quantity</th>
-                                    <th style="width:8%">Delivered</th>
-                                    <th style="width:8%">Request</th>
+                                    <th style="width:10%">Quantity</th>
+                                    <th style="width:10%">Delivered</th>
+                                    @*<th style="width:8%">Request</th>*@
                                     <th style="width:17%">Intake</th>
-                                    <th style="width:18%">Comments</th>
-                                    <th style="width:7%">Batch</th>
-                                    <th style="width:7%">Lot</th>
-                                    <th style="width:5%">Price</th>
+                                    @*<th style="width:18%">Comments</th>*@
+                                    <th style="width:15%">Batch</th>
+                                    <th style="width:15%">Lot</th>
+                                    <th style="width:10%">Price</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -92,11 +92,11 @@
                                         @*4*@
                                         <td>@p.DeliverQty</td>
                                         @*5*@
-                                        <td>@p.RequestQty</td>
+                                        @*<td>@p.RequestQty</td>*@
                                         @*6*@
                                         <td>@p.IntakeDisplay</td>
                                         @*7*@
-                                        <td>@p.Comments</td>
+                                        @*<td>@p.Comments</td>*@
                                         @*8*@
                                         <td>@p.BatchNo</td>
                                         @*9*@
@@ -108,15 +108,15 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <td colspan="8" align="right">Total:</td>
+                                    <td colspan="6" align="right">Total:</td>
                                     <td colspan="1" align="left" id="grandTotal">@Model.Sum(i => i.TotalAmount).ToString("0.##")</td>
                                 </tr>
                                 <tr>
-                                    <td colspan="8" align="right">Discount (-):</td>
+                                    <td colspan="6" align="right">Discount (-):</td>
                                     <td colspan="1" align="left" id="discountAmount">@((Model.Sum(i => i.TotalAmount) - Model.Sum(i => i.PaidAmount)).ToString("0.##"))</td>
                                 </tr>
                                 <tr>
-                                    <td colspan="8" align="right">Total Amount:</td>
+                                    <td colspan="6" align="right">Total Amount:</td>
                                     <td colspan="1" align="left" id="paidAmount">@Model.Sum(i => i.PaidAmount).ToString("0.##")</td>
                                 </tr>
                             </tfoot>

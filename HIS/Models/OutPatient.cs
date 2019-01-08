@@ -19,6 +19,7 @@ namespace HIS
         public string DOBDisplay { get; set; }
         public string EnrolledDisplay { get; set; }
         public string ValidDateDisplay { get; set; }
+        public string PurposeDisplay { get; set; }
         public List<Purpose> Purposes { get; set; }
         public string[] PurposeIds { get; set; }
         public string GetFullName()

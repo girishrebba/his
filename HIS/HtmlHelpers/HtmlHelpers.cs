@@ -42,7 +42,8 @@ namespace HIS.HtmlHelpers
 
         public static string GetMedicineWithDose(string medicineName, string dose)
         {
-            return string.Format("{0} - {1}", medicineName, dose);
+            return medicineName;
+            //return string.Format("{0} - {1}", medicineName, dose);
         }
 
         public static string GetMedicineWithDoseAvailableQty(string medicineName, string dose, int qty)
@@ -593,10 +594,10 @@ public static List<User> GetDoctors()
         }
 
 
-        private static string GetPurpose(string purposes, List<Purpose> purposeList)
+        public static string GetPurpose(string purposes, List<Purpose> purposeList)
         {
 
-            if (!string.IsNullOrEmpty(purposes))
+            if (!string.IsNullOrEmpty(purposes) && purposeList.Count() > 0)
             {
                 List<string> purposeNames = new List<string>();
 
