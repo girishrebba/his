@@ -83,8 +83,8 @@ namespace HIS.Controllers
 
         public ActionResult GetErolledConsultations()
         {
-            DateTime startDateTime = DateTime.Today; 
-            DateTime endDateTime = DateTime.Today.AddDays(1).AddTicks(-1);
+            DateTime startDateTime = DateTime.Today.AddHours(12.5); 
+            DateTime endDateTime = DateTime.Today.AddDays(1).AddHours(12.5).AddTicks(-1);
             int sno = 0;
             using (HISDBEntities hs = new HISDBEntities())
             {

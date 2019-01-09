@@ -211,7 +211,6 @@
     <Content Include="light\css\bootstrap.min.css" />
     <Content Include="light\css\entypo.css" />
     <Content Include="light\css\font-awesome.min.css" />
-    <Content Include="light\css\Market.css" />
     <Content Include="light\css\mouldifi-core.css" />
     <Content Include="light\css\mouldifi-forms.css" />
     <Content Include="light\css\mouldifi-rtl-core.css" />

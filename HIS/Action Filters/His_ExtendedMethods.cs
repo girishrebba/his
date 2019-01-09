@@ -53,15 +53,15 @@ public static class His_ExtendedMethods
         {
             if(decimal.TryParse(HttpContext.Current.Session["UserID"].ToString(), out result))
             {
-                if (HIS.MvcApplication.Global.permissionList == null)
+                if (HttpContext.Current.Session["UserRole"] == null)
                 {
                     HisUser user = new HisUser(result, true);
-                    HIS.MvcApplication.Global.permissionList = user.GetUserPermissions(true);
-                    bFound = user.HasPermission(permission, HIS.MvcApplication.Global.permissionList);
+                    HttpContext.Current.Session["UserRole"] = user.GetUserPermissions(true);
+                    bFound = user.HasPermission(permission, (List<Permission>)HttpContext.Current.Session["UserRole"]);
                 }
                 else {
                     HisUser user = new HisUser(result);
-                    bFound = user.HasPermission(permission, HIS.MvcApplication.Global.permissionList);
+                    bFound = user.HasPermission(permission, (List<Permission>)HttpContext.Current.Session["UserRole"]);
                 }
                 //HisUser user = new HisUser(result,true);
                 //if(user != null)
@@ -84,16 +84,16 @@ public static class His_ExtendedMethods
         {
             if (decimal.TryParse(HttpContext.Current.Session["UserID"].ToString(), out result))
             {
-                if (HIS.MvcApplication.Global.permissionList == null)
+                if (HttpContext.Current.Session["UserRole"] == null)
                 {
                     HisUser user = new HisUser(result, true);
-                    HIS.MvcApplication.Global.permissionList = user.GetUserPermissions(true);
-                    bFound = user.HasPermission(permission, HIS.MvcApplication.Global.permissionList);
+                    HttpContext.Current.Session["UserRole"] = user.GetUserPermissions(true);
+                    bFound = user.HasPermission(permission, (List<Permission>)HttpContext.Current.Session["UserRole"]);
                 }
                 else
                 {
                     HisUser user = new HisUser(result);
-                    bFound = user.HasPermission(permission, HIS.MvcApplication.Global.permissionList);
+                    bFound = user.HasPermission(permission, (List<Permission>)HttpContext.Current.Session["UserRole"]);
                 }                
             }
             //Check if the requesting user has the specified application permission...
