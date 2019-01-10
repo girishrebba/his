@@ -23,6 +23,7 @@ namespace HIS.Controllers
             using (HISDBEntities hs = new HISDBEntities())
             {
                 var medicines = (from med in hs.MedicineMasters
+                                 join mi in hs.MedicineInventories on med.MMID equals mi.MedicineID
                                  join b in hs.Brands on med.BrandID equals b.BrandID
                                  join bc in hs.BrandCategories on med.BrandCategoryID equals bc.CategoryID
                                  join sp in hs.Suppliers on med.SupplierID equals sp.SupplierID into sup
@@ -32,6 +33,7 @@ namespace HIS.Controllers
                                  select new
                                  {
                                      med,
+                                     mi,
                                      b.BrandName,
                                      bc.Category,
                                      sp.SupplierName,
@@ -46,7 +48,9 @@ namespace HIS.Controllers
                                                MedDose = x.med.MedDose,
                                                SubCategory = x.SubCategory,
                                                SupplierName = x.SupplierName,
-                                               TriggerQty = x.med.TriggerQty
+                                               TriggerQty = x.med.TriggerQty,
+                                               ItemPrice = x.mi.PricePerItem,
+                                               AvailableQuantity = x.mi.AvailableQty.HasValue?x.mi.AvailableQty.Value:0,
                                            }).ToList();
 
                 return Json(new { data = medicines }, JsonRequestBehavior.AllowGet);
@@ -141,6 +145,7 @@ namespace HIS.Controllers
             using (HISDBEntities dc = new HISDBEntities())
             {
                 var v = (from med in dc.MedicineMasters
+                         join mi in dc.MedicineInventories on med.MMID equals mi.MedicineID
                          join b in dc.Brands on med.BrandID equals b.BrandID
                          join bc in dc.BrandCategories on med.BrandCategoryID equals bc.CategoryID
                          join sp in dc.Suppliers on med.SupplierID equals sp.SupplierID into sup
@@ -154,7 +159,8 @@ namespace HIS.Controllers
                              b.BrandName,
                              bc.Category,
                              sp.SupplierName,
-                             bsc.SubCategory
+                             bsc.SubCategory,
+                             mi
                          }).FirstOrDefault();
                 if (v != null)
                 {
@@ -163,6 +169,8 @@ namespace HIS.Controllers
                     medicineMaster.Category = v.Category;
                     medicineMaster.SubCategory = v.SubCategory;
                     medicineMaster.SupplierName = v.SupplierName;
+                    medicineMaster.AvailableQuantity = v.mi.AvailableQty.HasValue ? v.mi.AvailableQty.Value : 0;
+                    medicineMaster.ItemPrice = v.mi.PricePerItem;
                 }
                 return medicineMaster;
             }
@@ -187,6 +195,12 @@ namespace HIS.Controllers
                 else
                 {
                     //AddSupplierCategories(mm);
+                    var mi = db.MedicineInventories.Where(m => m.MedicineID == mm.MMID).FirstOrDefault();
+                    if(mi != null)
+                    {
+                        mi.PricePerItem = mm.ItemPrice;
+                    }
+                    db.Entry(mi).State = EntityState.Modified;
                     db.Entry(mm).State = EntityState.Modified;
                     db.SaveChanges();
                     return Json(new { success = true, message = "Updated Successfully" }, JsonRequestBehavior.AllowGet);

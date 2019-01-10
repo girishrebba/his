@@ -17,6 +17,7 @@ namespace HIS
         public string SupplierName { get; set; }
         public List<BrandSubCategory> SubCategories { get; set; }
         public List<Supplier> Suppliers { get; set; }
+        public int AvailableQuantity { get; set; }
     }
 
     public class MedicineMasterMetaData
