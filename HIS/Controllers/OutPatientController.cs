@@ -83,8 +83,9 @@ namespace HIS.Controllers
 
         public ActionResult GetErolledConsultations()
         {
-            DateTime startDateTime = DateTime.Today.AddHours(12.5); 
+            DateTime startDateTime = DateTime.Today; 
             DateTime endDateTime = DateTime.Today.AddDays(1).AddHours(12.5).AddTicks(-1);
+            string today = DateTime.Today.AddHours(12.5).Date.ToString("dd/MM/yyyy");
             int sno = 0;
             using (HISDBEntities hs = new HISDBEntities())
             {
@@ -122,8 +123,10 @@ namespace HIS.Controllers
                                          x.user.LastName),
                                      Purpose = x.op.Purpose,
                                      EnrolledDisplay = HtmlHelpers.HtmlHelpers.DateFormat(x.op.Enrolled),
+                                     VisitDate= x.pv.DateOfVisit.ToString("dd/MM/yyyy"),
                                      PrevENMR = x.op.PrevENMR
                                  }).ToList();
+                outPatients = outPatients.Where(a => a.VisitDate == today).ToList();
                 return Json(new { data = outPatients  }, JsonRequestBehavior.AllowGet);
             }
         }
@@ -448,8 +451,8 @@ namespace HIS.Controllers
                 if (pvh != null && pvh.PurposeIds != null)
                 {
                     pvh.Purpose = string.Join(",", pvh.PurposeIds);
-                }
-                pvh.DateOfVisit = pvh.DateOfVisit.Add(DateTime.Now.TimeOfDay);
+                }               
+                pvh.DateOfVisit = pvh.DateOfVisit.AddHours(12.5);
                 hs.PatientVisitHistories.Add(pvh);
                 hs.SaveChanges();
                 return Json(new { success = true, message = string.Format("Consultation created Successfully for ENMRNO: {0}", pvh.ENMRNO) }, JsonRequestBehavior.AllowGet);

@@ -22,6 +22,7 @@ namespace HIS
         public string PurposeDisplay { get; set; }
         public List<Purpose> Purposes { get; set; }
         public string[] PurposeIds { get; set; }
+        public string VisitDate { get; set; }
         public string GetFullName()
         {
             return string.Format("{0} {1} {2}",
