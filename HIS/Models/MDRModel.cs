@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace HIS
 {
+    [MetadataType(typeof(MDRMetaData))]
     public class MDRModel
     {
         public string ENMRNO { get; set; }
@@ -33,5 +34,11 @@ namespace HIS
 
         [Required(ErrorMessage = "Please choose doctor", AllowEmptyStrings = false)]
         public int PrescribedBy { get; set; }
+
+        [Required(ErrorMessage = "Please choose BatchNo", AllowEmptyStrings = false)]
+        public string BatchNo { get; set; }
+
+        [Required(ErrorMessage = "Please choose LotNo", AllowEmptyStrings = false)]
+        public string LotNo { get; set; }
     }
 }

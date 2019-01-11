@@ -270,7 +270,7 @@
 
                                 str += "</tr >";
                                 if (i == data.data.length - 1) {
-                                    var tot = consultationFeesum - feeDiscountsum + LabTestPaidAmountsum + scanTestDiscountsum;
+                                    var tot = consultationFeesum - feeDiscountsum + LabTestPaidAmountsum + scanTestPaidAmountsum + pharmaTestPaidAmountsum;
                                     str += "<tr><td colspan='2' style='font- size:x - large;'><b>Total: </b></td><td><b>" + consultationFeesum + "</b></td><td><b>" + feeDiscountsum + "</b></td><td><b>" + LabTotalAmountsum + "</b></td><td><b>" + LabTestPaidAmountsum + "</b></td><td><b>" + LabTestDiscountsum + "</b></td><td><b>" + scanTotalAmountsum + "</b></td><td><b>" + scanTestPaidAmountsum + "</b></td><td><b>" + scanTestDiscountsum + "</b></td><td><b>" + pharmaTotalAmountsum + "</b></td><td><b>" + pharmaTestPaidAmountsum + "</b></td><td><b>" + pharmaTestDiscountsum + "</b></td><td></td><td><b>" + tot + "</b></td></tr >";
                                     consultationFeesum = 0;
                                     feeDiscountsum = 0;
@@ -285,7 +285,7 @@
                                     pharmaTestDiscountsum = 0;
                                 }
                                 else if (data.data[i]["DoctorID"] != data.data[i + 1]["DoctorID"]) {
-                                    var tot = consultationFeesum - feeDiscountsum + LabTestPaidAmountsum + scanTestDiscountsum;
+                                    var tot = consultationFeesum - feeDiscountsum + LabTestPaidAmountsum + scanTestPaidAmountsum + pharmaTestPaidAmountsum;
                                     str += "<tr><td colspan='2' style='font- size:x - large;'><b>Total: </b></td><td><b>" + consultationFeesum + "</b></td><td><b>" + feeDiscountsum + "</b></td><td><b>" + LabTotalAmountsum + "</b></td><td><b>" + LabTestPaidAmountsum + "</b></td><td><b>" + LabTestDiscountsum + "</b></td><td><b>" + scanTotalAmountsum + "</b></td><td><b>" + scanTestPaidAmountsum + "</b></td><td><b>" + scanTestDiscountsum + "</b></td><td><b>" + pharmaTotalAmountsum + "</b></td><td><b>" + pharmaTestPaidAmountsum + "</b></td><td><b>" + pharmaTestDiscountsum + "</b></td><td></td><td><b>" + tot + "</b></td></tr >";
                                     consultationFeesum = 0;
                                     feeDiscountsum = 0;

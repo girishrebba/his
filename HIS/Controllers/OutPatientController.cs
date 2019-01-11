@@ -83,17 +83,18 @@ namespace HIS.Controllers
 
         public ActionResult GetErolledConsultations()
         {
-            DateTime startDateTime = DateTime.Today; 
-            DateTime endDateTime = DateTime.Today.AddDays(1).AddHours(12.5).AddTicks(-1);
-            string today = DateTime.Today.AddHours(12.5).Date.ToString("dd/MM/yyyy");
+            DateTime startDateTime = DateTime.Now; 
+            DateTime endDateTime = DateTime.Now.AddDays(1).AddHours(12.5).AddTicks(-1);
+            DateTime today = DateTime.Now.AddHours(12.5);
+            string onlydate = today.Date.ToString("dd/MM/yyyy");
             int sno = 0;
             using (HISDBEntities hs = new HISDBEntities())
             {
                 var outPatients = (from op in hs.OutPatients
                                    join user in hs.Users on op.DoctorID equals user.UserID
                                    join pv in hs.PatientVisitHistories on op.ENMRNO equals pv.ENMRNO
-                                   where (op.Status == null || op.Status == false) &&
-                                   (pv.DateOfVisit >= startDateTime && pv.DateOfVisit <= endDateTime)
+                                   where (op.Status == null || op.Status == false) 
+                                   && (pv.DateOfVisit >= startDateTime && pv.DateOfVisit <= endDateTime)
                                    select new
                                    {
                                        op,
@@ -126,7 +127,7 @@ namespace HIS.Controllers
                                      VisitDate= x.pv.DateOfVisit.ToString("dd/MM/yyyy"),
                                      PrevENMR = x.op.PrevENMR
                                  }).ToList();
-                outPatients = outPatients.Where(a => a.VisitDate == today).ToList();
+                outPatients = outPatients.Where(a => a.VisitDate == onlydate).ToList();
                 return Json(new { data = outPatients  }, JsonRequestBehavior.AllowGet);
             }
         }
