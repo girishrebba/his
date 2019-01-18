@@ -255,6 +255,18 @@ namespace HIS.Controllers
             });
         }
 
+        [HttpGet]
+        public ActionResult ManualDrugReturn(string enmrNo)
+        {
+            return View(new MDReturnModel
+            {
+                ENMRNO = enmrNo,
+                MedicineID = 0,
+                Quantity = 0,
+                TotalCost = 0
+            });
+        }
+
         [HttpPost]
         public ActionResult ManualDrugRequest(List<PatientPrescription> mdrRequest)
         {
@@ -286,6 +298,47 @@ namespace HIS.Controllers
                     db.Entry(master).State = EntityState.Modified;
                     db.SaveChanges();
                     return Json(new { success = true, message = string.Format("Manual Drug Request for ENMRNO - {0} delivered Successfully", mdrRequest[0].ENMRNO) }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Error occured" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+
+        }
+
+        [HttpPost]
+        public ActionResult ManualDrugReturn(List<PatientPrescription> mdrRequest)
+        {
+            using (HISDBEntities db = new HISDBEntities())
+            {
+                if (mdrRequest != null && mdrRequest.Count() > 0)
+                {
+                    System.Data.Entity.Core.Objects.ObjectParameter pmidOut = new System.Data.Entity.Core.Objects.ObjectParameter("PMID", typeof(Int32));
+
+                    db.CreateMasterPrescription(mdrRequest[0].ENMRNO, Convert.ToInt32(System.Web.HttpContext.Current.Session["UserID"]), 0, false, pmidOut);
+                    int pmid = Convert.ToInt32(pmidOut.Value);
+                    foreach (PatientPrescription pp in mdrRequest)
+                    {
+                        pp.PMID = pmid;
+                        pp.MedicineWithDose = "text";
+                        pp.IntakeFrequencyID = pp.IntakeFrequencyID;
+                        db.PatientPrescriptions.Add(pp);
+                        var medInv = db.MedicineInventories.Where(miv => miv.MedicineID == pp.MedicineID).First();
+                        medInv.AvailableQty = medInv.AvailableQty + pp.Quantity;
+                        db.Entry(medInv).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+
+                    var master = db.PrescriptionMasters.Where(p => p.PMID == pmid).FirstOrDefault();
+                    master.Discount = 0;
+                    master.PaidAmount = 0;
+                    master.TotalAmount = mdrRequest[0].TotalAmount;
+                    master.IsDelivered = true;
+                    master.IsReturn = true;
+                    db.Entry(master).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return Json(new { success = true, message = string.Format("Manual Drug Return for ENMRNO - {0} delivered Successfully", mdrRequest[0].ENMRNO) }, JsonRequestBehavior.AllowGet);
                 }
                 else
                 {

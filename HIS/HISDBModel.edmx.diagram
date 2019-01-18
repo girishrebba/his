@@ -85,8 +85,8 @@
         <AssociationConnector Association="HISDBModel.FK_PVH_Consultation_Type" />
         <AssociationConnector Association="HISDBModel.FK_PatientVisitHistory_Doctor" />
         <EntityTypeShape EntityType="HISDBModel.FeeCollection" Width="1.5" PointX="18.5" PointY="14.25" />
-        <EntityTypeShape EntityType="HISDBModel.InPatient" Width="1.5" PointX="16.25" PointY="9.875" />
-        <EntityTypeShape EntityType="HISDBModel.OutPatient" Width="1.5" PointX="8.25" PointY="15" />
+        <EntityTypeShape EntityType="HISDBModel.InPatient" Width="1.5" PointX="8.25" PointY="14.875" />
+        <EntityTypeShape EntityType="HISDBModel.OutPatient" Width="1.5" PointX="16.25" PointY="12" />
         <AssociationConnector Association="HISDBModel.FK_InPatients_BloodGroup" />
         <AssociationConnector Association="HISDBModel.FK_OutPatients_BloodGroup" />
         <AssociationConnector Association="HISDBModel.FK_FeeCollection_ENMRNO" />

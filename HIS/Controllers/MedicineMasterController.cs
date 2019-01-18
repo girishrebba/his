@@ -199,6 +199,7 @@ namespace HIS.Controllers
                     if(mi != null)
                     {
                         mi.PricePerItem = mm.ItemPrice;
+                        mi.AvailableQty = mm.AvailableQuantity;
                     }
                     db.Entry(mi).State = EntityState.Modified;
                     db.Entry(mm).State = EntityState.Modified;

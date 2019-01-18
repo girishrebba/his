@@ -122,11 +122,12 @@
                                     <a class='btn btn-primary btn-sm' title='Admit as IP' style='margin-left:5px' onclick=PopupAdmissionForm('@Url.Action("Admission", "OutPatient")/?enmrNo=" + data + "')><i class='fa fa-hospital his-fa-size'></i></a>}"
                                 + "@if (His_ExtendedMethods.HasPermissionPage("OutPatient-ManualDrugRequest")){
                                     <a class='btn btn-primary btn-sm' title='Manual Drug Request' style='margin-left:5px' onclick=PopupMDRForm('@Url.Action("ManualDrugRequest", "OutPatient")/?enmrNo=" + data + "')><i class='fa fa-capsules his-fa-size'></i></a>}"
+                                + "@if (His_ExtendedMethods.HasPermissionPage("OutPatient-ManualDrugReturn")){
+                                    <a class='btn btn-primary btn-sm' title='Manual Drug Return' style='margin-left:5px' onclick=PopupMDReturnForm('@Url.Action("ManualDrugReturn", "OutPatient")/?enmrNo=" + data + "')><i class='fas fa-undo his-fa-size'></i></a>}"
                                 + "@if (His_ExtendedMethods.HasPermissionPage("OutPatient-PatientTests")){
                                     <a class='btn btn-primary btn-sm' title='Lab Test Upload' style='margin-left:5px' onclick=PopupPatientTests('@Url.Action("PatientTests", "OutPatient")/?enmrNo=" + data + "')><i class='fa fa-flask his-fa-size'></i></a>}"
                                 + "@if (His_ExtendedMethods.HasPermissionPage("OutPatient-PatientScans")){
                                     <a class='btn btn-primary btn-sm' title='Scan Upload' style='margin-left:5px' onclick=PopupPatientScans('@Url.Action("PatientScans", "OutPatient")/?enmrNo=" + data + "')><i class='fa fa-tv his-fa-size'></i></a>}"
-
                                 + "@if (His_ExtendedMethods.HasPermissionPage("OutPatient-LabTestBillPay")){
                                     <a class='btn btn-primary btn-sm' title='Scan Test Bill Payment' style='margin-left:5px' onclick=PopupScanTestBillPayForm('@Url.Action("opScanTestBillPay", "OutPatient")/?enmrNo=" + data + "')><i class='fab fa-cc-visa his-fa-size'></i></a>}"
 
@@ -186,6 +187,8 @@
                                     <a class='btn btn-primary btn-sm' title='Admit as IP' style='margin-left:5px' onclick=PopupAdmissionForm('@Url.Action("Admission", "OutPatient")/?enmrNo=" + data + "')><i class='fa fa-hospital his-fa-size'></i></a>}"
                                 + "@if (His_ExtendedMethods.HasPermissionPage("OutPatient-ManualDrugRequest")){
                                     <a class='btn btn-primary btn-sm' title='Manual Drug Request' style='margin-left:5px' onclick=PopupMDRForm('@Url.Action("ManualDrugRequest", "OutPatient")/?enmrNo=" + data + "')><i class='fa fa-capsules his-fa-size'></i></a>}"
+                                + "@if (His_ExtendedMethods.HasPermissionPage("OutPatient-ManualDrugReturn")){
+                                    <a class='btn btn-primary btn-sm' title='Manual Drug Return' style='margin-left:5px' onclick=PopupMDReturnForm('@Url.Action("ManualDrugReturn", "OutPatient")/?enmrNo=" + data + "')><i class='fas fa-undo his-fa-size'></i></a>}"
                                 + "@if (His_ExtendedMethods.HasPermissionPage("OutPatient-PatientTests")){
                                     <a class='btn btn-primary btn-sm' title='Lab Test Upload' style='margin-left:5px' onclick=PopupPatientTests('@Url.Action("PatientTests", "OutPatient")/?enmrNo=" + data + "')><i class='fa fa-flask his-fa-size'></i></a>}"
                                 + "@if (His_ExtendedMethods.HasPermissionPage("OutPatient-PatientScans")){
@@ -380,6 +383,29 @@
                     });
                 });
         }
+
+                function PopupMDReturnForm(url) {
+                    $('body').loadingModal({ text: 'Loading...' });
+                    var newMDRet = $('<div/>');
+                    $.get(url)
+                        .done(function (response) {
+                            newMDRet.html(response);
+                            MDRetpopup = newMDRet.dialog({
+                                autoOpen: true,
+                                resizable: true,
+                                modal: true,
+                                title: 'Manual Drug Return',
+                                width: '65%',
+                                close: function () {
+                                    MDRetpopup.dialog('destroy').remove();
+                                },
+                                open: function (event, ui) {
+                                    $('.ui-dialog-content').css('overflow', 'hidden');
+                                    $('body').loadingModal('destroy');
+                                }
+                            });
+                        });
+                }
 
         function PopupDeliverPrescription(url) {
             $('body').loadingModal({ text: 'Loading...' });
@@ -803,6 +829,68 @@
             });
             return false;
         }
+
+                function SubmitMDReturnForm(form) {
+                    $('body').loadingModal({ text: 'Processing...' });
+                    var mdrRequest = [];
+                    $.validator.setDefaults({
+                        ignore: []
+                    });
+                    var enmrNo = $('#ENMRNO').val();
+                    //var doctorID = $('#DoctorID').val();
+                    //var discount = $('#Discount').val();
+                    //var amountPaid = $('#paidAmount').html();
+                    var totalAmount = $('#grandTotal').html();
+                    $(form).find('#mdreturnTable > tbody tr').not(':first').each(function (index, elem) {
+                        var tbl = {};
+                        tbl.ENMRNO = enmrNo;
+                        //tbl.DoctorID = doctorID,
+                            tbl.IsDelivered = true,
+                            tbl.VisitID = 0;
+                        tbl.MedicineID = $($(this).find('td:eq(0)')).html();
+                        //tbl.IntakeFrequencyID = $($(this).find('td:eq(3)')).html();
+                        //tbl.DeliverQty = $($(this).find('td:eq(2)')).html();
+                        tbl.Quantity = $($(this).find('td:eq(2)')).html();
+                        tbl.BatchNo = $($(this).find('td:eq(3)')).html();
+                        tbl.LotNo = $($(this).find('td:eq(4)')).html();
+                        //tbl.Discount = discount;
+                        //tbl.PaidAmount = amountPaid;
+                        tbl.TotalAmount = totalAmount;
+                        mdrRequest.push(tbl);
+                    });
+                    $(form).find('#headerDiv').append("</br><table><tr><td>ENMRNO: " + $('#ENMRNO').val() + "</td></tr></table>");
+                    $(form).find('#headerDiv').append($(form).find('#mdreturnTable'));
+                    $('#fstRow').closest('tr').remove();
+                    $('#thd').find('th:last').remove();
+                    $('#tbd').find('td:last').remove();
+                    $("#ftr tr").each(function () {
+                        $(this).find("td").attr('colspan', 4);
+                    });
+                    $.ajax({
+                        type: "POST",
+                        contentType: "application/json",
+                        url: form.action,
+                        data: JSON.stringify(mdrRequest),
+                        success: function (data) {
+                            if (data.success) {
+                                $('#headerDiv').printThis({
+                                    header: '<img src="http://sravanthihospital.in/light/images/hms-logo_login.png" style="width:420px;" alt="Mouldifi" title="Sravanthi Hospitals">',
+                                    footer: false,
+                                    pageTitle: ""
+                                });
+                                MDRetpopup.dialog('close');
+                                dataTable.ajax.reload();
+                                consultations.ajax.reload();
+                                $.notify(data.message, {
+                                    globalPosition: "top center",
+                                    className: "success"
+                                })
+                            }
+                            $('body').loadingModal('destroy');
+                        }
+                    });
+                    return false;
+                }
 
         function SubmitLabTestForm(form) {
             $('body').loadingModal({ text: 'Processing...' });

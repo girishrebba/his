@@ -24,6 +24,20 @@ namespace HIS
         public int IntakeFrequencyID { get; set; }
     }
 
+    [MetadataType(typeof(MDReturnMetaData))]
+    public class MDReturnModel
+    {
+        public string ENMRNO { get; set; }
+        public int MedicineID { get; set; }
+        public string MedicineWithDose { get; set; }
+        public int Quantity { get; set; }
+        public decimal TotalCost { get; set; }
+        public decimal ItemPrice { get; set; }
+        public int PMID { get; set; }
+        public string BatchNo { get; set; }
+        public string LotNo { get; set; }
+    }
+
     public class MDRMetaData
     {
         [Required(ErrorMessage = "Please enter Medicine", AllowEmptyStrings = false)]
@@ -40,5 +54,18 @@ namespace HIS
 
         [Required(ErrorMessage = "Please choose LotNo", AllowEmptyStrings = false)]
         public string LotNo { get; set; }
+    }
+
+    public class MDReturnMetaData
+    {
+        [Required(ErrorMessage = "Please enter Medicine", AllowEmptyStrings = false)]
+        public string MedicineWithDose { get; set; }
+
+        [Required(ErrorMessage = "Please enter quantity", AllowEmptyStrings = false)]
+        public int Quantity { get; set; }
+        [Required(ErrorMessage = "Please enter Batch Number", AllowEmptyStrings = false)]
+        public int BatchNo { get; set; }
+        [Required(ErrorMessage = "Please enter Lot Number", AllowEmptyStrings = false)]
+        public int LotNo { get; set; }
     }
 }

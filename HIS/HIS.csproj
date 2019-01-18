@@ -1559,6 +1559,7 @@
     <Content Include="Views\InPatient\ScanTestBillPayPrint.cshtml" />
     <Content Include="Views\OutPatient\Refunds.cshtml" />
     <Content Include="Views\OutPatient\BillHistory.cshtml" />
+    <Content Include="Views\OutPatient\ManualDrugReturn.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

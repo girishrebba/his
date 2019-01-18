@@ -27,12 +27,12 @@
                 @Html.DropDownListFor(model => model.SubCategoryID, Model.SubCategories.Select(x => new SelectListItem { Text = x.SubCategory, Value = x.SubCategoryID.ToString() }), "--Select--", new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.SubCategoryID)
             </div>
-        @Html.LabelFor(model => model.SupplierID, "Suppliers:", htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-sm-4">
-            @Html.DropDownListFor(model => model.SupplierID, Model.Suppliers.Select(x => new SelectListItem { Text = x.SupplierName, Value = x.SupplierID.ToString() }), "--Select--", new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.SupplierID)
+            @Html.LabelFor(model => model.SupplierID, "Suppliers:", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-sm-4">
+                @Html.DropDownListFor(model => model.SupplierID, Model.Suppliers.Select(x => new SelectListItem { Text = x.SupplierName, Value = x.SupplierID.ToString() }), "--Select--", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.SupplierID)
+            </div>
         </div>
-    </div>
         <div class="form-group required">
             @Html.LabelFor(model => model.MedicineName, new { @class = "control-label col-md-2" })
             <div class="col-sm-4">
@@ -46,16 +46,24 @@
             </div>
         </div>
         <div class="form-group">
-            @Html.LabelFor(model => model.TriggerQty, new { @class = "control-label col-md-2 required" })
-            <div class="col-sm-4">
-                @Html.EditorFor(model => model.TriggerQty, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.TriggerQty)
+            <div class="@(Model.MMID > 0 ? "" : "hidden")" style="border: 1px;">
+                @Html.LabelFor(model => model.AvailableQuantity, "Available Quantity:", new { @class = "control-label col-md-2" })
+                <div class="col-sm-4">
+                    @Html.EditorFor(model => model.AvailableQuantity, new { htmlAttributes = new { @class = "form-control numericonly" } })
+                </div>
             </div>
             <div class="@(Model.MMID > 0 ? "" : "hidden")" style="border: 1px;">
                 @Html.LabelFor(model => model.ItemPrice, "Med Price:", new { @class = "control-label col-md-2" })
                 <div class="col-sm-4">
-                    @Html.EditorFor(model => model.ItemPrice, new { htmlAttributes = new { Value = (Model.ItemPrice.HasValue? Model.ItemPrice.Value : 0) > 0 ? Model.ItemPrice.Value.ToString("0.00") : string.Empty, @class = "form-control numericdecimal" } })
+                    @Html.EditorFor(model => model.ItemPrice, new { htmlAttributes = new { Value = (Model.ItemPrice.HasValue ? Model.ItemPrice.Value : 0) > 0 ? Model.ItemPrice.Value.ToString("0.00") : string.Empty, @class = "form-control numericdecimal" } })
                 </div>
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.TriggerQty, new { @class = "control-label col-md-2 required" })
+            <div class="col-sm-4">
+                @Html.EditorFor(model => model.TriggerQty, new { htmlAttributes = new { @class = "form-control numericonly" } })
+                @Html.ValidationMessageFor(model => model.TriggerQty)
             </div>
         </div>
         <div class="form-group">
