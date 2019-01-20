@@ -30,5 +30,6 @@ namespace HIS
         public Nullable<decimal> PharmaTotalAmount { get; set; }
         public Nullable<decimal> PharmaPaidAmount { get; set; }
         public Nullable<decimal> PharmaDiscount { get; set; }
+        public Nullable<decimal> TotRefund { get; set; }
     }
 }

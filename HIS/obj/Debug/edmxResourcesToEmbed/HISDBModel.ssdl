@@ -440,6 +440,7 @@
     <Property Name="RefundAmount" Type="money" />
     <Property Name="RefundReason" Type="varchar" MaxLength="500" />
     <Property Name="RefundedOn" Type="datetime" />
+    <Property Name="IsReturn" Type="bit" />
   </EntityType>
   <EntityType Name="PurchaseOrder">
     <Key>
@@ -951,18 +952,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_PP_FrequencyID">
-    <End Role="IntakeFrequency" Type="Self.IntakeFrequency" Multiplicity="1" />
-    <End Role="PatientPrescription" Type="Self.PatientPrescription" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="IntakeFrequency">
-        <PropertyRef Name="FrequencyID" />
-      </Principal>
-      <Dependent Role="PatientPrescription">
-        <PropertyRef Name="IntakeFrequencyID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_PP_Medicine">
     <End Role="MedicineMaster" Type="Self.MedicineMaster" Multiplicity="1" />
     <End Role="PatientPrescription" Type="Self.PatientPrescription" Multiplicity="*" />
@@ -1326,10 +1315,6 @@
     <AssociationSet Name="FK_PO_MedicineID" Association="Self.FK_PO_MedicineID">
       <End Role="MedicineMaster" EntitySet="MedicineMaster" />
       <End Role="PurchaseOrder" EntitySet="PurchaseOrder" />
-    </AssociationSet>
-    <AssociationSet Name="FK_PP_FrequencyID" Association="Self.FK_PP_FrequencyID">
-      <End Role="IntakeFrequency" EntitySet="IntakeFrequency" />
-      <End Role="PatientPrescription" EntitySet="PatientPrescription" />
     </AssociationSet>
     <AssociationSet Name="FK_PP_Medicine" Association="Self.FK_PP_Medicine">
       <End Role="MedicineMaster" EntitySet="MedicineMaster" />
