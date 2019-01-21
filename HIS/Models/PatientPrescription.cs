@@ -43,10 +43,10 @@ namespace HIS
         [Required(ErrorMessage = "Please choose frquency", AllowEmptyStrings = false)]
         public int IntakeFrequencyID { get; set; }
 
-        [Required(ErrorMessage = "Please choose BatchNo", AllowEmptyStrings = false)]
-        public string BatchNo { get; set; }
+        //[Required(ErrorMessage = "Please choose BatchNo", AllowEmptyStrings = false)]
+        //public string BatchNo { get; set; }
 
-        [Required(ErrorMessage = "Please choose LotNo", AllowEmptyStrings = false)]
-        public string LotNo { get; set; }
+        //[Required(ErrorMessage = "Please choose LotNo", AllowEmptyStrings = false)]
+        //public string LotNo { get; set; }
     }
 }

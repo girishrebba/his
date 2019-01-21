@@ -49,11 +49,11 @@ namespace HIS
         [Required(ErrorMessage = "Please choose doctor", AllowEmptyStrings = false)]
         public int PrescribedBy { get; set; }
 
-        [Required(ErrorMessage = "Please choose BatchNo", AllowEmptyStrings = false)]
-        public string BatchNo { get; set; }
+        //[Required(ErrorMessage = "Please choose BatchNo", AllowEmptyStrings = false)]
+        //public string BatchNo { get; set; }
 
-        [Required(ErrorMessage = "Please choose LotNo", AllowEmptyStrings = false)]
-        public string LotNo { get; set; }
+        //[Required(ErrorMessage = "Please choose LotNo", AllowEmptyStrings = false)]
+        //public string LotNo { get; set; }
     }
 
     public class MDReturnMetaData
@@ -63,9 +63,9 @@ namespace HIS
 
         [Required(ErrorMessage = "Please enter quantity", AllowEmptyStrings = false)]
         public int Quantity { get; set; }
-        [Required(ErrorMessage = "Please enter Batch Number", AllowEmptyStrings = false)]
-        public int BatchNo { get; set; }
-        [Required(ErrorMessage = "Please enter Lot Number", AllowEmptyStrings = false)]
-        public int LotNo { get; set; }
+        //[Required(ErrorMessage = "Please enter Batch Number", AllowEmptyStrings = false)]
+        //public int BatchNo { get; set; }
+        //[Required(ErrorMessage = "Please enter Lot Number", AllowEmptyStrings = false)]
+        //public int LotNo { get; set; }
     }
 }

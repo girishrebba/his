@@ -286,6 +286,7 @@ namespace HIS.Controllers
                         db.PatientPrescriptions.Add(pp);
                         var medInv = db.MedicineInventories.Where(miv => miv.MedicineID == pp.MedicineID).First();
                         medInv.AvailableQty = medInv.AvailableQty - pp.DeliverQty;
+                       // db.Configuration.ValidateOnSaveEnabled = false;
                         db.Entry(medInv).State = EntityState.Modified;
                         db.SaveChanges();
                     }
@@ -995,7 +996,7 @@ namespace HIS.Controllers
                         foreach (PatientPrescription pp in prescriptions)
                         {
                             pp.PMID = pmid;
-                            db.Configuration.ValidateOnSaveEnabled = false;
+                            //db.Configuration.ValidateOnSaveEnabled = false;
                             db.PatientPrescriptions.Add(pp);
                         }
                         db.SaveChanges();
