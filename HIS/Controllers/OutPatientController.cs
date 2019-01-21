@@ -995,6 +995,7 @@ namespace HIS.Controllers
                         foreach (PatientPrescription pp in prescriptions)
                         {
                             pp.PMID = pmid;
+                            db.Configuration.ValidateOnSaveEnabled = false;
                             db.PatientPrescriptions.Add(pp);
                         }
                         db.SaveChanges();
