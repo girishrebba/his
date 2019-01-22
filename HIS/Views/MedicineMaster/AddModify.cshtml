@@ -78,6 +78,7 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
+        $("#BrandCategoryID").find("option:not(:first)").remove();
         $("#BrandID").change(function () {
             $.ajax({
                 url: '/MedicineMaster/GetCategories',

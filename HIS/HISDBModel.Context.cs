@@ -246,23 +246,6 @@ namespace HIS
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddSupplier", nameParameter, supplierID);
         }
     
-        public virtual ObjectResult<IpRevenueReport_Result> IpRevenueReport(string doctors, Nullable<System.DateTime> start_Time, Nullable<System.DateTime> end_Time)
-        {
-            var doctorsParameter = doctors != null ?
-                new ObjectParameter("Doctors", doctors) :
-                new ObjectParameter("Doctors", typeof(string));
-    
-            var start_TimeParameter = start_Time.HasValue ?
-                new ObjectParameter("Start_Time", start_Time) :
-                new ObjectParameter("Start_Time", typeof(System.DateTime));
-    
-            var end_TimeParameter = end_Time.HasValue ?
-                new ObjectParameter("End_Time", end_Time) :
-                new ObjectParameter("End_Time", typeof(System.DateTime));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<IpRevenueReport_Result>("IpRevenueReport", doctorsParameter, start_TimeParameter, end_TimeParameter);
-        }
-    
         public virtual ObjectResult<RevenueReport_Result> RevenueReport(string doctors, Nullable<System.DateTime> start_Time, Nullable<System.DateTime> end_Time)
         {
             var doctorsParameter = doctors != null ?
@@ -278,6 +261,23 @@ namespace HIS
                 new ObjectParameter("End_Time", typeof(System.DateTime));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RevenueReport_Result>("RevenueReport", doctorsParameter, start_TimeParameter, end_TimeParameter);
+        }
+    
+        public virtual ObjectResult<IpRevenueReport_Result> IpRevenueReport(string doctors, Nullable<System.DateTime> start_Time, Nullable<System.DateTime> end_Time)
+        {
+            var doctorsParameter = doctors != null ?
+                new ObjectParameter("Doctors", doctors) :
+                new ObjectParameter("Doctors", typeof(string));
+    
+            var start_TimeParameter = start_Time.HasValue ?
+                new ObjectParameter("Start_Time", start_Time) :
+                new ObjectParameter("Start_Time", typeof(System.DateTime));
+    
+            var end_TimeParameter = end_Time.HasValue ?
+                new ObjectParameter("End_Time", end_Time) :
+                new ObjectParameter("End_Time", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<IpRevenueReport_Result>("IpRevenueReport", doctorsParameter, start_TimeParameter, end_TimeParameter);
         }
     }
 }
