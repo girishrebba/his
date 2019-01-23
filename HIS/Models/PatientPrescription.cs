@@ -49,4 +49,19 @@ namespace HIS
         //[Required(ErrorMessage = "Please choose LotNo", AllowEmptyStrings = false)]
         //public string LotNo { get; set; }
     }
+
+    [MetadataType(typeof(DeliverPrescriptionMetaData))]
+    public class DeliverPrescriptionModel:PatientPrescription
+    {
+
+    }
+
+    public class DeliverPrescriptionMetaData
+    {
+        [Required(ErrorMessage = "Please enter BatchNo", AllowEmptyStrings = false)]
+        public string BatchNo { get; set; }
+
+        [Required(ErrorMessage = "Please enter LotNo", AllowEmptyStrings = false)]
+        public string LotNo { get; set; }
+    }
 }

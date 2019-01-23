@@ -555,62 +555,69 @@
     }
 
     function SubmitDeliverPrescriptionForm(form) {
-        $('body').loadingModal({ text: 'Processing...' });
-        //$('#MedicineWithDose').rules('remove', 'required');
-        var prescriptions = [];
-        var enmrNo = $('#ENMRNO').val();
-        var visitID = $('#VisitID').val();
-        var discount = $('#Discount').val();
-        var amountToBePaid = $('#paidAmount').html();
-        var totalAmount = $('#grandTotal').html();
-        var PmID = $('#PMID').val();
+        $.validator.unobtrusive.parse(form);
+        if (!$(form).valid()) {
+            alert("Please make sure to enter Batch and Lot Numbers!!");
+            return false;
+        }
+        if ($(form).valid()) {
+            $('body').loadingModal({ text: 'Processing...' });
+            //$('#MedicineWithDose').rules('remove', 'required');
+            var prescriptions = [];
+            var enmrNo = $('#ENMRNO').val();
+            var visitID = $('#VisitID').val();
+            var discount = $('#Discount').val();
+            var amountToBePaid = $('#paidAmount').html();
+            var totalAmount = $('#grandTotal').html();
+            var PmID = $('#PMID').val();
 
-        $(form).find('#headerDivbill').append("</br><table><tr><td>ENMRNO: " + $('#ENMRNO').val() + "</td></tr><tr><td >Doctor: " + $('#DoctorName').val() + "</td></tr><tr><td>Visit: " + $('#VisitName').val() + "</td></tr><tr><td>Suggested Date: " + $('#DateDisplay').val() + "</td></tr></table>");
-        $(form).find('#headerDivbill').append($(form).find('#ppTable'));
+            $(form).find('#headerDivbill').append("</br><table><tr><td>ENMRNO: " + $('#ENMRNO').val() + "</td></tr><tr><td >Doctor: " + $('#DoctorName').val() + "</td></tr><tr><td>Visit: " + $('#VisitName').val() + "</td></tr><tr><td>Suggested Date: " + $('#DateDisplay').val() + "</td></tr></table>");
+            $(form).find('#headerDivbill').append($(form).find('#ppTable'));
 
 
-        $(form).find('#ppTable > tbody tr').each(function (index, elem) {
-            var tbl = {};
-            tbl.ENMRNO = enmrNo;
-            tbl.VisitID = visitID;
-            tbl.MedicineID = $($(this).find('td:eq(1)')).html();
-            tbl.DeliverQty = $($(this).find('td:eq(4)')).find('.deliverQty').val();
-            tbl.RequestQty = $($(this).find('td:eq(5)')).find('.reqQty').val();
-            tbl.BatchNo = $($(this).find('td:eq(8)')).find('.batchNo').val();
-            tbl.LotNo = $($(this).find('td:eq(9)')).find('.lotNo').val();
-            tbl.Discount = discount;
-            tbl.PaidAmount = amountToBePaid;
-            tbl.TotalAmount = totalAmount;
-            tbl.PMID = PmID;
-            prescriptions.push(tbl);
-        });
-        $.ajax({
-            type: "POST",
-            contentType: "application/json",
-            url: form.action,
-            data: JSON.stringify(prescriptions),
-            success: function (data) {
-                if (data.success) {
-                    $('#headerDivbill').printThis({
-                        header: '<img src="http://sravanthihospital.in/light/images/hms-logo_login.png" style="width:420px;" alt="Mouldifi" title="Sravanthi Hospitals">',
-                        footer: false,
-                        pageTitle: ""
-                    });
-                    deliverPopUp.dialog('close');
-                    dataTable.ajax.reload();
-                    $.notify(data.message, {
-                        globalPosition: "top center",
-                        className: "success"
-                    })
+            $(form).find('#ppTable > tbody tr').each(function (index, elem) {
+                var tbl = {};
+                tbl.ENMRNO = enmrNo;
+                tbl.VisitID = visitID;
+                tbl.MedicineID = $($(this).find('td:eq(1)')).html();
+                tbl.DeliverQty = $($(this).find('td:eq(4)')).find('.deliverQty').val();
+                tbl.RequestQty = $($(this).find('td:eq(5)')).find('.reqQty').val();
+                tbl.BatchNo = $($(this).find('td:eq(8)')).find('.batchNo').val();
+                tbl.LotNo = $($(this).find('td:eq(9)')).find('.lotNo').val();
+                tbl.Discount = discount;
+                tbl.PaidAmount = amountToBePaid;
+                tbl.TotalAmount = totalAmount;
+                tbl.PMID = PmID;
+                prescriptions.push(tbl);
+            });
+            $.ajax({
+                type: "POST",
+                contentType: "application/json",
+                url: form.action,
+                data: JSON.stringify(prescriptions),
+                success: function (data) {
+                    if (data.success) {
+                        $('#headerDivbill').printThis({
+                            header: '<img src="http://sravanthihospital.in/light/images/hms-logo_login.png" style="width:420px;" alt="Mouldifi" title="Sravanthi Hospitals">',
+                            footer: false,
+                            pageTitle: ""
+                        });
+                        deliverPopUp.dialog('close');
+                        dataTable.ajax.reload();
+                        $.notify(data.message, {
+                            globalPosition: "top center",
+                            className: "success"
+                        })
+                    }
+                    $('body').loadingModal('destroy');
                 }
-                $('body').loadingModal('destroy');
-            }
-        });
+            });
+        }
         return false;
     }
 
     function SubmitPrescriptionForm(form) {
-        alert('submit');
+        //alert('submit');
         var ppItems = [];
         var enmrNo = $('#ENMRNO').val();
         var visitID = $('#VisitID').val();

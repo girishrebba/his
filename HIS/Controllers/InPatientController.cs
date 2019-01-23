@@ -541,7 +541,7 @@ namespace HIS.Controllers
                         foreach (PatientPrescription pp in prescriptions)
                         {
                             pp.PMID = pmid;
-                            db.Configuration.ValidateOnSaveEnabled = false;
+                            //db.Configuration.ValidateOnSaveEnabled = false;
                             db.PatientPrescriptions.Add(pp);
                         }
                         db.SaveChanges();
@@ -848,7 +848,7 @@ namespace HIS.Controllers
         public ActionResult DeliverPrescription(string enmrNo)
         {
             int visitID = 0;
-            var prescriptions = new List<PatientPrescription>();
+            var prescriptions = new List<DeliverPrescriptionModel>();
             using (var hs = new HISDBEntities())
             {
                 prescriptions = GetPatientNotDeliverPrescriptions(enmrNo, visitID);
@@ -967,7 +967,7 @@ namespace HIS.Controllers
             return PatientVisitPrescriptions(enmrNo, visitID);
         }
 
-        public List<PatientPrescription> GetPatientNotDeliverPrescriptions(string enmrNo, int visitID)
+        public List<DeliverPrescriptionModel> GetPatientNotDeliverPrescriptions(string enmrNo, int visitID)
         {
             return PatientVisitNotDeliverPrescriptions(enmrNo, visitID);
         }
@@ -1013,7 +1013,7 @@ namespace HIS.Controllers
             }
         }
 
-        private static List<PatientPrescription> PatientVisitNotDeliverPrescriptions(string enmrNo, int visitID)
+        private static List<DeliverPrescriptionModel> PatientVisitNotDeliverPrescriptions(string enmrNo, int visitID)
         {
             using (HISDBEntities hs = new HISDBEntities())
             {
@@ -1036,7 +1036,7 @@ namespace HIS.Controllers
                                             })
                                   .OrderByDescending(b => b.pm.DatePrescribed)
                                   .AsEnumerable()
-                                 .Select(x => new PatientPrescription
+                                 .Select(x => new DeliverPrescriptionModel
                                  {
                                      DateDisplay = HtmlHelpers.HtmlHelpers.DateFormat(x.pm.DatePrescribed),
                                      ENMRNO = x.pm.ENMRNO,

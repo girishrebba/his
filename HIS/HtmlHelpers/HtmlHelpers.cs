@@ -1152,6 +1152,7 @@ public static List<User> GetDoctors()
         {
             bool result = true;
             bool hasPrescriptionForLastVisit = false;
+            bool hasDeliveredPrescriptionForLastVisit = false;
             bool hasTestForLastVisit = false;
             bool hasScanForLastVisit = false;
             using (var hs = new HISDBEntities())
@@ -1161,13 +1162,24 @@ public static List<User> GetDoctors()
                 {
                     hasPrescriptionForLastVisit = hs.PrescriptionMasters.Where(p => p.VisitID == latestVisit.SNO).Any();
 
+                    if (hasPrescriptionForLastVisit)
+                    {
+                        hasDeliveredPrescriptionForLastVisit = hs.PrescriptionMasters.Where(p => p.VisitID == latestVisit.SNO && p.IsDelivered == true).Any();
+                    }
+
                     hasTestForLastVisit = hs.LabTestMasters.Where(p => p.VisitID == latestVisit.SNO).Any();
 
                     hasScanForLastVisit = hs.ScanTestMasters.Where(p => p.VisitID == latestVisit.SNO).Any();
 
-                    if (hasPrescriptionForLastVisit 
-                        && hasTestForLastVisit 
-                        && hasScanForLastVisit)
+                    if ((hasPrescriptionForLastVisit && hasDeliveredPrescriptionForLastVisit))
+                    {
+                        result = false;
+                    }
+                    else if(!hasDeliveredPrescriptionForLastVisit || hasTestForLastVisit || hasScanForLastVisit)
+                    {
+                        result = true;
+                    }
+                    else
                     {
                         result = false;
                     }
