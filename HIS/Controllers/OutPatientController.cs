@@ -275,8 +275,8 @@ namespace HIS.Controllers
                 if (mdrRequest != null && mdrRequest.Count() > 0)
                 {
                     System.Data.Entity.Core.Objects.ObjectParameter pmidOut = new System.Data.Entity.Core.Objects.ObjectParameter("PMID", typeof(Int32));
-                    
-                    db.CreateMasterPrescription(mdrRequest[0].ENMRNO, Convert.ToInt32(System.Web.HttpContext.Current.Session["UserID"]),0,false, pmidOut);
+                    int id = mdrRequest[0].PrescribedBy;
+                    db.CreateMasterPrescription(mdrRequest[0].ENMRNO, mdrRequest[0].PrescribedBy, 0,false, pmidOut);
                     int pmid = Convert.ToInt32(pmidOut.Value);
                     foreach (PatientPrescription pp in mdrRequest)
                     {
