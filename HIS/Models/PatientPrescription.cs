@@ -30,7 +30,7 @@ namespace HIS
         public bool ISIP { get; set; }
         public int RequestQty { get; set; }
         public bool IsDelivered { get; set; }
-        public int PrescribedBy { get; set; }
+        public int DoctorID { get; set; }
     }
 
     public class PPMetaData
