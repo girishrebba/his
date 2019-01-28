@@ -23,6 +23,7 @@
     @if (Model != null && Model.Count > 0)
     {
         @Html.HiddenFor(model => model[0].ENMRNO, new { @id = "ENMRNO" })
+        @Html.HiddenFor(model => model[0].PatientName, new { @id = "PatientName" })
         @Html.HiddenFor(model => model[0].VisitID, new { @id = "VisitID" })
         @Html.HiddenFor(model => model[0].PMID, new { @id = "PMID" })
         @Html.HiddenFor(model => model[0].VisitName, new { @id = "VisitName" })
@@ -80,30 +81,30 @@
                             <tbody>
                                 @foreach (var p in Model)
                                 {
-                                <tr>
-                                    @*0*@
-                                    <td style="display:none">@p.ItemCost</td>
-                                    @*1*@
-                                    <td style="display:none">@p.MedicineID</td>
-                                    @*2*@
-                                    <td>@p.MedicineWithDose</td>
-                                    @*3*@
-                                    <td>@p.Quantity</td>
-                                    @*4*@ 
-                                    <td>@Html.EditorFor(model => p.DeliverQty, new { htmlAttributes = new { @class = "form-control deliverQty" } })</td>
-                                    @*5*@
-                                    <td>@Html.EditorFor(model => p.RequestQty, new { htmlAttributes = new { @class = "form-control reqQty" } })</td>
-                                    @*6*@
-                                    <td>@p.IntakeDisplay</td>
-                                    @*7*@
-                                    <td>@p.Comments</td>
-                                    @*8*@
-                                    <td>@Html.EditorFor(model => p.BatchNo, new { htmlAttributes = new { @class = "form-control batchNo" } })</td>
-                                    @*9*@
-                                    <td>@Html.EditorFor(model => p.LotNo, new { htmlAttributes = new { @class = "form-control lotNo" } })</td>
-                                    @*10*@
-                                    <td class="price">@p.TotalCost</td>
-                                </tr>
+                                    <tr>
+                                        @*0*@
+                                        <td style="display:none">@p.ItemCost</td>
+                                        @*1*@
+                                        <td style="display:none">@p.MedicineID</td>
+                                        @*2*@
+                                        <td>@p.MedicineWithDose</td>
+                                        @*3*@
+                                        <td>@p.Quantity</td>
+                                        @*4*@
+                                        <td>@Html.EditorFor(model => p.DeliverQty, new { htmlAttributes = new { @class = "form-control deliverQty" } })</td>
+                                        @*5*@
+                                        <td>@Html.EditorFor(model => p.RequestQty, new { htmlAttributes = new { @class = "form-control reqQty" } })</td>
+                                        @*6*@
+                                        <td>@p.IntakeDisplay</td>
+                                        @*7*@
+                                        <td>@p.Comments</td>
+                                        @*8*@
+                                        <td>@Html.EditorFor(model => p.BatchNo, new { htmlAttributes = new { @class = "form-control batchNo" } })</td>
+                                        @*9*@
+                                        <td>@Html.EditorFor(model => p.LotNo, new { htmlAttributes = new { @class = "form-control lotNo" } })</td>
+                                        @*10*@
+                                        <td class="price">@p.TotalCost</td>
+                                    </tr>
                                 }
                             </tbody>
                             <tfoot>

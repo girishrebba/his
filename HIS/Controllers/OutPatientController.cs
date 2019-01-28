@@ -155,6 +155,7 @@ namespace HIS.Controllers
                     {
                         var itemCost = hs.MedicineInventories.Where(mi => mi.MedicineID == pp.MedicineID).First().PricePerItem.Value;
                         pp.ItemCost = itemCost;
+                        pp.PatientName = HtmlHelpers.HtmlHelpers.GetOutpatinetFullName(enmrNo);
                         pp.TotalCost = pp.Quantity * itemCost;
                         pp.VisitName = visitName;
                         pp.DeliverQty = pp.Quantity;
@@ -183,6 +184,7 @@ namespace HIS.Controllers
                     {
                         var itemCost = hs.MedicineInventories.Where(mi => mi.MedicineID == pp.MedicineID).First().PricePerItem.Value;
                         pp.ItemCost = itemCost;
+                        pp.PatientName = HtmlHelpers.HtmlHelpers.GetOutpatinetFullName(enmrNo);
                         pp.TotalCost = pp.Quantity * itemCost;
                         pp.VisitName = visitName;
                         //pp.DeliverQty = pp.Quantity;
@@ -246,6 +248,7 @@ namespace HIS.Controllers
             return View(new MDRModel
             {
                 ENMRNO = enmrNo,
+                PatientName = HtmlHelpers.HtmlHelpers.GetOutpatinetFullName(enmrNo),
                 MedicineID = 0,
                 Quantity = 0,
                 TotalCost = 0,
@@ -958,6 +961,7 @@ namespace HIS.Controllers
             PatientPrescription pp = new PatientPrescription();
             pp.ENMRNO = enmrNo;
             pp.VisitID = visitID;
+            pp.PatientName = HtmlHelpers.HtmlHelpers.GetOutpatinetFullName(enmrNo);
             pp.VisitName = currentVisit;
             pp.DoctorName = HtmlHelpers.HtmlHelpers.LoginUserName();
             pp.TestTypes = HtmlHelpers.HtmlHelpers.GetTestTypes();
@@ -1124,6 +1128,7 @@ namespace HIS.Controllers
                 if (patientTests.Count() > 0)
                 {
                     patientTests[0].ENMRNO = enmrNo;
+                    patientTests[0].PatientName = HtmlHelpers.HtmlHelpers.GetOutpatinetFullName(enmrNo);
                     patientTests[0].VisitName = HtmlHelpers.HtmlHelpers.GetVisitName(latestVisit.ConsultTypeID);
                     
                 }
@@ -1176,6 +1181,7 @@ namespace HIS.Controllers
                 if (PatientScans.Count() > 0)
                 {
                     PatientScans[0].ENMRNO = enmrNo;
+                    PatientScans[0].PatientName = HtmlHelpers.HtmlHelpers.GetOutpatinetFullName(enmrNo);
                     PatientScans[0].VisitName = HtmlHelpers.HtmlHelpers.GetVisitName(latestVisit.ConsultTypeID);
                 }
             }
@@ -1230,6 +1236,7 @@ namespace HIS.Controllers
                 if (patientTests.Count() > 0)
                 {
                     patientTests[0].ENMRNO = enmrNo;
+                    patientTests[0].PatientName = HtmlHelpers.HtmlHelpers.GetOutpatinetFullName(enmrNo);
                     patientTests[0].VisitName = HtmlHelpers.HtmlHelpers.GetVisitName(latestVisit.ConsultTypeID);
 
                 }
@@ -1250,6 +1257,7 @@ namespace HIS.Controllers
                 if (patientTests.Count() > 0)
                 {
                     patientTests[0].ENMRNO = enmrNo;
+                    patientTests[0].PatientName = HtmlHelpers.HtmlHelpers.GetOutpatinetFullName(enmrNo);
                     patientTests[0].VisitName = HtmlHelpers.HtmlHelpers.GetVisitName(latestVisit.ConsultTypeID);
 
                 }
@@ -1314,6 +1322,7 @@ namespace HIS.Controllers
                 if (patientScans.Count() > 0)
                 {
                     patientScans[0].ENMRNO = enmrNo;
+                    patientScans[0].PatientName = HtmlHelpers.HtmlHelpers.GetOutpatinetFullName(enmrNo);
                     patientScans[0].VisitName = HtmlHelpers.HtmlHelpers.GetVisitName(latestVisit.ConsultTypeID);
 
                 }
@@ -1334,6 +1343,7 @@ namespace HIS.Controllers
                 if (patientScans.Count() > 0)
                 {
                     patientScans[0].ENMRNO = enmrNo;
+                    patientScans[0].PatientName = HtmlHelpers.HtmlHelpers.GetOutpatinetFullName(enmrNo);
                     patientScans[0].VisitName = HtmlHelpers.HtmlHelpers.GetVisitName(latestVisit.ConsultTypeID);
 
                 }

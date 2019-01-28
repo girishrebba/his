@@ -31,6 +31,7 @@ namespace HIS
         public int RequestQty { get; set; }
         public bool IsDelivered { get; set; }
         public int DoctorID { get; set; }
+        public string PatientName { get; set; }
     }
 
     public class PPMetaData

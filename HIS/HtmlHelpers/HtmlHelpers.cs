@@ -40,19 +40,18 @@ namespace HIS.HtmlHelpers
             else return string.Empty;
         }
 
-        //public static string GetOutpatinetFullName(string emrno)
-        //{
-        //    using (HISDBEntities hs = new HISDBEntities())
-        //    {
-        //        var enmrNo = (from b in hs.OutPatients
-        //                      select new { b.FirstName, b.MiddleName,b.LastName }).ToList();
+        public static string GetOutpatinetFullName(string emrno)
+        {
+            using (HISDBEntities hs = new HISDBEntities())
+            {
+                var data = (from b in hs.OutPatients
+                              select new { b.FirstName, b.MiddleName, b.LastName }).FirstOrDefault();
 
-        //        return string.Format("{0} {1} {2}",  string.IsNullOrEmpty(enmrNo.fi) ? string.Empty : firstName,
-        //                                string.IsNullOrEmpty(middleName) ? string.Empty : middleName,
-        //                                string.IsNullOrEmpty(lastName) ? string.Empty : lastName);
-        //    }
-           
-        //}
+                return string.Format("{0} {1} {2}", string.IsNullOrEmpty(data.FirstName) ? string.Empty : data.FirstName,
+                                        string.IsNullOrEmpty(data.MiddleName) ? string.Empty : data.MiddleName,
+                                        string.IsNullOrEmpty(data.LastName) ? string.Empty : data.LastName);
+            }
+        }
 
         public static string GetMedicineWithDose(string medicineName, string dose)
         {

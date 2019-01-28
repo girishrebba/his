@@ -81,7 +81,7 @@
 @using (Html.BeginForm("OPPrescription", "OutPatient", FormMethod.Post, new { id = "ppForm", onsubmit = "return SubmitPrescriptionForm(this)" }))
 {
     @Html.HiddenFor(model => model.ENMRNO, new { @id = "ENMRNO" })
-    @Html.HiddenFor(model => model.patien, new { @id = "PatientName" })
+    @Html.HiddenFor(model => model.PatientName, new { @id = "PatientName" })
     @Html.HiddenFor(model => model.VisitID, new { @id = "VisitID" })
     @Html.HiddenFor(model => model.VisitName, new { @id = "VisitName" })
     @Html.HiddenFor(model => model.DoctorName, new { @id = "DoctorName" })

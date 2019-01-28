@@ -27,6 +27,7 @@
         {
         <div id="PrintDiv">
             @Html.HiddenFor(model => model[0].ENMRNO, new { @id = "ENMRNO" })
+            @Html.HiddenFor(model => model[0].PatientName, new { @id = "PatientName" })
             @Html.HiddenFor(model => model[0].STMID, new { @id = "STMID" })
             @Html.HiddenFor(model => model[0].VisitName, new { @id = "VisitName" })
             @Html.HiddenFor(model => model[0].DoctorName, new { @id = "DoctorName" })
@@ -43,6 +44,12 @@
                     </div>
                 </div>
                 <div class="form-group">
+                    @Html.LabelFor(model => model[0].PatientName, "PatientName:", new { @class = "control-label col-md-2" })
+                    <div class="col-sm-4 lableDisplay">
+                        @Html.DisplayFor(model => model[0].PatientName, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>                   
+                </div>
+                <div class="form-group">
                     @Html.LabelFor(model => model[0].DoctorName, "Doctor:", new { @class = "control-label col-md-2" })
                     <div class="col-sm-4 lableDisplay">
                         @Html.DisplayFor(model => model[0].DoctorName, new { htmlAttributes = new { @class = "form-control" } })
@@ -52,7 +59,7 @@
                         @Html.DisplayFor(model => model[0].DateDisplay, new { htmlAttributes = new { @class = "form-control" } })
                     </div>
                 </div>
-              
+
             </div>
             <div class="row">
                 <div class="col-lg-12">
@@ -67,13 +74,13 @@
                             </thead>
                             <tbody>
                                 @foreach (var p in Model)
-                    {
-                        <tr>
-                            <td style="display:none">@p.ScanID</td>
-                            <td>@p.ScanName</td>
-                            <td class="price">@p.ScanCost.ToString("0.##")</td>
-                        </tr>
-        }
+                        {
+                            <tr>
+                                <td style="display:none">@p.ScanID</td>
+                                <td>@p.ScanName</td>
+                                <td class="price">@p.ScanCost.ToString("0.##")</td>
+                            </tr>
+                }
                             </tbody>
                             <tfoot>
                                 <tr>
@@ -81,7 +88,7 @@
                                     <td align="left" id="grandTotal">@Model.Sum(i => i.TotalAmount).ToString("0.##")</td>
                                 </tr>
                                 <tr>
-                                    <td align="right">Discount (-):</td>                               
+                                    <td align="right">Discount (-):</td>
                                     <td align="left" id="discountAmount">@((Model.Sum(i => i.TotalAmount) - Model.Sum(i => i.PaidAmount)).ToString("0.##"))</td>
                                 </tr>
                                 <tr>

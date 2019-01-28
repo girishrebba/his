@@ -641,7 +641,7 @@
                 ppItems.push(tbl);
             }
 
-            $(form).find('#headerDiv').append("</br><table><tr><td>ENMRNO: " + $('#ENMRNO').val() + "</td></tr><tr><td>Doctor: " + $('#DoctorName').val() + "</td></tr><tr><td>Visit & Date: " + $('#VisitName').val() + "</td></tr></table>");
+                $(form).find('#headerDiv').append("</br><table><tr><td>ENMRNO: " + $('#ENMRNO').val() + "</td></tr><tr><td>Name: " + $('#PatientName').val() + "</td></tr><tr><td>Doctor: " + $('#DoctorName').val() + "</td></tr><tr><td>Visit & Date: " + $('#VisitName').val() + "</td></tr></table>");
             $(form).find('#headerDiv').append($(form).find('#ppTable'));
             $('#fstRow').closest('tr').remove();
             $('#thd').find('th:last').remove();
@@ -743,7 +743,7 @@
                             tbl.MedicineWithDose = 'demo';
                             prescriptions.push(tbl);
                         });
-                        $(form).find('#headerDivdp').append("</br><table><tr><td>ENMRNO: " + $('#ENMRNO').val() + "</td></tr><tr><td>Doctor: " + $('#DoctorName').val() + "</td></tr><tr><td>Visit: " + $('#VisitName').val() + "</td></tr><tr><td colspan='2'>Suggested Date: " + $('#DateDisplay').val() + "</td></tr></table>");
+                        $(form).find('#headerDivdp').append("</br><table><tr><td>ENMRNO: " + $('#ENMRNO').val() + "</td></tr><tr><td>Name: " + $('#PatientName').val() + "</td></tr><tr><td>Doctor: " + $('#DoctorName').val() + "</td></tr><tr><td>Visit: " + $('#VisitName').val() + "</td></tr><tr><td colspan='2'>Suggested Date: " + $('#DateDisplay').val() + "</td></tr></table>");
                         $(form).find('#headerDivdp').append($(form).find('#ppTable'));
 
                         $.ajax({
@@ -801,7 +801,7 @@
                 tbl.TotalAmount = totalAmount;
                 mdrRequest.push(tbl);
             });
-            $(form).find('#headerDiv').append("</br><table><tr><td>ENMRNO: " + $('#ENMRNO').val() + "</td></tr><tr><td>Doctor: " + $("#PrescribedByID option:selected").text() + "</td></tr></table>");
+                $(form).find('#headerDiv').append("</br><table><tr><td>ENMRNO: " + $('#ENMRNO').val() + "</td></tr><tr><td>Name: " + $('#PatientName').val() + "</td></tr><tr><td>Doctor: " + $("#PrescribedByID option:selected").text() + "</td></tr></table>");
             $(form).find('#headerDiv').append($(form).find('#mdrTable'));
             $('#fstRow').closest('tr').remove();
             $('#thd').find('th:last').remove();
@@ -994,7 +994,7 @@
             billPayModel.Discount = discount;
             billPayModel.PaidAmount = amountPaid;
 
-            $(form).find('#headerDivbill').append("</br><table><tr><td>ENMRNO: " + $('#ENMRNO').val() + "</td></tr><tr><td >Doctor: " + $('#DoctorName').val() + "</td></tr><tr><td>Visit: " + $('#VisitName').val() + "</td></tr><tr><td>Suggested Date: " + $('#DateDisplay').val() + "</td></tr></table>");
+                $(form).find('#headerDivbill').append("</br><table><tr><td>ENMRNO: " + $('#ENMRNO').val() + "</td></tr><tr><td>Name: " + $('#PatientName').val() + "</td></tr><tr><td >Doctor: " + $('#DoctorName').val() + "</td></tr><tr><td>Visit: " + $('#VisitName').val() + "</td></tr><tr><td>Suggested Date: " + $('#DateDisplay').val() + "</td></tr></table>");
             $(form).find('#headerDivbill').append($(form).find('#ptTable'));
 
             $.ajax({
@@ -1062,7 +1062,7 @@
             billPayModel.Discount = discount;
             billPayModel.PaidAmount = amountPaid;
 
-            $(form).find('#headerDivbill').append("</br><table><tr><td>ENMRNO: " + $('#ENMRNO').val() + "</td></tr><tr><td >Doctor: " + $('#DoctorName').val() + "</td></tr><tr><td>Visit: " + $('#VisitName').val() + "</td></tr><tr><td>Suggested Date: " + $('#DateDisplay').val() + "</td></tr></table>");
+                $(form).find('#headerDivbill').append("</br><table><tr><td>ENMRNO: " + $('#ENMRNO').val() + "</td></tr><tr><td>Name: " + $('#PatientName').val() + "</td></tr><tr><td >Doctor: " + $('#DoctorName').val() + "</td></tr><tr><td>Visit: " + $('#VisitName').val() + "</td></tr><tr><td>Suggested Date: " + $('#DateDisplay').val() + "</td></tr></table>");
             $(form).find('#headerDivbill').append($(form).find('#ptTable'));
             $.ajax({
                 type: "POST",

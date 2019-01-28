@@ -20,6 +20,7 @@ namespace HIS
         public decimal TotalAmount { get; set; }
         public decimal PaidAmount { get; set; }
         public bool IsBillPaid { get; set; }
+        public string PatientName { get; set; }
     }
 
 

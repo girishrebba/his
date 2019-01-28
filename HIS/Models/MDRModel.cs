@@ -22,6 +22,7 @@ namespace HIS
         public decimal Discount { get; set; }
         public int PMID { get; set; }
         public int IntakeFrequencyID { get; set; }
+        public string PatientName { get; set; }
     }
 
     [MetadataType(typeof(MDReturnMetaData))]

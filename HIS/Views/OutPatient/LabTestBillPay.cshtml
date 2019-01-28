@@ -26,6 +26,7 @@
     @if (Model != null && Model.Count > 0)
     {
         @Html.HiddenFor(model => model[0].ENMRNO, new { @id = "ENMRNO" })
+        @Html.HiddenFor(model => model[0].PatientName, new { @id = "PatientName" })
         @Html.HiddenFor(model => model[0].LTMID, new { @id = "LTMID" })
         @Html.HiddenFor(model => model[0].VisitName, new { @id = "VisitName" })
         @Html.HiddenFor(model => model[0].DoctorName, new { @id = "DoctorName" })
