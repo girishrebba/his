@@ -45,6 +45,7 @@ namespace HIS.HtmlHelpers
             using (HISDBEntities hs = new HISDBEntities())
             {
                 var data = (from b in hs.OutPatients
+                            where b.ENMRNO==emrno
                               select new { b.FirstName, b.MiddleName, b.LastName }).FirstOrDefault();
 
                 return string.Format("{0} {1} {2}", string.IsNullOrEmpty(data.FirstName) ? string.Empty : data.FirstName,
