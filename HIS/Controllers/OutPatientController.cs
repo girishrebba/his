@@ -337,7 +337,8 @@ namespace HIS.Controllers
                     var master = db.PrescriptionMasters.Where(p => p.PMID == pmid).FirstOrDefault();
                     master.Discount = 0;
                     master.PaidAmount = 0;
-                    master.TotalAmount = mdrRequest[0].TotalAmount;
+                    master.RefundAmount = mdrRequest[0].TotalAmount;
+                    master.TotalAmount = 0;
                     master.IsDelivered = true;
                     master.IsReturn = true;
                     db.Entry(master).State = EntityState.Modified;
