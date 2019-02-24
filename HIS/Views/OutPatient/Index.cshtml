@@ -802,14 +802,26 @@
                 mdrRequest.push(tbl);
             });
                 $(form).find('#headerDiv').append("</br><table><tr><td>ENMRNO: " + $('#ENMRNO').val() + "</td></tr><tr><td>Name: " + $('#PatientName').val() + "</td></tr><tr><td>Doctor: " + $("#PrescribedByID option:selected").text() + "</td></tr></table>");
-            $(form).find('#headerDiv').append($(form).find('#mdrTable'));
-            $('#fstRow').closest('tr').remove();
-            $('#thd').find('th:last').remove();
-            $('#tbd').find('td:last').remove();
-            $("#ftr tr").each(function () {
-                $(this).find("td").attr('colspan', 3);
-            });
+                
 
+                $(form).find('#headerDiv').append($(form).find('#mdrTable'));
+                $('#fstRow').closest('tr').remove();
+                $('#thd').find('th:last').remove();
+
+                $("#ftr tr").each(function () {
+                $(this).find("td").attr('colspan', 3);                
+                });
+
+
+                $('#thd').find('th:eq(2)').remove();
+                //Hide the intake column
+                $("#tbd tr").each(function () {
+                    $(this).find('td:last').remove();
+                    $(this).find('td:eq(4)').remove();
+                });
+  
+
+                
 
             $.ajax({
                 type: "POST",
