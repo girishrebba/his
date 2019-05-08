@@ -211,8 +211,13 @@
                                                 <div class="panel panel-default">
                                                     <div class="panel-heading" style="padding-left:1px;">
                                                         <span class="lableDisplay">MDR Prescription</span>
+                                                        <a class="btn btn-primary btn-sm" title="View & Print" style="margin-left:5px" onclick="printMDRbill('@Model.ENMRNO');"><i class="fa fa-print his-fa-size"></i></a>
+                                                        @*<a class="btn btn-primary btn-sm" title="MDR Print" style="margin-left:5px" onclick="PrintMDR('@Model.ENMRNO','@Model.PatientName');" ><i class="fa fa-print his-fa-size" ></i></a>*@
                                                     </div>
-                                                    <div class="panel-body">
+
+                                                    <div class="panel-body" id="MDRgrid">
+                                                        <div id="mdrheader">
+                                                        </div>
                                                         <div class="table-responsive">
                                                             <table class="table table-striped table-bordered" style="width:100%">
                                                                 <thead>
@@ -226,15 +231,15 @@
                                                                 </thead>
                                                                 <tbody>
                                                                     @foreach (var his in ViewBag.MDR)
-                                                                    {
-                                                                        <tr>
-                                                                            <td>@his.MedicineWithDose</td>
-                                                                            <td>@his.Quantity</td>
-                                                                            <td>@his.IntakeDisplay</td>
-                                                                            <td>@his.DoctorName</td>
-                                                                            <td>@his.DateDisplay</td>
-                                                                        </tr>
-                                                                    }
+                {
+                                                    <tr>
+                                                        <td>@his.MedicineWithDose</td>
+                                                        <td>@his.Quantity</td>
+                                                        <td>@his.IntakeDisplay</td>
+                                                        <td>@his.DoctorName</td>
+                                                        <td>@his.DateDisplay</td>
+                                                    </tr>
+}
                                                                 </tbody>
                                                             </table>
                                                         </div>
@@ -407,7 +412,7 @@
     </div>
 }
 
-<script type="text/javascript">
+    <script type="text/javascript">
     $(document).ready(function () {
         $('#TestIds').trigger('chosen:updated');
         $('#TestIds').chosen();
@@ -455,6 +460,36 @@
                       });
                 }
 
+
+
+         function printMDRbill(emrno) {
+
+                             // alert(emrno + ' ' + visitid);
+                             // newPP.dialog('close');
+                       $('body').loadingModal({ text: 'Loading...' });
+                       var formDiv = $('<div/>');
+                       var url = '@Url.Action("MDRPrint", "OutPatient")/?enmrNo=' + emrno; // + '&visitid=' + visitid ;
+                       $.get(url)
+                      .done(function (response) {
+                          formDiv.html(response);
+
+                          printdiv = formDiv.dialog({
+                              autoOpen: true,
+                              resizable: true,
+                              modal: true,
+                              title: 'Print Details',
+                              width: 850,
+                              top: 147,
+                              close: function () {
+                                  printdiv.dialog('destroy').remove();
+                              },
+                              open: function (event, ui) {
+                                  $('.ui-dialog-content').css('overflow', 'hidden');
+                                  $('body').loadingModal('destroy');
+                              }
+                          });
+                      });
+                }
 
                 function printTestbill(emrno, visitid) {
 
@@ -530,8 +565,23 @@
                         $("#divPackage").addClass("hidden");
                         $("#divTests").removeClass("hidden");
                     }
-                });
+     });
 
+
+                function PrintMDR(eno,patientname) {
+
+                    //var formDiv = $('<div/>');
+
+                   // this.dialog('destroy').remove();
+
+                    $('#mdrheader').append("<table><tr><td>ENMRNO: " + eno + "</td></tr><tr><td>Patient Name: " + patientname + "</td></tr></table>");
+                    $('#MDRgrid').printThis({
+                        header: '<img src="http://sravanthihospital.in/light/images/hms-logo_login.png" style="width:420px;" alt="Mouldifi" title="Sravanthi Hospitals">',
+                        footer: false,
+                        pageTitle: ""
+                    });
+                   // $('#mdrheader').remove();
+                }
 
     $('#btnSubmit').click(function () {
         if (($('table#ppTable tr').length < 3)
@@ -628,4 +678,4 @@
             $('#Comments').val('');
             $('#btnSubmit').removeClass('disabled');
         }
-</script>
+    </script>

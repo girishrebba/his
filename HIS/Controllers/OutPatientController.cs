@@ -196,6 +196,37 @@ namespace HIS.Controllers
             return View(prescriptions);
         }
 
+        [HttpGet]
+        public ActionResult MDRPrint(string enmrNo)
+        {
+            //GetPatientVisitPrescriptions(enmrNo, 0).Where(v => v.VisitID == 0 && v.ISIP == false).ToList();
+           // var latestVisit = new PatientVisitHistory();
+            var prescriptions = new List<PatientPrescription>();
+            using (var hs = new HISDBEntities())
+            {
+                //latestVisit = hs.PatientVisitHistories.Where(pvh => pvh.ENMRNO == enmrNo).FirstOrDefault();
+
+                prescriptions = GetPatientPrintPrescriptions(enmrNo, 0);
+                //string visitName = HtmlHelpers.HtmlHelpers.GetVisitName(latestVisit.ConsultTypeID);
+                if (prescriptions.Count() > 0)
+                {
+                    foreach (var pp in prescriptions)
+                    {
+                        var itemCost = hs.MedicineInventories.Where(mi => mi.MedicineID == pp.MedicineID).First().PricePerItem.Value;
+                        pp.ItemCost = itemCost;
+                        pp.PatientName = HtmlHelpers.HtmlHelpers.GetOutpatinetFullName(enmrNo);
+                        pp.TotalCost = pp.Quantity * itemCost;
+                       // pp.VisitName = visitName;
+                        //pp.DeliverQty = pp.Quantity;
+                        //pp.RequestQty = 0;
+                    }
+                }
+                //ViewBag.History = PatientPrescriptionHistory(enmrNo);
+            }
+           
+            return View(prescriptions);
+        }
+
         [HttpPost]
         public ActionResult DeliverPrescription(IList<PatientPrescription> prescriptions)
         {
